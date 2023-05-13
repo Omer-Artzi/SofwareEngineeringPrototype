@@ -1,0 +1,15 @@
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/TerminationEvent.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ClientUpdateEvent.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/SimpleChatServer.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/OriginatorMessage.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AdaptableServer.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/SimpleServer.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/TransmissionEvent.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/Main.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/SubscribedClient.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ConnectionToClient.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AbstractServer.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ObservableOriginatorServer.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/PrimaryController.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AbstractConnectionFactory.java
+/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ObservableServer.java
