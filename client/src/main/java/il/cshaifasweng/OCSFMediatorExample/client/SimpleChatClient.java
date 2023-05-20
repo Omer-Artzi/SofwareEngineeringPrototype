@@ -22,12 +22,12 @@ public class SimpleChatClient extends Application {
     private static Scene scene;
     private SimpleClient client;
 
-    public static final double version = 1.3;
+    public static final double version = 1.6;
 
 
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage){
         try {
 
 
@@ -43,6 +43,7 @@ public class SimpleChatClient extends Application {
         }
         catch (Exception e)
         {
+            JOptionPane.showMessageDialog(null,"Could not connect to server, please check that it is running or contact your admin", "Server connection error", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

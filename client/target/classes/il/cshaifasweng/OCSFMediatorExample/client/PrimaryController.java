@@ -47,22 +47,6 @@ public class PrimaryController {
 			e.printStackTrace();
 		}
 	}
-
-	@Subscribe
-	public void errorEvent(ErrorEvent event){
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
-		Platform.runLater(() -> {
-			Alert alert = new Alert(Alert.AlertType.ERROR,
-					String.format("Message:\nId: %d\nData: %s\nTimestamp: %s\n",
-							event.getMessage().getId(),
-							event.getMessage().getMessage(),
-							event.getMessage().getTimeStamp().format(dtf))
-			);
-			alert.setTitle("Error!");
-			alert.setHeaderText("Error:");
-			alert.show();
-		});
-	}
 	@FXML
 	public void requestGrades() throws IOException
 	{
@@ -118,8 +102,6 @@ public class PrimaryController {
 				SimpleClient.getClient().sendToServer(message);
 				List<Student> students = StudentsTV.getItems();
 				newStudent.setID(students.size()+1);
-				StudentsTV.getItems().add(newStudent);
-				StudentsTV.refresh();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -131,6 +113,12 @@ public class PrimaryController {
 	public void refreshStudents() throws IOException {
 		Message message = new Message(1, "Get Students");
 		SimpleClient.getClient().sendToServer(message);
+	}
+	@Subscribe
+	public void callbackAddStudent(AddStudentSuccesEvent event)
+	{
+		StudentsTV.getItems().add(event.getStudent());
+		StudentsTV.refresh();
 	}
 
 }

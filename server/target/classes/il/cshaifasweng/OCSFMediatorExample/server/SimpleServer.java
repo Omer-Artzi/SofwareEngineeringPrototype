@@ -21,15 +21,12 @@ import javax.swing.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
 	private static Session session;
 	private static int transmissionID = 0;
-	//private static int numOfConnectedClients = 0;
 
 	public static SessionFactory getSessionFactory() throws HibernateException {
 		Configuration configuration = new Configuration();
@@ -53,6 +50,7 @@ public class SimpleServer extends AbstractServer {
 			session.beginTransaction();
 			generateStudents();
 			generateGrades();
+			session.getTransaction().commit();
 
 		}
 		catch (Exception exception)
@@ -79,6 +77,7 @@ public class SimpleServer extends AbstractServer {
 
 	//Generating grades and saving in the SQL server
 	private void generateGrades() {
+
 		List<Student> students = sendStudents();
 		Faker faker = new Faker();
 		Random r = new Random();
@@ -106,7 +105,7 @@ public class SimpleServer extends AbstractServer {
 		SubscribedClient subscribedClient = new SubscribedClient(client);
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
-		System.out.println("Message Received: " + request);
+		session.beginTransaction();
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
@@ -116,20 +115,36 @@ public class SimpleServer extends AbstractServer {
 			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
 			else if(request.startsWith("Get Students")){
-				response ="Students";
-				message.setMessage(response);
-				message.setData(sendStudents());
-				client.sendToClient(message);
+				try {
+					response = "Students";
+					message.setMessage(response);
+					message.setData(sendStudents());
+					client.sendToClient(message);
+				}
+				catch (Exception e)
+				{
+					response = "Failed: Couldn't retrieve students";
+					message.setMessage(response);
+					client.sendToClient(message);
+				}
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
 			else if(request.startsWith("Get Grades")){
-				String studentID = request.substring(12);
-				int iStudentID = Integer.parseInt(studentID);
-				Student student = getStudent(iStudentID);
-				response = ("Grades of " + student.getStudentName());
-				message.setMessage(response);
-				message.setData(student);
-				client.sendToClient(message);
+				try {
+					String studentID = request.substring(12);
+					int iStudentID = Integer.parseInt(studentID);
+					Student student = getStudent(iStudentID);
+					response = ("Grades of " + student.getStudentName());
+					message.setMessage(response);
+					message.setData(student);
+					client.sendToClient(message);
+				}
+				catch (Exception e)
+				{
+					response = "Failed: Couldn't retrieve grades";
+					message.setMessage(response);
+					client.sendToClient(message);
+				}
 
 
 
@@ -139,6 +154,7 @@ public class SimpleServer extends AbstractServer {
 			{
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
+
 					response = "Grade Saved: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
 					message.setMessage(response);
 					session.merge(newGrade);
@@ -150,6 +166,7 @@ public class SimpleServer extends AbstractServer {
 					response = "Failed to save grade";
 					message.setMessage(response);
 					client.sendToClient(message);
+					session.getTransaction().rollback();
 				}
 			}
 			//we got a request to add a new client as a subscriber.
@@ -176,13 +193,18 @@ public class SimpleServer extends AbstractServer {
 				try {
 					session.save(newStudent);
 					session.flush();
-					response = ("Success: " + newStudent.getStudentName() + " was successfully added to the database");
+					response = ("Success: Student " + newStudent.getStudentName() + " was successfully added to the database");
 					message.setMessage(response);
+					message.setData(message.getData());
 					client.sendToClient(message);
 				}
 				catch (Exception e)
 				{
-					response = (newStudent.getStudentName() + " could not be added to the database");
+					response = ("Failed: Student " + newStudent.getStudentName() + " could not be added to the database");
+					message.setMessage(response);
+					client.sendToClient(message);
+					session.getTransaction().rollback();
+
 				}
 			}
 			else if(request.startsWith("Add Grade")){
@@ -193,17 +215,17 @@ public class SimpleServer extends AbstractServer {
 					updatedStudent.getGrades().add(newGrade);
 					session.merge(updatedStudent);
 					session.flush();
-					response = ("Success: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + " was successfully added to the database");
+
+					response = ("Success: Grade was successfully added to the database : {" + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + "}");
 					message.setMessage(response);
 					client.sendToClient(message);
-					System.out.println(response);
 
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
-					response = (newGrade.getStudent().getStudentName() + "'s new grade could not be added to the database");
-					System.out.println(response);
+					response = ("Failed: Grade could not be added to the database");
+					client.sendToClient(message);
+					session.getTransaction().rollback();
 				}
 			}
 			else{
@@ -212,6 +234,7 @@ public class SimpleServer extends AbstractServer {
 				response = "[Unrecognized Message]";
 				client.sendToClient(message);
 			}
+			session.getTransaction().commit();
 			transmission.setResponse(response);
 			EventBus.getDefault().post(new TransmissionEvent(transmission));
 		} catch (IOException e1) {
@@ -255,8 +278,9 @@ public class SimpleServer extends AbstractServer {
 			String name = faker.name().fullName();
 			Student student = new Student(name);
 			session.save(student);
-			session.flush();
+
 		}
+		session.flush();
 	}
 	public List<Student> sendStudents()
 	{

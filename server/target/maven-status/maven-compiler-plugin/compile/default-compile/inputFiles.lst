@@ -1,15 +1,15 @@
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/TerminationEvent.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ClientUpdateEvent.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/SimpleChatServer.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/OriginatorMessage.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AdaptableServer.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/SimpleServer.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/TransmissionEvent.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/Main.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/SubscribedClient.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ConnectionToClient.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AbstractServer.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ObservableOriginatorServer.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/PrimaryController.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/AbstractConnectionFactory.java
-/Users/omerartzi/IdeaProjects/Prototype/server/src/main/java/il/cshaifasweng/OCSFMediatorExample/server/ocsf/ObservableServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\AbstractConnectionFactory.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\PrimaryController.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\AdaptableServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\SimpleServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\TerminationEvent.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\SimpleChatServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\TransmissionEvent.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\ObservableOriginatorServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\OriginatorMessage.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\Main.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\ConnectionToClient.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\SubscribedClient.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\AbstractServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ocsf\ObservableServer.java
+C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\server\src\main\java\il\cshaifasweng\OCSFMediatorExample\server\ClientUpdateEvent.java

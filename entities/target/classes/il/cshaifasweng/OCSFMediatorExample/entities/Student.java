@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Students")
-public class Student implements Serializable {
+public class Student implements Serializable,Comparable<Student> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
@@ -63,5 +63,10 @@ public class Student implements Serializable {
                 ", studentName='" + studentName + '\'' +
                 ", grades=" + grades +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Student other) {
+        return this.studentName.compareTo(other.getStudentName());
     }
 }

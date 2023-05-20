@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "Grades")
-public class Grade implements Serializable {
+public class Grade implements Serializable,Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
@@ -69,4 +69,12 @@ public class Grade implements Serializable {
         this.student = student;
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    @Override
+    public int compareTo(Object other) {
+        return this.subject.compareTo(((Grade)other).subject);
+    }
 }

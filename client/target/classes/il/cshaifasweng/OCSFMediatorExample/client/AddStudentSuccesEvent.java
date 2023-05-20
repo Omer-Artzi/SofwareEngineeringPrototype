@@ -2,14 +2,10 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.Student;
 
-public class RefreshEvent {
+public class AddStudentSuccesEvent {
     private Student student;
-
-    public RefreshEvent() {
-    }
-
-    public RefreshEvent(Student student) {
-        this.student = student;
+    public AddStudentSuccesEvent(Student data) {
+        this.student = data;
     }
 
     public Student getStudent() {
