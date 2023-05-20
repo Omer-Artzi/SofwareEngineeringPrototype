@@ -1,5 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
-
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.AbstractServer;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
@@ -18,10 +20,17 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -32,6 +41,11 @@ public class SimpleServer extends AbstractServer {
 		Configuration configuration = new Configuration();
 		configuration.addAnnotatedClass(Student.class);
 		configuration.addAnnotatedClass(Grade.class);
+		configuration.addAnnotatedClass(Subject.class);
+		configuration.addAnnotatedClass(Course.class);
+		configuration.addAnnotatedClass(Teacher.class);
+		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(ExamForm.class);
 
 
 
@@ -48,10 +62,10 @@ public class SimpleServer extends AbstractServer {
 			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			generateStudents();
-			generateGrades();
-			session.getTransaction().commit();
-
+			//generateStudents();
+			//generateGrades();
+			generateData();
+			//session.getTransaction().commit();
 		}
 		catch (Exception exception)
 		{
@@ -65,7 +79,128 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	// Close database session
+	private void generateData() throws IOException {
+		School school = School.getInstance();
+		ObjectMapper objectMapper = new ObjectMapper();
+		SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/il/cshaifasweng/OCSFMediatorExample/server/SchoolSubjects.json"),SubjectWrapper.class);
+		school.setSubjects(subjects.getSubjects());
+
+		try {
+			for (Subject subject : subjects.getSubjects()) {
+				session.saveOrUpdate(subject);
+				for (Course course : subject.getCourses()) {
+					course.setSubject(subject);
+					session.saveOrUpdate(course);
+				}
+				session.flush();
+			}
+			List<Subject> subjectList = subjects.getSubjects();
+			generateTeachers(subjectList);
+			generateQuestions(subjectList);
+			session.getTransaction().commit();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+	private void generateQuestions(List<Subject> subjectList) {
+		String requests[] = {"https://opentdb.com/api.php?amount=50&category=9&type=multiple","https://opentdb.com/api.php?amount=50&category=17&type=multiple","https://opentdb.com/api.php?amount=50&category=24&type=multiple","https://opentdb.com/api.php?amount=50&category=23&type=multiple","https://opentdb.com/api.php?amount=50&category=20&type=multiple","https://opentdb.com/api.php?amount=50&category=26&type=multiple","https://opentdb.com/api.php?amount=50&category=19&type=multiple","https://opentdb.com/api.php?amount=50&category=27&type=multiple","https://opentdb.com/api.php?amount=50&category=24&type=multiple","https://opentdb.com/api.php?amount=50&category=18&type=multiple",};
+		Random random = new Random();
+		int randCourse;
+		for (int i = 0; i < requests.length;i++) {
+		try {
+
+				// Create URL object and open connection
+				URL url = new URL(requests[i]);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+				// Set request method
+				connection.setRequestMethod("GET");
+
+				// Get response code
+				int responseCode = connection.getResponseCode();
+				if (responseCode == HttpURLConnection.HTTP_OK) {
+					// Read response
+					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					StringBuilder response = new StringBuilder();
+					String line;
+					while ((line = reader.readLine()) != null) {
+						response.append(line);
+					}
+					reader.close();
+
+					// Process JSON response
+					String jsonResponse = response.toString();
+
+					// Parse JSON response
+					Gson gson = new Gson();
+					ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
+					List<ResponseQuestion> questions = apiResponse.getResults();
+					for(ResponseQuestion responseQuestion: questions)
+					{
+						Question question = new Question();
+						responseQuestion.convert(question);
+						question.setSubject(subjectList.get(i));
+						randCourse = random.nextInt(subjectList.get(i).getCourses().size());
+						question.setCourse(subjectList.get(i).getCourses().get(randCourse));
+						session.save(question);
+						session.flush();
+					}
+					System.out.println(questions);
+
+
+				} else {
+					System.out.println("Error: " + responseCode);
+				}
+
+				// Close the connection
+				connection.disconnect();
+
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void generateTeachers(List<Subject> subjects) {
+		try {
+			Faker faker = new Faker();
+			Random random = new Random();
+			int randomSubject, randomCourse;
+			for (int i = 0; i < 50; i++) {
+				String teacherFirstName = faker.name().firstName();
+				String teacherLastName = faker.name().lastName();
+				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
+				String password = faker.internet().password();
+				List<Course> courses = new ArrayList<>();
+				for (int j = 0; j < 3; j++) {
+					randomSubject = random.nextInt(subjects.size());
+					Subject subject = subjects.get(randomSubject);
+					for (int k = 0; k < 3; k++) {
+						randomCourse = random.nextInt(subject.getCourses().size());
+						courses.add(subject.getCourses().get(randomCourse));
+					}
+				}
+				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, teacherEmail, password, courses);
+				for (Course course : courses) {
+					course.getTeachers().add(teacher);
+				}
+
+				session.saveOrUpdate(teacher);
+
+			}
+			session.flush();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
 		Message message = new Message(1,"Server is closed");
@@ -77,7 +212,6 @@ public class SimpleServer extends AbstractServer {
 
 	//Generating grades and saving in the SQL server
 	private void generateGrades() {
-
 		List<Student> students = sendStudents();
 		Faker faker = new Faker();
 		Random r = new Random();
@@ -105,7 +239,7 @@ public class SimpleServer extends AbstractServer {
 		SubscribedClient subscribedClient = new SubscribedClient(client);
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
-		session.beginTransaction();
+		System.out.println("Message Received: " + request);
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
@@ -113,38 +247,38 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 			}
+			else if(request.startsWith("Get Subjects")){
+				response ="Subjects";
+				message.setMessage(response);
+				message.setData(getSubjects());
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in " + ((Subject)(message.getData())).getName();
+				message.setMessage(response);
+				message.setData(getExamsForSubjects((Subject)(message.getData())));
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Exams Forms for Course")){
+				response ="Exams in " + ((Course)(message.getData())).getName();
+				message.setMessage(response);
+				message.setData(getExamsForCourse((Course)(message.getData())));
+				client.sendToClient(message);
+			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
 			else if(request.startsWith("Get Students")){
-				try {
-					response = "Students";
-					message.setMessage(response);
-					message.setData(sendStudents());
-					client.sendToClient(message);
-				}
-				catch (Exception e)
-				{
-					response = "Failed: Couldn't retrieve students";
-					message.setMessage(response);
-					client.sendToClient(message);
-				}
+				response ="Students";
+				message.setMessage(response);
+				message.setData(sendStudents());
+				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
 			else if(request.startsWith("Get Grades")){
-				try {
-					String studentID = request.substring(12);
-					int iStudentID = Integer.parseInt(studentID);
-					Student student = getStudent(iStudentID);
-					response = ("Grades of " + student.getStudentName());
-					message.setMessage(response);
-					message.setData(student);
-					client.sendToClient(message);
-				}
-				catch (Exception e)
-				{
-					response = "Failed: Couldn't retrieve grades";
-					message.setMessage(response);
-					client.sendToClient(message);
-				}
+				String studentID = request.substring(12);
+				int iStudentID = Integer.parseInt(studentID);
+				Student student = getStudent(iStudentID);
+				response = ("Grades of " + student.getStudentName());
+				message.setMessage(response);
+				message.setData(student);
+				client.sendToClient(message);
 
 
 
@@ -154,7 +288,6 @@ public class SimpleServer extends AbstractServer {
 			{
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
-
 					response = "Grade Saved: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
 					message.setMessage(response);
 					session.merge(newGrade);
@@ -166,7 +299,6 @@ public class SimpleServer extends AbstractServer {
 					response = "Failed to save grade";
 					message.setMessage(response);
 					client.sendToClient(message);
-					session.getTransaction().rollback();
 				}
 			}
 			//we got a request to add a new client as a subscriber.
@@ -193,18 +325,13 @@ public class SimpleServer extends AbstractServer {
 				try {
 					session.save(newStudent);
 					session.flush();
-					response = ("Success: Student " + newStudent.getStudentName() + " was successfully added to the database");
+					response = ("Success: " + newStudent.getStudentName() + " was successfully added to the database");
 					message.setMessage(response);
-					message.setData(message.getData());
 					client.sendToClient(message);
 				}
 				catch (Exception e)
 				{
-					response = ("Failed: Student " + newStudent.getStudentName() + " could not be added to the database");
-					message.setMessage(response);
-					client.sendToClient(message);
-					session.getTransaction().rollback();
-
+					response = (newStudent.getStudentName() + " could not be added to the database");
 				}
 			}
 			else if(request.startsWith("Add Grade")){
@@ -215,17 +342,17 @@ public class SimpleServer extends AbstractServer {
 					updatedStudent.getGrades().add(newGrade);
 					session.merge(updatedStudent);
 					session.flush();
-
-					response = ("Success: Grade was successfully added to the database : {" + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + "}");
+					response = ("Success: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + " was successfully added to the database");
 					message.setMessage(response);
 					client.sendToClient(message);
+					System.out.println(response);
 
 				}
 				catch (Exception e)
 				{
-					response = ("Failed: Grade could not be added to the database");
-					client.sendToClient(message);
-					session.getTransaction().rollback();
+					e.printStackTrace();
+					response = (newGrade.getStudent().getStudentName() + "'s new grade could not be added to the database");
+					System.out.println(response);
 				}
 			}
 			else{
@@ -234,12 +361,36 @@ public class SimpleServer extends AbstractServer {
 				response = "[Unrecognized Message]";
 				client.sendToClient(message);
 			}
-			session.getTransaction().commit();
 			transmission.setResponse(response);
 			EventBus.getDefault().post(new TransmissionEvent(transmission));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	private List<ExamForm> getExamsForCourse(Course course) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		Root<ExamForm> root = query.from(ExamForm.class);
+		query.where(builder.equal(root.get("course"), course));
+		List<ExamForm> examForms = session.createQuery(query).getResultList();
+		return examForms;
+	}
+	private List<ExamForm> getExamsForSubjects(Subject subject) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		Root<ExamForm> root = query.from(ExamForm.class);
+		query.where(builder.equal(root.get("subject"), subject));
+		List<ExamForm> examForms = session.createQuery(query).getResultList();
+		return examForms;
+	}
+
+	private List<Subject> getSubjects() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
+		query.from(Subject.class);
+		List<Subject> subjects = session.createQuery(query).getResultList();
+		return subjects;
 	}
 
 	private Student getStudent(int iStudentID) {
@@ -278,9 +429,8 @@ public class SimpleServer extends AbstractServer {
 			String name = faker.name().fullName();
 			Student student = new Student(name);
 			session.save(student);
-
+			session.flush();
 		}
-		session.flush();
 	}
 	public List<Student> sendStudents()
 	{

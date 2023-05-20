@@ -7,9 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-import il.cshaifasweng.OCSFMediatorExample.entities.Message;
-import il.cshaifasweng.OCSFMediatorExample.entities.NewSubscriberEvent;
-import il.cshaifasweng.OCSFMediatorExample.entities.Student;
+import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -24,101 +22,126 @@ import javax.swing.*;
 public class PrimaryController {
 	@FXML
 	private int msgId;
+
 	@FXML
-	private Button getGradesButton;
+	private ComboBox<Course> CoursesCB;
+
 	@FXML
-	private  TableView<Student> StudentsTV;
+	private TableView<Exam> ExamsTV;
+
 	@FXML
-	private TableColumn<Student, SimpleStringProperty> IDColumn;
+	private TableColumn<Exam, Integer> IDColumn;
+
 	@FXML
-	private TableColumn<Student,SimpleStringProperty> NameColumn;
+	private Button ViewDIgitalButton;
+
 	@FXML
-	private Button addStudentButton;
+	private Button ViewManualButton;
+
 	@FXML
-	private Button refreshButton;
+	private Button addExamButton;
+
+	@FXML
+	private Button backButton;
+
+	@FXML
+	private TableColumn<Exam, SimpleStringProperty> codeColumn;
+
+	@FXML
+	private TableColumn<Exam, SimpleStringProperty> createdColumn;
+
+	@FXML
+	private TableColumn<Exam, SimpleStringProperty> creatorColumn;
+
+	@FXML
+	private TableColumn<Exam, SimpleStringProperty> lastUsedColumn;
+
+	@FXML
+	private Button modifyExamButton;
+
+	@FXML
+	private Button statsButton;
+
+	@FXML
+	private ComboBox<Subject> subjectsCB;
+
+	@FXML
+	private TableColumn<Exam, SimpleStringProperty> timeColumm;
+
+
 
 	@Subscribe
-	public void getStarterData(NewSubscriberEvent event) {
-		try {
-			Message message = new Message(msgId, "Get Students");
-			SimpleClient.getClient().sendToServer(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	@FXML
-	public void requestGrades() throws IOException
-	{
-		if(StudentsTV.getSelectionModel().getSelectedItem() != null) {
-			SimpleChatClient.setRoot("secondary");
-			Message message = new Message(1, "Get Grades: " + StudentsTV.getSelectionModel().getSelectedItem().getID());
-			SimpleClient.getClient().sendToServer(message);
-		}
-		else {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
+	public void errorEvent(ErrorEvent event){
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+		Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.ERROR,
+					String.format("Message:\nId: %d\nData: %s\nTimestamp: %s\n",
+							event.getMessage().getId(),
+							event.getMessage().getMessage(),
+							event.getMessage().getTimeStamp().format(dtf))
+			);
 			alert.setTitle("Error!");
-			alert.setHeaderText("Error: No Student Was Chosen");
+			alert.setHeaderText("Error:");
 			alert.show();
-		}
+		});
 	}
 
 	@FXML
 	void initialize() {
 		EventBus.getDefault().register(this);
-		IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-		NameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
-		StudentsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		List<Student> studentList = SimpleClient.getClient().getStudents();
-		if(studentList != null) {
-			StudentsTV.getItems().addAll(studentList);
+		try {
+			Message message = new Message(msgId, "Get Subjects");
+			SimpleClient.getClient().sendToServer(message);
+			IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+			codeColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+			createdColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+			ExamsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
-	@Subscribe
-	public void setStudents(studentMessageEvent message)
-	{
-		List<Student> studentList = message.getStudents();
-		if(studentList != null) {
-			StudentsTV.getItems().clear();
-			SimpleClient.getClient().setStudents(studentList);
-			StudentsTV.getItems().addAll(studentList);
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(null, "No students in the Database", "Database Error ", JOptionPane.WARNING_MESSAGE);
-		}
-	}
-	@FXML
-	public void addStudent() throws IOException {
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.setTitle("Student Name");
-		dialog.setHeaderText("Enter the student's name:");
-		dialog.showAndWait().ifPresent(name -> {
-			// Process the entered student name
-			Message message = new Message(msgId,"Add Student: " + name);
-			Student newStudent = new Student(name);
-			message.setData(newStudent);
-			try {
-				SimpleClient.getClient().sendToServer(message);
-				List<Student> students = StudentsTV.getItems();
-				newStudent.setID(students.size()+1);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-
-		});
 
 	}
+
+
 	@FXML
 	public void refreshStudents() throws IOException {
 		Message message = new Message(1, "Get Students");
 		SimpleClient.getClient().sendToServer(message);
 	}
 	@Subscribe
-	public void callbackAddStudent(AddStudentSuccesEvent event)
+	public void displaySubjects(SubjectMessageEvent event)
 	{
-		StudentsTV.getItems().add(event.getStudent());
-		StudentsTV.refresh();
+		if(event.getSubjects() != null)
+		{
+			subjectsCB.getItems().addAll(event.getSubjects());
+
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Could not Retrieve any subjects", "DataBase Erroe", JOptionPane.WARNING_MESSAGE);
+		}
+
 	}
+	@FXML
+	public void onSubjectSelection() throws IOException {
+		List<Course> courses = subjectsCB.getSelectionModel().getSelectedItem().getCourses();
+		if(courses != null)
+		{
+			CoursesCB.getItems().addAll(courses);
+			Message message = new Message(++msgId, "Get Exams Forms for Subject: "  + CoursesCB.getSelectionModel().getSelectedItem() );
+			message.setData(subjectsCB.getSelectionModel().getSelectedItem());
+			SimpleClient.getClient().sendToServer(message);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "This subject does not contain any courses", "DataBase Erroe", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	@FXML
+	public void onCourseSelection() throws IOException {
+		Message message = new Message(++msgId, "Get Exams Forms for Course: "  + CoursesCB.getSelectionModel().getSelectedItem() );
+		message.setData(CoursesCB.getSelectionModel().getSelectedItem());
+		SimpleClient.getClient().sendToServer(message);
+	}
+
 
 }

@@ -2,14 +2,12 @@ package il.cshaifasweng.OCSFMediatorExample.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.github.javafaker.Faker;
 import il.cshaifasweng.OCSFMediatorExample.entities.Grade;
 import il.cshaifasweng.OCSFMediatorExample.entities.Message;
 import il.cshaifasweng.OCSFMediatorExample.entities.Student;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -18,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import javax.swing.*;
 
 public class SecondaryController {
     @FXML
@@ -68,6 +68,8 @@ public class SecondaryController {
                 if (editedGrade != null) {
                     editedGrade.setGrade(newGradeNum);
                     sendNewGrade(editedGrade);
+                    gradesTV.getSelectionModel().getSelectedItem().setGrade(newGradeNum);
+                    gradesTV.refresh();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "No Grade Was Chosen");
                     alert.setTitle("Error!");
@@ -85,17 +87,12 @@ public class SecondaryController {
     @Subscribe
     public void DisplayGrades(GradeMessageEvent event) {
         try {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    studentNameTF.setText(event.getStudent().getStudentName() + "'s Grades");
-                    studentNameTF.setAlignment(Pos.TOP_CENTER);
-                }
-            });
+            studentNameTF.setText(event.getStudent().getStudentName() + "'s Grades");
+            studentNameTF.setAlignment(Pos.TOP_CENTER);
         }
         catch (IllegalStateException e)
         {
-            e.printStackTrace();
+
         }
         student = event.getStudent();
         gradesTV.getItems().clear();
@@ -140,15 +137,9 @@ public class SecondaryController {
             if (size != 0) {
                 average = sum / size;
             }
-            final String stats = "Average: " + average + " ,num of grades: " + size + ", passes: " + passes + " , fails: " + fails;
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    statsLabel.setText(stats);
-                    statsLabel.setAlignment(Pos.BASELINE_CENTER);
-                }
-            });
 
+            statsLabel.setText("Average: " + average + " ,num of grades: " + size + ", passes: " + passes + " , fails: " + fails);
+            statsLabel.setAlignment(Pos.BASELINE_CENTER);
         }
     }
 
@@ -162,7 +153,7 @@ public class SecondaryController {
         courseOptions = new ArrayList<>();
         subjectOptions = new ArrayList<>();
         Faker faker = new Faker();
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
             String course = faker.educator().course();
             if (!courseOptions.contains(course)) {
                 courseOptions.add(course);
@@ -171,8 +162,6 @@ public class SecondaryController {
             if (!subjectOptions.contains(subject)) {
                 subjectOptions.add(subject);
             }
-            Collections.sort(courseOptions);
-            Collections.sort(subjectOptions);
         }
     }
 
@@ -232,9 +221,9 @@ public class SecondaryController {
                     Message message = new Message(1, "Add Grade to Student ID: " + student.getID());
                     Grade newgrade = new Grade(igrade, course, subject, student);
                     message.setData(newgrade);
-                  //gradesTV.getItems().add(newgrade);
-                   // gradesTV.refresh();
-                    //calcStats(gradesTV.getItems());
+                    gradesTV.getItems().add(newgrade);
+                    gradesTV.refresh();
+                    calcStats(gradesTV.getItems());
                     SimpleClient.getClient().sendToServer(message);
                 } catch (NumberFormatException e) {
 
@@ -251,28 +240,9 @@ public class SecondaryController {
         dialog.showAndWait();
     }
 
-    @Subscribe
+
     public void refreshGrades() throws IOException {
         Message message = new Message(1, "Get Grades: " + student.getID());
         SimpleClient.getClient().sendToServer(message);
     }
-    @Subscribe
-    public void failedToSave(EditGradeSuccessEvent event)
-    {
-        Grade grade = event.getGrade();
-        for(Grade gradeInTable:gradesTV.getItems())
-        {
-            if(gradeInTable.getID() == grade.getID())
-                gradeInTable.setGrade(grade.getGrade());
-        }
-        gradesTV.refresh();
-    }
-    @Subscribe
-    public void callbackAddGradeSuccess(AddGradeSuccesEvent event)
-    {
-        gradesTV.getItems().add(event.getGrade());
-        gradesTV.refresh();
-        calcStats(gradesTV.getItems());
-    }
-
 }

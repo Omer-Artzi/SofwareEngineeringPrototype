@@ -14,10 +14,10 @@ import java.io.IOException;
 
 public class SimpleChatServer extends Application
 {
-    private final double version = 1.6;
+    private final double version = 1.3;
     public void start(Stage stage) throws IOException {
         try {
-            SimpleServer server = new SimpleServer(5000);
+            SimpleServer server = new SimpleServer(3000);
             server.listen();
         }
         catch (IOException e)

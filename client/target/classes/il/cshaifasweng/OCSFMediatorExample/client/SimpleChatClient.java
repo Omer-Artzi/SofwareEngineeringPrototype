@@ -9,12 +9,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 
 public class SimpleChatClient extends Application {
@@ -22,31 +28,30 @@ public class SimpleChatClient extends Application {
     private static Scene scene;
     private SimpleClient client;
 
-    public static final double version = 1.6;
+    public static final double version = 1.3;
 
 
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) throws IOException {
         try {
-
 
             EventBus.getDefault().register(this);
             client = SimpleClient.getClient();
             client.openConnection();
-            scene = new Scene(loadFXML("primary"), 640, 480);
+            Message message = new Message(1, "add client");
+            SimpleClient.getClient().sendToServer(message);
+            scene = new Scene(loadFXML("ViewExam"), 640, 480);
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
             stage.show();
-            Message message = new Message(1, "add client");
-            SimpleClient.getClient().sendToServer(message);
         }
         catch (Exception e)
         {
-            JOptionPane.showMessageDialog(null,"Could not connect to server, please check that it is running or contact your admin", "Server connection error", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }
+
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));

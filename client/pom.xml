@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>19.0.2.1</version>
+			<version>16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.greenrobot</groupId>
@@ -47,6 +47,18 @@
 			<artifactId>javafx-base</artifactId>
 			<version>14</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+		</dependency>
 	<dependency>
 		<groupId>org.openjfx</groupId>
 		<artifactId>javafx-controls</artifactId>
@@ -57,54 +69,13 @@
 		<artifactId>javafx-fxml</artifactId>
 		<version>14</version>
 	</dependency>
+<dependency>
+<groupId>org.openjfx</groupId>
+<artifactId>javafx-graphics</artifactId>
+<version>14</version>
+<classifier>win</classifier>
+</dependency>
 	</dependencies>
-
-	<!--If else for a pom file. Classify the correct dependency for each OS-->
-	<profiles>
-		<profile>
-			<id>windows</id>
-			<activation>
-				<os><family>windows</family></os>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-graphics</artifactId>
-					<version>14</version>
-					<classifier>win</classifier>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>mac</id>
-			<activation>
-				<os><family>mac</family></os>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-graphics</artifactId>
-					<version>14</version>
-					<classifier>mac</classifier>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
-			<id>linux</id>
-			<activation>
-				<os><family>unix</family></os>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-graphics</artifactId>
-					<version>14</version>
-					<classifier>linux</classifier>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-
 	<build>
 		<plugins>
 			<plugin>

@@ -1,15 +1,14 @@
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\PrimaryController.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\EditGradeSuccessEvent.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\ObservableSWRClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SecondaryController.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\AdaptableClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\MessageEvent.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\studentMessageEvent.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\Main.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\ObservableClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\AbstractClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\AddStudentSuccesEvent.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SimpleClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SimpleChatClient.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\GradeMessageEvent.java
-C:\Users\omera\IdeaProjects\G1_Prototype 1.6\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\AddGradeSuccesEvent.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ErrorEvent.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SimpleClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\AbstractClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SecondaryController.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\Main.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\PrimaryController.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\GradeMessageEvent.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SubjectMessageEvent.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\AdaptableClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\SimpleChatClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\ObservableClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\studentMessageEvent.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\ocsf\ObservableSWRClient.java
+C:\Users\omera\IdeaProjects\ViewExams\Prototype\client\src\main\java\il\cshaifasweng\OCSFMediatorExample\client\MessageEvent.java

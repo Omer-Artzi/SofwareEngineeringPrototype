@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="il.cshaifasweng.OCSFMediatorExample.client.PrimaryController">
+   <children>
+      <TableView fx:id="ExamsTV" layoutX="15.0" layoutY="88.0" prefHeight="318.0" prefWidth="608.0">
+        <columns>
+          <TableColumn fx:id="IDColumn" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="codeColumn" prefWidth="75.0" text="Code" />
+            <TableColumn fx:id="createdColumn" prefWidth="103.0" text="Date Created" />
+            <TableColumn fx:id="lastUsedColumn" prefWidth="75.0" text="Last Used" />
+            <TableColumn fx:id="creatorColumn" prefWidth="160.0" text="Created By" />
+            <TableColumn fx:id="timeColumm" prefWidth="119.0" text="Time" />
+        </columns>
+      </TableView>
+      <Button fx:id="backButton" layoutX="35.0" layoutY="32.0" mnemonicParsing="false" text="Back" />
+      <Button fx:id="ViewDIgitalButton" layoutX="10.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="View Digital Version " />
+      <Button fx:id="ViewManualButton" layoutX="157.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="View Manual Version" />
+      <ComboBox fx:id="subjectsCB" layoutX="106.0" layoutY="32.0" onAction="#onSubjectSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Subject" />
+      <ComboBox fx:id="CoursesCB" layoutX="375.0" layoutY="32.0" onAction="#onCourseSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Course" />
+      <Button fx:id="statsButton" layoutX="306.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="View Stats" />
+      <Button fx:id="modifyExamButton" layoutX="412.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modify Exam" />
+      <Button fx:id="addExamButton" layoutX="526.0" layoutY="419.0" mnemonicParsing="false" text="Add New Exam " />
+   </children>
+</AnchorPane>
