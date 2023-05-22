@@ -15,6 +15,7 @@ public class ExamForm {
     @ManyToOne
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
+    private String Code;
     @ManyToOne
     @JoinColumn(name = "SubjectID")
     private Subject subject;
@@ -34,6 +35,23 @@ public class ExamForm {
         this.examTime=examTime;
         this.QuestionList=QuestionList;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
+
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}
     public Teacher getCreator(){return creator;}

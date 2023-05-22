@@ -27,6 +27,11 @@ public class Teacher implements Serializable {
         this.password = password;
     }
 
+    public Teacher(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Teacher() {
 
     }
@@ -44,6 +49,11 @@ public class Teacher implements Serializable {
 
     public Long getId() {
         return ID;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + lastName;
     }
 }
 

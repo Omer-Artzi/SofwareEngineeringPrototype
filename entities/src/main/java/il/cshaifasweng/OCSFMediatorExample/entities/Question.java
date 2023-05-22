@@ -37,6 +37,14 @@ public Question(){}
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
     }
+
+    public Question(String questionData, String correctAnswer, String teacherNote, String studentNote) {
+        this.questionData = questionData;
+        this.correctAnswer = correctAnswer;
+        this.teacherNote = teacherNote;
+        this.studentNote = studentNote;
+    }
+
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}
     public Subject getSubject(){return subject;}

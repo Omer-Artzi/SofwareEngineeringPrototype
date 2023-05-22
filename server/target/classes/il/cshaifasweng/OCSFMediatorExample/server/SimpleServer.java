@@ -107,7 +107,16 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private void generateQuestions(List<Subject> subjectList) {
-		String requests[] = {"https://opentdb.com/api.php?amount=50&category=9&type=multiple","https://opentdb.com/api.php?amount=50&category=17&type=multiple","https://opentdb.com/api.php?amount=50&category=24&type=multiple","https://opentdb.com/api.php?amount=50&category=23&type=multiple","https://opentdb.com/api.php?amount=50&category=20&type=multiple","https://opentdb.com/api.php?amount=50&category=26&type=multiple","https://opentdb.com/api.php?amount=50&category=19&type=multiple","https://opentdb.com/api.php?amount=50&category=27&type=multiple","https://opentdb.com/api.php?amount=50&category=24&type=multiple","https://opentdb.com/api.php?amount=50&category=18&type=multiple",};
+		String requests[] = {"https://opentdb.com/api.php?amount=50&category=9&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=17&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=24&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=23&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=20&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=26&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=19&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=27&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=24&type=multiple",
+				"https://opentdb.com/api.php?amount=50&category=18&type=multiple",};
 		Random random = new Random();
 		int randCourse;
 		for (int i = 0; i < requests.length;i++) {

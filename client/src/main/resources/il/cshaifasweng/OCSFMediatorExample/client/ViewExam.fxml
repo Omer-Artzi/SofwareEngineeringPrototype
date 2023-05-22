@@ -19,8 +19,8 @@
         </columns>
       </TableView>
       <Button fx:id="backButton" layoutX="35.0" layoutY="32.0" mnemonicParsing="false" text="Back" />
-      <Button fx:id="ViewDIgitalButton" layoutX="10.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="View Digital Version " />
-      <Button fx:id="ViewManualButton" layoutX="157.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" text="View Manual Version" />
+      <Button fx:id="ViewDIgitalButton" layoutX="10.0" layoutY="419.0" mnemonicParsing="false" onAction="#viewDigital" prefHeight="25.0" prefWidth="132.0" text="View Digital Version " />
+      <Button fx:id="ViewManualButton" layoutX="157.0" layoutY="419.0" mnemonicParsing="false" onAction="#viewManual" prefHeight="25.0" prefWidth="132.0" text="View Manual Version" />
       <ComboBox fx:id="subjectsCB" layoutX="106.0" layoutY="32.0" onAction="#onSubjectSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Subject" />
       <ComboBox fx:id="CoursesCB" layoutX="375.0" layoutY="32.0" onAction="#onCourseSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Course" />
       <Button fx:id="statsButton" layoutX="306.0" layoutY="419.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="View Stats" />

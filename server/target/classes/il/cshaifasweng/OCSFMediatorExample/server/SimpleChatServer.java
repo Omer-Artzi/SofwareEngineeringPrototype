@@ -1,6 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.server;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class SimpleChatServer extends Application
 {
-    private final double version = 1.3;
+    private final double version = 1.6;
     public void start(Stage stage) throws IOException {
         try {
             SimpleServer server = new SimpleServer(3000);
@@ -32,7 +33,9 @@ public class SimpleChatServer extends Application
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+
                 EventBus.getDefault().post(new TerminationEvent());
+                Platform.exit();
             }
         });
         stage.show();
