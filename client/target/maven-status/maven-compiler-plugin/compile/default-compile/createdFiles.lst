@@ -5,6 +5,7 @@ Events/AddStudentSuccesEvent.class
 LoginController.class
 Events/RefreshEvent.class
 SimpleClient.class
+ViewExamController.class
 PreLogInController.class
 Events/AddGradeSuccesEvent.class
 Events/SubjectMessageEvent.class
