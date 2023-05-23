@@ -31,7 +31,7 @@ public class SimpleChatClient extends Application {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
+            scene = new Scene(loadFXML("MainWindow"));
             stage.setScene(scene);
             stage.setTitle("High Entities.School Test System Prototype - Version " + version);
             stage.show();

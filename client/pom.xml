@@ -14,17 +14,17 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
-			<version>16</version>
+			<version>14</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>16</version>
+			<version>14</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>16</version>
+			<version>14</version>
 		</dependency>
 		<dependency>
 			<groupId>org.greenrobot</groupId>
@@ -92,7 +92,9 @@
 				<version>3.8.0</version>
 				<configuration>
 					<release>13</release>
-				</configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
