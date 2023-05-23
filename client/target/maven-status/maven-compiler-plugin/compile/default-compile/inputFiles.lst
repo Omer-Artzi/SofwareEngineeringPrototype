@@ -5,6 +5,7 @@
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/ExamMessageEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/GradeMessageEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/PreLogInController.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/AddExamController.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/EditGradeSuccessEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/ErrorEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/SecondaryController.java
@@ -19,3 +20,5 @@
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/MessageEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/Events/studentMessageEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/ocsf/ObservableClient.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/TeacherMainScreenController.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/LoginController.java

@@ -33,7 +33,7 @@ public class SimpleChatClient extends Application {
             EventBus.getDefault().register(this);
             scene = new Scene(loadFXML("PreLogIn"), 399, 217);
             stage.setScene(scene);
-            stage.setTitle("High Entities.School Test System Prototype - Version " + version);
+            stage.setTitle("High School Test System Prototype - Version " + version);
             stage.show();
         }
         catch (Exception e)
