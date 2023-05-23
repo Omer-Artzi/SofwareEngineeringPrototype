@@ -22,7 +22,7 @@ public class SimpleChatClient extends Application {
     private static Stage clientStage;
     private SimpleClient client;
 
-    public static final double version = 1.3;
+    public static final double version = 1.7;
 
 
 

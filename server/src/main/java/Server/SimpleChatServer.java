@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class SimpleChatServer extends Application
 {
-    private final double version = 1.6;
+    private final double version = 1.7;
     public void start(Stage stage) throws IOException {
         try {
             SimpleServer server = new SimpleServer(3000);

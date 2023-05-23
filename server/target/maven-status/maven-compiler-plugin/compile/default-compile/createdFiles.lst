@@ -10,6 +10,7 @@ Server/ocsf/OriginatorMessage.class
 Server/Events/TransmissionEvent.class
 Server/SimpleChatServer$1.class
 Server/ocsf/SubscribedClient.class
+Server/Events/ExtraTimeRequestEvent.class
 Server/ocsf/AdaptableServer.class
 Server/ocsf/AbstractConnectionFactory.class
 Server/Controllers/PrimaryController.class

@@ -7,7 +7,7 @@ import java.io.Serializable;
 @MappedSuperclass
 @Table(name = "Entities.Person")
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
-public class Person implements Serializable{
+public abstract class Person implements Serializable{
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,7 +47,7 @@ public class Person implements Serializable{
     }
 
     public void setFirstName(String firstName) {
-        firstName = firstName;
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -55,7 +55,7 @@ public class Person implements Serializable{
     }
 
     public void setLastName(String lastName) {
-        lastName = lastName;
+        this.lastName = lastName;
     }
 
     public String getFullName() {
@@ -75,7 +75,7 @@ public class Person implements Serializable{
     }
 
     public void setEmail(String email) {
-        email = email;
+        this.email = email;
     }
 
     public String getPassword() {
@@ -83,6 +83,10 @@ public class Person implements Serializable{
     }
 
     public void setPassword(String password) {
-        password = password;
+        this.password = password;
     }
+
+    public abstract void extraTimeRequest(ExtraTime data);
+
+    public abstract void receiveExtraTime(ExtraTime data);
 }

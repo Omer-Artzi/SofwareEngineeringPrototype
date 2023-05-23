@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class SimpleClient extends AbstractClient {
-
+	private static Person user;
 	private static SimpleClient client = null;
 	private static  String IP;
 	private static int port;
@@ -23,6 +23,7 @@ public class SimpleClient extends AbstractClient {
 	@Override
 	protected void handleMessageFromServer(Object msg) {
 		Message message = (Message) msg;
+		System.out.println("Message Received: " + message.getMessage());
 		if (message.getMessage().startsWith("Students")) {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
@@ -47,11 +48,22 @@ public class SimpleClient extends AbstractClient {
 
 		} else if (message.getMessage().equals("client added successfully")) {
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
-		}else if(message.getMessage().startsWith("Exams in ")){
+		} else if (message.getMessage().startsWith("Extra time approved"))
+		{
+			user.receiveExtraTime((ExtraTime)message.getData());
+		}
+		else if (message.getMessage().startsWith("Extra Time Requested")) {
+			user.extraTimeRequest((ExtraTime)message.getData());
+
+		} else if(message.getMessage().startsWith("Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
-		} else if (message.getMessage().startsWith("Entities.Grade Saved")) {
+		} else if (message.getMessage().startsWith("Grade Saved")) {
+		}else if(message.getMessage().startsWith("Success: User")){
+			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
+		} else if (message.getMessage().startsWith("Fail: User")){
+			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
 		} else if (message.getMessage().startsWith("Success")) {
 		} else if (message.getMessage().startsWith("Failed to save grade")) {
 			String warning = "The grade could not be saved";
@@ -105,5 +117,9 @@ public class SimpleClient extends AbstractClient {
 
 	public static void setPortNum(int port) {
 		SimpleClient.port = port;
+	}
+
+	public void setUser(Person user) {
+		this.user = user;
 	}
 }

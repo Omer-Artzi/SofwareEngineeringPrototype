@@ -35,6 +35,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Entities.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -51,10 +52,6 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(Person.class);
-
-
-
-
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -215,6 +212,16 @@ public class SimpleServer extends AbstractServer {
 
 	private void generateTeachers(List<Subject> subjects) {
 		try {
+			Teacher admin = new Teacher();
+			String salt = BCrypt.gensalt();
+			admin.setEmail("admin");
+			admin.setPassword(BCrypt.hashpw("1234", salt));
+			admin.setCourseList(new ArrayList<>());
+			admin.setGender(Gender.Female);
+			admin.setFirstName("super");
+			admin.setLastName("user");
+			session.saveOrUpdate(admin);
+			session.flush();
 			Faker faker = new Faker();
 			Random random = new Random();
 			int randomSubject, randomCourse;
@@ -222,7 +229,7 @@ public class SimpleServer extends AbstractServer {
 				String teacherFirstName = faker.name().firstName();
 				String teacherLastName = faker.name().lastName();
 				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
-				String password = faker.internet().password();
+				String password = BCrypt.hashpw(faker.internet().password(), salt);
 				List<Course> courses = new ArrayList<>();
 				for (int j = 0; j < 5; j++) {
 					randomSubject = random.nextInt(subjects.size());
@@ -260,7 +267,7 @@ public class SimpleServer extends AbstractServer {
 
 	//Generating grades and saving in the SQL server
 	private void generateGrades() {
-		List<Student> students = sendStudents();
+		List<Student> students = retrievetudents();
 		Faker faker = new Faker();
 		Random r = new Random();
 		for(Student student : students)
@@ -287,20 +294,58 @@ public class SimpleServer extends AbstractServer {
 		SubscribedClient subscribedClient = new SubscribedClient(client);
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
-		System.out.println("Entities.Message Received: " + request);
+		System.out.println("Message Received: " + request);
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
 				response = "Error! we got an empty message";
 				message.setMessage(response);
 				client.sendToClient(message);
-			}
-			else if(request.startsWith("Get Subjects")){
+			}else if(request.startsWith("Login")){
+				List<String> credentials = (List<String>)message.getData();
+				String password = credentials.get(1);
+				Person user = retrieveUser(credentials.get(0));
+				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
+				{
+					response = "Success: User found";
+					message.setData(user);
+				}
+				else
+				{
+					response = "Fail: User not found";
+				}
+				message.setMessage(response);
+				client.sendToClient(message);
+			} else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Subject")){
+			} else if (message.getMessage().startsWith("Extra time request"))
+			{
+				response = "Extra Time Requested";
+				message.setMessage(response);
+				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
+				sendToAllClients(message);
+			}else if (message.getMessage().startsWith("Extra time approved"))
+			{
+				response = "Extra time approved";
+				message.setMessage(response);
+				sendToAllClients(message);
+
+			}
+			else if (message.getMessage().startsWith("Exam approved")) {
+				try {
+					session.save((ClassExam)message.getData());
+					response = "Exam saved successfully";
+				}
+				catch (Exception e)
+				{
+					response = "Failed to save exam";
+				}
+				message.setMessage(response);
+				client.sendToClient(message);
+			} else if(request.startsWith("Get Exams Forms for Entities.Subject")){
 				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
@@ -315,7 +360,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Students")){
 				response ="Students";
 				message.setMessage(response);
-				message.setData(sendStudents());
+				message.setData(retrievetudents());
 				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
@@ -327,16 +372,13 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(student);
 				client.sendToClient(message);
-
-
-
 			}
 			//The user decided to update a grade, we will update the SQL server and send the new grade list
-			else if(request.startsWith("Change Entities.Grade"))
+			else if(request.startsWith("Change Grade"))
 			{
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
-					response = "Entities.Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
+					response = "Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
 					message.setMessage(response);
 					session.merge(newGrade);
 					session.flush();
@@ -368,7 +410,7 @@ public class SimpleServer extends AbstractServer {
 				}
 				EventBus.getDefault().post(new ClientUpdateEvent(SubscribersList.size()));
 			}
-			else if(request.startsWith("Add Entities.Student")){
+			else if(request.startsWith("Add Student")){
 				Student newStudent = (Student) (message.getData());
 				try {
 					session.save(newStudent);
@@ -382,7 +424,7 @@ public class SimpleServer extends AbstractServer {
 					response = (newStudent.getFullName() + " could not be added to the database");
 				}
 			}
-			else if(request.startsWith("Add Entities.Grade")){
+			else if(request.startsWith("Add Grade")){
 				Grade newGrade = ((Grade)(message.getData()));
 				try {
 					session.save(newGrade);
@@ -406,7 +448,7 @@ public class SimpleServer extends AbstractServer {
 			else{
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);
-				response = "[Unrecognized Entities.Message]";
+				response = "[Unrecognized Message]";
 				client.sendToClient(message);
 			}
 			transmission.setResponse(response);
@@ -414,6 +456,26 @@ public class SimpleServer extends AbstractServer {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	private Person retrieveUser(String email) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		try {
+			CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+			Root<Teacher> root = query.from(Teacher.class);
+			query.where(builder.equal(root.get("email"), email));
+			Person user = session.createQuery(query).getSingleResult();
+			return user;
+		}
+		catch (Exception e)
+		{
+			CriteriaQuery<Student> query = builder.createQuery(Student.class);
+			Root<Student> root = query.from(Student.class);
+			query.where(builder.equal(root.get("email"), email));
+			Person user = session.createQuery(query).getSingleResult();
+			return user;
+		}
+
 	}
 
 	private List<ExamForm> getExamsForCourse(Course course) {
@@ -451,7 +513,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 
-	private Object sendGrades ( int iStudentID){
+	private Object retrieveGrades ( int iStudentID){
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Grade> query = builder.createQuery(Grade.class);
 			Root<Grade> gradeRoot = query.from(Grade.class);
@@ -481,7 +543,7 @@ public class SimpleServer extends AbstractServer {
 			session.flush();
 		}
 	}
-	public List<Student> sendStudents()
+	public List<Student> retrievetudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);

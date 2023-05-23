@@ -1,7 +1,9 @@
 Entities/School.class
+Entities/ClassExam.class
 Entities/NewSubscriberEvent.class
 Entities/Message.class
 Entities/Exam.class
+Entities/ExtraTime.class
 Entities/Teacher.class
 Entities/Course.class
 Entities/SubjectWrapper.class

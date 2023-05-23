@@ -1,11 +1,13 @@
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Question.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Exam.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/ClassExam.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Person.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Message.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/School.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Grade.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Transmission.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Subject.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/ExtraTime.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Course.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Principle.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/entities/src/main/java/Entities/Gender.java
