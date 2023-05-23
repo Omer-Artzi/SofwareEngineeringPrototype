@@ -1,4 +1,5 @@
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/il/cshaifasweng/OCSFMediatorExample/client/ocsf/ObservableClient.java
+/Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/il/cshaifasweng/OCSFMediatorExample/client/ExamMessageEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/il/cshaifasweng/OCSFMediatorExample/client/Main.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/il/cshaifasweng/OCSFMediatorExample/client/AddStudentSuccesEvent.java
 /Users/omerartzi/IdeaProjects/SofwareEngineeringPrototype/client/src/main/java/il/cshaifasweng/OCSFMediatorExample/client/LoadExamEvent.java

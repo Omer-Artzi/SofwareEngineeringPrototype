@@ -29,7 +29,9 @@ public class Course implements Serializable {
     private List<ExamForm> examForms = new ArrayList<>();
 
 
-    public Course(){}
+    public Course(){
+        code = getName();
+    }
     public Course(String Name,List<Teacher>TeacherList)
     {
         this.Name=Name;
@@ -39,6 +41,7 @@ public class Course implements Serializable {
     public Course(String name) {
         Name = name;
     }
+
 
     public String getName(){return Name;}
     public void setName(String newName){this.Name=newName;}
@@ -73,5 +76,13 @@ public class Course implements Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

@@ -22,11 +22,13 @@ public class Course implements Serializable {
     private Subject subject;
     @OneToMany(mappedBy = "course")
     private List<Question> questions = new ArrayList<>();
+    /*
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "Course_ID"),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
+     */
 
 
     public Course(){}

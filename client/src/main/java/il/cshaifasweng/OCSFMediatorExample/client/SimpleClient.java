@@ -44,7 +44,9 @@ public class SimpleClient extends AbstractClient {
 
 		} else if (message.getMessage().equals("client added successfully")) {
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
-		} else if (message.getMessage().equals("Error! we got an empty message")) {
+		}else if(message.getMessage().startsWith("Exams in ")){
+			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
+		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
 		} else if (message.getMessage().startsWith("Grade Saved")) {
 		} else if (message.getMessage().startsWith("Success")) {

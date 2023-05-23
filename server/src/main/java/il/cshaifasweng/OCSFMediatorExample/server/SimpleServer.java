@@ -26,11 +26,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -46,6 +46,8 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Teacher.class);
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
+		configuration.addAnnotatedClass(Person.class);
+
 
 
 
@@ -62,8 +64,6 @@ public class SimpleServer extends AbstractServer {
 			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			//generateStudents();
-			//generateGrades();
 			generateData();
 			//session.getTransaction().commit();
 		}
@@ -80,6 +80,8 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private void generateData() throws IOException {
+		generateStudents();
+		generateGrades();
 		School school = School.getInstance();
 		ObjectMapper objectMapper = new ObjectMapper();
 		SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/il/cshaifasweng/OCSFMediatorExample/server/SchoolSubjects.json"),SubjectWrapper.class);
@@ -107,16 +109,18 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private void generateQuestions(List<Subject> subjectList) {
-		String requests[] = {"https://opentdb.com/api.php?amount=50&category=9&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=17&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=24&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=23&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=20&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=26&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=19&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=27&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=24&type=multiple",
-				"https://opentdb.com/api.php?amount=50&category=18&type=multiple",};
+		int questionAmount = 30;
+		String[] requests = {
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=17&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=23&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=20&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=26&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=19&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
+				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
 		Random random = new Random();
 		int randCourse;
 		for (int i = 0; i < requests.length;i++) {
@@ -148,17 +152,18 @@ public class SimpleServer extends AbstractServer {
 					Gson gson = new Gson();
 					ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
 					List<ResponseQuestion> questions = apiResponse.getResults();
+				List<Question> questionsList = new ArrayList<>();
 					for(ResponseQuestion responseQuestion: questions)
 					{
 						Question question = new Question();
 						responseQuestion.convert(question);
-						question.setSubject(subjectList.get(i));
-						randCourse = random.nextInt(subjectList.get(i).getCourses().size());
-						question.setCourse(subjectList.get(i).getCourses().get(randCourse));
+						question.setCourse(subjectList.get(i).getCourses().get(0));
+						questionsList.add(question);
 						session.save(question);
 						session.flush();
 					}
 					System.out.println(questions);
+					generateTestForms(questionsList);
 
 
 				} else {
@@ -171,7 +176,38 @@ public class SimpleServer extends AbstractServer {
 			} catch(IOException e){
 				e.printStackTrace();
 			}
+
 		}
+	}
+
+	private void generateTestForms(List<Question> questionsList) {
+		if(questionsList != null) {
+			for(int  i = 0; i < 3; i++) {
+				ExamForm examForm = new ExamForm();
+				for(int  j = 0; j < 10;j++) {
+					examForm.addQuestion(questionsList.get((i * 10) + j));
+				}
+				List<Question> examQuestions =  examForm.getQuestionList();
+				Course examCourse = examQuestions.get(0).getCourse();
+				Subject examSubject = examCourse.getSubject();
+				examForm.setQuestionList(examQuestions);
+				examForm.setSubject(examSubject);
+				examForm.setCourse(examCourse);
+				examForm.setCode(examSubject.getName() + " Code + " + examCourse.getName() + " Code" );
+				examForm.setCreator(examCourse.getTeacherList().get(0));
+				LocalDate localDate = LocalDate.now();
+				// Convert LocalDate to Date
+				Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+				examForm.setDateCreated(date);
+				examForm.setLastUsed(date);
+				session.saveOrUpdate(examForm);
+			}
+			session.flush();
+		}
+		else {
+			System.out.println("No question Retrieved");
+		}
+
 	}
 
 	private void generateTeachers(List<Subject> subjects) {
@@ -185,15 +221,15 @@ public class SimpleServer extends AbstractServer {
 				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
 				String password = faker.internet().password();
 				List<Course> courses = new ArrayList<>();
-				for (int j = 0; j < 3; j++) {
+				for (int j = 0; j < 5; j++) {
 					randomSubject = random.nextInt(subjects.size());
 					Subject subject = subjects.get(randomSubject);
-					for (int k = 0; k < 3; k++) {
+					for (int k = 0; k < 5; k++) {
 						randomCourse = random.nextInt(subject.getCourses().size());
 						courses.add(subject.getCourses().get(randomCourse));
 					}
 				}
-				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, teacherEmail, password, courses);
+				Teacher teacher = new Teacher(teacherFirstName, teacherLastName,Gender.Male, teacherEmail, password, courses);
 				for (Course course : courses) {
 					course.getTeachers().add(teacher);
 				}
@@ -262,12 +298,12 @@ public class SimpleServer extends AbstractServer {
 				message.setData(getSubjects());
 				client.sendToClient(message);
 			}else if(request.startsWith("Get Exams Forms for Subject")){
-				response ="Exams in " + ((Subject)(message.getData())).getName();
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
 			}else if(request.startsWith("Get Exams Forms for Course")){
-				response ="Exams in " + ((Course)(message.getData())).getName();
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
@@ -284,7 +320,7 @@ public class SimpleServer extends AbstractServer {
 				String studentID = request.substring(12);
 				int iStudentID = Integer.parseInt(studentID);
 				Student student = getStudent(iStudentID);
-				response = ("Grades of " + student.getStudentName());
+				response = ("Grades of " + student.getFullName());
 				message.setMessage(response);
 				message.setData(student);
 				client.sendToClient(message);
@@ -297,7 +333,7 @@ public class SimpleServer extends AbstractServer {
 			{
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
-					response = "Grade Saved: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
+					response = "Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
 					message.setMessage(response);
 					session.merge(newGrade);
 					session.flush();
@@ -334,13 +370,13 @@ public class SimpleServer extends AbstractServer {
 				try {
 					session.save(newStudent);
 					session.flush();
-					response = ("Success: " + newStudent.getStudentName() + " was successfully added to the database");
+					response = ("Success: " + newStudent.getFullName() + " was successfully added to the database");
 					message.setMessage(response);
 					client.sendToClient(message);
 				}
 				catch (Exception e)
 				{
-					response = (newStudent.getStudentName() + " could not be added to the database");
+					response = (newStudent.getFullName() + " could not be added to the database");
 				}
 			}
 			else if(request.startsWith("Add Grade")){
@@ -351,7 +387,7 @@ public class SimpleServer extends AbstractServer {
 					updatedStudent.getGrades().add(newGrade);
 					session.merge(updatedStudent);
 					session.flush();
-					response = ("Success: " + newGrade.getStudent().getStudentName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + " was successfully added to the database");
+					response = ("Success: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + ": " + newGrade.getSubject() + " was successfully added to the database");
 					message.setMessage(response);
 					client.sendToClient(message);
 					System.out.println(response);
@@ -360,7 +396,7 @@ public class SimpleServer extends AbstractServer {
 				catch (Exception e)
 				{
 					e.printStackTrace();
-					response = (newGrade.getStudent().getStudentName() + "'s new grade could not be added to the database");
+					response = (newGrade.getStudent().getFullName() + "'s new grade could not be added to the database");
 					System.out.println(response);
 				}
 			}
@@ -435,8 +471,9 @@ public class SimpleServer extends AbstractServer {
 		Faker faker = new Faker();
 		for(int  i = 0; i < 10;i++)
 		{
-			String name = faker.name().fullName();
-			Student student = new Student(name);
+			String firstName = faker.name().firstName();
+			String lastName = faker.name().lastName();
+			Student student = new Student(firstName,lastName);
 			session.save(student);
 			session.flush();
 		}

@@ -1,11 +1,13 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Entity
-@Table(name="Exam Forms")
-public class ExamForm {
+@Table(name="Exam_Forms")
+public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
@@ -84,5 +86,10 @@ public class ExamForm {
     public void setLastUsed(Date lastUsed) {
         this.lastUsed = lastUsed;
     }
+
+    public void addQuestion(Question question) {
+        QuestionList.add(question);
+    }
 }
+
 

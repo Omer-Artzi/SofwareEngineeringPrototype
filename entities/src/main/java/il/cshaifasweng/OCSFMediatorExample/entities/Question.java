@@ -1,11 +1,12 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name="Questions")
-public class Question {
+public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
@@ -27,10 +28,9 @@ public class Question {
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
 public Question(){}
-    public Question(Course course, Subject subject, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
+    public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
     {
         this.course=course;
-        this.subject=subject;
         this.questionData=questionData;
         this.Answers=Answer;
         this.correctAnswer=correctAnswer;
@@ -47,8 +47,6 @@ public Question(){}
 
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}
-    public Subject getSubject(){return subject;}
-    public void setSubject(Subject newSubject){this.subject=newSubject;}
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
     public List<String> getAnswers(){return Answers;}

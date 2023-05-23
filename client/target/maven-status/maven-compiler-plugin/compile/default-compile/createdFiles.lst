@@ -2,6 +2,7 @@ il/cshaifasweng/OCSFMediatorExample/client/SecondaryController.class
 il/cshaifasweng/OCSFMediatorExample/client/ocsf/AbstractClient.class
 il/cshaifasweng/OCSFMediatorExample/client/RefreshEvent.class
 il/cshaifasweng/OCSFMediatorExample/client/Main.class
+il/cshaifasweng/OCSFMediatorExample/client/ExamMessageEvent.class
 il/cshaifasweng/OCSFMediatorExample/client/studentMessageEvent.class
 il/cshaifasweng/OCSFMediatorExample/client/SimpleClient.class
 il/cshaifasweng/OCSFMediatorExample/client/LoadExamEvent.class

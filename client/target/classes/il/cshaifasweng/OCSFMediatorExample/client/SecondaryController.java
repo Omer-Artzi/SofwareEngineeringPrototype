@@ -87,7 +87,7 @@ public class SecondaryController {
     @Subscribe
     public void DisplayGrades(GradeMessageEvent event) {
         try {
-            studentNameTF.setText(event.getStudent().getStudentName() + "'s Grades");
+            studentNameTF.setText(event.getStudent().getFullName() + "'s Grades");
             studentNameTF.setAlignment(Pos.TOP_CENTER);
         }
         catch (IllegalStateException e)

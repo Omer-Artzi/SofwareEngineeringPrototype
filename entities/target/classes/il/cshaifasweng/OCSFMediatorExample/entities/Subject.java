@@ -13,9 +13,10 @@ public class Subject implements Serializable {
     private String name;
     @OneToMany(mappedBy = "subject")
     private List<Course> courses = new ArrayList<>();
+    /*
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
-
+    */
     public Subject() {
     }
 

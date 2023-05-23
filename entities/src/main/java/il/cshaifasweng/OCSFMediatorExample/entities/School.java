@@ -7,19 +7,20 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class School {
     private static School school;
     private static List<Subject> subjects;
+    private static List<Principal> principals;
 
     private School() {}
 
         public static School getInstance() {
         if(school == null)
         {
-
             school = new School();
         }
         return  school;

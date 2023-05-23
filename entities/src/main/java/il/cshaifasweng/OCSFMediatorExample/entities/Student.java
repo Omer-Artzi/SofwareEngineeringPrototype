@@ -9,43 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "Students")
-public class Student implements Serializable,Comparable<Student> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
-    private String studentName;
+@DiscriminatorValue("2")
+public class Student extends Person implements Serializable, Comparable<Student> {
     @OneToMany(mappedBy = "student")
     private List<Grade> grades = new ArrayList<>();
 
-    public Student(String studentName) {
-        this.studentName = studentName;
+    public Student() {}
+
+    public Student( String firstName, String lastName, Gender gender, String email, String password) {
+        super(firstName, lastName, gender, email, password);
     }
 
-    public Student() {
-
-    }
-    public Student(Student student) {
-        this.ID = student.getID();
-        this.grades = student.getGrades();
-        this.studentName = student.getStudentName();
-
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public Student(String firstName, String lastName) {
+        super(firstName, lastName);
     }
 
     public List<Grade> getGrades() {
@@ -56,17 +34,14 @@ public class Student implements Serializable,Comparable<Student> {
         this.grades = grades;
     }
 
+
     @Override
     public String toString() {
-        return "Student{" +
-                "ID=" + ID +
-                ", studentName='" + studentName + '\'' +
-                ", grades=" + grades +
-                '}';
+        return super.toString();
     }
 
     @Override
     public int compareTo(Student other) {
-        return this.studentName.compareTo(other.getStudentName());
+        return this.getFirstName().compareTo(other.getFirstName()) + this.getLastName().compareTo(other.getLastName());
     }
 }

@@ -10,10 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import il.cshaifasweng.OCSFMediatorExample.entities.*;
 import javafx.application.Platform;
@@ -56,7 +54,7 @@ public class PrimaryController {
 	private Button backButton;
 
 	@FXML
-	private TableColumn<ExamForm, String> codeColumn;
+	private TableColumn<ExamForm, SimpleStringProperty> codeColumn;
 
 	@FXML
 	private TableColumn<ExamForm, SimpleStringProperty> createdColumn;
@@ -105,17 +103,15 @@ public class PrimaryController {
 			SimpleClient.getClient().sendToServer(message);
 			IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
 			codeColumn.setCellValueFactory(new PropertyValueFactory<>("Code"));
-			codeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 			createdColumn.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
 			ExamsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-			ExamsTV.setEditable(true);
-
+			//Simulate Input
 			ExamForm sample = new ExamForm();
 			sample.setID(1);
 			sample.setCode("Code1");
 			sample.setCourse(new Course("Infi 1"));
 			sample.setSubject(new Subject("Mathematics"));
-			sample.setCreator(new Teacher("Ami","Viselter"));
+			sample.setCreator(new Teacher());
 			List<Question> sampleQuestions = new ArrayList<>();
 			Question question1 = new Question("What is a differential","Ami's favorite snack","I like this question","The answer is A");
 			List<String> answers = new ArrayList<>();
@@ -129,7 +125,7 @@ public class PrimaryController {
 			LocalDate localDate = LocalDate.now();
 			// Convert LocalDate to Date
 			Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			sample.setDateCreated(Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+			sample.setDateCreated(date);
 			ExamsTV.getItems().add(sample);
 			ExamsTV.refresh();
 		} catch (IOException e) {
@@ -146,7 +142,6 @@ public class PrimaryController {
 		if(event.getSubjects() != null)
 		{
 			subjectsCB.getItems().addAll(event.getSubjects());
-
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "Could not Retrieve any subjects", "DataBase Erroe", JOptionPane.WARNING_MESSAGE);
@@ -159,7 +154,7 @@ public class PrimaryController {
 		if(courses != null)
 		{
 			CoursesCB.getItems().addAll(courses);
-			Message message = new Message(++msgId, "Get Exams Forms for Subject: "  + CoursesCB.getSelectionModel().getSelectedItem() );
+			Message message = new Message(++msgId, "Get Exams Forms for Subject: "  + subjectsCB.getSelectionModel().getSelectedItem() );
 			message.setData(subjectsCB.getSelectionModel().getSelectedItem());
 			SimpleClient.getClient().sendToServer(message);
 		}
@@ -184,6 +179,7 @@ public class PrimaryController {
 	public void viewManual()
 	{
 		int questionID = 1;
+		Random random = new Random();
 		ExamForm selectedForm = ExamsTV.getSelectionModel().getSelectedItem();
 		XWPFDocument document = new XWPFDocument();
 		XWPFParagraph titleParagraph = document.createParagraph();
@@ -202,16 +198,19 @@ public class PrimaryController {
 		{
 			XWPFParagraph questionParagraph = document.createParagraph();
 			XWPFRun questionBody = questionParagraph.createRun();
+			List<String> answers = question.getAnswers();
+			int randPlace = random.nextInt(3);
+			answers.add(randPlace,question.getCorrectAnswer());
 			questionBody.setText(questionID++ +". " + question.getQuestionData());
 			questionBody.addBreak();
 			questionBody.addBreak();
-			questionBody.setText(" A." + question.getAnswers().get(0),questionBody.getTextPosition());
+			questionBody.setText(" A." + answers.get(0),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" B." + question.getAnswers().get(1),questionBody.getTextPosition());
+			questionBody.setText(" B." + answers.get(1),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" C." + question.getAnswers().get(2),questionBody.getTextPosition());
+			questionBody.setText(" C." + answers.get(2),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" D." + question.getAnswers().get(3),questionBody.getTextPosition());
+			questionBody.setText(" D." + answers.get(3),questionBody.getTextPosition());
 			questionBody.addBreak();
 			questionBody.addBreak();
 			questionBody.setText("Student Notes: " + question.getStudentNote(),questionBody.getTextPosition());
@@ -283,6 +282,13 @@ public class PrimaryController {
 		else {
 			JOptionPane.showMessageDialog(null,"No exam selected","Error!",JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	@Subscribe
+	public void DisplayExam(ExamMessageEvent event)
+	{
+		ExamsTV.getItems().clear();
+		ExamsTV.getItems().addAll(event.getExamForms());
+		ExamsTV.refresh();
 	}
 
 
