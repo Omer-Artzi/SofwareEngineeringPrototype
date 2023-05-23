@@ -191,7 +191,7 @@ public class PrimaryController {
 		title.addBreak();
 		title.setText("Exam Code: " + selectedForm.getCode(),title.getTextPosition());
 		title.addBreak();
-		title.setText("Created By: " + selectedForm.getCreator() + " in " + selectedForm.getDateCreated(),title.getTextPosition());
+		title.setText("Created By: " + selectedForm.getCreator().getFullName() + " in " + selectedForm.getDateCreated(),title.getTextPosition());
 		title.addBreak();
 
 		for(Question question : selectedForm.getQuestionList())

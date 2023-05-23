@@ -1,4 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
+
+import com.github.javafaker.Faker;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,6 +49,11 @@ public class ExamForm implements Serializable {
     }
 
     public String getCode() {
+        Faker faker= new Faker();
+        if(Code == null)
+        {
+            Code = subject.getCode() + course.getCode() + faker.bothify("##");
+        }
         return Code;
     }
 
@@ -85,5 +93,11 @@ public class ExamForm implements Serializable {
     public void setLastUsed(Date lastUsed) {
         this.lastUsed = lastUsed;
     }
+
+    public void addQuestion(Question question) {
+        QuestionList.add(question);
+    }
+
 }
+
 

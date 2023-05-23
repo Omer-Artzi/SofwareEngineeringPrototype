@@ -193,7 +193,7 @@ public class SimpleServer extends AbstractServer {
 				examForm.setQuestionList(examQuestions);
 				examForm.setSubject(examSubject);
 				examForm.setCourse(examCourse);
-				examForm.setCode(examSubject.getName() + " Code + " + examCourse.getName() + " Code" );
+				examForm.setCode(examSubject.getCode() + "" + examCourse.getCode());
 				examForm.setCreator(examCourse.getTeacherList().get(0));
 				LocalDate localDate = LocalDate.now();
 				// Convert LocalDate to Date

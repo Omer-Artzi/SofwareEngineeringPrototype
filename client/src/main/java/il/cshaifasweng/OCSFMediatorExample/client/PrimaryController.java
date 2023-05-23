@@ -213,12 +213,16 @@ public class PrimaryController {
 			questionBody.setText(" D." + answers.get(3),questionBody.getTextPosition());
 			questionBody.addBreak();
 			questionBody.addBreak();
-			questionBody.setText("Student Notes: " + question.getStudentNote(),questionBody.getTextPosition());
-			questionBody.addBreak();
-			questionBody.addBreak();
-			questionBody.setText("Teacher Notes: " + question.getTeacherNote(),questionBody.getTextPosition());
-			questionBody.addBreak();
-			questionBody.addBreak();
+			if(question.getStudentNote() != null) {
+				questionBody.setText("Student Notes: " + question.getStudentNote(), questionBody.getTextPosition());
+				questionBody.addBreak();
+				questionBody.addBreak();
+			}
+			if(question.getTeacherNote() != null) {
+				questionBody.setText("Teacher Notes: " + question.getTeacherNote(), questionBody.getTextPosition());
+				questionBody.addBreak();
+				questionBody.addBreak();
+			}
 
 		}
 		try

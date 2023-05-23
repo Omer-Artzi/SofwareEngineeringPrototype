@@ -1,5 +1,7 @@
 package il.cshaifasweng.OCSFMediatorExample.entities;
 
+import com.github.javafaker.Faker;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class Course implements Serializable {
     private Subject subject;
     @OneToMany(mappedBy = "course")
     private List<Question> questions = new ArrayList<>();
+    private String code;
     /*
     @ManyToMany
     @JoinTable(
@@ -31,16 +34,23 @@ public class Course implements Serializable {
      */
 
 
-    public Course(){}
+    public Course(){
+
+    }
     public Course(String Name,List<Teacher>TeacherList)
     {
+        Faker faker = new Faker();
         this.Name=Name;
         this.teachers =TeacherList;
+        code = faker.bothify("##");
     }
 
     public Course(String name) {
-        Name = name;
+        Faker faker = new Faker();
+
+        code = faker.bothify("##");
     }
+
 
     public String getName(){return Name;}
     public void setName(String newName){this.Name=newName;}
@@ -75,5 +85,18 @@ public class Course implements Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public String getCode() {
+        if(code == null)
+        {
+            Faker faker = new Faker();
+            code = faker.bothify("##");
+        }
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

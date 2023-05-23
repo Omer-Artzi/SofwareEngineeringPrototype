@@ -13,9 +13,6 @@ public class Question implements Serializable {
     @ManyToOne
     @JoinColumn(name = "courseID")
     private Course course;
-    @ManyToOne
-    @JoinColumn(name = "subjectID")
-    private  Subject subject;
     private String questionData;
     @ElementCollection
     private List<String> Answers;
