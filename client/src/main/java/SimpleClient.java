@@ -51,7 +51,7 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
-		} else if (message.getMessage().startsWith("Entities.Grade Saved")) {
+		} else if (message.getMessage().startsWith("Grade Saved")) {
 		} else if (message.getMessage().startsWith("Success")) {
 		} else if (message.getMessage().startsWith("Failed to save grade")) {
 			String warning = "The grade could not be saved";
@@ -93,7 +93,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to Log in");
-			SimpleChatClient.setRoot("login");
+			SimpleChatClient.setRoot("ViewExam");
 			SimpleChatClient.getClientStage().setWidth(1024);
 			SimpleChatClient.getClientStage().setHeight(768);
 

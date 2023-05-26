@@ -67,13 +67,13 @@ public class SimpleChatClient extends Application {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.INFORMATION,
-                    String.format("Entities.Message:\nId: %d\nData: %s\nTimestamp: %s\n",
+                    String.format("Message:\nId: %d\nData: %s\nTimestamp: %s\n",
                             message.getMessage().getId(),
                             message.getMessage().getMessage(),
                             message.getMessage().getTimeStamp().format(dtf))
             );
             alert.setTitle("new message");
-            alert.setHeaderText("New Entities.Message:");
+            alert.setHeaderText("New Message:");
             alert.show();
         });
     }

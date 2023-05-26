@@ -43,7 +43,7 @@ public class TeacherMainScreenController  {
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
         SimpleChatClient m = new SimpleChatClient();
-        SimpleChatClient.setRoot("addExam.fxml");
+        SimpleChatClient.setRoot("addExam");
     }
 
     @FXML
@@ -62,7 +62,8 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) {
+    void viewTestForms(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("ViewExam");
 
     }
 

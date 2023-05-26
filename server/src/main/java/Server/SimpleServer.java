@@ -286,7 +286,7 @@ public class SimpleServer extends AbstractServer {
 		SubscribedClient subscribedClient = new SubscribedClient(client);
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
-		System.out.println("Entities.Message Received: " + request);
+		System.out.println("Message Received: " + request);
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
@@ -299,12 +299,12 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(retrieveSubjects());
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+			}else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(retrieveExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Course")){
+			}else if(request.startsWith("Get Exams Forms for Course")){
 				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(retrieveExamsForCourse((Course)(message.getData())));
@@ -331,11 +331,11 @@ public class SimpleServer extends AbstractServer {
 
 			}
 			//The user decided to update a grade, we will update the SQL server and send the new grade list
-			else if(request.startsWith("Change Entities.Grade"))
+			else if(request.startsWith("Change Grade"))
 			{
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
-					response = "Entities.Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
+					response = "Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
 					message.setMessage(response);
 					session.merge(newGrade);
 					session.flush();
@@ -367,7 +367,7 @@ public class SimpleServer extends AbstractServer {
 				}
 				EventBus.getDefault().post(new ClientUpdateEvent(SubscribersList.size()));
 			}
-			else if(request.startsWith("Add Entities.Student")){
+			else if(request.startsWith("Add Student")){
 				Student newStudent = (Student) (message.getData());
 				try {
 					session.save(newStudent);
@@ -381,7 +381,7 @@ public class SimpleServer extends AbstractServer {
 					response = (newStudent.getFullName() + " could not be added to the database");
 				}
 			}
-			else if(request.startsWith("Add Entities.Grade")){
+			else if(request.startsWith("Add Grade")){
 				Grade newGrade = ((Grade)(message.getData()));
 				try {
 					session.save(newGrade);
@@ -405,7 +405,7 @@ public class SimpleServer extends AbstractServer {
 			else{
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);
-				response = "[Unrecognized Entities.Message]";
+				response = "[Unrecognized Message]";
 				client.sendToClient(message);
 			}
 			transmission.setResponse(response);

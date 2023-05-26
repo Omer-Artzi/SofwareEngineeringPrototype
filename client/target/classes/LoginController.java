@@ -46,8 +46,8 @@ public class LoginController {
 
     private void checkLogin() throws IOException {
 
-        if(usernameTF.getText().toString().equals("user") && passwordTF.getText().toString().equals("1234")) {
-            wrongLoginLabel.setText("Login successful");
+        if(usernameTF.getText()!=null && passwordTF.getText()!=null) {
+
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
             // in case that the user is a Teacher:
             SimpleChatClient.setRoot("TeacherMainScreen");

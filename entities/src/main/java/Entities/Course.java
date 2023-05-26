@@ -30,7 +30,7 @@ public class Course implements Serializable {
     @JoinTable(
             joinColumns = @JoinColumn(name = "Course_ID"),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
-    private List<Entities.ExamForm> examForms = new ArrayList<>();
+    private List<ExamForm> examForms = new ArrayList<>();
      */
 
 

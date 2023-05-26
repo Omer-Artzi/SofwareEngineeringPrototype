@@ -93,7 +93,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to Log in");
-			SimpleChatClient.setRoot("login");
+			SimpleChatClient.setRoot("ViewExam");
 			SimpleChatClient.getClientStage().setWidth(1024);
 			SimpleChatClient.getClientStage().setHeight(768);
 
