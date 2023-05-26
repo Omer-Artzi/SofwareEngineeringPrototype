@@ -2,6 +2,8 @@ package Entities;
 
 import java.util.List;
 
+
+// Deprecated. ClassExam is the new entity
 public class Exam extends ExamForm{
 
     private int ID;

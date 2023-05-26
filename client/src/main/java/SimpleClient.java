@@ -105,7 +105,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
 		}
 		catch (Exception e)
