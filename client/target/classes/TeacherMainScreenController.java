@@ -1,5 +1,4 @@
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,6 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public class TeacherMainScreenController  {
+
+    @FXML
+    private Label MainMessageLabel;
+
     @FXML
     private Label Menu;
 
@@ -69,6 +72,7 @@ public class TeacherMainScreenController  {
 
     @FXML
     void initialize() {
+        assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert MenuBack != null : "fx:id=\"MenuBack\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";

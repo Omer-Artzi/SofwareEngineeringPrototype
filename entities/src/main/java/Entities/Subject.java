@@ -15,6 +15,13 @@ public class Subject implements Serializable {
     private String name;
     @OneToMany(mappedBy = "subject")
     private List<Course> courses = new ArrayList<>();
+
+    // Updated by Ilan 27.5
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "Subject_ID"),
+            inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
+    private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
     /*
     @OneToMany(mappedBy = "subject")
@@ -65,6 +72,10 @@ public class Subject implements Serializable {
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
+
+    public List<Teacher> getTeachers(){return teachers;}
+
+    public void setTeachers(List<Teacher> teachers){this.teachers = teachers;}
 
     public String getCode() {
         if(code == null)
