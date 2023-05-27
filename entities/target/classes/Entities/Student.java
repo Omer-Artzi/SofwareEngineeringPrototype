@@ -20,12 +20,12 @@ public class Student extends Person implements Serializable, Comparable<Student>
 
     public Student() {}
 
-    public Student( String firstName, String lastName, Gender gender, String email, String password) {
-        super(firstName, lastName, gender, email, password);
+    public Student(Long ID, String firstName, String lastName, Gender gender, String email, String password) {
+        super(ID, firstName, lastName, gender, email, password);
     }
 
-    public Student(String firstName, String lastName) {
-        super(firstName, lastName);
+    public Student(Long ID, String firstName, String lastName) {
+        super(ID, firstName, lastName);
     }
 
     public List<Grade> getGrades() {

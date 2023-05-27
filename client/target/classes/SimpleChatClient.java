@@ -20,6 +20,7 @@ public class SimpleChatClient extends Application {
 
     private static Scene scene;
     private static Stage clientStage;
+    private static FXMLLoader fxmlLoader;
     private SimpleClient client;
 
     public static final double version = 1.7;
@@ -48,8 +49,7 @@ public class SimpleChatClient extends Application {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        return FXMLLoader.load(SimpleChatClient.class.getResource(fxml + ".fxml"));
     }
 
     @Override

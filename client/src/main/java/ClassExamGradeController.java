@@ -136,11 +136,16 @@ public class ClassExamGradeController {
         GradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         StatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         ClassExamTv.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        StatusColumn.setComparator(StatusColumn.getComparator().reversed());
+        ClassExamTv.getSortOrder().add(StatusColumn);
         // Loading the data to the table
         if(chosenExam != null)
         {
             ClassExamTv.getItems().addAll(chosenExam.getStudentExams());
+            ClassExamTv.sort();
         }
+
     }
 
     @FXML

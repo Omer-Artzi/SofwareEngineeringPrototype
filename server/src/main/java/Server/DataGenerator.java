@@ -7,6 +7,7 @@ import Server.SimpleServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
+import javassist.Loader;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -28,7 +29,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DataGenerator {
 
-
+    static Faker faker = new Faker();
+    static Random random = new Random();
 
     public static void generateData(Session session) throws IOException {
         GenerateStudents(session);
@@ -59,7 +61,6 @@ public class DataGenerator {
     }
 
     public static void GenerateQuestions(List<Subject> subjectList, Session session) {
-        Faker faker = new Faker();
         int questionAmount = 30;
         String[] requests = {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
@@ -72,8 +73,7 @@ public class DataGenerator {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
-        Random random = new Random();
-        int randCourse;
+
         for (int i = 0; i < requests.length;i++) {
             try {
                 // Create URL object and open connection
@@ -133,7 +133,6 @@ public class DataGenerator {
     }
 
     public static void GenerateTestForms(List<Question> questionsList, Session session) {
-        Faker faker = new Faker();
         if(questionsList != null) {
             for(int  i = 0; i < 3; i++) {
                 ExamForm examForm = new ExamForm();
@@ -180,9 +179,7 @@ public class DataGenerator {
     }
     private static void GenerateClassExams(List<ExamForm> ExamForms, Session session)
     {
-        Faker faker = new Faker();
         if(ExamForms != null) {
-
             // generate list of Class Exam
             for(int i = 0; i < 3; i++) {
 
@@ -214,7 +211,8 @@ public class DataGenerator {
                         status = "Approved";
                     else
                         status = "To Evaluate";
-                    StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, faker.number().numberBetween(0, 101), status);
+                    //status = "To Evaluate";
+                    StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
                     StudentExams.add(currentExam);
 
                 }
@@ -235,13 +233,10 @@ public class DataGenerator {
 
     public static void GenerateTeachers(List<Subject> subjects, Session session) {
         try {
+            List<Long> IDS = SimpleServer.retrieveIDs();
             String salt = BCrypt.gensalt();
-
-            Faker faker = new Faker();
-            Random random = new Random();
             int randomSubject, randomCourse;
             for (int i = 0; i < 50; i++) {
-
                 String teacherFirstName = faker.name().firstName();
                 String teacherLastName = faker.name().lastName();
                 String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
@@ -255,7 +250,14 @@ public class DataGenerator {
                         courses.add(subject.getCourses().get(randomCourse));
                     }
                 }
-                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password);
+
+                Long ID = faker.number().randomNumber(9, false);
+                while (IDS.contains(ID))
+                {
+                    ID = faker.number().randomNumber(9, false);
+                }
+                IDS.add(ID);
+                Teacher teacher = new Teacher(ID, teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password);
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
@@ -284,12 +286,11 @@ public class DataGenerator {
     //Generating grades and saving in the SQL server
     public static void GenerateGrades(Session session) {
         List<Student> students = SimpleServer.retrieveStudents();
-        Faker faker = new Faker();
-        Random r = new Random();
+
         for(Student student : students)
         {
             for(int i = 0; i < 8;i++ ) {
-                Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
+                Grade grade = new Grade(random.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
                 student.getGrades().add(grade);
                 session.save(grade);
             }
@@ -299,12 +300,18 @@ public class DataGenerator {
 
 
     public static void GenerateStudents(Session session) {
-        Faker faker = new Faker();
+        List<Long> IDS = SimpleServer.retrieveIDs();
         for(int  i = 0; i < 10;i++)
         {
+            Long ID = faker.number().randomNumber(9, false);
+            while (IDS.contains(ID))
+            {
+                ID = faker.number().randomNumber(9, false);
+            }
+            IDS.add(ID);
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            Student student = new Student(firstName,lastName);
+            Student student = new Student(ID, firstName,lastName);
             session.save(student);
             session.flush();
         }

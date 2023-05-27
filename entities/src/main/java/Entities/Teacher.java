@@ -15,12 +15,8 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "tester")
     private List<ClassExam> classExams = new ArrayList<>();
 
-    public Teacher(String firstName, String lastName, Gender gender, String email, String password) {
-        super(firstName, lastName, gender, email, password);
-    }
-
-    public Teacher(String teacherFirstName, String teacherLastName, String teacherEmail, String password, List<Course> courses) {
-
+    public Teacher(Long ID, String firstName, String lastName, Gender gender, String email, String password) {
+        super(ID, firstName, lastName, gender, email, password);
     }
 
     public List<Course> getCourseList() {

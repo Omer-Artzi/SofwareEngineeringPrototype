@@ -19,9 +19,12 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -588,6 +591,22 @@ public class SimpleServer extends AbstractServer {
 		query.from(ExamForm.class);
 		List<ExamForm> exams = session.createQuery(query).getResultList();
 		return exams;
+	}
+
+	public static List<Long> retrieveIDs()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Student> queryS = builder.createQuery(Student.class);
+		queryS.from(Student.class);
+		List<Student> personList = session.createQuery(queryS).getResultList();
+		List<Long> IDS = personList.stream().map(Student::getID).collect(Collectors.toList());
+
+		CriteriaQuery<Teacher> queryT = builder.createQuery(Teacher.class);
+		queryT.from(Teacher.class);
+		List<Teacher> teacherList = session.createQuery(queryT).getResultList();
+		IDS.addAll(teacherList.stream().map(Teacher::getID).collect(Collectors.toList()));
+
+		return IDS;
 	}
 
 
