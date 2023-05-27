@@ -83,7 +83,7 @@ public class ViewQuestionsController {
     }
 
     @Subscribe
-    void PopulateDropdownMenus(SubjectMessageEvent event) {
+    public void PopulateDropdownMenus(SubjectMessageEvent event) {
         subjectList = event.getSubjects();
         subjectPicker.getItems().addAll(subjectList);
     }

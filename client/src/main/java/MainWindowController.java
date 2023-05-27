@@ -20,18 +20,32 @@ public class MainWindowController {
     private AnchorPane sidePane;
 
     @FXML
-    void initialize() throws IOException {
+    private void initialize() throws IOException {
         InitializationAsserts();
 
+
+        // Load the sidebar
         Parent sideBarParent = SimpleChatClient.loadFXML("/Sidebar");
         sidePane.getChildren().clear();
         sidePane.getChildren().add(sideBarParent);
 
+        // Load the main window
+        Parent mainWindowParent = SimpleChatClient.loadFXML("/ViewQuestionsWindow");
+        mainPane.getChildren().clear();
+        mainPane.getChildren().add(mainWindowParent);
+
     }
 
-    void InitializationAsserts() {
+    private void InitializationAsserts() {
         assert mainPane != null : "fx:id=\"mainPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert sidePane != null : "fx:id=\"sidePane\" was not injected: check your FXML file 'MainWindow.fxml'.";
+    }
+
+    @FXML
+    public void LoadSceneToMainWindow(String sceneName) throws IOException {
+        Parent mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        mainPane.getChildren().clear();
+        mainPane.getChildren().add(mainWindowParent);
     }
 }
 
