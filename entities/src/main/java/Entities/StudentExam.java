@@ -32,6 +32,9 @@ public class StudentExam implements Serializable {
 
     private double timeLeft;
 
+    private String teacherNote;
+    private String scoreChangeReason;
+
     public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, String status)
     {
         this.student = student;
@@ -42,6 +45,18 @@ public class StudentExam implements Serializable {
         this.studentAnswers = studentAnswers;
         this.grade = grade;
         this.status = status;
+    }
+
+    public void update(StudentExam other)
+    {
+        this.grade = other.grade;
+        this.studentAnswers = new ArrayList<>(other.getStudentAnswers());
+        this.status = other.status;
+    }
+
+    public int getID()
+    {
+        return this.ID;
     }
 
     public Student getStudent()
@@ -97,6 +112,25 @@ public class StudentExam implements Serializable {
     public double getTimeLeft(){return timeLeft;}
     public void setTimeLeft(double timeLeft){this.timeLeft=timeLeft;}
 
+    public String getTeacherNote()
+    {
+        return teacherNote;
+    }
+
+    public void setTeacherNote(String teacherNote)
+    {
+        this.teacherNote = teacherNote;
+    }
+
+    public String getScoreChangeReason()
+    {
+        return scoreChangeReason;
+    }
+
+    public void setScoreChangeReason(String scoreChangeReason)
+    {
+        this.scoreChangeReason = scoreChangeReason;
+    }
 
 
 }

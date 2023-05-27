@@ -57,6 +57,12 @@ public class Course implements Serializable {
     public List<Teacher> getTeacherList(){return teachers;}
     public void setTeacherList(List<Teacher>TeacherList){this.teachers =TeacherList;}
 
+    public void AddTeacher(Teacher teacher)
+    {
+        if (!teachers.contains(teacher))
+            teachers.add(teacher);
+    }
+
 
     public void setId(Long id) {
         this.ID = id;

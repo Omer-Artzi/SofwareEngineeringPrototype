@@ -11,7 +11,11 @@ import java.util.List;
 public class Teacher extends Person{
     @ManyToMany(mappedBy = "teachers")
     private List<Course> courses = new ArrayList<>();
-    public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list) {
+
+    @OneToMany(mappedBy = "tester")
+    private List<ClassExam> classExams = new ArrayList<>();
+
+    public Teacher(String firstName, String lastName, Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
 
@@ -21,6 +25,29 @@ public class Teacher extends Person{
 
     public List<Course> getCourseList() {
         return courses;
+    }
+    public void AddCourse(Course course) {
+        if (!courses.contains(course))
+        {
+            courses.add(course);
+            course.AddTeacher(this);
+        }
+    }
+
+    public List<ClassExam> getClassExam() {
+        return classExams;
+    }
+
+    public void setClassExam(List<ClassExam> classExam) {
+        this.classExams = classExam;
+    }
+    public void AddClassExam(ClassExam classExam)
+    {
+        if (!classExams.contains(classExam))
+        {
+            this.classExams.add(classExam);
+        }
+
     }
 
     public void setCourseList(List<Course> CourseList) {

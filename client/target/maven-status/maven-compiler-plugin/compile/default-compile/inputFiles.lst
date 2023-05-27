@@ -2,9 +2,11 @@ C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\Sofw
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AbstractClient.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\SubjectMessageEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleChatClient.java
+C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\StudentExamGradeController.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ExamMessageEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\MessageEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AdaptableClient.java
+C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\StudentExamEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableClient.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleClient.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\AddExamController.java
@@ -18,6 +20,7 @@ C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\Sofw
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddGradeSuccesEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddStudentSuccesEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableSWRClient.java
+C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\GeneralEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Main.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\LoadExamEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\PreLogInController.java
