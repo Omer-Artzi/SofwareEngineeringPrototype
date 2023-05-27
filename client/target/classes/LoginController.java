@@ -1,11 +1,18 @@
 
+import Entities.Message;
+import Events.UserMessageEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginController {
     @FXML
@@ -45,17 +52,16 @@ public class LoginController {
     }
 
     private void checkLogin() throws IOException {
-        if(usernameTF.getText().toString().equals("user") && passwordTF.getText().toString().equals("1234")) {
-            wrongLoginLabel.setText("Login successful");
+        String username = usernameTF.getText();
+        String password = passwordTF.getText();
+        if(!username.isEmpty() && !password.isEmpty() &&!username.isBlank() && !password.isBlank()) {
+            Message credentials = new Message(1, "Login");
+            List<String> user = new ArrayList<>();
+            user.add(username);
+            user.add(password);
+            credentials.setData(user);
+            SimpleClient.getClient().sendToServer(credentials);
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
-            // in case that the user is a Teacher:
-            SimpleChatClient.setRoot("TeacherMainScreen");
-
-            // in case that the user is a Student:
-            //m.changeScene("StudentMainScreen.fxml");
-
-            // in case that the user is a Principal:
-            //m.changeScene("PrincipalMainScreen.fxml");
         }
         else if (usernameTF.getText().isEmpty() && passwordTF.getText().isEmpty()){
             wrongLoginLabel.setText("Please enter your data");
@@ -67,11 +73,24 @@ public class LoginController {
 
     @FXML
     void initialize() {
+        EventBus.getDefault().register(this);
         assert loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'login.fxml'.";
         assert passwordTF != null : "fx:id=\"passwordTF\" was not injected: check your FXML file 'login.fxml'.";
         assert usernameTF != null : "fx:id=\"usernameTF\" was not injected: check your FXML file 'login.fxml'.";
         assert wrongLoginLabel != null : "fx:id=\"wrongLoginLabel\" was not injected: check your FXML file 'login.fxml'.";
 
+    }
+    @Subscribe
+    public void logIn(UserMessageEvent event) throws IOException {
+        System.out.println("Logging in");
+        if(event.getStatus() == "Success")
+        {
+            SimpleClient.getClient().setUser(event.getUser());
+            SimpleChatClient.setRoot("TeacherMainScreen");
+        }
+        else {
+            wrongLoginLabel.setText("E-mail address or password is wrong");
+        }
     }
 
 }

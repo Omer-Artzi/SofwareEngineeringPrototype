@@ -42,4 +42,11 @@ public class Student extends Person implements Serializable, Comparable<Student>
     public int compareTo(Student other) {
         return this.getFirstName().compareTo(other.getFirstName()) + this.getLastName().compareTo(other.getLastName());
     }
+    public void extraTimeRequest(ExtraTime data)
+    {}
+
+    @Override
+    public void receiveExtraTime(ExtraTime data) {
+        //TODO: Add extra time
+    }
 }
