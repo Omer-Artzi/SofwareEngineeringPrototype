@@ -23,6 +23,7 @@ public class MainWindowController {
     private void initialize() throws IOException {
         InitializationAsserts();
 
+        SimpleChatClient.setMainWindowController(this);
 
         // Load the sidebar
         Parent sideBarParent = SimpleChatClient.loadFXML("/Sidebar");

@@ -14,6 +14,7 @@ ocsf\ObservableClient.class
 Events\ErrorEvent.class
 Events\ClientConnectionEvent.class
 TeacherMainScreenController.class
+QuestionSceneController.class
 Events\MessageEvent.class
 AddExamController.class
 Main.class
@@ -22,6 +23,7 @@ MainWindowController.class
 ocsf\ObservableSWRClient.class
 SecondaryController$1.class
 SimpleChatClient.class
+Events\UserMessageEvent.class
 Events\ExamMessageEvent.class
 Events\EditGradeSuccessEvent.class
 Events\LoadExamEvent.class

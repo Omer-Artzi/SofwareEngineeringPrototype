@@ -217,6 +217,9 @@ public class SimpleServer extends AbstractServer {
 			admin.setEmail("admin");
 			admin.setPassword(BCrypt.hashpw("1234", salt));
 			admin.setCourseList(new ArrayList<>());
+			for (Subject subject : subjects) {
+				admin.getCourseList().addAll(subject.getCourses());
+			};
 			admin.setGender(Gender.Female);
 			admin.setFirstName("super");
 			admin.setLastName("user");
@@ -283,6 +286,7 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+		System.out.println("Message Received in server");
 		Message message = (Message) msg;
 		String response;
 		String request = message.getMessage();
@@ -303,12 +307,15 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}else if(request.startsWith("Login")){
 				List<String> credentials = (List<String>)message.getData();
+				System.out.println("user is: " + credentials.get(0) + " password is: " + credentials.get(1));
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
+				System.out.println("user is: " + user.getEmail() + " password is: " + password);
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
 					response = "Success: User found";
 					message.setData(user);
+					System.out.println("user has been sent to client");
 				}
 				else
 				{
@@ -317,6 +324,7 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 			} else if(request.startsWith("Get Subjects")){
+				System.out.println("Sending subjects to client");
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
@@ -459,16 +467,19 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private Person retrieveUser(String email) {
+		System.out.println("Retrieving user");
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		try {
 			CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
 			Root<Teacher> root = query.from(Teacher.class);
 			query.where(builder.equal(root.get("email"), email));
 			Person user = session.createQuery(query).getSingleResult();
+			System.out.println("Retrieved user");
 			return user;
 		}
 		catch (Exception e)
 		{
+			System.out.println("Error in retrieveuser");
 			CriteriaQuery<Student> query = builder.createQuery(Student.class);
 			Root<Student> root = query.from(Student.class);
 			query.where(builder.equal(root.get("email"), email));

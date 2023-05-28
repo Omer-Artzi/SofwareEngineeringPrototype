@@ -8,6 +8,7 @@ D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Main.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\ResponseQuestion.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\ApiResponse.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Controllers\PrimaryController.java
+D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\ExtraTimeRequestEvent.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\SimpleServer.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\ClientUpdateEvent.java
 D:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\TerminationEvent.java

@@ -10,6 +10,7 @@ Server\Events\TerminationEvent.class
 Server\ocsf\ObservableServer.class
 Server\ocsf\ObservableOriginatorServer.class
 Server\ocsf\AbstractServer.class
+Server\Events\ExtraTimeRequestEvent.class
 Server\ocsf\OriginatorMessage.class
 Server\SimpleChatServer.class
 Server\SimpleChatServer$1.class

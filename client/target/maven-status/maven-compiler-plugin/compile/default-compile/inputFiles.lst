@@ -5,6 +5,7 @@ D:\repos\SofwareEngineeringPrototype\client\src\main\java\LoginController.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\MessageEvent.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\ocsf\AbstractClient.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\studentMessageEvent.java
+D:\repos\SofwareEngineeringPrototype\client\src\main\java\QuestionSceneController.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Main.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\AddExamController.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\RefreshEvent.java
@@ -20,6 +21,7 @@ D:\repos\SofwareEngineeringPrototype\client\src\main\java\MainWindowController.j
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ClientConnectionEvent.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\SecondaryController.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\LoadExamEvent.java
+D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\UserMessageEvent.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ExamMessageEvent.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\PreLogInController.java
 D:\repos\SofwareEngineeringPrototype\client\src\main\java\TeacherMainScreenController.java

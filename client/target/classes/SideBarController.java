@@ -3,6 +3,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
+
 public class SideBarController {
 
     @FXML
@@ -47,8 +49,8 @@ public class SideBarController {
     }
 
     @FXML
-    void viewQuestion(ActionEvent event) {
-
+    void viewQuestion(ActionEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewQuestionsWindow");
     }
 
     @FXML

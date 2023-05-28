@@ -12,5 +12,7 @@ Entities\Gender.class
 Entities\SubjectWrapper.class
 Entities\School.class
 Entities\Message.class
+Entities\ClassExam.class
 Entities\Exam.class
+Entities\ExtraTime.class
 Entities\NewSubscriberEvent.class
