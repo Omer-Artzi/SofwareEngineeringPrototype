@@ -26,12 +26,21 @@ public class ClassExam implements Serializable
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
+    private int approvedExamsNum;
+
+    private double gradesMean;
+
+    private double gradesVariance;
+
     public ClassExam(ExamForm examForm, String date, Teacher tester)
     {
-        this.examForm = examForm;
         this.date=date;
         this.tester = tester;
+        this.examForm = examForm;
         tester.AddClassExam(this);
+        this.approvedExamsNum=0;
+        this.gradesMean=0;
+        this.gradesVariance=0;
     }
 
     public int getID() {return ID;}
@@ -39,6 +48,13 @@ public class ClassExam implements Serializable
     public List<StudentExam> getStudentExams(){return studentExams;}
     public void setStudentExams(List<StudentExam> studentExams){this.studentExams=studentExams;}
     public void AddStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
+
+    public void UpdateStudentExam(StudentExam studentExam)
+    {
+        System.out.println("index = " + studentExams.indexOf(studentExam));
+        studentExams.set(studentExams.indexOf(studentExam), studentExam);
+    }
+
     public String getDate(){return date;}
     public void setDate(String newDate){this.date=newDate;}
     public ExamForm getExamForm(){return examForm;}
@@ -46,4 +62,15 @@ public class ClassExam implements Serializable
 
     public Teacher getTeacher(){return tester;}
     public void setTeacher(Teacher tester){this.tester=tester;}
+
+
+    public int getApprovedExamsNum(){return approvedExamsNum;}
+    public void setApprovedExamsNum(int approvedExamsNum){this.approvedExamsNum=approvedExamsNum;}
+
+    public double getGradesMean(){return gradesMean;}
+    public void setGradesMean(double gradesMean){this.gradesMean=gradesMean;}
+
+    public double getGradesVariance(){return gradesVariance;}
+    public void setGradesVariance(double gradesVariance){this.gradesVariance=gradesVariance;}
+
 }

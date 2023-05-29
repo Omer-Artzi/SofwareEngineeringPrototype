@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class DataGenerator {
 
@@ -207,7 +208,7 @@ public class DataGenerator {
                         studentAnswers.add(faker.number().numberBetween(1, 5));
                     }
                     String status = "";
-                    if (faker.number().numberBetween(0, 2) == 1)
+                    if (faker.number().numberBetween(0, 1) == 1)
                         status = "Approved";
                     else
                         status = "To Evaluate";

@@ -1,4 +1,5 @@
 import Entities.*;
+import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
 import Events.MessageEvent;
 import Events.StudentExamEvent;
@@ -94,6 +95,7 @@ public class StudentExamGradeController
 
     void SetStudentScore(int newScore)
     {
+        solvedExam.setGrade(newScore);
         GradeText.setText(Integer.toString(newScore));
         if (newScore > 50)
             GradeText.setFill(Color.GREEN);
@@ -171,15 +173,13 @@ public class StudentExamGradeController
             ChangeScoreTextArea.setPromptText("Please write The reason for the score change");
 
             // set new score and note
-            solvedExam.setGrade(newScore);
+            SetStudentScore(newScore);
             solvedExam.setScoreChangeReason(textAreaStr);
 
             // close pop up HBOX
             ChangeScoreErrLbl.setVisible(false);
             ChangeScoreHbox.setVisible(false);
             ChangeScoreHbox.setPrefHeight(0);
-
-            SetStudentScore(newScore);
         }
         catch (Exception e)
         {
@@ -239,6 +239,10 @@ public class StudentExamGradeController
                 if (alert.getResult() == ButtonType.YES)
                 {
                     SimpleChatClient.setRoot("ClassExamGrade");
+                    String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
+                    String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
+                    String classExamID = Integer.toString(solvedExam.getClassExam().getID());
+                    EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, classExamID));
                 }
             }
             catch (Exception e)

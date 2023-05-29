@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -51,7 +52,7 @@ public class SimpleServer extends AbstractServer {
 
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
-	public SimpleServer(int port) {
+	public SimpleServer(int port) throws IOException {
 		super(port);
 		try{
 			EventBus.getDefault().register(this);
@@ -59,7 +60,6 @@ public class SimpleServer extends AbstractServer {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			DataGenerator.generateData(session);
-			//session.getTransaction().commit();
 		}
 		catch (Exception exception)
 		{
@@ -68,211 +68,24 @@ public class SimpleServer extends AbstractServer {
 				session.getTransaction().rollback();
 			}
 			System.err.println("An error occurred, changes have been rolled back.");
-			exception.printStackTrace();
+			//exception.printStackTrace();
 			JOptionPane.showMessageDialog(null, "A connection to the database could not be formed, please check the MySQL Server is installed and running(Check Console for more info)", "Database Error", JOptionPane.WARNING_MESSAGE);
+			throw exception;
 		}
 	}
 
-	//private void generateData() throws IOException {
-	//	generateStudents();
-	//	generateGrades();
-	//	School school = School.getInstance();
-	//	ObjectMapper objectMapper = new ObjectMapper();
-	//	SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
-	//	school.setSubjects(subjects.getSubjects());
-	//	try {
-	//		for (Subject subject : subjects.getSubjects()) {
-	//			session.saveOrUpdate(subject);
-	//			for (Course course : subject.getCourses()) {
-	//				course.setSubject(subject);
-	//				session.saveOrUpdate(course);
-	//			}
-	//			session.flush();
-	//		}
-	//		List<Subject> subjectList = subjects.getSubjects();
-	//		generateTeachers(subjectList);
-	//		generateQuestions(subjectList);
-	//		session.getTransaction().commit();
-	//	}
-	//	catch (Exception e)
-	//	{
-	//		e.printStackTrace();
-	//	}
-	//
-	//}
-
-	//private void generateQuestions(List<Subject> subjectList) {
-	//	int questionAmount = 30;
-	//	String[] requests = {
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=17&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=23&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=20&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=26&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=19&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
-	//			"https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
-	//	Random random = new Random();
-	//	int randCourse;
-	//	for (int i = 0; i < requests.length;i++) {
-	//	try {
-	//
-	//			// Create URL object and open connection
-	//			URL url = new URL(requests[i]);
-	//			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	//
-	//			// Set request method
-	//			connection.setRequestMethod("GET");
-	//
-	//			// Get response code
-	//			int responseCode = connection.getResponseCode();
-	//			if (responseCode == HttpURLConnection.HTTP_OK) {
-	//				// Read response
-	//				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	//				StringBuilder response = new StringBuilder();
-	//				String line;
-	//				while ((line = reader.readLine()) != null) {
-	//					response.append(line);
-	//				}
-	//				reader.close();
-	//
-	//				// Process JSON response
-	//				String jsonResponse = response.toString();
-	//
-	//				// Parse JSON response
-	//				Gson gson = new Gson();
-	//				ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
-	//				List<ResponseQuestion> questions = apiResponse.getResults();
-	//			List<Question> questionsList = new ArrayList<>();
-	//				for(ResponseQuestion responseQuestion: questions)
-	//				{
-	//					Question question = new Question();
-	//					responseQuestion.convert(question);
-	//					question.setCourse(subjectList.get(i).getCourses().get(0));
-	//					questionsList.add(question);
-	//					session.save(question);
-	//					session.flush();
-	//				}
-	//				//System.out.println(questions);
-	//				generateTestForms(questionsList);
-	//
-	//
-	//			} else {
-	//				System.out.println("Error: " + responseCode);
-	//			}
-	//
-	//			// Close the connection
-	//			connection.disconnect();
-	//
-	//		} catch(IOException e){
-	//			e.printStackTrace();
-	//		}
-	//
-	//	}
-	//}
-
-	//private void generateTestForms(List<Question> questionsList) {
-	//	if(questionsList != null) {
-	//		for(int  i = 0; i < 3; i++) {
-	//			ExamForm examForm = new ExamForm();
-	//			for(int  j = 0; j < 10;j++) {
-	//				examForm.addQuestion(questionsList.get((i * 10) + j));
-	//			}
-	//			List<Question> examQuestions =  examForm.getQuestionList();
-	//			Course examCourse = examQuestions.get(0).getCourse();
-	//			Subject examSubject = examCourse.getSubject();
-	//			examForm.setQuestionList(examQuestions);
-	//			examForm.setSubject(examSubject);
-	//			examForm.setCourse(examCourse);
-	//			examForm.setCreator(examCourse.getTeacherList().get(0));
-	//			LocalDate localDate = LocalDate.now();
-	//			examForm.getCode();
-	//			// Convert LocalDate to Date
-	//			Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-	//			examForm.setDateCreated(date);
-	//			examForm.setLastUsed(date);
-	//			session.saveOrUpdate(examForm);
-	//		}
-	//		session.flush();
-	//	}
-	//	else {
-	//		System.out.println("No question Retrieved");
-	//	}
-	//
-	//}
-
-	//private void generateTeachers(List<Subject> subjects) {
-	//	try {
-	//		Teacher admin = new Teacher();
-	//		String salt = BCrypt.gensalt();
-	//		admin.setEmail("admin");
-	//		admin.setPassword(BCrypt.hashpw("1234", salt));
-	//		admin.setCourseList(new ArrayList<>());
-	//		admin.setGender(Gender.Female);
-	//		admin.setFirstName("super");
-	//		admin.setLastName("user");
-	//		session.saveOrUpdate(admin);
-	//		session.flush();
-	//		Faker faker = new Faker();
-	//		Random random = new Random();
-	//		int randomSubject, randomCourse;
-	//		for (int i = 0; i < 50; i++) {
-	//			String teacherFirstName = faker.name().firstName();
-	//			String teacherLastName = faker.name().lastName();
-	//			String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
-	//			String password = BCrypt.hashpw(faker.internet().password(), salt);
-	//			List<Course> courses = new ArrayList<>();
-	//			for (int j = 0; j < 5; j++) {
-	//				randomSubject = random.nextInt(subjects.size());
-	//				Subject subject = subjects.get(randomSubject);
-	//				for (int k = 0; k < 5; k++) {
-	//					randomCourse = random.nextInt(subject.getCourses().size());
-	//					courses.add(subject.getCourses().get(randomCourse));
-	//				}
-	//			}
-	//			Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, courses);
-	//			for (Course course : courses) {
-	//				course.getTeachers().add(teacher);
-	//			}
-	//
-	//			session.saveOrUpdate(teacher);
-	//
-	//		}
-	//		session.flush();
-	//	}
-	//	catch (Exception e)
-	//	{
-	//		e.printStackTrace();
-	//	}
-	//
-	//}
-
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
+		System.out.println("Server is closed");
 		Message message = new Message(1,"Server is closed");
 		sendToAllClients(message);
-		session.getTransaction().commit();
-		session.close();
+		if (session != null) {
+			if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+				session.getTransaction().commit();
+			session.close();
+		}
 		this.close();
 	}
-
-	//Generating grades and saving in the SQL server
-	//private void generateGrades() {
-	//	List<Student> students = retrievetudents();
-	//	Faker faker = new Faker();
-	//	Random r = new Random();
-	//	for(Student student : students)
-	//	{
-	//		for(int i = 0; i < 8;i++ ) {
-	//			Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
-	//			student.getGrades().add(grade);
-	//			session.save(grade);
-	//		}
-	//	}
-	//	session.flush();
-	//}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -445,9 +258,24 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Change Student Exam")){
 				StudentExam studentExam = ((StudentExam)(message.getData()));
 				try {
+					// draw student from database and update him
 					StudentExam studentExamToChange = session.get(StudentExam.class, studentExam.getID());
 					studentExamToChange.update(studentExam);
 					session.update(studentExamToChange);
+					session.flush();
+
+					ClassExam exam = studentExamToChange.getClassExam();
+					exam.UpdateStudentExam(studentExamToChange);
+					//exam.getStudentExams().stream().filter(studentExamIter->
+					//		studentExamIter.getID() == studentExamToChange.getID()).collect(Collectors.toList())
+					//		.get(0);
+					//if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+					//	session.getTransaction().commit();
+					//	session.beginTransaction();
+
+					// Update classExam Stats
+					exam = OperationUtis.UpdateClassExamStats(exam);
+					session.update(exam);
 					session.flush();
 					response = ("Success: StudentExam Approved");
 					message.setMessage(response);
@@ -476,7 +304,8 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 
-		session.getTransaction().commit();
+		if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+			session.getTransaction().commit();
 	}
 
 	private Person retrieveUser(String email) {
@@ -553,18 +382,6 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 	}
-	//public void generateStudents() {
-	//	Faker faker = new Faker();
-	//	for(int  i = 0; i < 10;i++)
-	//	{
-	//		String firstName = faker.name().firstName();
-	//		String lastName = faker.name().lastName();
-	//		Student student = new Student(firstName,lastName);
-	//		session.save(student);
-	//		session.flush();
-	//	}
-	//}
-
 
 	public static List<Student> retrieveStudents()
 	{
