@@ -21,10 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -32,6 +29,7 @@ public class DataGenerator {
 
     static Faker faker = new Faker();
     static Random random = new Random();
+
 
     public static void generateData(Session session) throws IOException {
         GenerateStudents(session);
@@ -234,31 +232,29 @@ public class DataGenerator {
 
     public static void GenerateTeachers(List<Subject> subjects, Session session) {
         try {
-            List<Long> IDS = SimpleServer.retrieveIDs();
             String salt = BCrypt.gensalt();
             int randomSubject, randomCourse;
+            HashSet<Subject> tempSubjects = new HashSet<Subject>();
+            HashSet<Course> tempCourses = new HashSet<Course>();
+            Teacher admin = null;
             for (int i = 0; i < 50; i++) {
                 String teacherFirstName = faker.name().firstName();
                 String teacherLastName = faker.name().lastName();
                 String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
                 String password = BCrypt.hashpw(faker.internet().password(), salt);
-                List<Course> courses = new ArrayList<>();
+                List<Course> coursesList = new ArrayList<>();
+                List<Subject> subjectsList = new ArrayList<>();
                 for (int j = 0; j < 5; j++) {
                     randomSubject = random.nextInt(subjects.size());
                     Subject subject = subjects.get(randomSubject);
+                    subjectsList.add(subject);
                     for (int k = 0; k < 5; k++) {
                         randomCourse = random.nextInt(subject.getCourses().size());
-                        courses.add(subject.getCourses().get(randomCourse));
+                        coursesList.add(subject.getCourses().get(randomCourse));
                     }
                 }
 
-                Long ID = faker.number().randomNumber(9, false);
-                while (IDS.contains(ID))
-                {
-                    ID = faker.number().randomNumber(9, false);
-                }
-                IDS.add(ID);
-                Teacher teacher = new Teacher(ID, teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password);
+                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
@@ -267,15 +263,34 @@ public class DataGenerator {
                     teacher.setGender(Gender.Female);
                     teacher.setFirstName("super");
                     teacher.setLastName("user");
+                    admin = teacher;
                 }
-                for (Course course : courses) {
-                    teacher.AddCourse(course);
+                for (Course course : coursesList) {
+                    course.getTeachers().add(teacher);
+                    if(!(tempCourses.contains(course))){
+                        tempCourses.add(course);
+                        course.getTeachers().add(admin);
+                    }
                 }
-
+                for (Subject subject : subjectsList) {
+                    subject.getTeachers().add(teacher);
+                    if(!(tempSubjects.contains(subject))){
+                        tempSubjects.add(subject);
+                        subject.getTeachers().add(admin);
+                    }
+                }
                 session.saveOrUpdate(teacher);
-
             }
             session.flush();
+            List<Course> allCourses = new ArrayList<>();
+            List<Subject> allSubjects = new ArrayList<>();
+            allSubjects.addAll(tempSubjects);
+            allCourses.addAll(tempCourses);
+            admin.setSubjectList(allSubjects);
+            admin.setCourseList(allCourses);
+            session.saveOrUpdate(admin);
+            session.flush();
+
         }
         catch (Exception e)
         {
@@ -301,18 +316,11 @@ public class DataGenerator {
 
 
     public static void GenerateStudents(Session session) {
-        List<Long> IDS = SimpleServer.retrieveIDs();
-        for(int  i = 0; i < 10;i++)
+        for(int  i = 0; i < 10; i++)
         {
-            Long ID = faker.number().randomNumber(9, false);
-            while (IDS.contains(ID))
-            {
-                ID = faker.number().randomNumber(9, false);
-            }
-            IDS.add(ID);
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            Student student = new Student(ID, firstName,lastName);
+            Student student = new Student(firstName,lastName);
             session.save(student);
             session.flush();
         }

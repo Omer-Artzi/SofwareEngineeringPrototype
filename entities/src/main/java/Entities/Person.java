@@ -14,10 +14,8 @@ public abstract class Person implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int SQLID;
-
-
     private long ID;
+
     private String firstName;
     private String lastName;
     private Gender gender;
@@ -26,8 +24,7 @@ public abstract class Person implements Serializable{
 
     public Person(){}
 
-    public Person(long ID, String firstName, String lastName, Gender gender, String email, String password)  {
-        this.ID = ID;
+    public Person(String firstName, String lastName, Gender gender, String email, String password)  {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -35,8 +32,7 @@ public abstract class Person implements Serializable{
         this.password = password;
     }
 
-    public Person(long ID, String firstName, String lastName) {
-        this.ID = ID;
+    public Person(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

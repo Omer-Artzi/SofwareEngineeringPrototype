@@ -26,9 +26,6 @@ public class Teacher extends Person{
         this.subjects = subject_list;
     }
 
-    public Teacher(String teacherFirstName, String teacherLastName, String teacherEmail, String password, List<Course> courses, List<Subject> subjects) {
-    }
-
     public List<Course> getCourseList() {
         return courses;
     }

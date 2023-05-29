@@ -1,10 +1,15 @@
 package Server;
+import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
+import Server.Events.ResponseQuestion;
 import Server.Events.TerminationEvent;
+import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
+import com.github.javafaker.Faker;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -19,8 +24,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -84,6 +96,22 @@ public class SimpleServer extends AbstractServer {
 			session.close();
 		}
 		this.close();
+	}
+
+	//Generating grades and saving in the SQL server
+	private void generateGrades() {
+		List<Student> students = retrieveStudents();
+		Faker faker = new Faker();
+		Random r = new Random();
+		for(Student student : students)
+		{
+			for(int i = 0; i < 8;i++ ) {
+				Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
+				student.getGrades().add(grade);
+				session.save(grade);
+			}
+		}
+		session.flush();
 	}
 
 	@Override
@@ -405,23 +433,4 @@ public class SimpleServer extends AbstractServer {
 		List<ExamForm> exams = session.createQuery(query).getResultList();
 		return exams;
 	}
-
-	public static List<Long> retrieveIDs()
-	{
-		// Retrieves all teachers and students ID's and return their combined list
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Student> queryS = builder.createQuery(Student.class);
-		queryS.from(Student.class);
-		List<Student> personList = session.createQuery(queryS).getResultList();
-		List<Long> IDS = personList.stream().map(Student::getID).collect(Collectors.toList());
-
-		CriteriaQuery<Teacher> queryT = builder.createQuery(Teacher.class);
-		queryT.from(Teacher.class);
-		List<Teacher> teacherList = session.createQuery(queryT).getResultList();
-		IDS.addAll(teacherList.stream().map(Teacher::getID).collect(Collectors.toList()));
-		return IDS;
-	}
-
-
-
 }

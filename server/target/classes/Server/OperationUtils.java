@@ -25,11 +25,14 @@ public class OperationUtils {
         mean /= approvedExamsNum;
 
         // variance calculation
-        for (int i = 0; i < approvedExamsNum; i++)
+        if (approvedExamsNum != 1)
         {
-            variance += Math.pow((grades.get(i) - mean), 2);
+            for (int i = 0; i < approvedExamsNum; i++)
+            {
+                variance += Math.pow((grades.get(i) - mean), 2);
+            }
+            variance = variance / (approvedExamsNum-1);
         }
-        variance = variance / approvedExamsNum;
 
         // set and return result
         classExam.setApprovedExamsNum(approvedExamsNum);

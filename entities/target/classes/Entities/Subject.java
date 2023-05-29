@@ -16,7 +16,7 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject")
     private List<Course> courses = new ArrayList<>();
 
-    // TODO: Added by Ilan, check if it works with the database
+    // Updated by Ilan 27.5
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "Subject_ID"),
