@@ -1,4 +1,5 @@
 Events\SubjectMessageEvent.class
+Events\ClassExamGradeEvent.class
 Events\AddGradeSuccesEvent.class
 ClassExamGradeController.class
 LoginController.class

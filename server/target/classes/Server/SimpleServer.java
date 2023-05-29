@@ -20,7 +20,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -255,7 +254,8 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			// Lior's addition
-			else if(request.startsWith("Change Student Exam")){
+			else if(request.startsWith("Change Student Exam"))
+			{
 				StudentExam studentExam = ((StudentExam)(message.getData()));
 				try {
 					// draw student from database and update him
@@ -264,17 +264,10 @@ public class SimpleServer extends AbstractServer {
 					session.update(studentExamToChange);
 					session.flush();
 
+					// Update exam's stats
 					ClassExam exam = studentExamToChange.getClassExam();
 					exam.UpdateStudentExam(studentExamToChange);
-					//exam.getStudentExams().stream().filter(studentExamIter->
-					//		studentExamIter.getID() == studentExamToChange.getID()).collect(Collectors.toList())
-					//		.get(0);
-					//if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
-					//	session.getTransaction().commit();
-					//	session.beginTransaction();
-
-					// Update classExam Stats
-					exam = OperationUtis.UpdateClassExamStats(exam);
+					exam = OperationUtils.UpdateClassExamStats(exam);
 					session.update(exam);
 					session.flush();
 					response = ("Success: StudentExam Approved");
@@ -290,9 +283,8 @@ public class SimpleServer extends AbstractServer {
 					System.out.println(response);
 				}
 			}
-
-
-			else{
+			else
+			{
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);
 				response = "[Unrecognized Message]";
@@ -300,10 +292,12 @@ public class SimpleServer extends AbstractServer {
 			}
 			transmission.setResponse(response);
 			EventBus.getDefault().post(new TransmissionEvent(transmission));
-		} catch (IOException e1) {
+		}
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 		}
-
+		// Check if there were new changes in the database before commint
 		if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
 			session.getTransaction().commit();
 	}
@@ -383,6 +377,8 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
+
+	// Functions which retrieve data from database
 	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -412,6 +408,7 @@ public class SimpleServer extends AbstractServer {
 
 	public static List<Long> retrieveIDs()
 	{
+		// Retrieves all teachers and students ID's and return their combined list
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> queryS = builder.createQuery(Student.class);
 		queryS.from(Student.class);
@@ -422,7 +419,6 @@ public class SimpleServer extends AbstractServer {
 		queryT.from(Teacher.class);
 		List<Teacher> teacherList = session.createQuery(queryT).getResultList();
 		IDS.addAll(teacherList.stream().map(Teacher::getID).collect(Collectors.toList()));
-
 		return IDS;
 	}
 

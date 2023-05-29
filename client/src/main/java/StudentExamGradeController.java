@@ -1,11 +1,7 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
-import Events.MessageEvent;
 import Events.StudentExamEvent;
-import com.github.javafaker.Faker;
-//import com.thedeanda.lorem.Lorem;
-//import com.thedeanda.lorem.LoremIpsum;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,23 +10,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -44,13 +34,7 @@ public class StudentExamGradeController
     private Button ApproveBtn;
 
     @FXML
-    private Button ChangeScoreBtn;
-
-    @FXML
     private HBox ChangeScoreHbox;
-
-    @FXML
-    private Button ChangeScoreSaveBtn;
 
     @FXML
     private TextField ChangeScoreSaveField;
@@ -59,19 +43,10 @@ public class StudentExamGradeController
     private TextArea ChangeScoreTextArea;
 
     @FXML
-    private Button FeedbackBtn;
-
-    @FXML
     private HBox FeedbackHbox;
 
     @FXML
-    private Button FeedbackSaveBtn;
-
-    @FXML
     private TextArea FeedbackTextArea;
-
-    @FXML
-    private TextFlow GradeTF;
 
     @FXML
     private Text GradeText;
@@ -88,8 +63,6 @@ public class StudentExamGradeController
     @FXML
     private Label StudentNameLabel;
 
-    @FXML
-    private AnchorPane root;
 
     private StudentExam solvedExam;
 
@@ -109,7 +82,6 @@ public class StudentExamGradeController
         solvedExam.setStatus("Approved");
         // send to server to set student Exam
         Message studentExamMessage = new Message(0, "Change Student Exam");
-        //studentExamMessage.setData(SimpleClient.getClient().getUser());
         studentExamMessage.setData(solvedExam);
         SimpleClient.getClient().sendToServer(studentExamMessage);
 
@@ -264,7 +236,6 @@ public class StudentExamGradeController
 
     @Subscribe
     public void getStarterData(StudentExamEvent event) throws IOException, InterruptedException {
-        System.out.println(1);
         solvedExam = event.getStudentExam();
         Platform.runLater(() -> {
             try {
@@ -310,7 +281,6 @@ public class StudentExamGradeController
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
 
             HBox qustionHbox = new HBox();
-            //qustionHbox.prefHeight(68);
             qustionHbox.prefWidth(557);
 
             // Set question number
@@ -425,12 +395,10 @@ public class StudentExamGradeController
         SetStudentScore(studentScore);
 
         StudentIDLabel.setText(Long.toString(solvedExam.getStudent().getID()));
-        //StudentIDLabel.setMinWidth(150);
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         StudentNameLabel.setText(solvedExam.getStudent().getFullName());
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
-        //StudentNameLabel.setMinWidth(150);
         return AnswersVBOX_t;
     }
 
