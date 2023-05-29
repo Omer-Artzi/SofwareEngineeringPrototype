@@ -226,12 +226,15 @@ public class SimpleServer extends AbstractServer {
 			String salt = BCrypt.gensalt();
 			admin.setEmail("admin");
 			admin.setPassword(BCrypt.hashpw("1234", salt));
-			admin.setCourseList(new ArrayList<>());
+			//admin.setSubjectList(new ArrayList<>());
+			//admin.setCourseList(new ArrayList<>());
 			admin.setGender(Gender.Female);
 			admin.setFirstName("super");
 			admin.setLastName("user");
 			session.saveOrUpdate(admin);
 			session.flush();
+			HashSet<Subject> tempSubjects = new HashSet<Subject>();
+			HashSet<Course> tempCourses = new HashSet<Course>();
 			Faker faker = new Faker();
 			Random random = new Random();
 			int randomSubject, randomCourse;
@@ -240,23 +243,42 @@ public class SimpleServer extends AbstractServer {
 				String teacherLastName = faker.name().lastName();
 				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
 				String password = BCrypt.hashpw(faker.internet().password(), salt);
-				List<Course> courses = new ArrayList<>();
+				List<Course> coursesList = new ArrayList<>();
+				List<Subject> subjectsList = new ArrayList<>();
 				for (int j = 0; j < 5; j++) {
 					randomSubject = random.nextInt(subjects.size());
 					Subject subject = subjects.get(randomSubject);
+					subjectsList.add(subject);
 					for (int k = 0; k < 5; k++) {
 						randomCourse = random.nextInt(subject.getCourses().size());
-						courses.add(subject.getCourses().get(randomCourse));
+						coursesList.add(subject.getCourses().get(randomCourse));
 					}
 				}
-				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, courses);
-				for (Course course : courses) {
+				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+				for (Course course : coursesList) {
 					course.getTeachers().add(teacher);
+					if(!(tempCourses.contains(course))){
+						tempCourses.add(course);
+						course.getTeachers().add(admin);
+					}
 				}
-
+				for (Subject subject : subjectsList) {
+					subject.getTeachers().add(teacher);
+					if(!(tempSubjects.contains(subject))){
+						tempSubjects.add(subject);
+						subject.getTeachers().add(admin);
+					}
+				}
 				session.saveOrUpdate(teacher);
-
 			}
+			session.flush();
+			List<Course> allCourses = new ArrayList<>();
+			List<Subject> allSubjects = new ArrayList<>();
+			allSubjects.addAll(tempSubjects);
+			allCourses.addAll(tempCourses);
+			admin.setSubjectList(allSubjects);
+			admin.setCourseList(allCourses);
+			session.saveOrUpdate(admin);
 			session.flush();
 		}
 		catch (Exception e)

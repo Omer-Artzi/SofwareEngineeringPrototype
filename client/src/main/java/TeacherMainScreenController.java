@@ -1,5 +1,8 @@
+
+
 import java.io.IOException;
-import Entities.Message;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,22 +14,31 @@ public class TeacherMainScreenController  {
     private Button seeCurrentTestsBT;
     @FXML
     private Label Menu;
+
     @FXML
     private Label MenuBack;
+
     @FXML
     private Button addQuestionButton;
+
     @FXML
     private Button addTestFormsButton;
+
     @FXML
     private Button gradeExamButton;
+
     @FXML
     private Button showStatisticsButton;
+
     @FXML
     private AnchorPane slider;
+
     @FXML
     private Button viewQuestionButton;
+
     @FXML
     private Button viewTestFormsButton;
+
     @FXML
     void seeCurrentTests(ActionEvent event) throws IOException {
         SimpleChatClient.setRoot("currentTests");
