@@ -124,7 +124,7 @@ public class SimpleServer extends AbstractServer {
 		Random random = new Random();
 		int randCourse;
 		for (int i = 0; i < requests.length;i++) {
-		try {
+			try {
 
 				// Create URL object and open connection
 				URL url = new URL(requests[i]);
@@ -152,7 +152,7 @@ public class SimpleServer extends AbstractServer {
 					Gson gson = new Gson();
 					ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
 					List<ResponseQuestion> questions = apiResponse.getResults();
-				List<Question> questionsList = new ArrayList<>();
+					List<Question> questionsList = new ArrayList<>();
 					for(ResponseQuestion responseQuestion: questions)
 					{
 						Question question = new Question();
@@ -212,6 +212,16 @@ public class SimpleServer extends AbstractServer {
 
 	private void generateTeachers(List<Subject> subjects) {
 		try {
+			Principle principle=new Principle();
+			String salt1 = BCrypt.gensalt();
+			principle.setEmail("admin");
+			principle.setPassword(BCrypt.hashpw("5678", salt1));
+			//principle.setCourseList(new ArrayList<>());
+			principle.setGender(Gender.Female);
+			principle.setFirstName("super");
+			principle.setLastName("user");
+			session.saveOrUpdate(principle);
+			session.flush();
 			Teacher admin = new Teacher();
 			String salt = BCrypt.gensalt();
 			admin.setEmail("admin");
@@ -316,12 +326,23 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Subjects")){
+			} else if(request.equals("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
 				client.sendToClient(message);
-			} else if (message.getMessage().startsWith("Extra time request"))
+			}else if(request.equals("Get Current Exams")){
+				response ="Current Exams";
+				message.setMessage(response);
+				message.setData(getExams());
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Principles")){
+				System.out.println("get principle request");
+				response="Principles";
+				message.setMessage(response);
+				message.setData(getPrinciples());
+				client.sendToClient(message);
+			}else if (message.getMessage().startsWith("Extra time request"))
 			{
 				response = "Extra Time Requested";
 				message.setMessage(response);
@@ -458,6 +479,16 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
+	private List<Course> getListOfCourses(int iTeacherID) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Course> query = builder.createQuery(Course.class);
+		Root<Course> courseRoot = query.from(Course.class);
+		Join<Course, Teacher> teacherJoin = courseRoot.join("course");
+		query.where(builder.equal(teacherJoin.get("ID"), iTeacherID));
+		List<Course> courses = session.createQuery(query).getResultList();
+		return courses;
+	}
+
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		try {
@@ -477,6 +508,7 @@ public class SimpleServer extends AbstractServer {
 		}
 
 	}
+
 
 	private List<ExamForm> getExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -501,6 +533,21 @@ public class SimpleServer extends AbstractServer {
 		query.from(Subject.class);
 		List<Subject> subjects = session.createQuery(query).getResultList();
 		return subjects;
+	}
+
+	private List<Exam> getExams() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Exam> query = builder.createQuery(Exam.class);
+		query.from(Exam.class);
+		List<Exam> exams = session.createQuery(query).getResultList();
+		return exams;
+	}
+	private List<Principle> getPrinciples() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
+		query.from(Principle.class);
+		List<Principle> principles = session.createQuery(query).getResultList();
+		return principles;
 	}
 
 	private Student getStudent(int iStudentID) {

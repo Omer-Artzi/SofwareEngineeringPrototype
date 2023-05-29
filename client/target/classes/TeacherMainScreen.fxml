@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TeacherMainScreenController">
    <children>
       <BorderPane layoutX="118.0" layoutY="79.0" prefHeight="268.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -119,6 +118,9 @@
                </children>
             </AnchorPane>
          </top>
+         <center>
+            <Button fx:id="seeCurrentTestsBT" mnemonicParsing="false" onAction="#seeCurrentTests" text="See current tests" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>

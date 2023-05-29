@@ -22,6 +22,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.controlsfx</groupId>
+				<artifactId>controlsfx</artifactId>
+				<version>8.40.14</version>
+			</dependency>
+			<!-- Thanks for using https://jar-download.com -->
+			<dependency>
 				<groupId>il.cshaifasweng.OCSFMediatorExample</groupId>
 				<artifactId>entities</artifactId>
 				<version>${project.version}</version>

@@ -1,5 +1,8 @@
 
 import Entities.Message;
+import Entities.Person;
+import Entities.Principle;
+import Entities.Teacher;
 import Events.UserMessageEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,6 +51,7 @@ public class LoginController {
 
     @FXML
     public void login(ActionEvent event) throws IOException {
+        System.out.println("after login BT");
         checkLogin();
     }
 
@@ -85,8 +89,14 @@ public class LoginController {
         System.out.println("Logging in");
         if(event.getStatus() == "Success")
         {
+            //Person user=event.getUser();
             SimpleClient.getClient().setUser(event.getUser());
-            SimpleChatClient.setRoot("TeacherMainScreen");
+            //if(user instanceof Teacher)
+                SimpleChatClient.setRoot("TeacherMainScreen");
+           // else if(user instanceof Principle)
+                //SimpleChatClient.setRoot("PrincipleMainScreen");
+            //else
+              //  SimpleChatClient.setRoot("StudentMainScreen");
         }
         else {
             wrongLoginLabel.setText("E-mail address or password is wrong");

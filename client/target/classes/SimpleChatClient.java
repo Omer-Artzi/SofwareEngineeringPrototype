@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 
 
 public class SimpleChatClient extends Application {
-
     private static Scene scene;
     private static Stage clientStage;
     private SimpleClient client;
@@ -25,13 +24,12 @@ public class SimpleChatClient extends Application {
     public static final double version = 1.7;
 
 
-
     @Override
     public void start(Stage stage) throws IOException {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
+            scene = new Scene(loadFXML("PreLogin"), 399, 217);/////399, 217)
             stage.setScene(scene);
             stage.setTitle("High Entities.School Test System Prototype - Version " + version);
             stage.show();
@@ -44,6 +42,7 @@ public class SimpleChatClient extends Application {
 
 
     public static void setRoot(String fxml) throws IOException {
+        System.out.println("In Set Root!!!!");
         scene.setRoot(loadFXML(fxml));
     }
 

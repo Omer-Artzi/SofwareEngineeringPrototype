@@ -16,7 +16,10 @@ public class Principle extends Person {
             extraTimeRequests.add(data);
         }
     }
-
+    public  Principle(){}
+    public Principle( String firstName, String lastName, Gender gender, String email, String password) {
+        super(firstName, lastName, gender, email, password);
+    }
     @Override
     public void receiveExtraTime(ExtraTime data) {
 

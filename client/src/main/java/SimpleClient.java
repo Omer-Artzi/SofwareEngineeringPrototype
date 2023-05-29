@@ -31,6 +31,14 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("Current Exams")) {
+			CurrentExamsEvent stMsg = new CurrentExamsEvent((List<Exam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("Principles")) {////im hereee
+			System.out.println("principles in client");
+			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principle>) message.getData());
+			System.out.println("Liad: client");
+			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
@@ -53,8 +61,8 @@ public class SimpleClient extends AbstractClient {
 			user.receiveExtraTime((ExtraTime)message.getData());
 		}
 		else if (message.getMessage().startsWith("Extra Time Requested")) {
-			user.extraTimeRequest((ExtraTime)message.getData());
-
+			//user.extraTimeRequest((ExtraTime)message.getData());
+			EventBus.getDefault().post(new notificationEvent((ExtraTime)message.getData()));
 		} else if(message.getMessage().startsWith("Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
@@ -121,5 +129,8 @@ public class SimpleClient extends AbstractClient {
 
 	public void setUser(Person user) {
 		this.user = user;
+	}
+	public Person getUser() {
+		return user;
 	}
 }
