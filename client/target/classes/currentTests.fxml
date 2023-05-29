@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CurrentTestsController">
+   <children>
+      <TableView fx:id="currentTestsQuestions" editable="true" layoutX="149.0" layoutY="83.0" prefHeight="182.0" prefWidth="302.0">
+        <columns>
+          <TableColumn fx:id="SubjectColumn" prefWidth="75.0" text="Subject" />
+          <TableColumn fx:id="CourseColumn" prefWidth="75.0" text="Course" />
+            <TableColumn fx:id="DateColumn" prefWidth="75.0" text="Date" />
+            <TableColumn fx:id="TimeColumn" prefWidth="75.0" text="Time" />
+        </columns>
+      </TableView>
+      <Button fx:id="ExtraTimeBT" layoutX="237.0" layoutY="281.0" mnemonicParsing="false" onAction="#RequestExtraTime" prefHeight="38.0" prefWidth="126.0" text="Request Extra Time" />
+   </children>
+</AnchorPane>
