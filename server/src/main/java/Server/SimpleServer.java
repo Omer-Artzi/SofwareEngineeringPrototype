@@ -1,6 +1,6 @@
 package Server;
 import Server.Events.ClientUpdateEvent;
-import Server.Events.TerminationEvent;
+import Entities.TerminationEvent;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
@@ -18,15 +18,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Entities.*;
@@ -157,13 +150,13 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Exams Forms for Entities.Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+			} else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Course")){
-				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+			}else if(request.startsWith("Get Exams Forms for Course")){
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);

@@ -23,10 +23,9 @@ public class Subject implements Serializable {
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
     private static int codeNum = 0;
-    /*
     @OneToMany(mappedBy = "subject")
-    private List<Entities.Question> questions = new ArrayList<>();
-    */
+    private List<Question> questions = new ArrayList<>();
+
     public Subject() {
         code = Integer.toString(++codeNum);
     }
