@@ -34,10 +34,11 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("Current Exams")) {
 			CurrentExamsEvent stMsg = new CurrentExamsEvent((List<Exam>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Principles")) {////im hereee
-			System.out.println("principles in client");
+		} else if (message.getMessage().startsWith("Principles")) {
 			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principle>) message.getData());
-			System.out.println("Liad: client");
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Live Exams")) {
+			LiveExamsEvent stMsg = new LiveExamsEvent((List<Exam>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);

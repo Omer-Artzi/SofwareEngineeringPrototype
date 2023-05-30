@@ -16,7 +16,8 @@ public class TeacherMainScreenController  {
     private Button seeCurrentTestsBT;
     @FXML
     private Label Menu;
-
+    @FXML
+    private Button viewExamBT;
     @FXML
     private Label MenuBack;
 
@@ -76,6 +77,12 @@ public class TeacherMainScreenController  {
     @FXML
     void viewTestForms(ActionEvent event) {
 
+    }
+    @FXML
+    void viewExam(ActionEvent event) throws IOException {
+        Message message = new Message(1, "Get Live Exams");
+        SimpleClient.getClient().sendToServer(message);
+        SimpleChatClient.setRoot("addQuestion");
     }
 
     @FXML

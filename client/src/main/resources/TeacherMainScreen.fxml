@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TeacherMainScreenController">
    <children>
       <BorderPane layoutX="118.0" layoutY="79.0" prefHeight="268.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -80,6 +79,18 @@
                            </graphic>
                         </Button>
                         <Button fx:id="showStatisticsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#showStatistics" prefHeight="50.0" prefWidth="176.0" style="-fx-background-color: #669bbc;" text="Show Statistics" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/report.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="viewExamBT" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewExam" prefHeight="50.0" prefWidth="176.0" style="-fx-background-color: #669bbc;" text="view Exam" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>

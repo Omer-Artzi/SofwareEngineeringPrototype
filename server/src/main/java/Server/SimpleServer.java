@@ -2,7 +2,7 @@ package Server;
 import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.ResponseQuestion;
-import Server.Events.TerminationEvent;
+//import Server.Events.TerminationEvent;
 import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
@@ -387,6 +387,11 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
+			}else if(request.startsWith("Get Live Exams")){
+				response ="Live Exams";
+				message.setMessage(response);
+				message.setData(getLiveExams());
+				client.sendToClient(message);
 			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
 			else if(request.startsWith("Get Students")){
@@ -528,7 +533,10 @@ public class SimpleServer extends AbstractServer {
 		}
 
 	}
-
+	private List<Exam> getLiveExams() { //TODO: write this function
+		List<Exam>exams=new ArrayList<>();
+		return exams;
+	}
 	private List<ExamForm> getExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);

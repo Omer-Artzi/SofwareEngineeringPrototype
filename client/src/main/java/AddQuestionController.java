@@ -22,14 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddQuestionController {
-    int correct;
     private List<Course> courseOfTeacher;
     private List<Course>courses;
     private List<Subject> subjectOfTeacher;
     private List<String>notes;
     @FXML
     private int msgId;
-    private static int counter=1;
     @FXML
     private TableColumn<Answer, String> AnswerColumn;
     @FXML
@@ -110,7 +108,7 @@ public class AddQuestionController {
             subject_name.add(item.getName());
         addSubjectChoiceBox.setItems(FXCollections.observableArrayList(subject_name));
 
-        Answer ans=new Answer();
+        Answer ans=new Answer("");
         ObservableList<Answer> data = AnswerTable.getItems();
         addCourseChoiceBox.setDisable(true);
         Elements(true);
@@ -139,13 +137,13 @@ public class AddQuestionController {
                 String [] str={"1","2","3","4"};
                 Elements(false);
                 List<Answer> a = new ArrayList<>();
-                Answer ans1 = new Answer();
+                Answer ans1 = new Answer("");
                 a.add(ans1);
-                Answer ans2 = new Answer();
+                Answer ans2 = new Answer("");
                 a.add(ans2);
-                Answer ans3 = new Answer();
+                Answer ans3 = new Answer("");
                 a.add(ans3);
-                Answer ans4 = new Answer();
+                Answer ans4 = new Answer("");
                 a.add(ans4);
                 for (int i = 0; i < 4; i++) {
                     a.get(i).setNumber(String.valueOf(i + 1));
@@ -170,29 +168,38 @@ public class AddQuestionController {
         });
     }
 
+
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
         /* check if the input is valid */
-
+        int counter=0;
         String errorMSG="";
-        String answers [] = new String[4];
-        int i=0;
-        ObservableList<Answer> dataList = AnswerTable.getItems();
-        for (Answer answer : dataList) {
-            // Process each Answer object
-            if(answer.getAnswer()!="")
-                counter++;
-            answers[i]=(answer.getNumber());
-            i++;
-        }
-        System.out.println("Counter is: "+counter);
         String data=QuestionDataTF.getText();
         String correctAnswer=CorrectAnswerCB.getValue();
         if(CorrectAnswerCB.getSelectionModel().isEmpty()||CorrectAnswerCB.getSelectionModel()==null)
             errorMSG="Error: Please choose correct answer";
         else if(data=="")
             errorMSG="Error: Please fiil question's information";
-        else if(counter!=5)
+        String CorrectAnswer=CorrectAnswerCB.getValue();
+        String correct="";
+        List<String> answers= new ArrayList<>();
+        List<Answer> dataList = AnswerTable.getItems();
+        for(Answer item: dataList)
+        {
+            System.out.println("answer" +item.getAnswer());
+        }
+        int i=0;
+        for (Answer answer : dataList) {
+            answers.add(answer.getAnswer());
+            if(String.valueOf(i+1).equals(correctAnswer)) {
+                correct = answer.getAnswer();
+            }
+            if(answer.getAnswer()!="") {
+                counter++;
+            }
+            i++;
+        }
+        if(counter!=4)
          errorMSG="Error: Please fiil question's answers";
         if(errorMSG!=""){
             JOptionPane.showMessageDialog(null,errorMSG,"Invalid Input",JOptionPane.ERROR_MESSAGE);
@@ -204,20 +211,20 @@ public class AddQuestionController {
         Subject subject = null;
         for(Subject item: subjectOfTeacher)
         {
-            if (item.getName()==selectedSubject)
+            if (item.getName().equals(selectedSubject))
                 subject=item;
         }
         String selectedCourse=addCourseChoiceBox.getValue();
         Course course = null;
-        for(Course item: courses)
+        for(Course item: courseOfTeacher)
         {
-            if (item.getName()==selectedCourse)
-                course=item;
+            if (item.getName().equals(selectedCourse)) {
+                course = item;
+            }
         }
-        correctAnswer=CorrectAnswerCB.getValue();
         String studentNote=StudentNote.getText();
         String teacherNote= TeacherNote.getText();
-        Question question=new Question(course,subject, data,answers,Integer.valueOf(correctAnswer),teacherNote,studentNote);
+        Question question=new Question(course, data,answers,correct,teacherNote,studentNote);
         Message message=new Message(1,"Save Question");
         message.setData(question);
         SimpleClient.getClient().sendToServer(message);
