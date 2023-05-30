@@ -35,6 +35,9 @@ public class StudentExam implements Serializable {
     private String teacherNote;
     private String scoreChangeReason;
 
+    public StudentExam() {
+    }
+
     public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, String status)
     {
         this.student = student;

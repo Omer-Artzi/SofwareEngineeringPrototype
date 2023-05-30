@@ -32,6 +32,9 @@ public class ClassExam implements Serializable
 
     private double gradesVariance;
 
+    public ClassExam() {
+    }
+
     public ClassExam(ExamForm examForm, String date, Teacher tester)
     {
         this.date=date;
