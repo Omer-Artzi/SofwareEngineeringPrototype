@@ -173,9 +173,14 @@ public class ViewExamController {
 	@FXML
 	public void viewManual()
 	{
+		ExamForm selectedForm = ExamsTV.getSelectionModel().getSelectedItem();
+		createManualExam(selectedForm);
+	}
+	public static void createManualExam(ExamForm selectedForm)
+	{
 		int questionID = 1;
 		Random random = new Random();
-		ExamForm selectedForm = ExamsTV.getSelectionModel().getSelectedItem();
+
 		XWPFDocument document = new XWPFDocument();
 		XWPFParagraph titleParagraph = document.createParagraph();
 		titleParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -228,14 +233,13 @@ public class ViewExamController {
 			System.out.println("Document created successfully.");
 			openExam(fileName);
 		}
-	 catch (Exception e) {
-		e.printStackTrace();
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 
-	}
-
-	private void openExam(String fileName) {
+	private static void openExam(String fileName) {
 		if (Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
