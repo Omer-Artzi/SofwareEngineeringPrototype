@@ -104,12 +104,15 @@ public class SimpleClient extends AbstractClient {
 			client.openConnection();
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
-			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
-			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
+			System.out.println("Connection Successful, moving to Log in");
+			SimpleChatClient.setRoot("ViewExam");
+			SimpleChatClient.getClientStage().setWidth(1024);
+			SimpleChatClient.getClientStage().setHeight(768);
+
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			System.out.println("Could not connect to server");
 			//JOptionPane.showMessageDialog(null,"Could not Connect to Server", "Connection Error",JOptionPane.WARNING_MESSAGE);
 		}

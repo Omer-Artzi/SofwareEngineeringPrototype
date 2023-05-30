@@ -1,16 +1,13 @@
 import Entities.Message;
 import Events.MessageEvent;
-import Entities.TerminationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -25,7 +22,7 @@ public class SimpleChatClient extends Application {
     private static Stage clientStage;
     private SimpleClient client;
 
-    public static final double version = 1.7;
+    public static final double version = 1.3;
 
 
 
@@ -34,7 +31,7 @@ public class SimpleChatClient extends Application {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("DoExamManual"), 263, 232);
+            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

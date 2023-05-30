@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class SimpleClient extends AbstractClient {
-	private static Person user;
+
 	private static SimpleClient client = null;
 	private static  String IP;
 	private static int port;

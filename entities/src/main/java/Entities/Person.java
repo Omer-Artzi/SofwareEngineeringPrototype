@@ -5,6 +5,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 @MappedSuperclass
+@Table(name = "Entities.Person")
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Person implements Serializable{
     @Serial
