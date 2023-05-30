@@ -56,8 +56,8 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void gradeExam(ActionEvent event) {
-
+    void gradeExam(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("ClassExamGrade");
     }
 
     @FXML

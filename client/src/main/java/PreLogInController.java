@@ -30,7 +30,7 @@ public class PreLogInController {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
 		Platform.runLater(() -> {
 			Alert alert = new Alert(Alert.AlertType.ERROR,
-					String.format("Entities.Message:\nId: %d\nData: %s\nTimestamp: %s\n",
+					String.format("Message:\nId: %d\nData: %s\nTimestamp: %s\n",
 							event.getMessage().getId(),
 							event.getMessage().getMessage(),
 							event.getMessage().getTimeStamp().format(dtf))

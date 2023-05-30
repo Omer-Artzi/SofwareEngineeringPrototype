@@ -13,8 +13,8 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-@ManyToOne
-@JoinColumn(name = "CourseID")
+    @ManyToOne
+    @JoinColumn(name = "CourseID")
     private Course course;
     @ManyToOne
     @JoinColumn(name = "TeacherID")
@@ -26,9 +26,15 @@ public class ExamForm implements Serializable {
     private Date dateCreated;
     private Date lastUsed;
     private double examTime;
+
+    @ElementCollection
+    private List<Integer> questionsScores = new ArrayList<>();
     @ManyToMany
     @JoinColumn(name = "examForms")
-    private List<Question>QuestionList = new ArrayList<>();
+    private List<Question> QuestionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "examForm")
+    private List<ClassExam> classExams = new ArrayList<>();
 
 
     public ExamForm(){}
@@ -67,8 +73,27 @@ public class ExamForm implements Serializable {
     public void setCreator(Teacher newTeacher){this.creator =newTeacher;}
     public double getExamTime(){return examTime;}
     public void setExamTime(double examTime){this.examTime=examTime;}
+
+    public List<Integer> getQuestionsScores()
+    {
+        return questionsScores;
+    }
+
+    public void setQuestionsScores(List<Integer> questionsScores)
+    {
+        this.questionsScores = questionsScores;
+    }
+    public void AddQuestionsScores(int questionsScore)
+    {
+        this.questionsScores.add(questionsScore);
+    }
+
     public List<Question> getQuestionList(){return QuestionList;}
     public void setQuestionList(List<Question> newQuestionList){this.QuestionList=newQuestionList;}
+
+    public List<ClassExam> getClassExam(){return classExams;}
+    public void setClassExam(List<ClassExam> classExam){this.classExams=classExam;}
+    public void addClassExam(ClassExam classExam){this.classExams.add(classExam);}
 
     public Subject getSubject() {
         return subject;

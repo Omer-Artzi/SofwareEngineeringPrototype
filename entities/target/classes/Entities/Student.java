@@ -14,9 +14,13 @@ public class Student extends Person implements Serializable, Comparable<Student>
     @OneToMany(mappedBy = "student")
     private List<Grade> grades = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentExam> studentExams = new ArrayList<>();
+
     public Student() {}
 
-    public Student( String firstName, String lastName, Gender gender, String email, String password) {
+    public Student(String firstName, String lastName, Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
 
@@ -32,6 +36,15 @@ public class Student extends Person implements Serializable, Comparable<Student>
         this.grades = grades;
     }
 
+    public List<StudentExam> getStudentExam() {
+        return studentExams;
+    }
+
+    public void setStudentExam(List<StudentExam> studentExams) {
+        this.studentExams = studentExams;
+    }
+
+    public void AddStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
 
     @Override
     public String toString() {
