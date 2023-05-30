@@ -1,7 +1,6 @@
 package Entities;
 
 import com.github.javafaker.Faker;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,25 +22,29 @@ public class Subject implements Serializable {
             inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
-    /*
+    private static int codeNum = 0;
     @OneToMany(mappedBy = "subject")
-    private List<Entities.Question> questions = new ArrayList<>();
-    */
+    private List<Question> questions = new ArrayList<>();
+
     public Subject() {
+        code = Integer.toString(++codeNum);
     }
 
     public Subject(Long id, String name, List<Course> courses) {
         this.ID = id;
         this.name = name;
         this.courses = courses;
+        code = Integer.toString(++codeNum);
     }
 
     public Subject(String name) {
         this.name = name;
+        code = Integer.toString(++codeNum);
     }
 
     public Subject(List<Course> courses) {
         this.courses = courses;
+        code = Integer.toString(++codeNum);
     }
 
     public void setId(Long id) {
