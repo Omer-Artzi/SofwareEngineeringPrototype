@@ -216,15 +216,15 @@ public class SimpleServer extends AbstractServer {
 			String salt = BCrypt.gensalt();
 			admin.setEmail("admin");
 			admin.setPassword(BCrypt.hashpw("1234", salt));
-			admin.setCourseList(new ArrayList<>());
-			for (Subject subject : subjects) {
-				admin.getCourseList().addAll(subject.getCourses());
-			};
+			//admin.setSubjectList(new ArrayList<>());
+			//admin.setCourseList(new ArrayList<>());
 			admin.setGender(Gender.Female);
 			admin.setFirstName("super");
 			admin.setLastName("user");
 			session.saveOrUpdate(admin);
 			session.flush();
+			HashSet<Subject> tempSubjects = new HashSet<Subject>();
+			HashSet<Course> tempCourses = new HashSet<Course>();
 			Faker faker = new Faker();
 			Random random = new Random();
 			int randomSubject, randomCourse;
@@ -233,23 +233,42 @@ public class SimpleServer extends AbstractServer {
 				String teacherLastName = faker.name().lastName();
 				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
 				String password = BCrypt.hashpw(faker.internet().password(), salt);
-				List<Course> courses = new ArrayList<>();
+				List<Course> coursesList = new ArrayList<>();
+				List<Subject> subjectsList = new ArrayList<>();
 				for (int j = 0; j < 5; j++) {
 					randomSubject = random.nextInt(subjects.size());
 					Subject subject = subjects.get(randomSubject);
+					subjectsList.add(subject);
 					for (int k = 0; k < 5; k++) {
 						randomCourse = random.nextInt(subject.getCourses().size());
-						courses.add(subject.getCourses().get(randomCourse));
+						coursesList.add(subject.getCourses().get(randomCourse));
 					}
 				}
-				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, courses);
-				for (Course course : courses) {
+				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+				for (Course course : coursesList) {
 					course.getTeachers().add(teacher);
+					if(!(tempCourses.contains(course))){
+						tempCourses.add(course);
+						course.getTeachers().add(admin);
+					}
 				}
-
+				for (Subject subject : subjectsList) {
+					subject.getTeachers().add(teacher);
+					if(!(tempSubjects.contains(subject))){
+						tempSubjects.add(subject);
+						subject.getTeachers().add(admin);
+					}
+				}
 				session.saveOrUpdate(teacher);
-
 			}
+			session.flush();
+			List<Course> allCourses = new ArrayList<>();
+			List<Subject> allSubjects = new ArrayList<>();
+			allSubjects.addAll(tempSubjects);
+			allCourses.addAll(tempCourses);
+			admin.setSubjectList(allSubjects);
+			admin.setCourseList(allCourses);
+			session.saveOrUpdate(admin);
 			session.flush();
 		}
 		catch (Exception e)
@@ -286,7 +305,6 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		System.out.println("Message Received in server");
 		Message message = (Message) msg;
 		String response;
 		String request = message.getMessage();
@@ -307,15 +325,12 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}else if(request.startsWith("Login")){
 				List<String> credentials = (List<String>)message.getData();
-				System.out.println("user is: " + credentials.get(0) + " password is: " + credentials.get(1));
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
-				System.out.println("user is: " + user.getEmail() + " password is: " + password);
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
 					response = "Success: User found";
 					message.setData(user);
-					System.out.println("user has been sent to client");
 				}
 				else
 				{
@@ -324,7 +339,6 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 			} else if(request.startsWith("Get Subjects")){
-				System.out.println("Sending subjects to client");
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
@@ -467,19 +481,16 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private Person retrieveUser(String email) {
-		System.out.println("Retrieving user");
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		try {
 			CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
 			Root<Teacher> root = query.from(Teacher.class);
 			query.where(builder.equal(root.get("email"), email));
 			Person user = session.createQuery(query).getSingleResult();
-			System.out.println("Retrieved user");
 			return user;
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error in retrieveuser");
 			CriteriaQuery<Student> query = builder.createQuery(Student.class);
 			Root<Student> root = query.from(Student.class);
 			query.where(builder.equal(root.get("email"), email));

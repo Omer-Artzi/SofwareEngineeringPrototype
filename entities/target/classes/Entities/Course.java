@@ -17,7 +17,7 @@ public class Course implements Serializable {
     @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "Course_ID"),
-    inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
+    inverseJoinColumns = @JoinColumn(name ="Teacher_ID"))
     private List<Teacher> teachers; //list of teachers that teaches the course
     @ManyToOne
     @JoinColumn(name = "subjectID")

@@ -27,12 +27,9 @@ public class LoginController {
     @FXML
     private Label wrongLoginLabel;
 
-    /*
-     * This method is called when the user clicks on the login button.
-     * It sends a NewLoginMessage to the server with the username and password
-     * entered by the user.
-     * @param event
-     */
+    // This method is called when the user clicks on the login button.
+    // It sends a NewLoginMessage to the server with the username and password entered by the user.
+
     /*
     @FXML
     void login(ActionEvent event) {
