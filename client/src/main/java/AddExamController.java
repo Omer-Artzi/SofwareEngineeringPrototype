@@ -1,6 +1,5 @@
 import Entities.*;
-import Events.CourseQuestionsListEvent;
-import Events.SubjectsOfTeacherMessageEvent;
+import Events.*;
 import antlr.ASTFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,7 +28,7 @@ public class AddExamController {
     private String examNotesForStudent;
     private String examNotesForTeacher;
     private String examName; // necessary?
-    private List<QuestionObject> questions;
+    private List<QuestionObject> questionObjectsList;
 
     private List<Subject> teacherSubjects;
     @FXML
@@ -89,8 +88,23 @@ public class AddExamController {
     }
 
     @FXML
-    void addQuestion(ActionEvent event) {
+    void addQuestion(ActionEvent event) throws IOException {
+        ChooseQuestionsEvent stMsg = new ChooseQuestionsEvent();
+        stMsg.setCourse(CourseCB.getValue());
+        System.out.println("Course: " + CourseCB.getValue());
+        EventBus.getDefault().post(stMsg);
+    }
 
+    @Subscribe
+    void setQuestions(SendChosenQuestionsEvent event) {
+        List<Question> addedQuestions = event.getQuestions();
+        for (Question q : addedQuestions) {
+            QuestionObject newQuestion = new QuestionObject(q.getID(), q.getQuestionData(), 0);
+            questionObjectsList.add(newQuestion);
+        }
+        questionTable.getItems().clear();
+        questionTable.getItems().addAll(questionObjectsList);
+        questionTable.refresh();
     }
 
     @FXML

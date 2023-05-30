@@ -46,7 +46,6 @@ public class Question implements Serializable {
         this.studentNote = studentNote;
     }
 
-    public int getID(){return ID;}
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}
     public String getQuestionData(){return questionData;}
