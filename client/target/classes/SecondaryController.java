@@ -69,13 +69,13 @@ public class SecondaryController {
                     gradesTV.getSelectionModel().getSelectedItem().setGrade(newGradeNum);
                     gradesTV.refresh();
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "No Entities.Grade Was Chosen");
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "No Grade Was Chosen");
                     alert.setTitle("Error!");
                     alert.setHeaderText("Error:");
                     alert.show();
                 }
             } else {
-                newGrade.setText("Invalid Entities.Grade");
+                newGrade.setText("Invalid Grade");
             }
         } catch (NumberFormatException e) {
             newGrade.setText("Invalid number");
@@ -165,7 +165,7 @@ public class SecondaryController {
 
     public void sendNewGrade(Grade grade) {
         try {
-            Message message = new Message(messageID++, "Change Entities.Grade");
+            Message message = new Message(messageID++, "Change Grade");
             message.setData(grade);
             calcStats(gradesTV.getItems());
             SimpleClient.getClient().sendToServer(message);
@@ -179,7 +179,7 @@ public class SecondaryController {
     public void addGrade() {
         Faker faker = new Faker();
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Entities.Course, Entities.Subject, and Entities.Grade");
+        dialog.setTitle("Course, Subject, and Grade");
         dialog.setHeaderText("Enter the course, subject, and grade:");
 
         GridPane gridPane = new GridPane();
@@ -192,11 +192,11 @@ public class SecondaryController {
         subjectComboBox.getItems().addAll(subjectOptions);
         TextField gradeTF = new TextField();
 
-        gridPane.add(new Label("Entities.Course:"), 0, 0);
+        gridPane.add(new Label("Course:"), 0, 0);
         gridPane.add(courseComboBox, 1, 0);
-        gridPane.add(new Label("Entities.Subject:"), 0, 1);
+        gridPane.add(new Label("Subject:"), 0, 1);
         gridPane.add(subjectComboBox, 1, 1);
-        gridPane.add(new Label("Entities.Grade:"), 0, 2);
+        gridPane.add(new Label("Grade:"), 0, 2);
         gridPane.add(gradeTF, 1, 2);
 
         dialog.getDialogPane().setContent(gridPane);
@@ -212,11 +212,11 @@ public class SecondaryController {
                     if (igrade < 0 || igrade > 100) {
                         Alert alert = new Alert(Alert.AlertType.ERROR, "");
                         alert.setTitle("Error!");
-                        alert.setHeaderText("Error: Invalid Entities.Grade, The Entities.Grade Was Not Saved");
+                        alert.setHeaderText("Error: Invalid Grade, The Grade Was Not Saved");
                         alert.show();
                         return null;
                     }
-                    Message message = new Message(1, "Add Entities.Grade to Entities.Student ID: " + student.getID());
+                    Message message = new Message(1, "Add Grade to Student ID: " + student.getID());
                     Grade newgrade = new Grade(igrade, course, subject, student);
                     message.setData(newgrade);
                     gradesTV.getItems().add(newgrade);

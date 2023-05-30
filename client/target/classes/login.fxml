@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="189.0" fitWidth="236.0" layoutX="26.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Images/HSTSLogo.png" />
+                  <Image url="@/Images/HSTSLogo.png" />
                </image>
             </ImageView>
          </children>
@@ -32,7 +32,7 @@
             </Label>
             <ImageView fitHeight="56.0" fitWidth="48.0" layoutX="125.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Images/loginSymbol.png" />
+                  <Image url="@/Images/loginSymbol.png" />
                </image>
             </ImageView>
             <Label layoutX="48.0" layoutY="163.0" text="Username:" textFill="#2c4a9e">

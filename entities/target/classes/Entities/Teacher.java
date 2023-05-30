@@ -9,12 +9,13 @@ import java.util.List;
 @Table(name = "Teachers")
 @DiscriminatorValue("1")
 public class Teacher extends Person{
-    //TODO: Added by Ilan, check if it's working with the database
+    // Updated by Ilan 27.5
     @ManyToMany(mappedBy = "teachers")
     private List<Subject> subjects = new ArrayList<>();
-
     @ManyToMany(mappedBy = "teachers")
     private List<Course> courses = new ArrayList<>();
+
+
     public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
         super(firstName, lastName, gender, email, password);
         this.courses = course_list;
@@ -42,7 +43,7 @@ public class Teacher extends Person{
     }
 
     public Teacher() {}
-    public void extraTimeRequest(ExtraTime data){};
+    public void extraTimeRequest(ExtraTime data){}
      public void receiveExtraTime(ExtraTime data)
      {
 

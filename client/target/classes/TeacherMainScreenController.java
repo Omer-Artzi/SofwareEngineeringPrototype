@@ -9,10 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public class TeacherMainScreenController  {
-
-    @FXML
-    private Label MainMessageLabel;
-
     @FXML
     private Label Menu;
 
@@ -39,6 +35,8 @@ public class TeacherMainScreenController  {
 
     @FXML
     private Button viewTestFormsButton;
+    @FXML
+    private Label MainMessageLabel;
 
     @FXML
     void addQuestion(ActionEvent event) {
@@ -47,6 +45,7 @@ public class TeacherMainScreenController  {
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
+        SimpleChatClient m = new SimpleChatClient();
         SimpleChatClient.setRoot("addExam");
     }
 
@@ -66,8 +65,8 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) {
-
+    void viewTestForms(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("ViewExam");
     }
 
     @FXML

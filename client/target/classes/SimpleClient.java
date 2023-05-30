@@ -11,6 +11,7 @@ import java.util.List;
 
 public class SimpleClient extends AbstractClient {
 	private static Person user;
+
 	private static SimpleClient client = null;
 	private static  String IP;
 	private static int port;
@@ -104,15 +105,12 @@ public class SimpleClient extends AbstractClient {
 			client.openConnection();
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
-			System.out.println("Connection Successful, moving to Log in");
-			SimpleChatClient.setRoot("ViewExam");
-			SimpleChatClient.getClientStage().setWidth(1024);
-			SimpleChatClient.getClientStage().setHeight(768);
-
+			System.out.println("Connection Successful, moving to homepage");
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
+			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			System.out.println("Could not connect to server");
 			//JOptionPane.showMessageDialog(null,"Could not Connect to Server", "Connection Error",JOptionPane.WARNING_MESSAGE);
 		}
@@ -122,7 +120,12 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.port = port;
 	}
 
-	public void setUser(Person user) {
-		this.user = user;
+	public static void setUser(Person otherUser) {
+		user = otherUser;
 	}
+
+	public static Person getUser() {
+		return user;
+	}
+
 }

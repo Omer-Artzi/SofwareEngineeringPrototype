@@ -2,7 +2,7 @@ package Server.Controllers;
 
 import Entities.Transmission;
 import Server.Events.ClientUpdateEvent;
-import Server.Events.TerminationEvent;
+import Entities.TerminationEvent;
 import Server.Events.TransmissionEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

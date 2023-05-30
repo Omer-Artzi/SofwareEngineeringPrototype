@@ -28,6 +28,9 @@ public class ExamForm implements Serializable {
     private double examTime;
     private String header;
     private String footer;
+    @OneToMany
+    @JoinColumn(name = "classExamID")
+    private List<ClassExam> classExams = new ArrayList<>();
 
     @ManyToMany
     @JoinColumn(name = "examForms")

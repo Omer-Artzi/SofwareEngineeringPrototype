@@ -1,10 +1,15 @@
 package Server;
+import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
-import Entities.TerminationEvent;
+import Server.Events.ResponseQuestion;
+
+import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
+import com.github.javafaker.Faker;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -18,8 +23,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Entities.*;
@@ -41,6 +53,10 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(ClassExam.class);
 		configuration.addAnnotatedClass(Person.class);
+
+
+
+
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -125,7 +141,7 @@ public class SimpleServer extends AbstractServer {
 			} else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
-				message.setData(getSubjects());
+				message.setData(retrieveSubjects());
 				client.sendToClient(message);
 			} else if (message.getMessage().startsWith("Extra time request"))
 			{
@@ -154,12 +170,12 @@ public class SimpleServer extends AbstractServer {
 			} else if(request.startsWith("Get Exams Forms for Subject")){
 				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
-				message.setData(getExamsForSubjects((Subject)(message.getData())));
+				message.setData(retrieveExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
 			}else if(request.startsWith("Get Exams Forms for Course")){
 				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
-				message.setData(getExamsForCourse((Course)(message.getData())));
+				message.setData(retrieveExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
 			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
@@ -173,7 +189,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Grades")){
 				String studentID = request.substring(12);
 				int iStudentID = Integer.parseInt(studentID);
-				Student student = getStudent(iStudentID);
+				Student student = retreiveStudent(iStudentID);
 				response = ("Grades of " + student.getFullName());
 				message.setMessage(response);
 				message.setData(student);
@@ -284,7 +300,8 @@ public class SimpleServer extends AbstractServer {
 
 	}
 
-	private List<ExamForm> getExamsForCourse(Course course) {
+
+	private List<ExamForm> retrieveExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
 		Root<ExamForm> root = query.from(ExamForm.class);
@@ -292,7 +309,7 @@ public class SimpleServer extends AbstractServer {
 		List<ExamForm> examForms = session.createQuery(query).getResultList();
 		return examForms;
 	}
-	private List<ExamForm> getExamsForSubjects(Subject subject) {
+	private List<ExamForm> retrieveExamsForSubjects(Subject subject) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
 		Root<ExamForm> root = query.from(ExamForm.class);
@@ -301,7 +318,7 @@ public class SimpleServer extends AbstractServer {
 		return examForms;
 	}
 
-	private List<Subject> getSubjects() {
+	private List<Subject> retrieveSubjects() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
 		query.from(Subject.class);
@@ -309,7 +326,7 @@ public class SimpleServer extends AbstractServer {
 		return subjects;
 	}
 
-	private Student getStudent(int iStudentID) {
+	private Student retrieveStudent(int iStudentID) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);
 		Root<Student> root = query.from(Student.class);
@@ -319,7 +336,7 @@ public class SimpleServer extends AbstractServer {
 	}
 
 
-	private Object retrieveGrades ( int iStudentID){
+	private Object retrieveGrades(int iStudentID){
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Grade> query = builder.createQuery(Grade.class);
 			Root<Grade> gradeRoot = query.from(Grade.class);
@@ -346,4 +363,18 @@ public class SimpleServer extends AbstractServer {
 		List<Student> students = session.createQuery(query).getResultList();
 		return students;
 	}
-}
+
+	public Student retreiveStudent(int iStudentID)
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Student> query = builder.createQuery(Student.class);
+		Root<Student> gradeRoot = query.from(Student.class);
+		query.where(builder.equal(gradeRoot.get("ID"), iStudentID));
+		Student student = session.createQuery(query).getSingleResult();
+		return student;
+	}
+	}
+
+
+
+
