@@ -319,31 +319,39 @@ public class SimpleServer extends AbstractServer {
 		System.out.println("Message Received: " + request);
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
-			if (request.isBlank()){
+			if (request.isBlank()) {
 				response = "Error! we got an empty message";
 				message.setMessage(response);
 				client.sendToClient(message);
-			}else if(request.startsWith("Login")){
-				List<String> credentials = (List<String>)message.getData();
+			} else if (request.startsWith("Login")) {
+				List<String> credentials = (List<String>) message.getData();
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
-				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
-				{
+				if (BCrypt.checkpw(password, user.getPassword()) && user != null) {
 					response = "Success: User found";
 					message.setData(user);
-				}
-				else
-				{
+				} else {
 					response = "Fail: User not found";
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Subjects")){
+			}else if(request.startsWith("1Get Subjects of Teacher")) {  // Added by Ilan 30.5
+				String teacherID = request.substring(26);
+				System.out.println("Teacher ID: " + teacherID); /////
+				int iTeacherID = Integer.parseInt(teacherID);
+				Teacher teacher = getTeacher(iTeacherID);
+				response = ("1Subjects of: " + teacher.getFullName());
+				System.out.println(response); /////
+				message.setMessage(response);
+				message.setData(getSubjects());
+				System.out.println("Subjects: " + teacher.getSubjectList()); /////
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
 				client.sendToClient(message);
-			} else if (message.getMessage().startsWith("Extra time request"))
+			}else if (message.getMessage().startsWith("Extra time request"))
 			{
 				response = "Extra Time Requested";
 				message.setMessage(response);
@@ -376,6 +384,11 @@ public class SimpleServer extends AbstractServer {
 				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Questions for Course")){
+				response ="Questions in Course " + ((Course)(message.getData())).getName();
+				message.setMessage(response);
+				message.setData(getQuestionsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
 			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
@@ -517,6 +530,15 @@ public class SimpleServer extends AbstractServer {
 		return examForms;
 	}
 
+	private List<Question> getQuestionsForCourse(Course course) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Question> query = builder.createQuery(Question.class);
+		Root<Question> root = query.from(Question.class);
+		query.where(builder.equal(root.get("course"), course));
+		List<Question> questions = session.createQuery(query).getResultList();
+		return questions;
+	}
+
 	private List<Subject> getSubjects() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
@@ -532,6 +554,15 @@ public class SimpleServer extends AbstractServer {
 		query.where(builder.equal(root.get("ID"), iStudentID));
 		Student student = session.createQuery(query).getSingleResult();
 		return student;
+	}
+
+	private Teacher getTeacher(int iTeacherID) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+		Root<Teacher> root = query.from(Teacher.class);
+		query.where(builder.equal(root.get("ID"), iTeacherID));
+		Teacher teacher = session.createQuery(query).getSingleResult();
+		return teacher;
 	}
 
 
@@ -573,6 +604,16 @@ public class SimpleServer extends AbstractServer {
 		List<Student> students = session.createQuery(query).getResultList();
 		return students;
 	}
+
+	public List<Subject> retrieveSubjects()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
+		query.from(Subject.class);
+		List<Subject> subjects = session.createQuery(query).getResultList();
+		return subjects;
+	}
+
 
 
 
