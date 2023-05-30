@@ -13,6 +13,12 @@ import java.util.List;
 public class Student extends Person implements Serializable, Comparable<Student> {
     @OneToMany(mappedBy = "student")
     private List<Grade> grades = new ArrayList<>();
+    @ManyToMany(mappedBy = "students")
+    private List<Subject> subjects = new ArrayList<>();
+    @ManyToMany(mappedBy = "students")
+    private List<Course> courses = new ArrayList<>();
+    @ManyToMany(mappedBy = "students")
+    private List<ClassExam> classExams = new ArrayList<>();
 
     public Student() {}
 
@@ -48,5 +54,30 @@ public class Student extends Person implements Serializable, Comparable<Student>
     @Override
     public void receiveExtraTime(ExtraTime data) {
         //TODO: Add extra time
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public List<ClassExam> getClassExams() {
+        return classExams;
+    }
+
+    public void setClassExams(List<ClassExam> classExams) {
+        this.classExams = classExams;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+
     }
 }

@@ -34,19 +34,19 @@ public class SimpleChatClient extends Application {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
+            scene = new Scene(loadFXML("DoExamManual"), 263, 232);
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-
+                    Platform.exit();
                     try {
                         SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    Platform.exit();
+
                 }
             });
             stage.show();
@@ -60,6 +60,18 @@ public class SimpleChatClient extends Application {
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+    }
+    public static void setScene(String fxml,int height, int width) throws IOException {
+        Platform.runLater(()->{
+            try {
+                scene = new Scene(loadFXML(fxml), height, width);
+                clientStage.setScene(scene);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
     }
 
     public static Parent loadFXML(String fxml) throws IOException {

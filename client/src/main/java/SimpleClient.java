@@ -119,7 +119,12 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.port = port;
 	}
 
-	public void setUser(Person user) {
-		this.user = user;
+	public static void setUser(Person otherUser) {
+		user = otherUser;
 	}
+
+	public static Person getUser() {
+		return user;
+	}
+
 }

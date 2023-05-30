@@ -12,9 +12,10 @@ public class Teacher extends Person{
     // Updated by Ilan 27.5
     @ManyToMany(mappedBy = "teachers")
     private List<Subject> subjects = new ArrayList<>();
-
     @ManyToMany(mappedBy = "teachers")
     private List<Course> courses = new ArrayList<>();
+
+
     public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
         super(firstName, lastName, gender, email, password);
         this.courses = course_list;

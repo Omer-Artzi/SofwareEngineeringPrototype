@@ -15,6 +15,12 @@ public class Subject implements Serializable {
     @OneToMany(mappedBy = "subject")
     private List<Course> courses = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "Subject_ID"),
+            inverseJoinColumns = @JoinColumn(name ="Student_ID" ))
+    private List<Student> students = new ArrayList<>();
+
     // Updated by Ilan 27.5
     @ManyToMany
     @JoinTable(

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChooseExamController">
+   <children>
+      <VBox prefHeight="766.0" prefWidth="1028.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="628.0" spacing="50.0">
+               <children>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToHomePage" text="Back" />
+                  <ComboBox fx:id="subjectsCB" onAction="#onSubjectSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Subject" />
+                  <ComboBox fx:id="CoursesCB" onAction="#onCourseSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Course" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="635.0" prefWidth="1028.0">
+               <children>
+                  <TableView fx:id="ExamsTV" editable="true" prefHeight="500.0" prefWidth="951.0">
+                    <columns>
+                      <TableColumn fx:id="IDColumn" prefWidth="236.15187072753906" text="ID" />
+                      <TableColumn fx:id="codeColumn" prefWidth="492.84812927246094" text="Code" />
+                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="221.28836059570312" text="Time" />
+                    </columns>
+                  </TableView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="11.0">
+               <children>
+                  <TextField fx:id="examCodeTF" promptText="Enter Exam Code" />
+                  <Button fx:id="ViewManualButton" mnemonicParsing="false" onAction="#takeManual" prefHeight="25.0" prefWidth="132.0" text="Take Manual Version" />
+                  <Button fx:id="ViewDIgitalButton" mnemonicParsing="false" onAction="#takeDigital" prefHeight="25.0" prefWidth="132.0" text="Take Digital Version " />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

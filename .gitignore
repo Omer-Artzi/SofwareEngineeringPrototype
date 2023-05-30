@@ -2,3 +2,8 @@
 *.class
 *.iml
 *.lst
+/entities/target/
+entities/target/classes/Entities/
+/client/target/
+/server/target/
+/server/target/classes/
