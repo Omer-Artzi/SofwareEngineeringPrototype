@@ -102,12 +102,7 @@ public class AddQuestionController {
     @FXML
     void initialize() throws IOException {             //initialize the page. update the data and the elements
         EventBus.getDefault().register(this);
-        Person person=SimpleClient.getClient().getUser();
-        Teacher teacher=new Teacher();
-        if(person instanceof Teacher) {
-            System.out.println("heyyyyyyyyyyy");
-            teacher = (Teacher) person;
-        }
+        Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
         courseOfTeacher = teacher.getCourseList();
         subjectOfTeacher=teacher.getSubject();
         List<String>subject_name=new ArrayList<>();

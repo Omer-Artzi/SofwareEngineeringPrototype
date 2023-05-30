@@ -45,7 +45,6 @@ public class LoginController {
 
     @FXML
     public void login(ActionEvent event) throws IOException {
-        System.out.println("after login BT");
         checkLogin();
     }
 
@@ -58,7 +57,6 @@ public class LoginController {
             user.add(username);
             user.add(password);
             credentials.setData(user);
-            System.out.println("checkLogin");
             SimpleClient.getClient().sendToServer(credentials);
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
         }
