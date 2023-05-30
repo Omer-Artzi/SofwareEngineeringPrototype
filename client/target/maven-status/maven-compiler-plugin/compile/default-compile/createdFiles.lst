@@ -27,5 +27,6 @@ Events\ExamMessageEvent.class
 Events\EditGradeSuccessEvent.class
 Events\GeneralEvent.class
 Events\StudentExamEvent.class
+SimpleChatClient$1.class
 Events\LoadExamEvent.class
 ocsf\AbstractClient.class

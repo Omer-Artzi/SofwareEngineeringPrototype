@@ -1,19 +1,20 @@
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Person.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\School.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Student.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Exam.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Transmission.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Question.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\StudentExam.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\SubjectWrapper.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ClassExam.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Grade.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Subject.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Course.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\NewSubscriberEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExamForm.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Principle.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Teacher.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExtraTime.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Message.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Gender.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExtraTime.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Person.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\School.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Subject.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Exam.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Principle.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ClassExam.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\SubjectWrapper.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Message.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\TerminationEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\StudentExam.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Transmission.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Course.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Grade.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Question.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Gender.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Teacher.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExamForm.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\NewSubscriberEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\entities\src\main\java\Entities\Student.java

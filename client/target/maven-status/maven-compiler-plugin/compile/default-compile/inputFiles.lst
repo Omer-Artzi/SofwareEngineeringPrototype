@@ -1,30 +1,30 @@
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\GradeMessageEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AbstractClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\SubjectMessageEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleChatClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\StudentExamGradeController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ExamMessageEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\MessageEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AdaptableClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\StudentExamEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ClassExamGradeEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\AddExamController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\TeacherMainScreenController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ClientConnectionEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ErrorEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\RefreshEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ClassExamGradeController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SecondaryController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\UserMessageEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddGradeSuccesEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddStudentSuccesEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableSWRClient.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\GeneralEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Main.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\LoadExamEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\PreLogInController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\LoginController.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\EditGradeSuccessEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\studentMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\TeacherMainScreenController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ClientConnectionEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ExamMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SecondaryController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AdaptableClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ErrorEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddGradeSuccesEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\studentMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\GradeMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\RefreshEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\LoginController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\StudentExamEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\EditGradeSuccessEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ClassExamGradeController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\LoadExamEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\AbstractClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableSWRClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Main.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\UserMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\SubjectMessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\PreLogInController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ClassExamGradeEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\MessageEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\AddExamController.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddStudentSuccesEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\GeneralEvent.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleChatClient.java
+G:\Other computers\Desktop\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\StudentExamGradeController.java

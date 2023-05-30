@@ -17,8 +17,6 @@ public class Question implements Serializable {
     @ElementCollection
     private List<String> Answers;
     private String correctAnswer;
-
-    // TODO: pass this notes to examForm
     private String teacherNote;
     private String studentNote;
     @ManyToMany
@@ -26,6 +24,10 @@ public class Question implements Serializable {
             joinColumns = @JoinColumn(name ="Question_ID" ),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
+
+    @ManyToOne
+    private Subject subject;
+
     public Question(){}
     public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
     {

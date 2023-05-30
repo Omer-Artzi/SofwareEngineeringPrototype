@@ -41,6 +41,8 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(Person.class);
+		configuration.addAnnotatedClass(StudentExam.class);
+		configuration.addAnnotatedClass(ClassExam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -67,13 +69,6 @@ public class SimpleServer extends AbstractServer {
 			JOptionPane.showMessageDialog(null, "A connection to the database could not be formed, please check the MySQL Server is installed and running(Check Console for more info)", "Database Error", JOptionPane.WARNING_MESSAGE);
 		}
 	}
-
-
-
-
-
-
-
 
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
@@ -379,7 +374,7 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 	}
-	public List<Student> retrieveStudents()
+	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);

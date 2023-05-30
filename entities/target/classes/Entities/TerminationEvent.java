@@ -1,4 +1,4 @@
-package Server.Events;
+package Entities;
 
 public class TerminationEvent {
     public TerminationEvent() {

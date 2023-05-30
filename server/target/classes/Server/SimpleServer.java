@@ -1,15 +1,10 @@
 package Server;
-import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
-import Server.Events.ResponseQuestion;
-import Server.Events.TerminationEvent;
-import com.google.gson.Gson;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import Entities.TerminationEvent;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
-import com.github.javafaker.Faker;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -24,25 +19,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
-
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
-	private static Session session;
+	static Session session;
 	private static int transmissionID = 0;
 
 	public static SessionFactory getSessionFactory() throws HibernateException {
@@ -55,22 +41,22 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(Person.class);
-		configuration.addAnnotatedClass(ClassExam.class);
 		configuration.addAnnotatedClass(StudentExam.class);
+		configuration.addAnnotatedClass(ClassExam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
 
 		return configuration.buildSessionFactory(serviceRegistry);
 	}
-	public SimpleServer(int port) throws IOException {
+	public SimpleServer(int port) {
 		super(port);
 		try{
 			EventBus.getDefault().register(this);
 			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			DataGenerator.generateData(session);
+			DataGenerator.generateData();
 		}
 		catch (Exception exception)
 		{
@@ -79,11 +65,17 @@ public class SimpleServer extends AbstractServer {
 				session.getTransaction().rollback();
 			}
 			System.err.println("An error occurred, changes have been rolled back.");
-			//exception.printStackTrace();
+			exception.printStackTrace();
 			JOptionPane.showMessageDialog(null, "A connection to the database could not be formed, please check the MySQL Server is installed and running(Check Console for more info)", "Database Error", JOptionPane.WARNING_MESSAGE);
-			throw exception;
 		}
 	}
+
+
+
+
+
+
+
 
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
@@ -98,21 +90,6 @@ public class SimpleServer extends AbstractServer {
 		this.close();
 	}
 
-	//Generating grades and saving in the SQL server
-	private void generateGrades() {
-		List<Student> students = retrieveStudents();
-		Faker faker = new Faker();
-		Random r = new Random();
-		for(Student student : students)
-		{
-			for(int i = 0; i < 8;i++ ) {
-				Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
-				student.getGrades().add(grade);
-				session.save(grade);
-			}
-		}
-		session.flush();
-	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -181,13 +158,13 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Exams Forms for Entities.Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+			} else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Course")){
-				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+			}else if(request.startsWith("Get Exams Forms for Course")){
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
@@ -404,9 +381,6 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 	}
-
-
-	// Functions which retrieve data from database
 	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
