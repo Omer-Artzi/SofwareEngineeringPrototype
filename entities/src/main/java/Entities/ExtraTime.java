@@ -1,10 +1,19 @@
 package Entities;
 
+import javax.persistence.*;
 import java.util.List;
-
+@Entity
+@Table(name = "ExtraTime")
 public class ExtraTime {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long ID;
     private String TeacherNote;
     private  Exam exam;
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "ExtraTime_ID"),
+            inverseJoinColumns = @JoinColumn(name ="Principle_ID"))
     private List<Principle> principles;
     public ExtraTime(){}
     public ExtraTime(Exam exam,List<Principle> principles,String teacherNote)
