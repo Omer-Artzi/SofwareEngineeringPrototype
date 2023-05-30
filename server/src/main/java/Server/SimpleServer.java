@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -40,6 +41,8 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(Person.class);
+		configuration.addAnnotatedClass(StudentExam.class);
+		configuration.addAnnotatedClass(ClassExam.class);
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -67,23 +70,18 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-
-
-
-
-
-
-
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
+		System.out.println("Server is closed");
 		Message message = new Message(1,"Server is closed");
 		sendToAllClients(message);
-		session.getTransaction().commit();
-		session.close();
+		if (session != null) {
+			if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+				session.getTransaction().commit();
+			session.close();
+		}
 		this.close();
 	}
-
-	//Generating grades and saving in the SQL server
 
 
 	@Override
@@ -100,6 +98,9 @@ public class SimpleServer extends AbstractServer {
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
 		System.out.println("Message Received: " + request);
+
+		// Todo: find better solution to start and commit transaction
+		session.beginTransaction();
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
@@ -165,7 +166,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Students")){
 				response ="Students";
 				message.setMessage(response);
-				message.setData(retrievetudents());
+				message.setData(retrieveStudents());
 				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
@@ -250,7 +251,38 @@ public class SimpleServer extends AbstractServer {
 					System.out.println(response);
 				}
 			}
-			else{
+			// Lior's addition
+			else if(request.startsWith("Change Student Exam"))
+			{
+				StudentExam studentExam = ((StudentExam)(message.getData()));
+				try {
+					// draw student from database and update him
+					StudentExam studentExamToChange = session.get(StudentExam.class, studentExam.getID());
+					studentExamToChange.update(studentExam);
+					session.update(studentExamToChange);
+					session.flush();
+
+					// Update exam's stats
+					ClassExam exam = studentExamToChange.getClassExam();
+					exam.UpdateStudentExam(studentExamToChange);
+					exam = OperationUtils.UpdateClassExamStats(exam);
+					session.update(exam);
+					session.flush();
+					response = ("Success: StudentExam Approved");
+					message.setMessage(response);
+					client.sendToClient(message);
+					System.out.println(response);
+
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					response = ("Failure: Failed to save StudentExam");
+					System.out.println(response);
+				}
+			}
+			else
+			{
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);
 				response = "[Unrecognized Message]";
@@ -258,9 +290,14 @@ public class SimpleServer extends AbstractServer {
 			}
 			transmission.setResponse(response);
 			EventBus.getDefault().post(new TransmissionEvent(transmission));
-		} catch (IOException e1) {
+		}
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 		}
+		// Check if there were new changes in the database before commint
+		if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+			session.getTransaction().commit();
 	}
 
 	private Person retrieveUser(String email) {
@@ -337,12 +374,30 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 	}
-	public List<Student> retrievetudents()
+	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);
 		query.from(Student.class);
 		List<Student> students = session.createQuery(query).getResultList();
 		return students;
+	}
+
+	public static List<Teacher> retrieveTeachers()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+		query.from(Teacher.class);
+		List<Teacher> teachers = session.createQuery(query).getResultList();
+		return teachers;
+	}
+
+	public static List<ExamForm> retrieveExamForm()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		query.from(ExamForm.class);
+		List<ExamForm> exams = session.createQuery(query).getResultList();
+		return exams;
 	}
 }

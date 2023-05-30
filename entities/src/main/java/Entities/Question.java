@@ -27,7 +27,8 @@ public class Question implements Serializable {
 
     @ManyToOne
     private Subject subject;
-public Question(){}
+
+    public Question(){}
     public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
     {
         this.course=course;
