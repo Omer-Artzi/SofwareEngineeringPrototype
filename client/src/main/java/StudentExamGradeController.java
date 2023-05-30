@@ -239,7 +239,9 @@ public class StudentExamGradeController
         solvedExam = event.getStudentExam();
         Platform.runLater(() -> {
             try {
+                System.out.println(4);
                 GetQuestions(AnswersVBOX);
+                System.out.println(5);
                 // set the scroll to top after estimated time of scene rendering
                 PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
                 pause.setOnFinished(timedEvent -> {ScrollPane.setVvalue(0);});
@@ -271,15 +273,21 @@ public class StudentExamGradeController
             TimeUnit.SECONDS.sleep(1);
         }
         List<Question> questions = solvedExam.getClassExam().getExamForm().getQuestionList();
+        System.out.println(1);
         int studentScore = 0;
         for (int questionNumber = 0; questionNumber < questions.size(); questionNumber++)
         {
+            System.out.println(2);
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
+            System.out.println(1);
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
+            System.out.println(1);
             int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber);
+            System.out.println(1);
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
-
+            System.out.println(3);
+            System.out.println(1);
             HBox qustionHbox = new HBox();
             qustionHbox.prefWidth(557);
 
