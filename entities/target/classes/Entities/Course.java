@@ -14,27 +14,35 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String Name;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "Course_ID"),
     inverseJoinColumns = @JoinColumn(name ="Teacher_ID"))
     private List<Teacher> teachers; //list of teachers that teaches the course
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "CourseID"),
+            inverseJoinColumns = @JoinColumn(name = "StudentID"))
+    private List<Student> students = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "subjectID")
     private Subject subject;
-    @OneToMany(mappedBy = "course")
-    private List<Question> questions = new ArrayList<>();
-    private String code;
-    private static int codeNum = 0;
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "Course_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
+    //////////////////////////////////////////////////////
+    //@OneToMany(mappedBy = "course")
+    //private List<Question> questions = new ArrayList<>();
+    @ManyToMany(mappedBy = "courses")
+    private List<Question> questions = new ArrayList<>();
+    //////////////////////////////////////////////////////
+
+    @OneToMany(mappedBy = "course")
     private List<ExamForm> examForms = new ArrayList<>();
 
-
-
+    private String code;
+    private static int codeNum = 0;
+    
     public Course(){
         code = Integer.toString(++codeNum);
     }

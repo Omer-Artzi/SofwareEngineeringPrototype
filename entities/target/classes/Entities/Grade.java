@@ -58,7 +58,8 @@ public class Grade implements Serializable,Comparable {
     }
 
     public void setCourse(String course) {
-        this.course = course;
+        if (this.course != course)
+            this.course = course;
     }
 
     public Student getStudent() {

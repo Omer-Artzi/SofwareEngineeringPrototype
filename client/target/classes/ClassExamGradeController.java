@@ -113,7 +113,10 @@ public class ClassExamGradeController {
         NameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getStudent().getFullName()));
         IDColumn.setCellValueFactory(param -> new SimpleStringProperty(Long.toString(param.getValue().getStudent().getID())));
         GradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-        StatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        //StatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        StatusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().TranslateStatus()));
         ClassExamTv.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         StatusColumn.setComparator(StatusColumn.getComparator().reversed());

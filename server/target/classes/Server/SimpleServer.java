@@ -70,13 +70,6 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-
-
-
-
-
-
-
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
 		System.out.println("Server is closed");

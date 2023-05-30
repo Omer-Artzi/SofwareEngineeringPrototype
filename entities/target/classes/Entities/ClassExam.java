@@ -26,11 +26,15 @@ public class ClassExam implements Serializable
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
+
     private int approvedExamsNum;
 
     private double gradesMean;
 
     private double gradesVariance;
+
+    public ClassExam() {
+    }
 
     public ClassExam(ExamForm examForm, String date, Teacher tester)
     {
