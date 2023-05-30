@@ -1,13 +1,16 @@
 import Entities.Message;
 import Events.MessageEvent;
+import Entities.TerminationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -31,7 +34,19 @@ public class SimpleChatClient extends Application {
             EventBus.getDefault().register(this);
             scene = new Scene(loadFXML("PreLogin"), 399, 217);/////399, 217)
             stage.setScene(scene);
-            stage.setTitle("High Entities.School Test System Prototype - Version " + version);
+            stage.setTitle("High School Test System Prototype - Version " + version);
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+
+                    try {
+                        SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Platform.exit();
+                }
+            });
             stage.show();
         }
         catch (Exception e)
@@ -65,13 +80,13 @@ public class SimpleChatClient extends Application {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.INFORMATION,
-                    String.format("Entities.Message:\nId: %d\nData: %s\nTimestamp: %s\n",
+                    String.format("Message:\nId: %d\nData: %s\nTimestamp: %s\n",
                             message.getMessage().getId(),
                             message.getMessage().getMessage(),
                             message.getMessage().getTimeStamp().format(dtf))
             );
             alert.setTitle("new message");
-            alert.setHeaderText("New Entities.Message:");
+            alert.setHeaderText("New Message:");
             alert.show();
         });
     }

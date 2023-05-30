@@ -1,6 +1,6 @@
 package Server;
 
-import Server.Events.TerminationEvent;
+import Entities.TerminationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

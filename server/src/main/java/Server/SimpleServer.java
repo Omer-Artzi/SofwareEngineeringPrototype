@@ -39,7 +39,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
-	private static Session session;
+	static Session session;
 	private static int transmissionID = 0;
 
 	public static SessionFactory getSessionFactory() throws HibernateException {
@@ -65,8 +65,7 @@ public class SimpleServer extends AbstractServer {
 			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			generateData();
-			//session.getTransaction().commit();
+			DataGenerator.generateData();
 		}
 		catch (Exception exception)
 		{
@@ -124,7 +123,7 @@ public class SimpleServer extends AbstractServer {
 		Random random = new Random();
 		int randCourse;
 		for (int i = 0; i < requests.length;i++) {
-			try {
+		try {
 
 				// Create URL object and open connection
 				URL url = new URL(requests[i]);
@@ -152,7 +151,7 @@ public class SimpleServer extends AbstractServer {
 					Gson gson = new Gson();
 					ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
 					List<ResponseQuestion> questions = apiResponse.getResults();
-					List<Question> questionsList = new ArrayList<>();
+				List<Question> questionsList = new ArrayList<>();
 					for(ResponseQuestion responseQuestion: questions)
 					{
 						Question question = new Question();
@@ -212,18 +211,6 @@ public class SimpleServer extends AbstractServer {
 
 	private void generateTeachers(List<Subject> subjects) {
 		try {
-			/*
-			Principle principle=new Principle();
-			String salt1 = BCrypt.gensalt();
-			principle.setEmail("admin");
-			principle.setPassword(BCrypt.hashpw("5678", salt1));
-			//principle.setCourseList(new ArrayList<>());
-			principle.setGender(Gender.Female);
-			principle.setFirstName("super");
-			principle.setLastName("user");
-			session.saveOrUpdate(principle);
-			session.flush();
-			*/
 			Teacher admin = new Teacher();
 			String salt = BCrypt.gensalt();
 			admin.setEmail("admin");
@@ -317,7 +304,6 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		System.out.println("SERVER3");
 		Message message = (Message) msg;
 		String response;
 		String request = message.getMessage();
@@ -351,7 +337,7 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.equals("Get Subjects")){
+			} else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
@@ -367,7 +353,7 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(getPrinciples());
 				client.sendToClient(message);
-			}else if (message.getMessage().startsWith("Extra time request"))
+			} else if (message.getMessage().startsWith("Extra time request"))
 			{
 				response = "Extra Time Requested";
 				message.setMessage(response);
@@ -391,13 +377,13 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Exams Forms for Entities.Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+			} else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Course")){
-				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+			}else if(request.startsWith("Get Exams Forms for Course")){
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
@@ -523,16 +509,6 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private List<Course> getListOfCourses(int iTeacherID) {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Course> query = builder.createQuery(Course.class);
-		Root<Course> courseRoot = query.from(Course.class);
-		Join<Course, Teacher> teacherJoin = courseRoot.join("course");
-		query.where(builder.equal(teacherJoin.get("ID"), iTeacherID));
-		List<Course> courses = session.createQuery(query).getResultList();
-		return courses;
-	}
-
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		try {
@@ -552,7 +528,6 @@ public class SimpleServer extends AbstractServer {
 		}
 
 	}
-
 
 	private List<ExamForm> getExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
