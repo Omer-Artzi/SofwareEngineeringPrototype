@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class SideBarController {
+public class TeacherSidebarController {
 
     @FXML
     private Label Menu;
@@ -74,13 +74,13 @@ public class SideBarController {
     }
 
     void InitializationAsserts(){
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert viewQuestionButton != null : "fx:id=\"viewQuestionButton\" was not injected: check your FXML file 'SideBar.fxml'.";
-        assert viewTestFormsButton != null : "fx:id=\"viewTestFormsButton\" was not injected: check your FXML file 'SideBar.fxml'.";
+        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert viewQuestionButton != null : "fx:id=\"viewQuestionButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
+        assert viewTestFormsButton != null : "fx:id=\"viewTestFormsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
 
     }
 

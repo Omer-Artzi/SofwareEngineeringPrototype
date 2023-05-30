@@ -92,8 +92,8 @@
 				<version>3.8.0</version>
 				<configuration>
 					<release>13</release>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>19</source>
+                    <target>19</target>s
                 </configuration>
 			</plugin>
 			<plugin>

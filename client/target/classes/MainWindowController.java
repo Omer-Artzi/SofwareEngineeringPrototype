@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.net.URL;
+import java.security.Principal;
 import java.util.ResourceBundle;
+
+import Entities.Student;
+import Entities.Teacher;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -31,7 +35,13 @@ public class MainWindowController {
         sidePane.getChildren().add(sideBarParent);
 
         // Load the main window
-        Parent mainWindowParent = SimpleChatClient.loadFXML("/ViewQuestionsWindow");
+        Parent mainWindowParent = null;
+        String userType = SimpleClient.getUser().getClass().getSimpleName();
+        System.out.println("User type: " + userType);
+        String mainScreenName = "/" + userType + "MainWindow";
+        // load correct window according to user type
+        mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
+        //mainWindowParent = SimpleChatClient.loadFXML("/ViewQuestionsWindow");
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
 

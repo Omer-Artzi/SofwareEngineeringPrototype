@@ -3,10 +3,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import Entities.Course;
-import Entities.Message;
-import Entities.Question;
-import Entities.Subject;
+import Entities.*;
 import Events.SubjectMessageEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -56,6 +53,8 @@ public class ViewQuestionsController {
 
     List<Subject> subjectList;
 
+    private Teacher teacher;
+
     @FXML
     void switchToPrimary(ActionEvent event) {
 
@@ -66,14 +65,21 @@ public class ViewQuestionsController {
         // subscribe to server
         EventBus.getDefault().register(this);
 
+        // get logged in teacher
+        teacher = (Teacher) SimpleClient.getUser();
+
+        // set up table columns
         IdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("questionData"));
 
-        try{
+        // populate subject picker
+        subjectPicker.getItems().addAll(teacher.getSubjectList());
+
+       /* try{
             RequestSubjectsAndCourses();
         } catch (IOException e) {
             System.out.println("Error retrieving subjects and courses");
-        }
+        }*/
 
     }
 
@@ -92,6 +98,12 @@ public class ViewQuestionsController {
         subjectPicker.setOnAction(e -> UpdateCourses());
     }
 
+    private void PopulateSubjects() {
+        subjectPicker.getItems().clear();
+        subjectPicker.getItems().addAll(teacher.getSubjectList());
+        subjectPicker.setOnAction(e -> UpdateCourses());
+    }
+
     private void UpdateCourses() {
         Subject selectedSubject = subjectPicker.getValue();
         coursePicker.getItems().clear();
@@ -103,6 +115,11 @@ public class ViewQuestionsController {
         coursePicker.setOnAction(e -> UpdateQuestions());
     }
 
+    private void RequestQuestions() throws IOException {
+        System.out.println("Requesting questions");
+        Message request = new Message(1, "Get Questions for course");
+        SimpleClient.getClient().sendToServer(request);
+    }
     private void UpdateQuestions() {
         System.out.println("Updating questions");
         Course selectedCourse = coursePicker.getValue();

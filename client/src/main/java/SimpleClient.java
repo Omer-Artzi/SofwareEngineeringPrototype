@@ -122,4 +122,8 @@ public class SimpleClient extends AbstractClient {
 	public void setUser(Person user) {
 		this.user = user;
 	}
+
+	public static Person getUser() {
+		return user;
+	}
 }
