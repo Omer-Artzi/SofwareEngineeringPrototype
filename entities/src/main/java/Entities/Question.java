@@ -54,5 +54,7 @@ public Question(){}
     public void setTeacherNote(String newNote){this.teacherNote=newNote;}
     public String getStudentNote(){return studentNote;}
     public void setStudentNote(String newNote){this.studentNote=newNote;}
-
+    public int getID() {
+        return ID;
+    }
 }
