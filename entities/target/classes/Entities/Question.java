@@ -24,7 +24,11 @@ public class Question implements Serializable {
             joinColumns = @JoinColumn(name ="Question_ID" ),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
-public Question(){}
+
+    @ManyToOne
+    private Subject subject;
+
+    public Question(){}
     public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
     {
         this.course=course;

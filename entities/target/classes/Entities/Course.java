@@ -25,30 +25,28 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course")
     private List<Question> questions = new ArrayList<>();
     private String code;
-    /*
+    private static int codeNum = 0;
+
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "Course_ID"),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
-    private List<Entities.ExamForm> examForms = new ArrayList<>();
-     */
+    private List<ExamForm> examForms = new ArrayList<>();
+
 
 
     public Course(){
-
+        code = Integer.toString(++codeNum);
     }
     public Course(String Name,List<Teacher>TeacherList)
     {
-        Faker faker = new Faker();
         this.Name=Name;
         this.teachers =TeacherList;
-        code = faker.bothify("##");
+        code = Integer.toString(++codeNum);;
     }
 
     public Course(String name) {
-        Faker faker = new Faker();
-
-        code = faker.bothify("##");
+        code = Integer.toString(++codeNum);
     }
 
 
@@ -56,6 +54,12 @@ public class Course implements Serializable {
     public void setName(String newName){this.Name=newName;}
     public List<Teacher> getTeacherList(){return teachers;}
     public void setTeacherList(List<Teacher>TeacherList){this.teachers =TeacherList;}
+
+    public void AddTeacher(Teacher teacher)
+    {
+        if (!teachers.contains(teacher))
+            teachers.add(teacher);
+    }
 
 
     public void setId(Long id) {
@@ -88,12 +92,8 @@ public class Course implements Serializable {
     }
 
     public String getCode() {
-        if(code == null)
-        {
-            Faker faker = new Faker();
-            code = faker.bothify("##");
-        }
-        return code;
+
+        return this.code;
     }
 
     public List<Question> getQuestions() {
