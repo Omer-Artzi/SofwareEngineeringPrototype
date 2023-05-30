@@ -26,6 +26,8 @@ public class SimpleChatClient extends Application {
     private static FXMLLoader fxmlLoader;
     private SimpleClient client;
 
+    private static MainWindowController mainWindowController;
+
     public static final double version = 1.7;
 
 
@@ -35,7 +37,7 @@ public class SimpleChatClient extends Application {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
+            scene = new Scene(loadFXML("PreLogIn"));
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -116,5 +118,13 @@ public class SimpleChatClient extends Application {
 
     public static Stage getClientStage() {
         return clientStage;
+    }
+
+    public static void setMainWindowController(MainWindowController newMainWindowController) {
+        mainWindowController = newMainWindowController;
+    }
+
+    public static MainWindowController getMainWindowController() {
+        return mainWindowController;
     }
 }
