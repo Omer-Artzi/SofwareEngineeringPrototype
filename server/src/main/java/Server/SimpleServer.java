@@ -212,6 +212,7 @@ public class SimpleServer extends AbstractServer {
 
 	private void generateTeachers(List<Subject> subjects) {
 		try {
+			/*
 			Principle principle=new Principle();
 			String salt1 = BCrypt.gensalt();
 			principle.setEmail("admin");
@@ -222,6 +223,7 @@ public class SimpleServer extends AbstractServer {
 			principle.setLastName("user");
 			session.saveOrUpdate(principle);
 			session.flush();
+			*/
 			Teacher admin = new Teacher();
 			String salt = BCrypt.gensalt();
 			admin.setEmail("admin");
@@ -315,6 +317,7 @@ public class SimpleServer extends AbstractServer {
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
+		System.out.println("SERVER3");
 		Message message = (Message) msg;
 		String response;
 		String request = message.getMessage();
@@ -485,6 +488,25 @@ public class SimpleServer extends AbstractServer {
 				{
 					e.printStackTrace();
 					response = (newGrade.getStudent().getFullName() + "'s new grade could not be added to the database");
+					System.out.println(response);
+				}
+			}else if(request.startsWith("Save Question")){
+				Question newQuestion = ((Question)(message.getData()));
+				try {
+					session.save(newQuestion);
+					//Course updateCourse=newQuestion.getCourse();
+					//updateCourse.getQuestions().add(newQuestion);
+					//session.merge(updateCourse);
+					session.flush();
+					response = ("Question added succefully");
+					message.setMessage(response);
+					client.sendToClient(message);
+					System.out.println(response);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					response = ("new question could not be added to the database");
 					System.out.println(response);
 				}
 			}

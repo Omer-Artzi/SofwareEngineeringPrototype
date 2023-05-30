@@ -29,7 +29,7 @@ public class Teacher extends Person{
         return courses;
     }
 
-    public List<Subject> getSubjectList() {
+    public List<Subject> getSubject() {
         return subjects;
     }
 
@@ -43,9 +43,6 @@ public class Teacher extends Person{
 
     public Teacher() {}
     public void extraTimeRequest(ExtraTime data){}
-     public void receiveExtraTime(ExtraTime data)
-     {
-
-     }
+    public void receiveExtraTime(ExtraTime data){}
 
 }

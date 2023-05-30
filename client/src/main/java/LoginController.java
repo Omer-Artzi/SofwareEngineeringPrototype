@@ -1,8 +1,5 @@
 
 import Entities.Message;
-import Entities.Person;
-import Entities.Principle;
-import Entities.Teacher;
 import Events.UserMessageEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,6 +58,7 @@ public class LoginController {
             user.add(username);
             user.add(password);
             credentials.setData(user);
+            System.out.println("checkLogin");
             SimpleClient.getClient().sendToServer(credentials);
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
         }
@@ -86,14 +84,9 @@ public class LoginController {
         System.out.println("Logging in");
         if(event.getStatus() == "Success")
         {
-            //Person user=event.getUser();
             SimpleClient.getClient().setUser(event.getUser());
-            //if(user instanceof Teacher)
-                SimpleChatClient.setRoot("TeacherMainScreen");
-           // else if(user instanceof Principle)
-                //SimpleChatClient.setRoot("PrincipleMainScreen");
-            //else
-              //  SimpleChatClient.setRoot("StudentMainScreen");
+            SimpleChatClient.setRoot("TeacherMainScreen");
+
         }
         else {
             wrongLoginLabel.setText("E-mail address or password is wrong");

@@ -1,11 +1,9 @@
 import Entities.*;
-import Events.SubjectMessageEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,21 +13,19 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.hibernate.Session;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class addQuestionController {
-    private static Session session;
+public class AddQuestionController {
     int correct;
-    private  List<Course>CourseOfTeacher;
+    private List<Course> courseOfTeacher;
     private List<Course>courses;
-    private List<Subject>subjects;
+    private List<Subject> subjectOfTeacher;
     private List<String>notes;
     @FXML
     private int msgId;
@@ -76,23 +72,23 @@ public class addQuestionController {
         ///***** need to add the correct answer choiceBox ******/////
     }
 
+    /*
     @Subscribe
     public void updateData1(SubjectMessageEvent eventSUB) throws IOException {
         Person person=(Teacher)SimpleClient.getClient().getUser();
         if(person instanceof Teacher){
             Teacher teacher=(Teacher) person;
             CourseOfTeacher=teacher.getCourseList();
+          //  SubjectOfTeacher=teacher.getSubjectList();
             //System.out.println(teacher.getFullName());
         }
-        ///*** need to change, after the changes I can delete this function ***///
-        subjects=eventSUB.getSubjects();
+        ///*** need to change, after the changes I can delete this function //
         List<String>subject_name=new ArrayList<>();
-        for(Subject item: subjects)
+        for(Subject item: SubjectOfTeacher)
             subject_name.add(item.getName());
-
         addSubjectChoiceBox.setItems(FXCollections.observableArrayList(subject_name));
     }
-
+*/
     public void Elements(boolean b)
     {
         StudentNote.setDisable(b);
@@ -106,6 +102,19 @@ public class addQuestionController {
     @FXML
     void initialize() throws IOException {             //initialize the page. update the data and the elements
         EventBus.getDefault().register(this);
+        Person person=SimpleClient.getClient().getUser();
+        Teacher teacher=new Teacher();
+        if(person instanceof Teacher) {
+            System.out.println("heyyyyyyyyyyy");
+            teacher = (Teacher) person;
+        }
+        courseOfTeacher = teacher.getCourseList();
+        subjectOfTeacher=teacher.getSubject();
+        List<String>subject_name=new ArrayList<>();
+        for(Subject item: subjectOfTeacher)
+            subject_name.add(item.getName());
+        addSubjectChoiceBox.setItems(FXCollections.observableArrayList(subject_name));
+
         Answer ans=new Answer();
         ObservableList<Answer> data = AnswerTable.getItems();
         addCourseChoiceBox.setDisable(true);
@@ -119,16 +128,9 @@ public class addQuestionController {
             if (addSubjectChoiceBox.getSelectionModel().isEmpty() || addSubjectChoiceBox.getSelectionModel() == null) {
             } else {
                 addCourseChoiceBox.setDisable(false);
-                List<String> course_name = new ArrayList<>(); //new course list to put in choiceBox
-                Subject subject=null;
-                for(Subject item: subjects)
-                {
-                    if(item.getName().equals(addSubjectChoiceBox.getValue()))
-                        subject=item;
-                }
-                for(Course item: CourseOfTeacher)
-                {
-                    if(item.getSubject().equals(addSubjectChoiceBox.getValue()))
+                List<String>course_name=new ArrayList<>();
+                for(Course item: courseOfTeacher) {
+                    if (item.getSubject().getName().equals(addSubjectChoiceBox.getValue()))
                         course_name.add(item.getName());
                 }
                 addCourseChoiceBox.setItems(FXCollections.observableArrayList(course_name));
@@ -153,6 +155,7 @@ public class addQuestionController {
                 for (int i = 0; i < 4; i++) {
                     a.get(i).setNumber(String.valueOf(i + 1));
                     data.add(a.get(i));
+                    CorrectAnswerCB.setItems(FXCollections.observableArrayList(str));
                 }
             }
         });
@@ -169,13 +172,13 @@ public class addQuestionController {
         AnswerColumn.setOnEditCommit(event -> {
             Answer item = event.getRowValue();
             item.setAnswer(event.getNewValue());
-            counter++;
         });
     }
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
         /* check if the input is valid */
+
         String errorMSG="";
         String answers [] = new String[4];
         int i=0;
@@ -185,7 +188,9 @@ public class addQuestionController {
             if(answer.getAnswer()!="")
                 counter++;
             answers[i]=(answer.getNumber());
+            i++;
         }
+        System.out.println("Counter is: "+counter);
         String data=QuestionDataTF.getText();
         String correctAnswer=CorrectAnswerCB.getValue();
         if(CorrectAnswerCB.getSelectionModel().isEmpty()||CorrectAnswerCB.getSelectionModel()==null)
@@ -202,7 +207,7 @@ public class addQuestionController {
         /* get all the data and create a new Question object, update the database */
         String selectedSubject=addSubjectChoiceBox.getValue();
         Subject subject = null;
-        for(Subject item: subjects)
+        for(Subject item: subjectOfTeacher)
         {
             if (item.getName()==selectedSubject)
                 subject=item;
@@ -214,12 +219,14 @@ public class addQuestionController {
             if (item.getName()==selectedCourse)
                 course=item;
         }
+        correctAnswer=CorrectAnswerCB.getValue();
         String studentNote=StudentNote.getText();
         String teacherNote= TeacherNote.getText();
         Question question=new Question(course,subject, data,answers,Integer.valueOf(correctAnswer),teacherNote,studentNote);
-        session.save(question);
-        session.flush();
-        SimpleChatClient.setRoot("QuestionSaved");
+        Message message=new Message(1,"Save Question");
+        message.setData(question);
+        SimpleClient.getClient().sendToServer(message);
+        //SimpleChatClient.setRoot("QuestionSaved");
     }
 
     @FXML

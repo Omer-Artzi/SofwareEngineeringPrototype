@@ -96,6 +96,10 @@ public class Course implements Serializable {
         return code;
     }
 
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }

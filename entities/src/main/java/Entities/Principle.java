@@ -1,17 +1,21 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "Teachers")
+@Table(name = "Principles")
 @DiscriminatorValue("3")
 public class Principle extends Person {
-    private List<ExtraTime> extraTimeRequests;
+
+    @ManyToMany(mappedBy = "principles")
+    private List<ExtraTime> extraTimeRequests=new ArrayList<>();
     public void extraTimeRequest(ExtraTime data) {
         for(Principle principal:data.getPrincipals()) {
             if(principal.getFullName() == getFullName())
+
             //TODO: pop message that extra time is requested when conditions are met
             extraTimeRequests.add(data);
         }
@@ -25,4 +29,11 @@ public class Principle extends Person {
 
     }
 
+    public List<ExtraTime> getExtraTimeRequests() {
+        return extraTimeRequests;
+    }
+
+    public void setExtraTimeRequests(List<ExtraTime> extraTimeRequests) {
+        this.extraTimeRequests = extraTimeRequests;
+    }
 }
