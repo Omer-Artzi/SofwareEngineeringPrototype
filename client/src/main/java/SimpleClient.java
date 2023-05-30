@@ -28,10 +28,13 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Subjects of")){ //Added by Ilan 30.5
+			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Grades")) {
+		}else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
 			List<Grade> grades = student.getGrades();
@@ -71,7 +74,14 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().equals("Server is closed")) {
 			String warning = "further updates cannot be made until connection is re-established";
 			JOptionPane.showMessageDialog(null, warning, "Error: The Server Was Closed ", JOptionPane.WARNING_MESSAGE);
-		} else {
+		}
+		else if(message.getMessage().startsWith("Questions in Course")) // Added by Ilan 30.5
+		{
+			CourseQuestionsListEvent stMsg = new CourseQuestionsListEvent((List<Question>) message.getData());
+			// System.out.println("Check");
+			EventBus.getDefault().post(stMsg);
+		}
+		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
@@ -123,7 +133,7 @@ public class SimpleClient extends AbstractClient {
 		this.user = user;
 	}
 
-	public static Person getUser() {
+	public Person getUser() {
 		return user;
 	}
 }
