@@ -41,7 +41,7 @@
                </columnResizePolicy>
             </TableView>
             <Pane fx:id="previewWindow" prefHeight="168.0" prefWidth="480.0" />
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#switchToPrimary" prefHeight="26.0" prefWidth="76.0" text="Back" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButtonPressed" prefHeight="26.0" prefWidth="76.0" text="Back" />
          </children>
       </VBox>
    </children>

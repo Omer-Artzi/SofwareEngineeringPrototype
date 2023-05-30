@@ -1,6 +1,7 @@
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\SecondaryController.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\PreviewQuestionController.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ChangePreviewEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\AddExamController.java
-C:\repos\SofwareEngineeringPrototype\client\src\main\java\SideBarController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\EditGradeSuccessEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\ocsf\ObservableClient.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\GradeMessageEvent.java
@@ -11,12 +12,15 @@ C:\repos\SofwareEngineeringPrototype\client\src\main\java\Main.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ErrorEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\MessageEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\AddStudentSuccesEvent.java
-C:\repos\SofwareEngineeringPrototype\client\src\main\java\QuestionSceneController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\ViewQuestionsController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ClientConnectionEvent.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\CourseQuestionsListEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\SimpleClient.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\PreLogInController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\LoginController.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\TeacherSidebarController.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\ChooseQuestionsEvent.java
+C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\SendChosenQuestionsEvent.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\MainWindowController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\TeacherMainScreenController.java
 C:\repos\SofwareEngineeringPrototype\client\src\main\java\Events\SubjectMessageEvent.java

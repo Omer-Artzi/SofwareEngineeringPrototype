@@ -29,22 +29,26 @@ public class MainWindowController {
 
         SimpleChatClient.setMainWindowController(this);
 
+        SimpleChatClient.getScene().getWindow().setHeight(768);
+        SimpleChatClient.getScene().getWindow().setWidth(1024);
+
         // Load the sidebar
         Parent sideBarParent = null;
-        String userType = SimpleClient.getUser().getClass().getSimpleName();
+        /*String userType = SimpleClient.getUser().getClass().getSimpleName();
         //System.out.println("User type: " + userType);
-        String sideBarName = "/" + userType + "Sidebar";
+        String sideBarName = *//*"/" +*//* userType + "Sidebar";
         // load correct sidebar according to user type
-        sideBarParent = SimpleChatClient.loadFXML(sideBarName);
+        sideBarParent = SimpleChatClient.loadFXML(sideBarName);*/
+        sideBarParent = SimpleChatClient.loadFXML("TeacherSidebar");
         sidePane.getChildren().clear();
         sidePane.getChildren().add(sideBarParent);
 
         // Load the main window
         Parent mainWindowParent = null;
-        String mainScreenName = "/" + userType + "MainWindow";
+        //String mainScreenName = "/" + userType + "MainWindow";
         // load correct window according to user type
-        mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
-        //mainWindowParent = SimpleChatClient.loadFXML("/ViewQuestionsWindow");
+        //mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
+        mainWindowParent = SimpleChatClient.loadFXML("ViewQuestions");
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
 
