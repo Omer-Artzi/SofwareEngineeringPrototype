@@ -35,6 +35,8 @@ public class TeacherMainScreenController  {
 
     @FXML
     private Button viewTestFormsButton;
+    @FXML
+    private Label MainMessageLabel;
 
     @FXML
     void addQuestion(ActionEvent event) {
@@ -65,8 +67,6 @@ public class TeacherMainScreenController  {
     @FXML
     void viewTestForms(ActionEvent event) throws IOException {
         SimpleChatClient.setRoot("ViewExam");
-    void viewTestForms(ActionEvent event) {
-
     }
 
     @FXML

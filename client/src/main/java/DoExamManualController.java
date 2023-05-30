@@ -40,6 +40,7 @@ public class DoExamManualController {
     private ClassExam classExam;
 
     private int timeInSeconds;
+     private ClassExam mainClassExam;
 
     @FXML
     void fileDropped(DragEvent event){
@@ -81,12 +82,13 @@ public class DoExamManualController {
 
     @FXML
     void initialize() {
-        timeInSeconds = 5;
+        timeInSeconds = mainClassExam.getTime();
         assert dragAndDropImg != null : "fx:id=\"dragAndDropImg\" was not injected: check your FXML file 'DoExamManual.fxml'.";
         assert timeLeftLabel != null : "fx:id=\"timeLeftLabel\" was not injected: check your FXML file 'DoExamManual.fxml'.";
         fileRecievedLabel.setAlignment(Pos.CENTER);
         fileRecievedLabel.setText("Drop File Here");
         timeLeftLabel.setAlignment(Pos.CENTER);
+        ViewExamController.createManualExam(classExam.getExamForm());
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override

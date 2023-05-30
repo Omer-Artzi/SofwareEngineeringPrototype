@@ -2,6 +2,7 @@
 *.class
 *.iml
 *.lst
+*.log
 /entities/target/
 entities/target/classes/Entities/
 /client/target/

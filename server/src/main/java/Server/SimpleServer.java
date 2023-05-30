@@ -2,7 +2,7 @@ package Server;
 import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.ResponseQuestion;
-import Server.Events.TerminationEvent;
+
 import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
@@ -189,7 +189,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Grades")){
 				String studentID = request.substring(12);
 				int iStudentID = Integer.parseInt(studentID);
-				Student student = getStudent(iStudentID);
+				Student student = retreiveStudent(iStudentID);
 				response = ("Grades of " + student.getFullName());
 				message.setMessage(response);
 				message.setData(student);
@@ -300,7 +300,7 @@ public class SimpleServer extends AbstractServer {
 
 	}
 
-	private List<ExamForm> getExamsForCourse(Course course) {
+
 	private List<ExamForm> retrieveExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
@@ -364,6 +364,17 @@ public class SimpleServer extends AbstractServer {
 		return students;
 	}
 
+	public Student retreiveStudent(int iStudentID)
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Student> query = builder.createQuery(Student.class);
+		Root<Student> gradeRoot = query.from(Student.class);
+		query.where(builder.equal(gradeRoot.get("ID"), iStudentID));
+		Student student = session.createQuery(query).getSingleResult();
+		return student;
+	}
+	}
 
 
-}
+
+
