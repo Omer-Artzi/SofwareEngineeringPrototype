@@ -2,7 +2,7 @@ package Server;
 import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.ResponseQuestion;
-import Server.Events.TerminationEvent;
+//import Server.Events.TerminationEvent;
 import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
@@ -40,7 +40,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
-	private static Session session;
+	public static Session session;
 	private static int transmissionID = 0;
 
 	public static SessionFactory getSessionFactory() throws HibernateException {
@@ -407,7 +407,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Students")){
 				response ="Students";
 				message.setMessage(response);
-				message.setData(retrievetudents());
+				message.setData(retrieveStudents());
 				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
