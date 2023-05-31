@@ -45,7 +45,8 @@ public class SimpleChatClient extends Application {
                 public void handle(WindowEvent event) {
 
                     try {
-                        SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
+                        if (SimpleClient.getClient().isConnected())
+                            SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

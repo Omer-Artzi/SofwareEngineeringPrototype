@@ -13,29 +13,31 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
     private Course course;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
-    private String Code;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SubjectID")
     private Subject subject;
-    private Date dateCreated;
-    private Date lastUsed;
-    private double examTime;
 
-    @ElementCollection
-    private List<Integer> questionsScores = new ArrayList<>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "examForms")
     private List<Question> QuestionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "examForm")
     private List<ClassExam> classExams = new ArrayList<>();
 
+    @ElementCollection
+    private List<Integer> questionsScores = new ArrayList<>();
+
+    private String Code;
+    private Date dateCreated;
+    private Date lastUsed;
+    private double examTime;
 
     public ExamForm(){}
     public ExamForm(Course course, Teacher teacher, Subject subject, double examTime,List<Question>QuestionList){

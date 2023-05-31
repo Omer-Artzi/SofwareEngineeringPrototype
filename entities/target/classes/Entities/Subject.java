@@ -23,6 +23,8 @@ public class Subject implements Serializable, Comparable<Subject> {
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
     private static int codeNum = 0;
+
+    // New paste, check if works
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
 

@@ -27,8 +27,9 @@ public class StudentExam implements Serializable {
     // Switch to Grade class? Delete Grade Class?
     private int grade;
 
-    private String status;
-    // String - 1- "To Evaluate", 2 - "Approved"
+    public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
+
+    private statusEnum status;
 
     private double timeLeft;
 
@@ -38,10 +39,10 @@ public class StudentExam implements Serializable {
     public StudentExam() {
     }
 
-    public StudentExam(Student student, ClassExam classExam, List < Integer > studentAnswers, int grade, String status)
+    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, statusEnum status)
     {
         this.student = student;
-        //this.student.AddStudentExam(this);
+        this.student.AddStudentExam(this);
         this.classExam = classExam;
         this.classExam.AddStudentExam(this);
         this.timeLeft = this.classExam.getExamForm().getExamTime();
@@ -102,14 +103,33 @@ public class StudentExam implements Serializable {
         this.grade = grade;
     }
 
-    public String getStatus()
+    public statusEnum getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(statusEnum status)
     {
         this.status = status;
+    }
+    public String TranslateStatus()
+    {
+        switch (status)
+        {
+            case Approved -> {
+            return "Approved";
+        }
+            case ToEvaluate -> {
+            return "To Evaluate";
+        }
+            case NotTaken -> {
+                return "Not Taken";
+            }
+            case Disapproved -> {
+                return "Disapproved";
+            }
+        }
+        return "";
     }
 
     public double getTimeLeft(){return timeLeft;}
