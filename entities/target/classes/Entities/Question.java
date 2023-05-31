@@ -11,16 +11,11 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
-    //////////////////////////////////////////////////////
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "QuestionID"),
     inverseJoinColumns = @JoinColumn(name ="CourseID"))
     private List<Course> courses = new ArrayList<>();
-    //@ManyToOne
-    //@JoinColumn(name = "courseID")
-    //private Course course;
-    //////////////////////////////////////////////////////
 
     private String questionData;
     @ElementCollection
@@ -34,12 +29,12 @@ public class Question implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
 
-    //@ManyToOne
-    //private Subject subject;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SubjectID")
+    private Subject subject;
 
     public Question(){}
 
-    //////////////////////////////////////////////////////
     public Question(List<Course> courses, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
     {
         this.courses=courses;
@@ -49,16 +44,6 @@ public class Question implements Serializable {
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
     }
-    //public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
-    //{
-    //    this.course=course;
-    //    this.questionData=questionData;
-    //    this.Answers=Answer;
-    //    this.correctAnswer=correctAnswer;
-    //    this.teacherNote=teacherNote;
-    //    this.studentNote=studentNote;
-    //}
-    //////////////////////////////////////////////////////
 
     public Question(String questionData, String correctAnswer, String teacherNote, String studentNote) {
         this.questionData = questionData;
@@ -67,9 +52,6 @@ public class Question implements Serializable {
         this.studentNote = studentNote;
     }
 
-    //////////////////////////////////////////////////////
-    //public Course getCourse(){return course;}
-    //public void setCourse(Course newCourse){this.course=newCourse;}
     public List<Course> getCourses(){return courses;}
     public void setCourses(List<Course> courses)
     {
@@ -81,7 +63,14 @@ public class Question implements Serializable {
         if(!this.courses.contains(course))
             courses.add(course);
     }
-    //////////////////////////////////////////////////////
+
+    public Subject getSubject(){return subject;}
+    public void setSubject(Subject subject)
+    {
+        if (this.subject != subject)
+            this.subject = subject;
+    }
+
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
     public List<String> getAnswers(){return Answers;}

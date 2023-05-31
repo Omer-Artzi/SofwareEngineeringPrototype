@@ -25,9 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DataGenerator {
     static Faker faker = new Faker();
     public static void generateData() throws IOException {
-        System.out.println(1);
         List<Student> students = DataGenerator.generateStudents();
-        System.out.println(2);
         generateGrades(students);
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -43,16 +41,11 @@ public class DataGenerator {
                 SimpleServer.session.flush();
             }
             List<Subject> subjectList = subjects.getSubjects();
-            System.out.println(3);
             generateTeachers(subjectList);
-            System.out.println(4);
             generateQuestions(subjectList);
-            System.out.println(5);
             List<ExamForm> examFormList = SimpleServer.retrieveExamForm();
             GenerateClassExams(examFormList);
-            System.out.println(6);
             SimpleServer.session.getTransaction().commit();
-            System.out.println(7);
         }
         catch (Exception e)
         {
@@ -61,7 +54,6 @@ public class DataGenerator {
 
     }
     private static void generateQuestions(List<Subject> subjectList) {
-        System.out.println("in q " + 1);
         int questionAmount = 30;
         String[] requests = {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
@@ -78,7 +70,6 @@ public class DataGenerator {
         int randCourse;
         for (int i = 0; i < requests.length;i++) {
             try {
-                System.out.println("in q " + 2);
                 // Create URL object and open connection
                 URL url = new URL(requests[i]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -89,7 +80,6 @@ public class DataGenerator {
                 // Get response code
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    System.out.println("in q " + 3);
                     // Read response
                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder response = new StringBuilder();
@@ -98,7 +88,6 @@ public class DataGenerator {
                         response.append(line);
                     }
                     reader.close();
-                    System.out.println("in q " + 4);
                     // Process JSON response
                     String jsonResponse = response.toString();
 
@@ -109,19 +98,16 @@ public class DataGenerator {
                     List<Question> questionsList = new ArrayList<>();
                     for(ResponseQuestion responseQuestion: questions)
                     {
-                        System.out.println("in q " + 5);
                         Question question = new Question();
                         responseQuestion.convert(question);
+                        // Recently uncommented
+                        question.setSubject(subjectList.get(i));
                         question.setCourses(subjectList.get(i).getCourses());
-                        //question.setCourse(subjectList.get(i).getCourses().get(0));
                         questionsList.add(question);
                         SimpleServer.session.save(question);
                         SimpleServer.session.flush();
-                        System.out.println("in q " + 6);
                     }
-                    System.out.println("in q " + 7);
                     generateTestForms(questionsList);
-                    System.out.println("in q " + 8);
                 }
                 else
                 {
@@ -148,12 +134,10 @@ public class DataGenerator {
                 }
                 List<Question> examQuestions =  examForm.getQuestionList();
                 Course examCourse = examQuestions.get(0).getCourses().get(0);
-                //Course examCourse = examQuestions.get(0).getCourse();
                 Subject examSubject = examCourse.getSubject();
-                //examForm.setQuestionList(examQuestions);
                 examForm.setSubject(examSubject);
                 examForm.setCourse(examCourse);
-                examForm.setCreator(examCourse.getTeacherList().get(0));
+                examForm.setCreator(examCourse.getTeachers().get(0));
                 LocalDate localDate = LocalDate.now();
                 examForm.getCode();
                 // Convert LocalDate to Date
@@ -332,5 +316,3 @@ public class DataGenerator {
     }
 
 }
-
-
