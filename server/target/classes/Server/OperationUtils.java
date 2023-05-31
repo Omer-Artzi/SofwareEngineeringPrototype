@@ -13,7 +13,7 @@ public class OperationUtils {
 
         // Extract exam's grades which were approved by the teacher
         List<StudentExam> studentExams = classExam.getStudentExams().stream().
-                filter(studentExam -> studentExam.getStatus().startsWith("Approved")).collect(Collectors.toList());
+                filter(studentExam -> studentExam.getStatus() == StudentExam.statusEnum.Approved).collect(Collectors.toList());
         List<Integer> grades = studentExams.stream().map(StudentExam::getGrade).collect(Collectors.toList());
         int approvedExamsNum = grades.size();
 

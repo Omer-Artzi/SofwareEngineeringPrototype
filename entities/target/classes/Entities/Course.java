@@ -14,26 +14,31 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String Name;
-    @ManyToMany
+    //list of teachers that teaches the course
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "Course_ID"),
     inverseJoinColumns = @JoinColumn(name ="Teacher_ID"))
-    private List<Teacher> teachers; //list of teachers that teaches the course
+    private List<Teacher> teachers;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "CourseID"),
+            inverseJoinColumns = @JoinColumn(name = "StudentID"))
+    private List<Student> students = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "subjectID")
     private Subject subject;
-    @OneToMany(mappedBy = "course")
-    private List<Question> questions = new ArrayList<>();
-    private String code;
-    private static int codeNum = 0;
 
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "Course_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
+    @ManyToMany(mappedBy = "courses")
+    private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course")
     private List<ExamForm> examForms = new ArrayList<>();
 
-
+    private String code;
+    private static int codeNum = 0;
 
     public Course(){
         code = Integer.toString(++codeNum);
@@ -52,13 +57,46 @@ public class Course implements Serializable {
 
     public String getName(){return Name;}
     public void setName(String newName){this.Name=newName;}
-    public List<Teacher> getTeacherList(){return teachers;}
-    public void setTeacherList(List<Teacher>TeacherList){this.teachers =TeacherList;}
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
+    }
 
     public void AddTeacher(Teacher teacher)
     {
         if (!teachers.contains(teacher))
             teachers.add(teacher);
+    }
+
+    public List<Student> getStudents(){return students;}
+    public void setStudents(List<Student> students){this.students =students;}
+
+    public void AddStudents(Student student)
+    {
+        if (!students.contains(student))
+            students.add(student);
+    }
+
+    public List<Question> getQuestions(){return questions;}
+    public void setQuestions(List<Question> students){this.questions =questions;}
+
+    public void AddQuestion(Question question)
+    {
+        if (!questions.contains(question))
+            questions.add(question);
+    }
+
+    public List<ExamForm> getExamForms(){return examForms;}
+    public void setExamForms(List<ExamForm> examForms){this.examForms = examForms;}
+
+    public void AddExamForm(ExamForm examForm)
+    {
+        if (!examForms.contains(examForm))
+            examForms.add(examForm);
     }
 
 
@@ -73,14 +111,6 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return Name;
-    }
-
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
     }
 
     public Subject getSubject() {

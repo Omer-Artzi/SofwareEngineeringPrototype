@@ -16,6 +16,7 @@ public class Teacher extends Person{
     @ManyToMany(mappedBy = "teachers")
     private List<Course> courses = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "tester")
     private List<ClassExam> classExams = new ArrayList<>();
 
