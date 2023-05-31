@@ -1,4 +1,5 @@
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\ocsf\SubscribedClient.java
+C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\OperationUtils.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\TransmissionEvent.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\ocsf\ObservableServer.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Main.java
@@ -14,5 +15,5 @@ C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\ocsf\AbstractCo
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\SimpleChatServer.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\ExtraTimeRequestEvent.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\SimpleServer.java
-C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\Events\TerminationEvent.java
+C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\DataGenerator.java
 C:\repos\SofwareEngineeringPrototype\server\src\main\java\Server\ocsf\OriginatorMessage.java

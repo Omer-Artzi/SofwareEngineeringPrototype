@@ -2,6 +2,8 @@
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import Entities.Message;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -41,13 +43,15 @@ public class TeacherMainScreenController  {
     private Button viewTestFormsButton;
 
     @FXML
-    void addQuestion(ActionEvent event)
-    {
-
+    void addQuestion(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("addQuestion");
     }
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
+        Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
+        System.out.println(SimpleClient.getClient().getUser().getID());
+        SimpleClient.getClient().sendToServer(message);
         SimpleChatClient.setRoot("addExam");
     }
 
@@ -62,14 +66,12 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void viewQuestion(ActionEvent event)
-    {
+    void viewQuestion(ActionEvent event) {
 
     }
 
     @FXML
-    void viewTestForms(ActionEvent event)
-    {
+    void viewTestForms(ActionEvent event) {
 
     }
 

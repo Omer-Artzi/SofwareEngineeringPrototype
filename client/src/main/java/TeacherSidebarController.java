@@ -32,6 +32,9 @@ public class TeacherSidebarController {
     private Button viewClassExamsButton;
 
     @FXML
+    private Label userTypeLabel;
+
+    @FXML
     void addQuestion(ActionEvent event) throws IOException {
         SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
 
@@ -39,7 +42,7 @@ public class TeacherSidebarController {
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
     }
 
     @FXML
@@ -71,6 +74,7 @@ public class TeacherSidebarController {
     @FXML
     void initialize() {
         InitializationAsserts();
+        userTypeLabel.setText("Logged in as: Teacher");
     }
 
     void InitializationAsserts(){

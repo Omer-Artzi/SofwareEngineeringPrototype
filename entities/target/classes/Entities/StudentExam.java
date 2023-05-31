@@ -35,10 +35,13 @@ public class StudentExam implements Serializable {
     private String teacherNote;
     private String scoreChangeReason;
 
-    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, String status)
+    public StudentExam() {
+    }
+
+    public StudentExam(Student student, ClassExam classExam, List < Integer > studentAnswers, int grade, String status)
     {
         this.student = student;
-        this.student.AddStudentExam(this);
+        //this.student.AddStudentExam(this);
         this.classExam = classExam;
         this.classExam.AddStudentExam(this);
         this.timeLeft = this.classExam.getExamForm().getExamTime();

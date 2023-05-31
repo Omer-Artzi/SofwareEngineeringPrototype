@@ -5,6 +5,7 @@ C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Message.jav
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Grade.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\SubjectWrapper.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\ClassExam.java
+C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\TerminationEvent.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Exam.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Question.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Person.java
@@ -14,5 +15,6 @@ C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Transmissio
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExtraTime.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\NewSubscriberEvent.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Teacher.java
+C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\StudentExam.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Principle.java
 C:\repos\SofwareEngineeringPrototype\entities\src\main\java\Entities\Student.java

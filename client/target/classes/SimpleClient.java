@@ -28,13 +28,10 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("1Subjects of")){ //Added by Ilan 30.5
-			//SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
-			//EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		}else if (message.getMessage().startsWith("Grades")) {
+		} else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
 			List<Grade> grades = student.getGrades();
@@ -63,7 +60,16 @@ public class SimpleClient extends AbstractClient {
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
 		} else if (message.getMessage().startsWith("Grade Saved")) {
-		}else if(message.getMessage().startsWith("Success: User")){
+		}
+		else if (message.getMessage().startsWith("Success: StudentExam Approved"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+		}
+		else if (message.getMessage().startsWith("Failure: Failed to save StudentExam"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
+		}
+		else if(message.getMessage().startsWith("Success: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
@@ -115,7 +121,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
 		}
 		catch (Exception e)

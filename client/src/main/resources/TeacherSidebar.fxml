@@ -132,5 +132,6 @@
             </Button>
          </children>
       </VBox>
+      <Label fx:id="userTypeLabel" prefHeight="17.0" prefWidth="180.0" text="Label" />
    </children>
 </AnchorPane>
