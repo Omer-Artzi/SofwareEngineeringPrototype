@@ -19,7 +19,7 @@ import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class ViewQuestionsController {
+public class TeacherViewQuestionsController {
 
     @FXML
     private ResourceBundle resources;
