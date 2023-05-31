@@ -45,28 +45,6 @@ public class ExtraTimeRequestController {
     public void initialize() {
         principles=new ArrayList<>();
         selectedPrinciples=new ArrayList<>();
-        /*
-        Principle p1=new Principle();
-        Principle p2=new Principle();
-        Principle p3=new Principle();
-        Principle p4=new Principle();
-        Principle p5=new Principle();
-        p1.setFirstName("liad");
-        p1.setLastName("arvatz");
-        p2.setFirstName("noa");
-        p2.setLastName("arvatz");
-        p3.setFirstName("shmuel");
-        p3.setLastName("arvatz");
-        p4.setFirstName("omer");
-        p4.setLastName("artzi");
-        p5.setFirstName("ilan");
-        p5.setLastName("sapoznikov");
-        principles.add(p1);
-        principles.add(p2);
-        principles.add(p3);
-        principles.add(p4);
-        principles.add(p5);
-        */
         for (int i = 0; i < principles.size(); i++) {
             // Create a CheckBox dynamically
             CheckBox checkBox = new CheckBox(principles.get(i).getFullName());

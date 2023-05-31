@@ -41,7 +41,7 @@ public class AddQuestionController {
     @FXML
     private TextArea TeacherNote;
     @FXML
-    private ChoiceBox<String> addCourseChoiceBox; /////////////////
+    private ChoiceBox<String> addCourseChoiceBox;
     @FXML
     private Button addQuestionButtom;
     @FXML

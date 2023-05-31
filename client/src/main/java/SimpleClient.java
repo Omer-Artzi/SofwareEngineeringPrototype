@@ -1,6 +1,7 @@
 import Entities.*;
 import Events.*;
 import javafx.scene.Scene;
+import org.apache.commons.lang3.ObjectUtils;
 import org.greenrobot.eventbus.EventBus;
 import ocsf.AbstractClient;
 
@@ -69,7 +70,16 @@ public class SimpleClient extends AbstractClient {
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
 		} else if (message.getMessage().startsWith("Grade Saved")) {
-		}else if(message.getMessage().startsWith("Success: User")){
+		}
+		else if (message.getMessage().startsWith("Success: StudentExam Approved"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+		}
+		else if (message.getMessage().startsWith("Failure: Failed to save StudentExam"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
+		}
+		else if(message.getMessage().startsWith("Success: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
@@ -80,7 +90,7 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().equals("Server is closed")) {
 			String warning = "further updates cannot be made until connection is re-established";
 			JOptionPane.showMessageDialog(null, warning, "Error: The Server Was Closed ", JOptionPane.WARNING_MESSAGE);
-		} else {
+		}else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
@@ -114,7 +124,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
 		}
 		catch (Exception e)
@@ -131,7 +141,8 @@ public class SimpleClient extends AbstractClient {
 	public void setUser(Person user) {
 		this.user = user;
 	}
-	public Person getUser() {
+
+	public static Person getUser() {
 		return user;
 	}
 }

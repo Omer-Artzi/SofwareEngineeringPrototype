@@ -1,5 +1,4 @@
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public class TeacherMainScreenController  {
+
     @FXML
     private Button seeCurrentTestsBT;
     @FXML
@@ -60,8 +60,8 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void gradeExam(ActionEvent event) {
-
+    void gradeExam(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("ClassExamGrade");
     }
 
     @FXML
@@ -70,23 +70,26 @@ public class TeacherMainScreenController  {
     }
 
     @FXML
-    void viewQuestion(ActionEvent event) {
+    void viewQuestion(ActionEvent event)
+    {
 
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) {
+    void viewTestForms(ActionEvent event)
+    {
 
     }
     @FXML
     void viewExam(ActionEvent event) throws IOException {
         Message message = new Message(1, "Get Live Exams");
         SimpleClient.getClient().sendToServer(message);
-        SimpleChatClient.setRoot("addQuestion");
+        SimpleChatClient.setRoot("viewLiveExams");
     }
 
     @FXML
     void initialize() {
+       // assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert MenuBack != null : "fx:id=\"MenuBack\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";

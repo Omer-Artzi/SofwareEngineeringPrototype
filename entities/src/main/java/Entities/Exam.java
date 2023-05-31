@@ -2,6 +2,9 @@ package Entities;
 
 import java.util.List;
 
+
+// Deprecated. ClassExam is the new entity
+// Todo: delete this class
 public class Exam extends ExamForm{
 
     private int ID;

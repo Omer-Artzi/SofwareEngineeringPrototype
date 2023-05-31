@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 public class SimpleChatClient extends Application {
     private static Scene scene;
     private static Stage clientStage;
+    private static FXMLLoader fxmlLoader;
     private SimpleClient client;
 
     public static final double version = 1.7;
@@ -61,14 +62,13 @@ public class SimpleChatClient extends Application {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        return FXMLLoader.load(SimpleChatClient.class.getResource(fxml + ".fxml"));
     }
 
     @Override
 	public void stop() throws Exception {
-           // Message message = new Message(1, "Client Closed");
-            //client.sendToServer(message);
+            Message message = new Message(1, "Client Closed");
+            client.sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
             System.exit(0);
