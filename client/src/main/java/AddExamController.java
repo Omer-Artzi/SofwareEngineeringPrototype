@@ -93,6 +93,7 @@ public class AddExamController {
         stMsg.setCourse(CourseCB.getValue());
         System.out.println("Course: " + CourseCB.getValue());
         EventBus.getDefault().post(stMsg);
+        // מוקדש לעידן באהבה
     }
 
     @Subscribe
