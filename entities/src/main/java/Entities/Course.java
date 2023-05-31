@@ -17,8 +17,8 @@ public class Course implements Serializable {
     //list of teachers that teaches the course
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-    joinColumns = @JoinColumn(name = "Course_ID"),
-    inverseJoinColumns = @JoinColumn(name ="Teacher_ID"))
+    joinColumns = @JoinColumn(name = "CourseID"),
+    inverseJoinColumns = @JoinColumn(name ="TeacherID"))
     private List<Teacher> teachers;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -71,16 +71,14 @@ public class Course implements Serializable {
         if (!teachers.contains(teacher))
             teachers.add(teacher);
     }
-
     public List<Student> getStudents(){return students;}
     public void setStudents(List<Student> students){this.students =students;}
-
-    public void AddStudents(Student student)
+    
+    public void addStudents(Student student)
     {
         if (!students.contains(student))
             students.add(student);
     }
-
     public List<Question> getQuestions(){return questions;}
     public void setQuestions(List<Question> students){this.questions =questions;}
 

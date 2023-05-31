@@ -27,8 +27,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DataGenerator {
     static Faker faker = new Faker();
     public static void generateData() throws IOException {
-        List<Student> students = DataGenerator.generateStudents();
-        generateGrades(students);
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
         SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
@@ -42,6 +40,11 @@ public class DataGenerator {
                 }
                 SimpleServer.session.flush();
             }
+
+            // sign the students to the first subject courses
+            List<Student> students = DataGenerator.generateStudents(subjects.getSubjects().get(0).getCourses());
+            generateGrades(students);
+
             List<Subject> subjectList = subjects.getSubjects();
             generateTeachers(subjectList);
             generateQuestions(subjectList);
@@ -140,7 +143,7 @@ public class DataGenerator {
                 examForm.setSubject(examSubject);
                 examForm.setCourse(examCourse);
                 examForm.setCreator(examCourse.getTeachers().get(0));
-                LocalDate localDate = LocalDate.now();
+                //LocalDate localDate = LocalDate.now();
                 examForm.getCode();
                 // Convert LocalDate to Date
                 Date date = ConvertToDate(LocalDateTime.now());
@@ -159,20 +162,20 @@ public class DataGenerator {
     private static void generateTeachers(List<Subject> subjects) {
         try {
             String salt = BCrypt.gensalt();
-            String principalFirstName = faker.name().firstName();
-            String principalLastName = faker.name().lastName();
-            String principalEmail = principalFirstName + "_" + principalLastName + "@gmail.com";
-            String priciplepassword = BCrypt.hashpw(faker.internet().password(), salt);
-            Principle principle = new Principle(principalFirstName, principalLastName,  Gender.Female, principalEmail, priciplepassword);
-            SimpleServer.session.saveOrUpdate(principle);
-            SimpleServer.session.flush();
+            //String principalFirstName = faker.name().firstName();
+            //String principalLastName = faker.name().lastName();
+            //String principalEmail = principalFirstName + "_" + principalLastName + "@gmail.com";
+            //String priciplepassword = BCrypt.hashpw(faker.internet().password(), salt);
+            //Principle principle = new Principle(principalFirstName, principalLastName,  Gender.Female, principalEmail, priciplepassword);
+            //SimpleServer.session.saveOrUpdate(principle);
+            //SimpleServer.session.flush();
             Teacher admin = null;
             HashSet<Subject> tempSubjects = new HashSet<Subject>();
             HashSet<Course> tempCourses = new HashSet<Course>();
 
             Random random = new Random();
             int randomSubject, randomCourse;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 50; i++) {
                 String teacherFirstName = faker.name().firstName();
                 String teacherLastName = faker.name().lastName();
                 String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
@@ -189,8 +192,6 @@ public class DataGenerator {
                     }
                 }
                 Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
-                //teacher.setPrinciple(principle);
-                //principle.addTeacher(teacher);
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
@@ -200,8 +201,6 @@ public class DataGenerator {
                     teacher.setLastName("user");
                     admin = teacher;
                 }
-                SimpleServer.session.saveOrUpdate(teacher);
-                SimpleServer.session.flush();
                 for (Course course : coursesList) {
                     course.getTeachers().add(teacher);
                     if(!(tempCourses.contains(course))){
@@ -236,9 +235,6 @@ public class DataGenerator {
         {
             e.printStackTrace();
         }
-
-
-
     }
     private static void generateGrades(List<Student> students) {
         Random r = new Random();
@@ -252,15 +248,23 @@ public class DataGenerator {
         }
         SimpleServer.session.flush();
     }
-    public static List<Student> generateStudents() {
+    public static List<Student> generateStudents(List<Course> courses) {
         List<Student> students = new ArrayList<>();
         for(int  i = 0; i < 10;i++)
         {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
             Student student = new Student(firstName,lastName);
+            for (int  j = 0; j < 2;j++)
+            {
+                int courseNum = faker.number().numberBetween(0, courses.size());
+                student.addCourse(courses.get(courseNum));
+                courses.get(courseNum).addStudents(student);
+                SimpleServer.session.save(courses.get(courseNum));
+            }
             students.add(student);
             SimpleServer.session.save(student);
+
             SimpleServer.session.flush();
         }
         return  students;
@@ -307,12 +311,18 @@ public class DataGenerator {
 
                 // Generate for every Class Exam a list of studentExams
                 List<Student> studentsTemp = new ArrayList<>(SimpleServer.retrieveStudents());
+                List<Student> studentsReceive = new ArrayList<>(SimpleServer.retrieveStudents());
                 int numberOfElements = faker.number().numberBetween(3,  studentsTemp.size());
                 List<StudentExam> StudentExams = new ArrayList<>();
                 for (int examineeNum = 0; examineeNum < numberOfElements; examineeNum++) {
                     int randomIndex = faker.number().numberBetween(0,  studentsTemp.size());
                     Student randomStudent = studentsTemp.get(randomIndex);
-                    studentsTemp.remove(randomIndex);
+                    studentsReceive.add(studentsTemp.remove(randomIndex));
+
+                    // student - class exam connection
+                    randomStudent.addClassExam(classExam);
+                    classExam.addStudent(randomStudent);
+
                     List<Integer> studentAnswers =  new ArrayList<>();
                     for(int  j = 0; j < classExam.getExamForm().getQuestionList().size() ;j++) {
                         studentAnswers.add(faker.number().numberBetween(1, 5));
@@ -322,9 +332,19 @@ public class DataGenerator {
                     StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
                     StudentExams.add(currentExam);
 
+                    //SimpleServer.session.saveOrUpdate(randomStudent);
+                    //SimpleServer.session.flush();
                 }
+
                 SimpleServer.session.saveOrUpdate(classExam);
                 SimpleServer.session.flush();
+
+                for (Student student : studentsReceive)
+                {
+                    SimpleServer.session.saveOrUpdate(student);
+                    SimpleServer.session.flush();
+                }
+
 
                 for(int examineeNum = 0; examineeNum < StudentExams.size() ;examineeNum++) {
                     SimpleServer.session.saveOrUpdate(StudentExams.get(examineeNum));

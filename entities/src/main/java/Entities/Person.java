@@ -4,9 +4,7 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-//@MappedSuperclass
-@Entity(name="persons")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@MappedSuperclass
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Person implements Serializable{
 

@@ -12,8 +12,8 @@ public class ExtraTime {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-    joinColumns = @JoinColumn(name = "ExtraTime_ID"),
-    inverseJoinColumns = @JoinColumn(name ="principles_ID"))
+            joinColumns = @JoinColumn(name = "ExtraTimeID"),
+            inverseJoinColumns = @JoinColumn(name ="principlesID"))
     private List<Principle> principles = new ArrayList<>();
     public List<Principle> getPrincipals() {
         return this.principles;

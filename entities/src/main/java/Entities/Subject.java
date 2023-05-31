@@ -18,8 +18,8 @@ public class Subject implements Serializable {
     // Updated by Ilan 27.5
     @ManyToMany
     @JoinTable(
-    joinColumns = @JoinColumn(name = "Subject_ID"),
-    inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
+    joinColumns = @JoinColumn(name = "SubjectID"),
+    inverseJoinColumns = @JoinColumn(name ="TeacherID" ))
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
     private static int codeNum = 0;
