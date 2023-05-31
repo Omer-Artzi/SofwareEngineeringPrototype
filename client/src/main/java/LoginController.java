@@ -84,7 +84,7 @@ public class LoginController {
         {
             SimpleClient.getClient().setUser(event.getUser());
             //SimpleChatClient.setRoot("TeacherMainScreen");
-            SimpleChatClient.setRoot("MainWindow");
+            SimpleChatClient.NewSetRoot("MainWindow");
         }
         else {
             wrongLoginLabel.setText("E-mail address or password is wrong");

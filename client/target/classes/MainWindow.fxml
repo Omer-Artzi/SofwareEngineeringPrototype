@@ -11,7 +11,11 @@
           <AnchorPane fx:id="sidePane" />
             <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <content>
-                <AnchorPane fx:id="mainPane" />
+                  <HBox alignment="CENTER">
+                     <children>
+                      <AnchorPane fx:id="mainPane" />
+                     </children>
+                  </HBox>
                </content>
             </ScrollPane>
          </children>

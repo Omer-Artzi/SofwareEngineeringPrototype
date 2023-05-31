@@ -2,6 +2,7 @@ Events\AddGradeSuccesEvent.class
 TeacherSidebarController.class
 ClassExamGradeController.class
 SimpleClient.class
+PrincipalMainScreenController.class
 PreLogInController.class
 Events\AddStudentSuccesEvent.class
 Events\ChooseQuestionsEvent.class
@@ -17,15 +18,18 @@ Main.class
 MainWindowController.class
 ocsf\ObservableSWRClient.class
 SecondaryController$1.class
+StudentSidebarController.class
 Events\SendChosenQuestionsEvent.class
 Events\CourseQuestionsListEvent.class
 Events\GeneralEvent.class
 ExamScreenController$1.class
+PrincipalSidebarController.class
 Events\StudentExamEvent.class
 SimpleChatClient$1.class
 Events\SubjectMessageEvent.class
 Events\ClassExamGradeEvent.class
 ExamScreenController$1$1.class
+StudentMainScreenController.class
 Events\SubjectsOfTeacherMessageEvent.class
 LoginController.class
 ocsf\AdaptableClient.class

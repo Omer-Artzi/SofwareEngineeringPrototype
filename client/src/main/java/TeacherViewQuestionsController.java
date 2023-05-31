@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,8 +19,6 @@ import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import javax.swing.*;
-
 public class TeacherViewQuestionsController {
 
     @FXML
@@ -31,7 +28,7 @@ public class TeacherViewQuestionsController {
     private URL location;
 
     @FXML
-    private Button backButton;
+    private Button addQuestionsToExamButton;
 
     @FXML
     private ChoiceBox<Course> coursePicker;
@@ -223,9 +220,12 @@ public class TeacherViewQuestionsController {
         System.out.println("Choosing questions");
 
         // set subject and course
+        System.out.println(event.getCourse().getSubject().toString());
+        subjectPicker.getItems().clear();
+        subjectPicker.getItems().add(event.getCourse().getSubject());
         subjectPicker.setValue(event.getCourse().getSubject());
-        coursePicker.setValue(event.getCourse());
         subjectPicker.disableProperty().setValue(true);
+        coursePicker.setValue(event.getCourse());
         coursePicker.disableProperty().setValue(true);
 
         // add a checkbox column to the table
@@ -262,7 +262,7 @@ public class TeacherViewQuestionsController {
             chosenQuestions = new ArrayList<>();
         }
 
-        backButton.setVisible(true);
+        addQuestionsToExamButton.setVisible(true);
     }
 
     void CheckboxPressed(Question question) {
@@ -274,7 +274,7 @@ public class TeacherViewQuestionsController {
     }
 
     @FXML
-    void backButtonPressed(ActionEvent event) {
+    void addQuestionsToExamButtonPressed(ActionEvent event) {
         System.out.println("Back button pressed");
         System.out.println("Chosen questions: " + chosenQuestions);
 
