@@ -58,7 +58,7 @@ public class TeacherSidebarController {
 
     @FXML
     void viewQuestion(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewQuestions");
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
     }
 
     @FXML

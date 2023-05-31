@@ -89,6 +89,10 @@ public class AddExamController {
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
+        // switch to TeacherViewQuestions
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+
+        // send info to TeacherViewQuestions
         ChooseQuestionsEvent stMsg = new ChooseQuestionsEvent();
         stMsg.setCourse(CourseCB.getValue());
         System.out.println("Course: " + CourseCB.getValue());
@@ -97,7 +101,10 @@ public class AddExamController {
     }
 
     @Subscribe
-    void setQuestions(SendChosenQuestionsEvent event) {
+    public void setQuestions(SendChosenQuestionsEvent event) {
+        System.out.println("received questions from TeacherViewQuestions: " + event.getQuestions());
+
+
         List<Question> addedQuestions = event.getQuestions();
         for (Question q : addedQuestions) {
             QuestionObject newQuestion = new QuestionObject(q.getID(), q.getQuestionData(), 0);
@@ -166,6 +173,10 @@ public class AddExamController {
         gradePercentageColumn.setCellValueFactory(new PropertyValueFactory<>("percentage"));
         questionTable.setEditable(false);
         questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        questionObjectsList = new ArrayList<>();
+        Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
+        SimpleClient.getClient().sendToServer(message);
     }
 
 
@@ -208,7 +219,7 @@ public class AddExamController {
         CourseCB.setDisable(true);
         questionTable.setDisable(false);
         List<QuestionObject> questionObjectsList = new ArrayList<>();
-        for (Question question : event.getQuestions()) {
+        /*for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
             QuestionObject item = new QuestionObject(question.getID(), question.getQuestionData(), 0);
             questionObjectsList.add(item);
@@ -217,7 +228,7 @@ public class AddExamController {
             questionTable.getItems().clear();
             questionTable.getItems().addAll(questionObjectsList);
             questionTable.refresh();
-        }
+        }*/
         enable();
     }
 

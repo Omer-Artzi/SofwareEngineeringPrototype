@@ -28,6 +28,9 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);

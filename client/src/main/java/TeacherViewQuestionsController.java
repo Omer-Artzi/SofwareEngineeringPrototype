@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,6 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import javax.swing.*;
 
 public class TeacherViewQuestionsController {
 
@@ -66,6 +69,8 @@ public class TeacherViewQuestionsController {
 
     @FXML
     void initialize() {
+        System.out.println("Initializing TeacherViewQuestionsController");
+
         // subscribe to server
         EventBus.getDefault().register(this);
 
@@ -84,7 +89,12 @@ public class TeacherViewQuestionsController {
         });
 
         // populate subject picker
-        subjectPicker.getItems().addAll(teacher.getSubjectList());
+        try {
+            RequestSubjects();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //subjectPicker.getItems().addAll(teacher.getSubjectList());
 
         //create a listener for the subject picker
         subjectPicker.setOnAction(e -> UpdateCourses());
@@ -116,6 +126,20 @@ public class TeacherViewQuestionsController {
             System.out.println("Error retrieving subjects and courses");
         }*/
 
+    }
+
+    // sends a server requests for the Subjects of the logged in teacher
+    private void RequestSubjects() throws IOException {
+        System.out.println("TeacherViewQuestions requesting subjects");
+        Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
+        SimpleClient.getClient().sendToServer(message);
+    }
+
+    // receives a list of subjects from the server
+    @Subscribe
+    public void updateSubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
+
+        subjectPicker.getItems().addAll(event.getSubjects());
     }
 
     void RequestSubjectsAndCourses() throws IOException {
@@ -195,7 +219,7 @@ public class TeacherViewQuestionsController {
     }
 
     @Subscribe
-    private void ChooseQuestions(ChooseQuestionsEvent event) {
+    public void ChooseQuestions(ChooseQuestionsEvent event) {
         System.out.println("Choosing questions");
 
         // set subject and course
@@ -251,7 +275,17 @@ public class TeacherViewQuestionsController {
 
     @FXML
     void backButtonPressed(ActionEvent event) {
-            SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions);
+        System.out.println("Back button pressed");
+        System.out.println("Chosen questions: " + chosenQuestions);
+
+        try {
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions);
+        EventBus.getDefault().post(chooseQuestionsEvent);
     }
 
 }

@@ -1,6 +1,5 @@
 import Entities.*;
-import Events.CourseQuestionsListEvent;
-import Events.SubjectsOfTeacherMessageEvent;
+import Events.*;
 import antlr.ASTFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,7 +28,7 @@ public class AddExamController {
     private String examNotesForStudent;
     private String examNotesForTeacher;
     private String examName; // necessary?
-    private List<QuestionObject> questions;
+    private List<QuestionObject> questionObjectsList;
 
     private List<Subject> teacherSubjects;
     @FXML
@@ -89,8 +88,31 @@ public class AddExamController {
     }
 
     @FXML
-    void addQuestion(ActionEvent event) {
+    void addQuestion(ActionEvent event) throws IOException {
+        // switch to TeacherViewQuestions
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
 
+        // send info to TeacherViewQuestions
+        ChooseQuestionsEvent stMsg = new ChooseQuestionsEvent();
+        stMsg.setCourse(CourseCB.getValue());
+        System.out.println("Course: " + CourseCB.getValue());
+        EventBus.getDefault().post(stMsg);
+        // מוקדש לעידן באהבה
+    }
+
+    @Subscribe
+    public void setQuestions(SendChosenQuestionsEvent event) {
+        System.out.println("received questions from TeacherViewQuestions: " + event.getQuestions());
+
+
+        List<Question> addedQuestions = event.getQuestions();
+        for (Question q : addedQuestions) {
+            QuestionObject newQuestion = new QuestionObject(q.getID(), q.getQuestionData(), 0);
+            questionObjectsList.add(newQuestion);
+        }
+        questionTable.getItems().clear();
+        questionTable.getItems().addAll(questionObjectsList);
+        questionTable.refresh();
     }
 
     @FXML
@@ -151,6 +173,10 @@ public class AddExamController {
         gradePercentageColumn.setCellValueFactory(new PropertyValueFactory<>("percentage"));
         questionTable.setEditable(false);
         questionTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        questionObjectsList = new ArrayList<>();
+        Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
+        SimpleClient.getClient().sendToServer(message);
     }
 
 
@@ -193,7 +219,7 @@ public class AddExamController {
         CourseCB.setDisable(true);
         questionTable.setDisable(false);
         List<QuestionObject> questionObjectsList = new ArrayList<>();
-        for (Question question : event.getQuestions()) {
+        /*for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
             QuestionObject item = new QuestionObject(question.getID(), question.getQuestionData(), 0);
             questionObjectsList.add(item);
@@ -202,7 +228,7 @@ public class AddExamController {
             questionTable.getItems().clear();
             questionTable.getItems().addAll(questionObjectsList);
             questionTable.refresh();
-        }
+        }*/
         enable();
     }
 

@@ -7,6 +7,7 @@ Events\AddStudentSuccesEvent.class
 Events\ChooseQuestionsEvent.class
 ExamScreenController$QuestionsObservable.class
 ProgressCircleController.class
+TeacherViewQuestionsController.class
 Events\RefreshEvent.class
 addQuestionController.class
 Events\ErrorEvent.class
@@ -27,7 +28,6 @@ Events\ClassExamGradeEvent.class
 ExamScreenController$1$1.class
 Events\SubjectsOfTeacherMessageEvent.class
 LoginController.class
-ViewQuestionsController.class
 ocsf\AdaptableClient.class
 ExamScreenController.class
 Events\GradeMessageEvent.class
