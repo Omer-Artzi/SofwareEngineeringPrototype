@@ -20,7 +20,11 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "tester")
     private List<ClassExam> classExams = new ArrayList<>();
 
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "PrincipalID")
+    //private Principle principle;
 
+    public Teacher() {}
     public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
         super(firstName, lastName, gender, email, password);
         this.courses = course_list;
@@ -30,11 +34,11 @@ public class Teacher extends Person{
     public List<Course> getCourseList() {
         return courses;
     }
-    public void AddCourse(Course course) {
+    public void addCourse(Course course) {
         if (!courses.contains(course))
         {
             courses.add(course);
-            course.AddTeacher(this);
+            course.addTeacher(this);
         }
     }
 
@@ -45,28 +49,40 @@ public class Teacher extends Person{
     public void setClassExam(List<ClassExam> classExam) {
         this.classExams = classExam;
     }
-    public void AddClassExam(ClassExam classExam)
+    public void addClassExam(ClassExam classExam)
     {
         if (!classExams.contains(classExam))
         {
             this.classExams.add(classExam);
         }
-
     }
 
     public List<Subject> getSubjectList() {
         return subjects;
     }
-
-    public void setCourseList(List<Course> CourseList) {
-        this.courses = CourseList;
+    public void setSubjects(List<Subject> SubjectList) {
+        this.subjects = new ArrayList<>(SubjectList);
+    }
+    public List<Subject> getSubjects(){return subjects;}
+    public void addSubject(Subject subject)
+    {
+        if(!this.subjects.contains(subject))
+            subjects.add(subject);
     }
 
-    public void setSubjectList(List<Subject> SubjectList) {
-        this.subjects = SubjectList;
+    public void setCourses(List<Course> courses) {
+        this.courses = new ArrayList<>(courses);
+    }
+    public List<Course> getCourses(){return courses;}
+    public void addSubject(Course course)
+    {
+        if(!this.courses.contains(course))
+            courses.add(course);
     }
 
-    public Teacher() {}
+    //public void setPrinciple(Principle principle) {
+    //public Principle getPrinciple(){return principle;}
+
     public void extraTimeRequest(ExtraTime data){}
      public void receiveExtraTime(ExtraTime data)
      {

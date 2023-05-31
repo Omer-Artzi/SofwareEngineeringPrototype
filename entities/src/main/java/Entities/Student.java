@@ -37,6 +37,15 @@ public class Student extends Person implements Serializable, Comparable<Student>
     public void setGrades(List<Grade> grades) {
         this.grades = grades;
     }
+    public void addGrade(Grade grade){grades.add(grade);}
+    public List<Course> getCourse() {
+        return courses;
+    }
+
+    public void setCourse(List<Course> courses) {
+        this.courses = courses;
+    }
+    public void addCourse(Course course){courses.add(course);}
 
     public List<StudentExam> getStudentExam() {
         return studentExams;
@@ -46,7 +55,7 @@ public class Student extends Person implements Serializable, Comparable<Student>
         this.studentExams = studentExams;
     }
 
-    public void AddStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
+    public void addStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
 
     @Override
     public String toString() {

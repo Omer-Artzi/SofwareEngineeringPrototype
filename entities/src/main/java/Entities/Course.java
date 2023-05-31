@@ -13,7 +13,7 @@ public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
-    private String Name;
+    private String name;
     //list of teachers that teaches the course
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -23,13 +23,13 @@ public class Course implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            joinColumns = @JoinColumn(name = "CourseID"),
-            inverseJoinColumns = @JoinColumn(name = "StudentID"))
+    joinColumns = @JoinColumn(name = "CourseID"),
+    inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "subjectID")
-    private Subject subject;
+    private Subject subject = null;
 
     @ManyToMany(mappedBy = "courses")
     private List<Question> questions = new ArrayList<>();
@@ -45,7 +45,7 @@ public class Course implements Serializable {
     }
     public Course(String Name,List<Teacher>TeacherList)
     {
-        this.Name=Name;
+        this.name=Name;
         this.teachers =TeacherList;
         code = Integer.toString(++codeNum);;
     }
@@ -55,8 +55,8 @@ public class Course implements Serializable {
     }
 
 
-    public String getName(){return Name;}
-    public void setName(String newName){this.Name=newName;}
+    public String getName(){return name;}
+    public void setName(String newName){this.name=newName;}
 
     public List<Teacher> getTeachers() {
         return teachers;
@@ -66,7 +66,7 @@ public class Course implements Serializable {
         this.teachers = teachers;
     }
 
-    public void AddTeacher(Teacher teacher)
+    public void addTeacher(Teacher teacher)
     {
         if (!teachers.contains(teacher))
             teachers.add(teacher);
@@ -84,7 +84,7 @@ public class Course implements Serializable {
     public List<Question> getQuestions(){return questions;}
     public void setQuestions(List<Question> students){this.questions =questions;}
 
-    public void AddQuestion(Question question)
+    public void addQuestion(Question question)
     {
         if (!questions.contains(question))
             questions.add(question);
@@ -93,7 +93,7 @@ public class Course implements Serializable {
     public List<ExamForm> getExamForms(){return examForms;}
     public void setExamForms(List<ExamForm> examForms){this.examForms = examForms;}
 
-    public void AddExamForm(ExamForm examForm)
+    public void addExamForm(ExamForm examForm)
     {
         if (!examForms.contains(examForm))
             examForms.add(examForm);
@@ -110,7 +110,7 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-        return Name;
+        return name;
     }
 
     public Subject getSubject() {
@@ -122,8 +122,12 @@ public class Course implements Serializable {
     }
 
     public String getCode() {
-
-        return this.code;
+        if(code == null)
+        {
+            Faker faker = new Faker();
+            code = faker.bothify("##");
+        }
+        return code;
     }
 
     public void setCode(String code) {

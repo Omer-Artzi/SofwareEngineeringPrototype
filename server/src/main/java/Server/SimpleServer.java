@@ -38,6 +38,8 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Subject.class);
 		configuration.addAnnotatedClass(Course.class);
 		configuration.addAnnotatedClass(Teacher.class);
+		configuration.addAnnotatedClass(Principle.class);
+		configuration.addAnnotatedClass(ExtraTime.class);
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
 		configuration.addAnnotatedClass(Person.class);

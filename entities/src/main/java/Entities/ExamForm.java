@@ -15,7 +15,7 @@ public class ExamForm implements Serializable {
     private int ID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
-    private Course course;
+    private Course course = null;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
@@ -26,7 +26,7 @@ public class ExamForm implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "examForms")
-    private List<Question> QuestionList = new ArrayList<>();
+    private List<Question> questionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "examForm")
     private List<ClassExam> classExams = new ArrayList<>();
@@ -34,18 +34,17 @@ public class ExamForm implements Serializable {
     @ElementCollection
     private List<Integer> questionsScores = new ArrayList<>();
 
-    private String Code;
+    private String code;
     private Date dateCreated;
     private Date lastUsed;
-    private double examTime;
+
 
     public ExamForm(){}
-    public ExamForm(Course course, Teacher teacher, Subject subject, double examTime,List<Question>QuestionList){
+    public ExamForm(Course course, Teacher teacher, Subject subject, List<Question> questionList){
         this.course=course;
         this.creator =teacher;
         this.subject=subject;
-        this.examTime=examTime;
-        this.QuestionList=QuestionList;
+        this.questionList=questionList;
     }
 
     public int getID() {
@@ -58,23 +57,21 @@ public class ExamForm implements Serializable {
 
     public String getCode() {
         Faker faker= new Faker();
-        if(Code == null)
+        if(code == null)
         {
-            Code = subject.getCode() + course.getCode() + faker.bothify("##");
+            code = subject.getCode() + course.getCode() + faker.bothify("##");
         }
-        return Code;
+        return code;
     }
 
     public void setCode(String code) {
-        Code = code;
+        code = code;
     }
 
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}
     public Teacher getCreator(){return creator;}
     public void setCreator(Teacher newTeacher){this.creator =newTeacher;}
-    public double getExamTime(){return examTime;}
-    public void setExamTime(double examTime){this.examTime=examTime;}
 
     public List<Integer> getQuestionsScores()
     {
@@ -90,8 +87,11 @@ public class ExamForm implements Serializable {
         this.questionsScores.add(questionsScore);
     }
 
-    public List<Question> getQuestionList(){return QuestionList;}
-    public void setQuestionList(List<Question> newQuestionList){this.QuestionList=newQuestionList;}
+    public List<Question> getQuestionList(){return questionList;}
+    public void setQuestionList(List<Question> newQuestionList){this.questionList=newQuestionList;}
+    public void addQuestion(Question question) {
+        questionList.add(question);
+    }
 
     public List<ClassExam> getClassExam(){return classExams;}
     public void setClassExam(List<ClassExam> classExam){this.classExams=classExam;}
@@ -121,9 +121,6 @@ public class ExamForm implements Serializable {
         this.lastUsed = lastUsed;
     }
 
-    public void addQuestion(Question question) {
-        QuestionList.add(question);
-    }
 
 }
 

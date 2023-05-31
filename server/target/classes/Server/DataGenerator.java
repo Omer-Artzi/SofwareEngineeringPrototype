@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -141,7 +143,8 @@ public class DataGenerator {
                 LocalDate localDate = LocalDate.now();
                 examForm.getCode();
                 // Convert LocalDate to Date
-                Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date date = ConvertToDate(LocalDateTime.now());
+                //Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 examForm.setDateCreated(date);
                 examForm.setLastUsed(date);
                 SimpleServer.session.saveOrUpdate(examForm);
@@ -155,14 +158,21 @@ public class DataGenerator {
     }
     private static void generateTeachers(List<Subject> subjects) {
         try {
-            Teacher admin = null;
             String salt = BCrypt.gensalt();
+            String principalFirstName = faker.name().firstName();
+            String principalLastName = faker.name().lastName();
+            String principalEmail = principalFirstName + "_" + principalLastName + "@gmail.com";
+            String priciplepassword = BCrypt.hashpw(faker.internet().password(), salt);
+            Principle principle = new Principle(principalFirstName, principalLastName,  Gender.Female, principalEmail, priciplepassword);
+            SimpleServer.session.saveOrUpdate(principle);
+            SimpleServer.session.flush();
+            Teacher admin = null;
             HashSet<Subject> tempSubjects = new HashSet<Subject>();
             HashSet<Course> tempCourses = new HashSet<Course>();
 
             Random random = new Random();
             int randomSubject, randomCourse;
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 10; i++) {
                 String teacherFirstName = faker.name().firstName();
                 String teacherLastName = faker.name().lastName();
                 String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
@@ -179,6 +189,8 @@ public class DataGenerator {
                     }
                 }
                 Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+                //teacher.setPrinciple(principle);
+                //principle.addTeacher(teacher);
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
@@ -188,6 +200,8 @@ public class DataGenerator {
                     teacher.setLastName("user");
                     admin = teacher;
                 }
+                SimpleServer.session.saveOrUpdate(teacher);
+                SimpleServer.session.flush();
                 for (Course course : coursesList) {
                     course.getTeachers().add(teacher);
                     if(!(tempCourses.contains(course))){
@@ -195,6 +209,7 @@ public class DataGenerator {
                         course.getTeachers().add(admin);
                     }
                 }
+
                 for (Subject subject : subjectsList) {
                     subject.getTeachers().add(teacher);
                     if(!(tempSubjects.contains(subject))){
@@ -203,21 +218,26 @@ public class DataGenerator {
                     }
                 }
                 SimpleServer.session.saveOrUpdate(teacher);
+
             }
             SimpleServer.session.flush();
+
             List<Course> allCourses = new ArrayList<>();
             List<Subject> allSubjects = new ArrayList<>();
             allSubjects.addAll(tempSubjects);
             allCourses.addAll(tempCourses);
-            admin.setSubjectList(allSubjects);
-            admin.setCourseList(allCourses);
+            admin.setSubjects(allSubjects);
+            admin.setCourses(allCourses);
             SimpleServer.session.saveOrUpdate(admin);
+            //SimpleServer.session.saveOrUpdate(principle);
             SimpleServer.session.flush();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
+
 
     }
     private static void generateGrades(List<Student> students) {
@@ -246,34 +266,42 @@ public class DataGenerator {
         return  students;
     }
 
-    private static LocalDate GenerateRandomDate(LocalDate startDate, LocalDate endDate) {
+    private static LocalDateTime GenerateRandomDate(LocalDate startDate, LocalDate endDate) {
         long startEpochDay = startDate.toEpochDay();
         long endEpochDay = endDate.toEpochDay();
         long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay);
-        return LocalDate.ofEpochDay(randomEpochDay);
+        return LocalDate.ofEpochDay(randomEpochDay).atTime(faker.number().numberBetween(8, 17), 0);
     }
 
-    private static Date ConvertToDate(LocalDate localDate) {
-        LocalDateTime localDateTime = localDate.atStartOfDay();
+    private static Date ConvertToDate(LocalDateTime localDate) {
         ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = localDateTime.atZone(zoneId);
+        ZonedDateTime zonedDateTime = localDate.atZone(zoneId);
         return Date.from(zonedDateTime.toInstant());
     }
+
     private static void GenerateClassExams(List<ExamForm> ExamForms)
     {
         if(ExamForms != null) {
             // generate list of Class Exam
             for(int i = 0; i < 3; i++) {
 
-                // covert random date in the next 5 mouths to perform the test
+                // generate random start and end time
                 LocalDate currentDate = LocalDate.now();
-                LocalDate randomDate = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
-                Date testDate = ConvertToDate(randomDate);
+                LocalDateTime randomDay = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
+                Date testStartDate = ConvertToDate(randomDay);
+                double examTime = faker.number().numberBetween(0, 4);
+                int examDays = faker.number().numberBetween(0, 3);
+                int examHours = faker.number().numberBetween((int)examTime, 23);
+                Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
+
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                ClassExam classExam = new ClassExam(ExamForms.get(i), testDate.toString(), teacher);
+                ClassExam classExam = new ClassExam(ExamForms.get(i), testStartDate, testEndDate, examTime*60 , teacher);
+
+                // set last used on creation date
+                ExamForms.get(i).setLastUsed(ConvertToDate(LocalDateTime.now()));
 
                 // compel the teacher to have the course if she not already have it
-                teacher.AddCourse(ExamForms.get(i).getCourse());
+                teacher.addCourse(ExamForms.get(i).getCourse());
                 SimpleServer.session.saveOrUpdate(teacher);
                 SimpleServer.session.flush();
 
@@ -291,12 +319,6 @@ public class DataGenerator {
                     }
                     StudentExam.statusEnum status;
                     status = StudentExam.statusEnum.ToEvaluate;
-                    //String status = "";
-                    //if (faker.number().numberBetween(0, 2) == 1)
-                    //    status = "Approved";
-                    //else
-                    //    status = "To Evaluate";
-                    //status = "To Evaluate";
                     StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
                     StudentExams.add(currentExam);
 
