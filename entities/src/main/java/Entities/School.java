@@ -8,6 +8,8 @@ public class School {
     private static List<Subject> subjects;
     private static List<Principal> principals;
 
+    // plus class exam list
+
     private School() {}
 
         public static School getInstance() {
@@ -15,7 +17,7 @@ public class School {
         {
             school = new School();
         }
-        return  school;
+        return school;
     }
 
     public static void setSubjects(List<Subject> subjects) {

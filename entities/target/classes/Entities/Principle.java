@@ -12,8 +12,8 @@ public class Principle extends Person {
     public void extraTimeRequest(ExtraTime data) {
         for(Principle principal:data.getPrincipals()) {
             if(principal.getFullName() == getFullName())
-            //TODO: pop message that extra time is requested when conditions are met
-            extraTimeRequests.add(data);
+                //TODO: pop message that extra time is requested when conditions are met
+                extraTimeRequests.add(data);
         }
     }
 

@@ -24,14 +24,15 @@ public class StudentExam implements Serializable {
     @ElementCollection
     private List<Integer> studentAnswers = new ArrayList<>();
 
+
+
+
     // Switch to Grade class? Delete Grade Class?
     private int grade;
 
     public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
 
     private statusEnum status;
-
-    private double timeLeft;
 
     private String teacherNote;
     private String scoreChangeReason;
@@ -42,10 +43,9 @@ public class StudentExam implements Serializable {
     public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, statusEnum status)
     {
         this.student = student;
-        this.student.AddStudentExam(this);
+        this.student.addStudentExam(this);
         this.classExam = classExam;
-        this.classExam.AddStudentExam(this);
-        this.timeLeft = this.classExam.getExamForm().getExamTime();
+        this.classExam.addStudentExam(this);
         this.studentAnswers = studentAnswers;
         this.grade = grade;
         this.status = status;
@@ -132,8 +132,6 @@ public class StudentExam implements Serializable {
         return "";
     }
 
-    public double getTimeLeft(){return timeLeft;}
-    public void setTimeLeft(double timeLeft){this.timeLeft=timeLeft;}
 
     public String getTeacherNote()
     {

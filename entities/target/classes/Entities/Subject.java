@@ -18,8 +18,8 @@ public class Subject implements Serializable {
     // Updated by Ilan 27.5
     @ManyToMany
     @JoinTable(
-            joinColumns = @JoinColumn(name = "Subject_ID"),
-            inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
+    joinColumns = @JoinColumn(name = "Subject_ID"),
+    inverseJoinColumns = @JoinColumn(name ="Teacher_ID" ))
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
     private String code;
     private static int codeNum = 0;
@@ -77,6 +77,12 @@ public class Subject implements Serializable {
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
+    public void addSetCourse(Course course)
+    {
+        if(!this.courses.contains(course))
+            courses.add(course);
+    }
+
 
     public List<Teacher> getTeachers(){return teachers;}
 
