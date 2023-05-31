@@ -170,7 +170,7 @@ public class ClassExamGradeController {
 
         // select course
         // collect the courses of the subject
-        List<Course> teacherCourses = clientTeacher.getCourseList();
+        List<Course> teacherCourses = clientTeacher.getCourses();
         List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName() == chosenSubjectStr)
                 .collect(Collectors.toList());
 
@@ -201,7 +201,7 @@ public class ClassExamGradeController {
 
         clientTeacher = (Teacher)SimpleClient.getClient().getUser();
         // Get teacher courses and return if the teacher not assigned to any course
-        List<Course> teacherCourses = clientTeacher.getCourseList();
+        List<Course> teacherCourses = clientTeacher.getCourses();
         if (teacherCourses.isEmpty())
         {
             System.out.println("Teacher Is not assign to any course");

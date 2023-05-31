@@ -28,6 +28,12 @@ public class ClassExam implements Serializable
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+    joinColumns = @JoinColumn(name = "ClassExamID"),
+    inverseJoinColumns = @JoinColumn(name = "StudentID"))
+    private List<Student> students = new ArrayList<>();
+
 
     private int approvedExamsNum;
 
@@ -36,11 +42,12 @@ public class ClassExam implements Serializable
     private double gradesVariance;
     // In Minutes
     private double examTime;
+    private String code;
 
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code)
     {
         this.startDate=startDate;
         this.finalSubmissionDate=finalSubmissionDate;
@@ -51,18 +58,35 @@ public class ClassExam implements Serializable
         this.approvedExamsNum=0;
         this.gradesMean=0;
         this.gradesVariance=0;
+        this.code = code;
     }
 
     public int getID() {return ID;}
 
     public List<StudentExam> getStudentExams(){return studentExams;}
-    public void setStudentExams(List<StudentExam> studentExams){this.studentExams=studentExams;}
-    public void addStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
+    public void setStudentExams(List<StudentExam> studentExams){this.studentExams= new ArrayList<>(studentExams);}
+    public void addStudentExam(StudentExam studentExam)
+    {
+        if (!studentExams.contains(studentExam))
+        {
+            studentExams.add(studentExam);
+        }
+    }
 
     public void UpdateStudentExam(StudentExam studentExam)
     {
         System.out.println("index = " + studentExams.indexOf(studentExam));
         studentExams.set(studentExams.indexOf(studentExam), studentExam);
+    }
+
+    public List<Student> getStudents(){return students;}
+    public void setSStudents(List<Student> students){this.students= new ArrayList<>(students);}
+    public void addStudent(Student student)
+    {
+        if(!students.contains(student))
+        {
+            students.add(student);
+        }
     }
 
     public Date getStartDate(){return startDate;}
@@ -86,5 +110,15 @@ public class ClassExam implements Serializable
     public void setGradesVariance(double gradesVariance){this.gradesVariance=gradesVariance;}
     public double getExamTime(){return examTime;}
     public void setExamTime(double examTime){this.examTime=examTime;}
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
 
 }
