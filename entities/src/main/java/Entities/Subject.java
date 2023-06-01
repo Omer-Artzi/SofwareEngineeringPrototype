@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "Subjects")
-public class Subject implements Serializable {
+public class Subject implements Serializable, Comparable<Subject> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
@@ -99,5 +99,10 @@ public class Subject implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public int compareTo(Subject o) {
+        return this.getName().compareTo(o.getName());
     }
 }

@@ -1,7 +1,6 @@
 import Entities.*;
 import Events.*;
 import javafx.scene.Scene;
-import org.apache.commons.lang3.ObjectUtils;
 import org.greenrobot.eventbus.EventBus;
 import ocsf.AbstractClient;
 
@@ -28,6 +27,9 @@ public class SimpleClient extends AbstractClient {
 		if (message.getMessage().startsWith("Students")) {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
@@ -81,7 +83,14 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().equals("Server is closed")) {
 			String warning = "further updates cannot be made until connection is re-established";
 			JOptionPane.showMessageDialog(null, warning, "Error: The Server Was Closed ", JOptionPane.WARNING_MESSAGE);
-		}else {
+		}
+		else if(message.getMessage().startsWith("Questions in Course")) // Added by Ilan 30.5
+		{
+			CourseQuestionsListEvent stMsg = new CourseQuestionsListEvent((List<Question>) message.getData());
+			// System.out.println("Check");
+			EventBus.getDefault().post(stMsg);
+		}
+		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
@@ -133,7 +142,7 @@ public class SimpleClient extends AbstractClient {
 		this.user = user;
 	}
 
-	public Person getUser() {
-		return this.user;
+	public static Person getUser() {
+		return user;
 	}
 }

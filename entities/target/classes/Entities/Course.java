@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name="Courses")
-public class Course implements Serializable {
+public class Course implements Serializable, Comparable<Course> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
@@ -130,5 +130,10 @@ public class Course implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public int compareTo(Course o) {
+        return this.getName().compareTo(o.getName());
     }
 }

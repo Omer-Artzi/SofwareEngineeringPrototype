@@ -83,4 +83,7 @@ public class Question implements Serializable {
     public String getStudentNote(){return studentNote;}
     public void setStudentNote(String newNote){this.studentNote=newNote;}
 
+    public int getID() {
+        return ID;
+    }
 }
