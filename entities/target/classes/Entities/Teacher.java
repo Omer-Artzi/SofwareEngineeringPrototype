@@ -20,9 +20,6 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "tester")
     private List<ClassExam> classExams = new ArrayList<>();
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "PrincipalID")
-    //private Principle principle;
 
     public Teacher() {}
     public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
@@ -31,7 +28,10 @@ public class Teacher extends Person{
         this.subjects = subject_list;
     }
 
-    public List<Course> getCourseList() {
+    public void setCourses(List<Course> courses) {
+        this.courses = new ArrayList<>(courses);
+    }
+    public List<Course> getCourses() {
         return courses;
     }
     public void addCourse(Course course) {
@@ -41,6 +41,7 @@ public class Teacher extends Person{
             course.addTeacher(this);
         }
     }
+
 
     public List<ClassExam> getClassExam() {
         return classExams;
@@ -69,19 +70,6 @@ public class Teacher extends Person{
         if(!this.subjects.contains(subject))
             subjects.add(subject);
     }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = new ArrayList<>(courses);
-    }
-    public List<Course> getCourses(){return courses;}
-    public void addSubject(Course course)
-    {
-        if(!this.courses.contains(course))
-            courses.add(course);
-    }
-
-    //public void setPrinciple(Principle principle) {
-    //public Principle getPrinciple(){return principle;}
 
     public void extraTimeRequest(ExtraTime data){}
      public void receiveExtraTime(ExtraTime data)

@@ -299,7 +299,8 @@ public class DataGenerator {
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                ClassExam classExam = new ClassExam(ExamForms.get(i), testStartDate, testEndDate, examTime*60 , teacher);
+                String code = Long.toString(faker.number().randomNumber(5, false));
+                ClassExam classExam = new ClassExam(ExamForms.get(i), testStartDate, testEndDate, examTime*60, teacher, code);
 
                 // set last used on creation date
                 ExamForms.get(i).setLastUsed(ConvertToDate(LocalDateTime.now()));

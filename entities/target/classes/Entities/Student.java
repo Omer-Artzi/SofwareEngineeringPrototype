@@ -51,7 +51,7 @@ public class Student extends Person implements Serializable, Comparable<Student>
     }
     public void addCourse(Course course)
     {
-        if(courses.contains(course))
+        if(!courses.contains(course))
             courses.add(course);
     }
 

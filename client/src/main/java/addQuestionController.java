@@ -78,7 +78,7 @@ public class addQuestionController {
         Person person=(Teacher)SimpleClient.getClient().getUser();
         if(person instanceof Teacher){
             Teacher teacher=(Teacher) person;
-            CourseOfTeacher=teacher.getCourseList();
+            CourseOfTeacher=teacher.getCourses();
             System.out.println(teacher.getFullName());
         }
         subjects=eventSUB.getSubjects();

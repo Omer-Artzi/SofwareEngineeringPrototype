@@ -26,8 +26,8 @@ public class Question implements Serializable {
     private String studentNote;
     @ManyToMany
     @JoinTable(
-            joinColumns = @JoinColumn(name ="Question_ID" ),
-            inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
+            joinColumns = @JoinColumn(name ="QuestionID" ),
+            inverseJoinColumns = @JoinColumn(name = "ExamFormID"))
     private List<ExamForm> examForms = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -71,6 +71,18 @@ public class Question implements Serializable {
         if (this.subject != subject)
             this.subject = subject;
     }
+
+    public List<ExamForm> getExamForm(){return examForms;}
+    public void setExamForm(List<ExamForm> examForms)
+    {
+        this.examForms = new ArrayList<>(examForms);
+    }
+    public void addExamForm(ExamForm examForm)
+    {
+        if(!this.examForms.contains(examForm))
+            examForms.add(examForm);
+    }
+
 
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}

@@ -38,6 +38,8 @@ public class ExamForm implements Serializable {
     private Date dateCreated;
     private Date lastUsed;
 
+    private double examTime;
+
 
     public ExamForm(){}
     public ExamForm(Course course, Teacher teacher, Subject subject, List<Question> questionList){
@@ -120,6 +122,9 @@ public class ExamForm implements Serializable {
     public void setLastUsed(Date lastUsed) {
         this.lastUsed = lastUsed;
     }
+
+    public double getExamTime(){return examTime;}
+    public void setExamTime(double examTime){this.examTime=examTime;}
 
 
 }
