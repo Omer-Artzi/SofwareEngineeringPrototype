@@ -1,4 +1,7 @@
 *.jar
+*/target/*
 *.class
 *.iml
 *.lst
+/client/target/classes/PrincipleMainScreen.fxml
+/client/target/classes/ClassExamGrade.fxml

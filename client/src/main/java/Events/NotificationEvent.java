@@ -9,13 +9,12 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
-import java.util.List;
 
-public class notificationEvent {
+public class NotificationEvent {
     ExtraTime extraTime;
    // private List<Teacher>teacherList; TODO: check how to get the teacher who sent the request
-    public notificationEvent(){}
-    public notificationEvent(ExtraTime ex)
+    public NotificationEvent(){}
+    public NotificationEvent(ExtraTime ex)
     {
         extraTime=ex;
     }
