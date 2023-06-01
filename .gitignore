@@ -3,5 +3,6 @@
 *.class
 *.iml
 *.lst
-/client/target/classes/PrincipleMainScreen.fxml
-/client/target/classes/ClassExamGrade.fxml
+*/target/*
+*.txt
+server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml

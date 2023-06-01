@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ExamScreenController">
+   <children>
+      <SplitPane dividerPositions="0.75" layoutX="109.0" layoutY="136.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <BorderPane prefHeight="53.0" prefWidth="764.0">
+                           <left>
+                              <Label fx:id="title" text="Title" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </left>
+                           <right>
+                              <Label fx:id="timing" text="Timing" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </right>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </BorderPane>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label fx:id="question" text="Question" wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <RadioButton fx:id="option1" mnemonicParsing="false" text="RadioButton" wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="Options" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="option2" mnemonicParsing="false" text="RadioButton" toggleGroup="$Options" wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton fx:id="option3" mnemonicParsing="false" text="RadioButton" toggleGroup="$Options" wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton fx:id="option4" mnemonicParsing="false" text="RadioButton" toggleGroup="$Options" wrapText="true">
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </RadioButton>
+                        <Separator prefWidth="200.0">
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <BorderPane prefHeight="42.0" prefWidth="764.0">
+                           <right>
+                              <FlowPane alignment="CENTER_RIGHT" hgap="15.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button fx:id="nextButton" mnemonicParsing="false" onAction="#nextQuestion" text="Next Question">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <FlowPane.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                    <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submitExam" text="Submit Quiz">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <FlowPane.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <BorderPane.margin>
+                                    <Insets />
+                                 </BorderPane.margin>
+                              </FlowPane>
+                           </right>
+                        </BorderPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="766.0" prefWidth="653.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Quiz Progress" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <FlowPane fx:id="progressPain" hgap="10.0" layoutY="33.0" prefHeight="483.0" prefWidth="252.0" vgap="10.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </FlowPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
