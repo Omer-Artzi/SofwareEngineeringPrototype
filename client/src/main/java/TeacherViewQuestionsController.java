@@ -28,7 +28,7 @@ public class TeacherViewQuestionsController {
     private URL location;
 
     @FXML
-    private Button addQuestionsToExamButton;
+    private Button ContextualButton;
 
     @FXML
     private ChoiceBox<Course> coursePicker;
@@ -59,6 +59,14 @@ public class TeacherViewQuestionsController {
 
     private PreviewQuestionController previewController;
 
+    private ContextualState state = ContextualState.VIEW;
+
+    private enum ContextualState {
+        VIEW, CHOOSE
+    }
+
+    private Question selectedQuestion;
+
     @FXML
     void switchToPrimary(ActionEvent event) {
 
@@ -67,6 +75,11 @@ public class TeacherViewQuestionsController {
     @FXML
     void initialize() {
         System.out.println("Initializing TeacherViewQuestionsController");
+
+        // handle contextual state
+        state = ContextualState.VIEW;
+        ContextualButton.setText("Edit Question");
+        ContextualButton.setDisable(true);
 
         // subscribe to server
         EventBus.getDefault().register(this);
@@ -208,6 +221,8 @@ public class TeacherViewQuestionsController {
 
     @Subscribe
     private void UpdatePreview(Question selectedQuestion) {
+        this.selectedQuestion = selectedQuestion;
+        ContextualButton.setDisable(false);
         System.out.println("Updating preview");
         ChangePreviewEvent event = new ChangePreviewEvent();
         event.setQuestion(selectedQuestion);
@@ -218,14 +233,12 @@ public class TeacherViewQuestionsController {
     public void ChooseQuestions(ChooseQuestionsEvent event) {
         System.out.println("Choosing questions");
 
+        // change state
+        state = ContextualState.CHOOSE;
+
         // set subject and course
-        System.out.println(event.getCourse().getSubject().toString());
-        subjectPicker.getItems().clear();
-        subjectPicker.getItems().add(event.getCourse().getSubject());
-        subjectPicker.setValue(event.getCourse().getSubject());
-        subjectPicker.disableProperty().setValue(true);
-        coursePicker.setValue(event.getCourse());
-        coursePicker.disableProperty().setValue(true);
+        SetPickersCourse(event.getCourse());
+        DisablePickers();
 
         // add a checkbox column to the table
         TableColumn<Question, Boolean> checkBoxColumn = new TableColumn<>("Choose");
@@ -261,10 +274,12 @@ public class TeacherViewQuestionsController {
             chosenQuestions = new ArrayList<>();
         }
 
-        addQuestionsToExamButton.setVisible(true);
+        // handle contextual button
+        ContextualButton.textProperty().setValue("Add Questions to Exam");
+        ContextualButton.setVisible(true);
     }
 
-    void CheckboxPressed(Question question) {
+    private void CheckboxPressed(Question question) {
         if (chosenQuestions.contains(question)) {
             chosenQuestions.remove(question);
         } else {
@@ -273,8 +288,30 @@ public class TeacherViewQuestionsController {
     }
 
     @FXML
-    void addQuestionsToExamButtonPressed(ActionEvent event) {
-        System.out.println("Back button pressed");
+    private void ContextualButtonPressed(ActionEvent event) {
+        System.out.println("Contextual button pressed");
+        switch (state) {
+            case VIEW:
+                EditQuestionButtonPressed();
+                break;
+            case CHOOSE:
+                AddQuestionsButtonPressed();
+                break;
+        }
+    }
+
+    private void EditQuestionButtonPressed(){
+
+        try {
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherAddQuestion");
+            StartEditExistingQuestionEvent editQuestionEvent = new StartEditExistingQuestionEvent(selectedQuestion, coursePicker.getValue());
+            EventBus.getDefault().post(editQuestionEvent);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void AddQuestionsButtonPressed(){
         System.out.println("Chosen questions: " + chosenQuestions);
 
         try {
@@ -285,6 +322,26 @@ public class TeacherViewQuestionsController {
 
         SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions);
         EventBus.getDefault().post(chooseQuestionsEvent);
+    }
+
+    @Subscribe
+    public void ReturnFromEditQuestion(FinishEditExistingQuestionEvent event){
+        System.out.println("Returning from edit question");
+
+        SetPickersCourse(event.getCourse());
+    }
+
+    private void SetPickersCourse(Course course){
+        System.out.println(course.getSubject().toString());
+        subjectPicker.getItems().clear();
+        subjectPicker.getItems().add(course.getSubject());
+        subjectPicker.setValue(course.getSubject());
+        coursePicker.setValue(course);
+    }
+
+    private void DisablePickers() {
+        subjectPicker.disableProperty().setValue(true);
+        coursePicker.disableProperty().setValue(true);
     }
 
 }
