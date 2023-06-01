@@ -1,4 +1,5 @@
 Entities\ExamForm.class
+Entities\StudentExam.class
 Entities\Question.class
 Entities\Person.class
 Entities\Teacher.class
@@ -12,6 +13,7 @@ Entities\Gender.class
 Entities\SubjectWrapper.class
 Entities\School.class
 Entities\Message.class
+Entities\TerminationEvent.class
 Entities\ClassExam.class
 Entities\Exam.class
 Entities\ExtraTime.class

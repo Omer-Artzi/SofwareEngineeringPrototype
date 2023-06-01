@@ -6,10 +6,11 @@ Server\Events\TransmissionEvent.class
 Server\ocsf\ConnectionToClient.class
 Server\ocsf\AbstractConnectionFactory.class
 Server\SimpleServer.class
-Server\Events\TerminationEvent.class
 Server\ocsf\ObservableServer.class
 Server\ocsf\ObservableOriginatorServer.class
 Server\ocsf\AbstractServer.class
+Server\DataGenerator.class
+Server\OperationUtils.class
 Server\Events\ExtraTimeRequestEvent.class
 Server\ocsf\OriginatorMessage.class
 Server\SimpleChatServer.class

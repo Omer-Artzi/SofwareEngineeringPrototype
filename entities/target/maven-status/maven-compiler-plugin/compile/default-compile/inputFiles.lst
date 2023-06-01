@@ -5,6 +5,7 @@ C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\E
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExamForm.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Teacher.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Exam.java
+C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\TerminationEvent.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Student.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\ExtraTime.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Message.java
@@ -12,6 +13,7 @@ C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\E
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Question.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\ClassExam.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Gender.java
+C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\StudentExam.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\SubjectWrapper.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Transmission.java
 C:\Users\liada\IdeaProjects\SofwareEngineeringPrototype\entities\src\main\java\Entities\Course.java

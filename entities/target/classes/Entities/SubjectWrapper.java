@@ -15,7 +15,7 @@ public class SubjectWrapper {
 
     @Override
     public String toString() {
-        return "Entities.SubjectWrapper{" +
+        return "SubjectWrapper{" +
                 "subjects=" + subjects +
                 '}';
     }

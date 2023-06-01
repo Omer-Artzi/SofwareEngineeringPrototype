@@ -28,7 +28,7 @@ public class Grade implements Serializable,Comparable {
 
     @Override
     public String toString() {
-        return "Entities.Grade{" +
+        return "Grade{" +
                 "ID=" + ID +
                 ", grade=" + grade +
                 ", subject='" + subject + '\'' +

@@ -90,6 +90,18 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                        <Button fx:id="viewExamBT" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewExam" prefHeight="50.0" prefWidth="176.0" style="-fx-background-color: #669bbc;" text="view Exam" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/report.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
                   </VBox>
                </children>
@@ -120,6 +132,17 @@
          </top>
          <center>
             <Button fx:id="seeCurrentTestsBT" mnemonicParsing="false" onAction="#seeCurrentTests" text="See current tests" BorderPane.alignment="CENTER" />
+         </center>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="MainMessageLabel" alignment="TOP_CENTER" layoutX="74.0" layoutY="53.0" prefHeight="102.0" prefWidth="676.0" text="Hello World!">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
    </children>

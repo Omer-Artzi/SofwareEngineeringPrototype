@@ -1,11 +1,10 @@
-import Events.notificationEvent;
+import Events.NotificationEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.io.IOException;
 
 public class PrincipleMainScreenController {
@@ -38,13 +37,14 @@ public class PrincipleMainScreenController {
     private Button viewTestFormsButton;
 
     @Subscribe
-    public void notification(notificationEvent event) throws IOException {
+    public void notification(NotificationEvent event) throws IOException {
         if(event.IsFound(SimpleClient.getClient().getUser()))
             event.show();
     }
+
     @FXML
     void ExtraTimeRequest(ActionEvent event) throws IOException {
-        SimpleChatClient.setRoot("");
+        SimpleChatClient.setRoot("ListExtraTimeRequest");
     }
 
     @FXML

@@ -1,5 +1,4 @@
 package Events;
-
 import Entities.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -9,13 +8,11 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
-import java.util.List;
 
-public class notificationEvent {
+public class NotificationEvent {
     ExtraTime extraTime;
-   // private List<Teacher>teacherList; TODO: check how to get the teacher who sent the request
-    public notificationEvent(){}
-    public notificationEvent(ExtraTime ex)
+    public NotificationEvent(){}
+    public NotificationEvent(ExtraTime ex)
     {
         extraTime=ex;
     }
@@ -35,10 +32,10 @@ public class notificationEvent {
     {
        Notifications notification=Notifications.create();
        notification.title("New Request Time");
-      // notification.text("From"+ extraTime..getFullName());
-      notification.position(Pos.BOTTOM_LEFT);
-      notification.onAction(event -> openController());
-      notification.show();
+       notification.text("From: "+ extraTime.getTeacher().getFullName());
+       notification.position(Pos.BOTTOM_LEFT);
+       notification.onAction(event -> openController());
+       notification.show();
     }
 
     //** click on the notification will jump the principle to see more details about the request**//

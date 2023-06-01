@@ -1,27 +1,24 @@
-import Entities.Exam;
-import Entities.ExtraTime;
-import Entities.Message;
-import Entities.Principle;
+import Entities.*;
+import Events.NotificationEvent;
 import Events.PrinciplesMessageEvent;
-import Events.RunExamEvent;
+import Events.SelectedClassExamEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 //** A controller to fill details about the Request to Extra Time**//
 public class ExtraTimeRequestController {
-    private Exam exam;
-    private List<Principle>principles;
-    private List<Principle>selectedPrinciples;
+    private ClassExam exam;
+    private List<Principle>principles=new ArrayList<>();
+    private List<Principle>selectedPrinciples=new ArrayList<>();
     @FXML
     private VBox CBvBox;
     //private VBox checkBoxContainer;
@@ -31,42 +28,35 @@ public class ExtraTimeRequestController {
     private Button sendBT;
 
     //**get the principles list from the server**//
-    @Subscribe
-    public void updatePrinciples(PrinciplesMessageEvent event){
-        principles= event.getPrinciples();
-    }
+    //@Subscribe
+   // public void updatePrinciples(PrinciplesMessageEvent event){
+    //    principles= event.getPrinciples();
+    //}
 
     @Subscribe
-    public void updateExam(RunExamEvent event)
+    public void updateExam(SelectedClassExamEvent event)
     {
+        System.out.println("in @Subscribe");
+        principles=event.getPrinciple();
+        selectedPrinciples=new ArrayList<>();
+        for (int i = 0; i < principles.size(); i++) {
+            // Create a CheckBox dynamically
+            System.out.println("iteration number "+i);
+            Principle p=new Principle("liad","arvatz",Gender.Female,"liad","1234");
+            CheckBox checkBox1 = new CheckBox(principles.get(i).getFullName());
+            CBvBox.getChildren().add(checkBox1);
+            CheckBox checkBox = new CheckBox(principles.get(i).getFullName());
+            System.out.println("name: "+principles.get(i).getFullName());
+            CBvBox.getChildren().add(checkBox);
+        }
         exam=event.getExam();
     }
     @FXML
-    public void initialize() {
-        principles=new ArrayList<>();
-        selectedPrinciples=new ArrayList<>();
+    void initialize() {
+        EventBus.getDefault().register(this);
+        VBox CBvBox=new VBox();
         /*
-        Principle p1=new Principle();
-        Principle p2=new Principle();
-        Principle p3=new Principle();
-        Principle p4=new Principle();
-        Principle p5=new Principle();
-        p1.setFirstName("liad");
-        p1.setLastName("arvatz");
-        p2.setFirstName("noa");
-        p2.setLastName("arvatz");
-        p3.setFirstName("shmuel");
-        p3.setLastName("arvatz");
-        p4.setFirstName("omer");
-        p4.setLastName("artzi");
-        p5.setFirstName("ilan");
-        p5.setLastName("sapoznikov");
-        principles.add(p1);
-        principles.add(p2);
-        principles.add(p3);
-        principles.add(p4);
-        principles.add(p5);
-        */
+        selectedPrinciples=new ArrayList<>();
         for (int i = 0; i < principles.size(); i++) {
             // Create a CheckBox dynamically
             CheckBox checkBox = new CheckBox(principles.get(i).getFullName());
@@ -77,15 +67,21 @@ public class ExtraTimeRequestController {
                     selectedPrinciples.add(principles.get(finalI));
             });
         }
+        */
+       // checkBox.setOnAction(event1 -> {
+         //   if (checkBox.isSelected())
+         //       selectedPrinciples.add(principles.get(finalI));
+        //});
+
     }
 
+    /* Send a notification to the relevant Principles*/
     @FXML
     void sendExtraTimeRequest(ActionEvent event) throws IOException {
         String note=TeacherNoteTF.getText();
-        ExtraTime extraTime=new ExtraTime(exam,selectedPrinciples,note);
-        Message message = new Message(1,"Extra time request");
-        message.setData(extraTime);
-        SimpleClient.getClient().sendToServer(message);
-
+        Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
+        ExtraTime extraTime=new ExtraTime(exam,selectedPrinciples,teacher,note);
+        NotificationEvent NE=new NotificationEvent(extraTime);
+        EventBus.getDefault().post(NE);
     }
 }

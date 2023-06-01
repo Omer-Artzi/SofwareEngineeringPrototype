@@ -1,7 +1,7 @@
 public class Answer {
     private String answer;
     private String number;
-    public Answer(){}
+    public Answer(String answer){this.answer=answer;}
     public Answer(String number,String answer)
     {
         this.number=number;
