@@ -36,6 +36,13 @@ public class Teacher extends Person{
             course.AddTeacher(this);
         }
     }
+    public void addClassExam(ClassExam classExam)
+    {
+        if (!classExams.contains(classExam))
+        {
+            this.classExams.add(classExam);
+        }
+    }
     public List<ClassExam> getClassExam() {return classExams;}
 
     public void setClassExam(List<ClassExam> classExam) {

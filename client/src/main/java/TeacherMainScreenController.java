@@ -82,8 +82,8 @@ public class TeacherMainScreenController  {
     }
     @FXML
     void viewExam(ActionEvent event) throws IOException {
-        Message message = new Message(1, "Get Live Exams");
-        SimpleClient.getClient().sendToServer(message);
+       // Message message = new Message(1, "Get Live Exams");
+       // SimpleClient.getClient().sendToServer(message);
         SimpleChatClient.setRoot("viewLiveExams");
     }
 

@@ -45,10 +45,12 @@ public class LoginController {
 
     @FXML
     public void login(ActionEvent event) throws IOException {
+        System.out.println("login principle");
         checkLogin();
     }
 
     private void checkLogin() throws IOException {
+        System.out.println("checkLogin principle");
         String username = usernameTF.getText();
         String password = passwordTF.getText();
         if(!username.isEmpty() && !password.isEmpty() &&!username.isBlank() && !password.isBlank()) {
@@ -57,7 +59,9 @@ public class LoginController {
             user.add(username);
             user.add(password);
             credentials.setData(user);
+            System.out.println("checkLogin2 principle");
             SimpleClient.getClient().sendToServer(credentials);
+            System.out.println("checkLogin3 principle");
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
         }
         else if (usernameTF.getText().isEmpty() && passwordTF.getText().isEmpty()){
@@ -84,7 +88,6 @@ public class LoginController {
         {
             SimpleClient.getClient().setUser(event.getUser());
             SimpleChatClient.setRoot("TeacherMainScreen");
-
         }
         else {
             wrongLoginLabel.setText("E-mail address or password is wrong");

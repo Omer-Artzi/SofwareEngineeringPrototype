@@ -97,6 +97,7 @@ public class AddQuestionController {
         addQuestionButtom.setDisable(b);
     }
 
+    //TODO: let teacher select sum courses
     @FXML
     void initialize() throws IOException {             //initialize the page. update the data and the elements
         EventBus.getDefault().register(this);

@@ -1,5 +1,6 @@
 import Entities.*;
 
+import Events.NotificationEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,6 +44,8 @@ public class ApproveOfPrincipleController {
 
     @FXML
     void sendAnswer(ActionEvent event) {
+        String answer=PrincipleD.getText();
+       // NotificationEvent answerOfPrincipler=new NotificationEvent()
 
     }
 

@@ -43,7 +43,7 @@ public class StudentExam implements Serializable {
         this.student = student;
         this.student.AddStudentExam(this);
         this.classExam = classExam;
-        this.classExam.AddStudentExam(this);
+        // this.classExam.AddStudentExam(this);
         this.timeLeft = this.classExam.getExamForm().getExamTime();
         this.studentAnswers = studentAnswers;
         this.grade = grade;

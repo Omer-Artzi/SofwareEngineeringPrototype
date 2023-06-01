@@ -3,6 +3,7 @@ package Entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,8 @@ public class ClassExam implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    private String date;
+    private Date startDate;
+    private Date finalSubmissionDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Teacher")
@@ -25,22 +27,22 @@ public class ClassExam implements Serializable
 
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
-
     private int approvedExamsNum;
-
     private double gradesMean;
-
     private double gradesVariance;
 
+    private double examTime;
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, String date, Teacher tester)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester)
     {
-        this.date=date;
+        this.startDate=startDate;
+        this.finalSubmissionDate=finalSubmissionDate;
+        this.examTime = examTime;
         this.tester = tester;
         this.examForm = examForm;
-        tester.AddClassExam(this);
+        tester.addClassExam(this);
         this.approvedExamsNum=0;
         this.gradesMean=0;
         this.gradesVariance=0;
@@ -50,7 +52,7 @@ public class ClassExam implements Serializable
 
     public List<StudentExam> getStudentExams(){return studentExams;}
     public void setStudentExams(List<StudentExam> studentExams){this.studentExams=studentExams;}
-    public void AddStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
+    public void addStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
 
     public void UpdateStudentExam(StudentExam studentExam)
     {
@@ -58,14 +60,16 @@ public class ClassExam implements Serializable
         studentExams.set(studentExams.indexOf(studentExam), studentExam);
     }
 
-    public String getDate(){return date;}
-    public void setDate(String newDate){this.date=newDate;}
+    public Date getStartDate(){return startDate;}
+    public void setStartDate(Date newDate){this.startDate=newDate;}
+    public Date getFinalDate(){return finalSubmissionDate;}
+    public void setFinalDate(Date newDate){this.finalSubmissionDate=newDate;}
+
     public ExamForm getExamForm(){return examForm;}
     public void setExamForm(ExamForm examForm){this.examForm=examForm;}
 
     public Teacher getTeacher(){return tester;}
     public void setTeacher(Teacher tester){this.tester=tester;}
-
 
     public int getApprovedExamsNum(){return approvedExamsNum;}
     public void setApprovedExamsNum(int approvedExamsNum){this.approvedExamsNum=approvedExamsNum;}
@@ -75,5 +79,7 @@ public class ClassExam implements Serializable
 
     public double getGradesVariance(){return gradesVariance;}
     public void setGradesVariance(double gradesVariance){this.gradesVariance=gradesVariance;}
+    public double getExamTime(){return examTime;}
+    public void setExamTime(double examTime){this.examTime=examTime;}
 
 }

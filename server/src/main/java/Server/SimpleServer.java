@@ -49,9 +49,13 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(Subject.class);
 		configuration.addAnnotatedClass(Course.class);
 		configuration.addAnnotatedClass(Teacher.class);
+		configuration.addAnnotatedClass(Principle.class);
+		configuration.addAnnotatedClass(ExtraTime.class);
 		configuration.addAnnotatedClass(Question.class);
 		configuration.addAnnotatedClass(ExamForm.class);
-		configuration.addAnnotatedClass(Person.class);
+		configuration.addAnnotatedClass(ClassExam.class);
+		configuration.addAnnotatedClass(StudentExam.class);
+		configuration.addAnnotatedClass(Person.class); //TODO: add principle and ExtraTimeRequest
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -78,7 +82,7 @@ public class SimpleServer extends AbstractServer {
 			JOptionPane.showMessageDialog(null, "A connection to the database could not be formed, please check the MySQL Server is installed and running(Check Console for more info)", "Database Error", JOptionPane.WARNING_MESSAGE);
 		}
 	}
-
+/*
 	private void generateData() throws IOException {
 		generateStudents();
 		generateGrades();
@@ -276,7 +280,7 @@ public class SimpleServer extends AbstractServer {
 		}
 
 	}
-
+*/
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
 		Message message = new Message(1,"Server is closed");
@@ -285,10 +289,10 @@ public class SimpleServer extends AbstractServer {
 		session.close();
 		this.close();
 	}
-
+/*
 	//Generating grades and saving in the SQL server
 	private void generateGrades() {
-		List<Student> students = retrievetudents();
+		List<Student> students = retrieveStudents();
 		Faker faker = new Faker();
 		Random r = new Random();
 		for(Student student : students)
@@ -301,7 +305,7 @@ public class SimpleServer extends AbstractServer {
 		}
 		session.flush();
 	}
-
+*/
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Message message = (Message) msg;
@@ -323,11 +327,13 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 			}else if(request.startsWith("Login")){
+				System.out.println("server principle");
 				List<String> credentials = (List<String>)message.getData();
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
+					System.out.println("found principle");
 					response = "Success: User found";
 					message.setData(user);
 				}
@@ -336,6 +342,20 @@ public class SimpleServer extends AbstractServer {
 					response = "Fail: User not found";
 				}
 				message.setMessage(response);
+				client.sendToClient(message);
+			}else if(request.equals("Get ExtraTimeRequest data")){ //Added by Liad
+				response ="ExtraTimeRequest data";
+				message.setMessage(response);
+				List<Object>data=new ArrayList<>();
+				if(message.getData()==null)
+					System.out.println("the ClassExam is not exist");
+				data.add(message.getData());
+				if (getPrinciples().isEmpty())
+					System.out.println("getPrinciples returns empty list");
+				data.add(getPrinciples());
+
+				message.setData(data);
+				System.out.println("SelectedClassExamEvent in server");
 				client.sendToClient(message);
 			} else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
@@ -397,7 +417,7 @@ public class SimpleServer extends AbstractServer {
 			else if(request.startsWith("Get Students")){
 				response ="Students";
 				message.setMessage(response);
-				message.setData(retrievetudents());
+				message.setData(retrieveStudents());
 				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
@@ -574,6 +594,10 @@ public class SimpleServer extends AbstractServer {
 		CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
 		query.from(Principle.class);
 		List<Principle> principles = session.createQuery(query).getResultList();
+		if(principles.isEmpty()) {
+			Principle principle=new Principle("arvatz","liad",Gender.Female,"EMAIL","PASS");
+			principles.add(principle);
+		}
 		return principles;
 	}
 
@@ -617,7 +641,7 @@ public class SimpleServer extends AbstractServer {
 			session.flush();
 		}
 	}
-	public List<Student> retrievetudents()
+	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);
@@ -625,7 +649,22 @@ public class SimpleServer extends AbstractServer {
 		List<Student> students = session.createQuery(query).getResultList();
 		return students;
 	}
-
+	public static List<ExamForm> retrieveExamForm()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		query.from(ExamForm.class);
+		List<ExamForm> exams = session.createQuery(query).getResultList();
+		return exams;
+	}
+	public static List<Teacher> retrieveTeachers()
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+		query.from(Teacher.class);
+		List<Teacher> teachers = session.createQuery(query).getResultList();
+		return teachers;
+	}
 
 
 }

@@ -35,7 +35,21 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("Current Exams")) {
 			CurrentExamsEvent stMsg = new CurrentExamsEvent((List<Exam>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Principles")) {
+		}else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
+			System.out.println("SelectedClassExamEvent in client");
+			List<Object>data=(List<Object>) message.getData();
+			if (data.get(0)==null)
+				System.out.println("Empty exam in client");
+			if(((List<Principle>)data.get(1)).isEmpty())
+				System.out.println("Empty principles in client");
+			System.out.println("SelectedClassExamEvent in client2");
+			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
+				System.out.println("Somethings wrong with message");
+			SelectedClassExamEvent stMsg = new SelectedClassExamEvent((List<Object>) message.getData());
+			if(stMsg==null)
+				System.out.println("the event is null");
+			EventBus.getDefault().post(stMsg);
+		}  else if (message.getMessage().startsWith("Principles")) {
 			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principle>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Live Exams")) {
@@ -62,10 +76,10 @@ public class SimpleClient extends AbstractClient {
 		{
 			user.receiveExtraTime((ExtraTime)message.getData());
 		}
-		else if (message.getMessage().startsWith("Extra Time Requested")) {
+		//else if (message.getMessage().startsWith("Extra Time Requested")) {
 			//user.extraTimeRequest((ExtraTime)message.getData());
-			EventBus.getDefault().post(new notificationEvent((ExtraTime)message.getData()));
-		} else if(message.getMessage().startsWith("Exams in ")){
+		//	EventBus.getDefault().post(new notificationEvent((ExtraTime)message.getData()));
+		 else if(message.getMessage().startsWith("Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
 		}else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
@@ -80,6 +94,7 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
 		}
 		else if(message.getMessage().startsWith("Success: User")){
+			System.out.println("client principle");
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));

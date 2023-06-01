@@ -25,6 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DataGenerator {
     public static void generateData() throws IOException {
          List<Student> students = DataGenerator.generateStudents();
+        generatePrinciple();
         generateGrades(students);
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -150,6 +151,39 @@ public class DataGenerator {
         }
 
     }
+    /*Generate Exams by Liad*/ //TODO:complete generate class Exam , Principles, RequestExtraTime
+    private static void generateExams(List<ExamForm> ExamFormList){
+        if(ExamFormList != null) {
+            for(int  i = 0; i < 3; i++) {
+                ClassExam exam = new ClassExam();
+                exam.setExamForm(ExamFormList.get(1));
+                exam.setTeacher(ExamFormList.get(1).getCreator());
+                //exam.se
+                /*
+                List<Question> examQuestions =  examForm.getQuestionList();
+                Course examCourse = examQuestions.get(0).getCourse();
+                Subject examSubject = examCourse.getSubject();
+                //examForm.setQuestionList(examQuestions);
+                examForm.setSubject(examSubject);
+                examForm.setCourse(examCourse);
+                examForm.setCreator(examCourse.getTeacherList().get(0));
+                LocalDate localDate = LocalDate.now();
+                examForm.getCode();
+                // Convert LocalDate to Date
+                Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                examForm.setDateCreated(date);
+                examForm.setLastUsed(date);
+                */
+
+                SimpleServer.session.saveOrUpdate(exam);
+            }
+            SimpleServer.session.flush();
+        }
+        else {
+            System.out.println("No question Retrieved");
+        }
+    }
+
     private static void generateTeachers(List<Subject> subjects) {
         try {
             Teacher admin = new Teacher();
@@ -224,6 +258,46 @@ public class DataGenerator {
         }
 
     }
+/*Generate Principles, by Liad*/
+    private static void generatePrinciple() {
+        try {
+            Principle admin = new Principle();
+            String salt = BCrypt.gensalt();
+            admin.setEmail("p");
+            admin.setPassword(BCrypt.hashpw("1234", salt));
+            admin.setGender(Gender.Female);
+            admin.setFirstName("superUser");
+            admin.setLastName("Principle");
+            SimpleServer.session.saveOrUpdate(admin);
+            SimpleServer.session.flush();
+            Faker faker = new Faker();
+            Random random = new Random();
+            for (int i = 0; i < 5; i++) {
+                String PrincipleFirstName = faker.name().firstName();
+                String PrincipleLastName = faker.name().lastName();
+                String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
+                String password = BCrypt.hashpw(faker.internet().password(), salt);
+                Principle principle = new Principle(PrincipleFirstName, PrincipleLastName, Gender.Male, PrincipleEmail, password);
+                if(i == 0)
+                {
+                    principle.setEmail("p");
+                    principle.setPassword(BCrypt.hashpw("1234", salt));
+                    principle.setGender(Gender.Female);
+                    principle.setFirstName("superUser");
+                    principle.setLastName("Principle");
+                }
+                SimpleServer.session.saveOrUpdate(principle);
+            }
+            SimpleServer.session.flush();
+            //SimpleServer.session.saveOrUpdate(admin);
+            //SimpleServer.session.flush();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private static void generateGrades(List<Student> students) {
         Faker faker = new Faker();
         Random r = new Random();
@@ -277,9 +351,10 @@ public class DataGenerator {
                 LocalDate currentDate = LocalDate.now();
                 LocalDate randomDate = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
                 Date testDate = ConvertToDate(randomDate);
+                Date testDate1 = ConvertToDate(randomDate); ///////////
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                ClassExam classExam = new ClassExam(ExamForms.get(i), testDate.toString(), teacher);
-
+                //ClassExam classExam = new ClassExam(ExamForms.get(i), testDate.toString(), teacher);
+                ClassExam classExam = new ClassExam(ExamForms.get(i), testDate,testDate1,2, teacher);
                 teacher.AddCourse(ExamForms.get(i).getCourse());
                 SimpleServer.session.saveOrUpdate(teacher);
                 SimpleServer.session.flush();

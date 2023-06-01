@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TeacherMainScreenController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PrincipleMainScreenController">
     <children>
         <BorderPane layoutX="118.0" layoutY="79.0" prefHeight="268.0" prefWidth="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <left>
@@ -18,7 +18,7 @@
                     <children>
                         <VBox prefHeight="500.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="ExtraTimeRequestBT" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#ExtraTimeRequest" prefHeight="54.0" prefWidth="198.0" style="-fx-background-color: #669bbc;" text="Extra Time Request" textFill="WHITE">
+                                <Button fx:id="ExtraTimeRequestBT" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#ExtraTimeRequest" prefHeight="54.0" prefWidth="198.0" style="-fx-background-color: #669bbc;" text="Extra Time Requests" textFill="WHITE">
                                     <font>
                                         <Font name="System Bold" size="15.0" />
                                     </font>

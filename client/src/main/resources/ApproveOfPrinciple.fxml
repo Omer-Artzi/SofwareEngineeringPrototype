@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Principle.ApproveOfPrinciple">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ApproveOfPrincipleController">
    <children>
       <TextArea fx:id="PrincipleD" layoutX="174.0" layoutY="278.0" prefHeight="82.0" prefWidth="275.0" />
       <Label layoutX="174.0" layoutY="249.0" prefHeight="18.0" prefWidth="161.0" text="Principle Decision:">

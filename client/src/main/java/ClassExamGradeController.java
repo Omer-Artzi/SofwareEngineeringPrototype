@@ -2,13 +2,7 @@ import Entities.*;
 import Entities.Teacher;
 import Entities.ClassExam;
 import Events.ClassExamGradeEvent;
-import Events.MessageEvent;
 import Events.StudentExamEvent;
-import Events.SubjectMessageEvent;
-import Server.Events.ApiResponse;
-import Server.Events.ResponseQuestion;
-import com.github.javafaker.Faker;
-import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,32 +30,24 @@ import java.util.stream.Collectors;
 public class ClassExamGradeController {
     @FXML
     private TableView<StudentExam> ClassExamTv;
-
     @FXML
     private Button EditExamBtn;
-
     @FXML
     private TableColumn<StudentExam, String> GradeColumn;
-
     @FXML
     private TableColumn<StudentExam, String> IDColumn;
-
     @FXML
     private TableColumn<StudentExam, String> NameColumn;
-
     @FXML
     private TableColumn<StudentExam, String> StatusColumn;
-
     @FXML
     private Button ViewExamBtn;
-
     @FXML
     private ComboBox<String> SubjectCombo;
     @FXML
     private ComboBox<String> CourseCombo;
     @FXML
     private ComboBox<String> ExamIDCombo;
-
 
     List<Student> Students = new ArrayList<>();
     List<Question> Questions = new ArrayList<>();
