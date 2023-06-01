@@ -385,9 +385,14 @@ public class SimpleServer extends AbstractServer {
 	private List<Question> getQuestionsForCourse(Course course) {
 		System.out.println("getQuestionsForCourse in SimpleServer start");
 		CriteriaBuilder builder = session.getCriteriaBuilder();
+		System.out.println("getQuestionsForCourse in SimpleServer after builder");
 		CriteriaQuery<Question> query = builder.createQuery(Question.class);
+		System.out.println("getQuestionsForCourse in SimpleServer after query");
 		Root<Question> root = query.from(Question.class);
-		query.where(builder.equal(root.get("course"), course));
+		System.out.println("getQuestionsForCourse in SimpleServer after root");
+		//query.where(builder.equal(root.get("course"), course));
+		query.where(builder.isMember(course, root.get("courses")));
+		System.out.println("getQuestionsForCourse in SimpleServer after where");
 		List<Question> questions = session.createQuery(query).getResultList();
 		System.out.println("getQuestionsForCourse in SimpleServer end");
 		return questions;
