@@ -99,7 +99,6 @@ public class TeacherViewQuestionsController {
         // create a listener for the course picker
         coursePicker.setOnAction(e -> {
             try {
-                System.out.println("Requesting questions");
                 RequestQuestions();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

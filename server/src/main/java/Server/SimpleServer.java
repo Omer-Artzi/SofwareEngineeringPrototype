@@ -82,204 +82,6 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-	private void generateData() throws IOException {
-		generateStudents();
-		generateGrades();
-		School school = School.getInstance();
-		ObjectMapper objectMapper = new ObjectMapper();
-		SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
-		school.setSubjects(subjects.getSubjects());
-		try {
-			for (Subject subject : subjects.getSubjects()) {
-				session.saveOrUpdate(subject);
-				for (Course course : subject.getCourses()) {
-					course.setSubject(subject);
-					session.saveOrUpdate(course);
-				}
-				session.flush();
-			}
-			List<Subject> subjectList = subjects.getSubjects();
-			generateTeachers(subjectList);
-			generateQuestions(subjectList);
-			session.getTransaction().commit();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
-	private void generateQuestions(List<Subject> subjectList) {
-		int questionAmount = 30;
-		String[] requests = {
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=17&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=23&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=20&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=26&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=19&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
-				"https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
-		Random random = new Random();
-		int randCourse;
-		for (int i = 0; i < requests.length;i++) {
-		try {
-
-				// Create URL object and open connection
-				URL url = new URL(requests[i]);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-				// Set request method
-				connection.setRequestMethod("GET");
-
-				// Get response code
-				int responseCode = connection.getResponseCode();
-				if (responseCode == HttpURLConnection.HTTP_OK) {
-					// Read response
-					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					StringBuilder response = new StringBuilder();
-					String line;
-					while ((line = reader.readLine()) != null) {
-						response.append(line);
-					}
-					reader.close();
-
-					// Process JSON response
-					String jsonResponse = response.toString();
-
-					// Parse JSON response
-					Gson gson = new Gson();
-					ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
-					List<ResponseQuestion> questions = apiResponse.getResults();
-				List<Question> questionsList = new ArrayList<>();
-					for(ResponseQuestion responseQuestion: questions)
-					{
-						Question question = new Question();
-						responseQuestion.convert(question);
-						question.setCourse(subjectList.get(i).getCourses().get(0));
-						questionsList.add(question);
-						session.save(question);
-						session.flush();
-					}
-					//System.out.println(questions);
-					generateTestForms(questionsList);
-
-
-				} else {
-					System.out.println("Error: " + responseCode);
-				}
-
-				// Close the connection
-				connection.disconnect();
-
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-
-		}
-	}
-
-	private void generateTestForms(List<Question> questionsList) {
-		if(questionsList != null) {
-			for(int  i = 0; i < 3; i++) {
-				ExamForm examForm = new ExamForm();
-				for(int  j = 0; j < 10;j++) {
-					examForm.addQuestion(questionsList.get((i * 10) + j));
-				}
-				List<Question> examQuestions =  examForm.getQuestionList();
-				Course examCourse = examQuestions.get(0).getCourse();
-				Subject examSubject = examCourse.getSubject();
-				examForm.setQuestionList(examQuestions);
-				examForm.setSubject(examSubject);
-				examForm.setCourse(examCourse);
-				examForm.setCreator(examCourse.getTeacherList().get(0));
-				LocalDate localDate = LocalDate.now();
-				examForm.getCode();
-				// Convert LocalDate to Date
-				Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-				examForm.setDateCreated(date);
-				examForm.setLastUsed(date);
-				session.saveOrUpdate(examForm);
-			}
-			session.flush();
-		}
-		else {
-			System.out.println("No question Retrieved");
-		}
-
-	}
-
-	private void generateTeachers(List<Subject> subjects) {
-		try {
-			Teacher admin = new Teacher();
-			String salt = BCrypt.gensalt();
-			admin.setEmail("admin");
-			admin.setPassword(BCrypt.hashpw("1234", salt));
-			//admin.setSubjectList(new ArrayList<>());
-			//admin.setCourseList(new ArrayList<>());
-			admin.setGender(Gender.Female);
-			admin.setFirstName("super");
-			admin.setLastName("user");
-			session.saveOrUpdate(admin);
-			session.flush();
-			HashSet<Subject> tempSubjects = new HashSet<Subject>();
-			HashSet<Course> tempCourses = new HashSet<Course>();
-			Faker faker = new Faker();
-			Random random = new Random();
-			int randomSubject, randomCourse;
-			for (int i = 0; i < 50; i++) {
-				String teacherFirstName = faker.name().firstName();
-				String teacherLastName = faker.name().lastName();
-				String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
-				String password = BCrypt.hashpw(faker.internet().password(), salt);
-				List<Course> coursesList = new ArrayList<>();
-				List<Subject> subjectsList = new ArrayList<>();
-				for (int j = 0; j < 5; j++) {
-					randomSubject = random.nextInt(subjects.size());
-					Subject subject = subjects.get(randomSubject);
-					subjectsList.add(subject);
-					for (int k = 0; k < 5; k++) {
-						randomCourse = random.nextInt(subject.getCourses().size());
-						coursesList.add(subject.getCourses().get(randomCourse));
-					}
-				}
-				Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
-				for (Course course : coursesList) {
-					course.getTeachers().add(teacher);
-					if(!(tempCourses.contains(course))){
-						tempCourses.add(course);
-						course.getTeachers().add(admin);
-					}
-				}
-				for (Subject subject : subjectsList) {
-					subject.getTeachers().add(teacher);
-					if(!(tempSubjects.contains(subject))){
-						tempSubjects.add(subject);
-						subject.getTeachers().add(admin);
-					}
-				}
-				session.saveOrUpdate(teacher);
-			}
-			session.flush();
-			List<Course> allCourses = new ArrayList<>();
-			List<Subject> allSubjects = new ArrayList<>();
-			allSubjects.addAll(tempSubjects);
-			allCourses.addAll(tempCourses);
-			admin.setSubjectList(allSubjects);
-			admin.setCourseList(allCourses);
-			session.saveOrUpdate(admin);
-			session.flush();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}
-
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
 		System.out.println("Server is closed");
@@ -333,6 +135,7 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 			}else if(request.startsWith("Login")){
+				System.out.println("Login request received");
 				List<String> credentials = (List<String>)message.getData();
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
@@ -399,6 +202,7 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}else if(request.startsWith("Get Questions for Course")){
 				response ="Questions in Course " + ((Course)(message.getData())).getName();
+				System.out.println(response);
 				message.setMessage(response);
 				message.setData(getQuestionsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
@@ -579,11 +383,13 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	private List<Question> getQuestionsForCourse(Course course) {
+		System.out.println("getQuestionsForCourse in SimpleServer start");
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Question> query = builder.createQuery(Question.class);
 		Root<Question> root = query.from(Question.class);
 		query.where(builder.equal(root.get("course"), course));
 		List<Question> questions = session.createQuery(query).getResultList();
+		System.out.println("getQuestionsForCourse in SimpleServer end");
 		return questions;
 	}
 

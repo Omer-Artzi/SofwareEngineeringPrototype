@@ -126,17 +126,10 @@ public class Course implements Serializable, Comparable<Course> {
         return this.code;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
     public void setCode(String code) {
         this.code = code;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
     @Override
     public int compareTo(Course o) {
         return this.getName().compareTo(o.getName());
