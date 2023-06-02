@@ -7,36 +7,27 @@ import Entities.Subject;
 import java.util.List;
 
 public class SendChosenQuestionsEvent {
-    private List<Question> questions;
-    private Subject subject;
-    private Course course;
+    List<Question> questions;
 
+    Subject subject;
 
-    public SendChosenQuestionsEvent(List<Question> questions, Subject selectedSubject, Course selectedCourse) {
+    Course course;
+
+    public SendChosenQuestionsEvent(List<Question> questions, Subject subject, Course course) {
         this.questions = questions;
+        this.subject = subject;
+        this.course = course;
     }
 
     public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
     public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
     public Course getCourse() {
         return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
     }
 }

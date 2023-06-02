@@ -19,6 +19,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
+
+import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import Entities.Principle;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -37,6 +40,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
+
+import static javax.management.Query.or;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -364,6 +369,7 @@ public class SimpleServer extends AbstractServer {
 
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
+
 		try {
 			CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
 			Root<Teacher> root = query.from(Teacher.class);
@@ -373,11 +379,27 @@ public class SimpleServer extends AbstractServer {
 		}
 		catch (Exception e)
 		{
-			CriteriaQuery<Student> query = builder.createQuery(Student.class);
-			Root<Student> root = query.from(Student.class);
-			query.where(builder.equal(root.get("email"), email));
-			Person user = session.createQuery(query).getSingleResult();
-			return user;
+			try{
+				CriteriaQuery<Student> query = builder.createQuery(Student.class);
+				Root<Student> root = query.from(Student.class);
+				query.where(builder.equal(root.get("email"), email));
+				Person user = session.createQuery(query).getSingleResult();
+				return user;
+			} catch (Exception e2)
+			{
+				try{
+					CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
+					Root<Principle> root = query.from(Principle.class);
+					query.where(builder.equal(root.get("email"), email));
+					Person user = session.createQuery(query).getSingleResult();
+					return user;
+				} catch (Exception e3)
+				{
+					System.out.println("User not found");
+					return null;
+				}
+			}
+
 		}
 
 	}
