@@ -28,10 +28,12 @@ Events\StudentExamEvent.class
 SimpleChatClient$1.class
 Events\SubjectMessageEvent.class
 Events\ClassExamGradeEvent.class
+Events\RefreshPerson.class
 ExamScreenController$1$1.class
 StudentMainScreenController.class
 Events\SubjectsOfTeacherMessageEvent.class
 LoginController.class
+ShowStatisticsController.class
 ocsf\AdaptableClient.class
 ExamScreenController.class
 Events\GradeMessageEvent.class

@@ -71,11 +71,14 @@ public class SimpleClient extends AbstractClient {
 		}
 		else if (message.getMessage().startsWith("Success: StudentExam Approved"))
 		{
-			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+			RefreshPerson event = new RefreshPerson("Success", (Person)message.getData());
+			EventBus.getDefault().post(event);
 		}
 		else if (message.getMessage().startsWith("Failure: Failed to save StudentExam"))
 		{
-			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
+			RefreshPerson event = new RefreshPerson("Failure", null);
+			EventBus.getDefault().post(event);
+			//EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
 		}
 		else if(message.getMessage().startsWith("Success: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));

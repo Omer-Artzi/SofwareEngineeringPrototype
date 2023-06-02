@@ -1,6 +1,7 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
+import Events.RefreshPerson;
 import Events.StudentExamEvent;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -197,13 +198,14 @@ public class StudentExamGradeController
     }
 
     @Subscribe
-    public void ExamApproved(GeneralEvent event) throws IOException, InterruptedException {
+    public void ExamApproved(RefreshPerson event) throws IOException, InterruptedException {
         Platform.runLater(() -> {
-        Message msg = event.getMessage();
-        if (msg.getMessage().startsWith("Success"))
+        String msg = event.getMessage();
+        if (msg.startsWith("Success"))
         {
             try
             {
+                SimpleClient.getClient().setUser(event.getPerson());
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES);
                 alert.setTitle("Student grading saved");
                 alert.setHeaderText("CONFIRMATION: Approved");
@@ -222,7 +224,7 @@ public class StudentExamGradeController
                 throw new RuntimeException(e);
             }
         }
-        else if (msg.getMessage().startsWith("Failure"))
+        else if (msg.startsWith("Failure"))
         {
             solvedExam.setStatus(StudentExam.statusEnum.ToEvaluate);
             Alert alert = new Alert(Alert.AlertType.ERROR);
