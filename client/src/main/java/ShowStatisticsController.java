@@ -46,13 +46,14 @@ public class ShowStatisticsController {
     @FXML
     private TableColumn<ClassExam, String> TesterCol;
 
+    @FXML
+    private TableColumn<ClassExam, String> HistogramCol;
+
     Teacher clientTeacher;
 
     @Subscribe
     public void stub(ClassExamGradeEvent event) {
     }
-
-
 
     private String FormatDate(Date date)
     {
@@ -76,12 +77,22 @@ public class ShowStatisticsController {
 
         // Iterate through the grade buckets (0 to 100 with a range of 10)
         for (int i = 0; i <= 100; i += 10) {
-            int bucketStart = i;
+            final int bucketStart = i;
             int bucketEnd = i + 10;
             //grades.removeIf(grade-> grade <= (i+1)*10);
             // Create a data point for the bucket
+
+            int bucketSize = grades.stream().filter(grade ->
+            {
+                if (grade <= bucketStart);
+                {
+                    grades.remove(grade);
+                    return true;
+                }
+            }).collect(Collectors.toList()).size();
+
             XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(
-                    bucketStart + "-" + bucketEnd, 0);
+                    bucketStart + "-" + bucketEnd, bucketSize);
 
             // Add the data point to the series
             series.getData().add(dataPoint);
