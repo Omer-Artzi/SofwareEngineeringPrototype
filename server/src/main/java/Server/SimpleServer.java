@@ -315,6 +315,7 @@ public class SimpleServer extends AbstractServer {
 					session.flush();
 					response = ("Success: StudentExam Approved");
 					message.setMessage(response);
+					message.setData(exam.getTeacher());
 					client.sendToClient(message);
 					System.out.println(response);
 

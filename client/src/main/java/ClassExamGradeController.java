@@ -107,6 +107,7 @@ public class ClassExamGradeController {
                 .collect(Collectors.toList());
         if (selectedExams.isEmpty())
             return;
+        // The list consist of only one exam
         chosenExam = selectedExams.get(0);
 
         // Assign the table data sources
@@ -119,8 +120,6 @@ public class ClassExamGradeController {
         StatusColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().TranslateStatus()));
         ClassExamTv.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        StatusColumn.setComparator(StatusColumn.getComparator().reversed());
-        ClassExamTv.getSortOrder().add(StatusColumn);
         // Loading the data to the table
         if(chosenExam != null)
         {
@@ -223,6 +222,15 @@ public class ClassExamGradeController {
         {
             SubjectCombo.getItems().add(teacherSubjects.get(i).getName());
         }
+
+        // Initialize sort mechanic
+        StatusColumn.setComparator(StatusColumn.getComparator().reversed());
+        ClassExamTv.getSortOrder().add(StatusColumn);
+
+        StatusColumn.setStyle( "-fx-alignment: CENTER;");
+        ExamIDCombo.setStyle( "-fx-alignment: CENTER;");
+        GradeColumn.setStyle( "-fx-alignment: CENTER;");
+        NameColumn.setStyle( "-fx-alignment: CENTER;");
 
     }
 

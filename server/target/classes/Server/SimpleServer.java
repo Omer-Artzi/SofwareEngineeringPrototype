@@ -35,6 +35,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -315,6 +317,7 @@ public class SimpleServer extends AbstractServer {
 					session.flush();
 					response = ("Success: StudentExam Approved");
 					message.setMessage(response);
+					message.setData(exam.getTeacher());
 					client.sendToClient(message);
 					System.out.println(response);
 

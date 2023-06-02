@@ -131,6 +131,7 @@ public class DataGenerator {
     }
     private static void generateTestForms(List<Question> questionsList) {
         if(questionsList != null) {
+            Teacher teacher = SimpleServer.retrieveTeachers().get(0);
             for(int  i = 0; i < 3; i++) {
                 ExamForm examForm = new ExamForm();
                 for(int  j = 0; j < 10;j++) {
@@ -142,7 +143,8 @@ public class DataGenerator {
                 Subject examSubject = examCourse.getSubject();
                 examForm.setSubject(examSubject);
                 examForm.setCourse(examCourse);
-                examForm.setCreator(examCourse.getTeachers().get(0));
+                examForm.setCreator(teacher);
+                teacher.addExamForm(examForm);
                 //LocalDate localDate = LocalDate.now();
                 examForm.getCode();
                 // Convert LocalDate to Date
@@ -305,8 +307,9 @@ public class DataGenerator {
                 // set last used on creation date
                 ExamForms.get(i).setLastUsed(ConvertToDate(LocalDateTime.now()));
 
-                // compel the teacher to have the course if she not already have it
+                // compel the teacher to have the course if she not already has it
                 teacher.addCourse(ExamForms.get(i).getCourse());
+                ExamForms.get(i).addClassExam(classExam);
                 SimpleServer.session.saveOrUpdate(teacher);
                 SimpleServer.session.flush();
 

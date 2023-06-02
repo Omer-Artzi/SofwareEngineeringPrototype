@@ -47,7 +47,7 @@ public class TeacherSidebarController {
 
     @FXML
     void gradeExam(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("GradeExams");
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ClassExamGrade");
     }
 
 
