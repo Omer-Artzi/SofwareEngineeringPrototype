@@ -242,10 +242,6 @@ public class TeacherViewQuestionsController {
         }
     }
 
-    @FXML
-    void switchToPrimary(ActionEvent event) {
-    }
-
 // send requests to the server
 
     // sends a server requests for the Subjects of the logged in teacher
