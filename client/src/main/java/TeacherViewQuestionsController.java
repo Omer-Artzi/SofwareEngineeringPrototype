@@ -59,6 +59,9 @@ public class TeacherViewQuestionsController {
 
     private PreviewQuestionController previewController;
 
+    private Subject selectedSubject; // for ChooseQuestionsEvent & SendChosenQuestionsEvent
+    private Course selectedCourse; // for ChooseQuestionsEvent & SendChosenQuestionsEvent
+
     @FXML
     void switchToPrimary(ActionEvent event) {
 
@@ -226,6 +229,8 @@ public class TeacherViewQuestionsController {
         subjectPicker.disableProperty().setValue(true);
         coursePicker.setValue(event.getCourse());
         coursePicker.disableProperty().setValue(true);
+        selectedCourse = event.getCourse();
+        selectedSubject = event.getSubject();
 
         // add a checkbox column to the table
         TableColumn<Question, Boolean> checkBoxColumn = new TableColumn<>("Choose");
@@ -283,7 +288,7 @@ public class TeacherViewQuestionsController {
             throw new RuntimeException(e);
         }
 
-        SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions);
+        SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions, selectedSubject, selectedCourse);
         EventBus.getDefault().post(chooseQuestionsEvent);
     }
 
