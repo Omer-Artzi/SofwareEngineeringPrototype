@@ -1,5 +1,6 @@
 import Entities.Message;
 import Events.MessageEvent;
+import Entities.TerminationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -22,9 +23,12 @@ public class SimpleChatClient extends Application {
 
     private static Scene scene;
     private static Stage clientStage;
+    private static FXMLLoader fxmlLoader;
     private SimpleClient client;
 
-    public static final double version = 1.3;
+    private static MainWindowController mainWindowController;
+
+    public static final double version = 1.7;
 
 
 
@@ -33,19 +37,20 @@ public class SimpleChatClient extends Application {
         try {
             clientStage = stage;
             EventBus.getDefault().register(this);
-            scene = new Scene(loadFXML("PreLogIn"), 399, 217);
+            scene = new Scene(loadFXML("PreLogIn"));
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
-                    Platform.exit();
+
                     try {
-                        SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
+                        if (SimpleClient.getClient().isConnected())
+                            SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
+                    Platform.exit();
                 }
             });
             stage.show();
@@ -58,30 +63,21 @@ public class SimpleChatClient extends Application {
 
 
     public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        mainWindowController.LoadSceneToMainWindow(fxml);
     }
-    public static void setScene(String fxml,int height, int width) throws IOException {
-        Platform.runLater(()->{
-            try {
-                scene = new Scene(loadFXML(fxml), height, width);
-                clientStage.setScene(scene);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
-        });
-
+    public static void NewSetRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatClient.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        return FXMLLoader.load(SimpleChatClient.class.getResource(fxml + ".fxml"));
     }
 
     @Override
 	public void stop() throws Exception {
             Message message = new Message(1, "Client Closed");
-            SimpleClient.getClient().sendToServer(message);
+            client.sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
             System.exit(0);
@@ -127,5 +123,13 @@ public class SimpleChatClient extends Application {
 
     public static Stage getClientStage() {
         return clientStage;
+    }
+
+    public static void setMainWindowController(MainWindowController newMainWindowController) {
+        mainWindowController = newMainWindowController;
+    }
+
+    public static MainWindowController getMainWindowController() {
+        return mainWindowController;
     }
 }

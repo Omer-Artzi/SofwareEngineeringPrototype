@@ -8,11 +8,14 @@ import java.io.Serializable;
 @Table(name = "Entities.Person")
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Person implements Serializable{
+
     @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
+
     private String firstName;
     private String lastName;
     private Gender gender;
@@ -21,7 +24,7 @@ public abstract class Person implements Serializable{
 
     public Person(){}
 
-    public Person(String firstName, String lastName, Gender gender, String email, String password) {
+    public Person(String firstName, String lastName, Gender gender, String email, String password)  {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;

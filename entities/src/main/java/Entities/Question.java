@@ -5,35 +5,42 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
-@Table(name="questions")
+@Table(name="Questions")
 public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    @ManyToOne
-    @JoinColumn(name = "courseID")
-    private Course course;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+    joinColumns = @JoinColumn(name = "QuestionID"),
+    inverseJoinColumns = @JoinColumn(name ="CourseID"))
+    private List<Course> courses = new ArrayList<>();
+
+    // The question problem text
     private String questionData;
     @ElementCollection
-    private List<String> incorrectAnswers;
+    private List<String> answers;
     private String correctAnswer;
     private String teacherNote;
     private String studentNote;
-    private String code;
     @ManyToMany
     @JoinTable(
-            joinColumns = @JoinColumn(name ="Question_ID" ),
-            inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
+            joinColumns = @JoinColumn(name ="QuestionID" ),
+            inverseJoinColumns = @JoinColumn(name = "ExamFormID"))
     private List<ExamForm> examForms = new ArrayList<>();
 
-    @ManyToOne
-    private Subject subject;
-public Question(){}
-    public Question(Course course, String questionData,List<String>Answer, String correctAnswer,String teacherNote,String studentNote)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SubjectID")
+    private Subject subject = null;
+
+    public Question(){}
+
+    public Question(List<Course> courses, String questionData,List<String>answers, String correctAnswer,String teacherNote,String studentNote)
     {
-        this.course=course;
+        this.courses=courses;
         this.questionData=questionData;
-        this.incorrectAnswers =Answer;
+        this.answers=answers;
         this.correctAnswer=correctAnswer;
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
@@ -46,12 +53,41 @@ public Question(){}
         this.studentNote = studentNote;
     }
 
-    public Course getCourse(){return course;}
-    public void setCourse(Course newCourse){this.course=newCourse;}
+    public List<Course> getCourses(){return courses;}
+    public void setCourses(List<Course> courses)
+    {
+        if (this.courses != courses)
+            this.courses = new ArrayList<>(courses);
+    }
+    public void addSetCourse(Course course)
+    {
+        if(!this.courses.contains(course))
+            courses.add(course);
+    }
+
+    public Subject getSubject(){return subject;}
+    public void setSubject(Subject subject)
+    {
+        if (this.subject != subject)
+            this.subject = subject;
+    }
+
+    public List<ExamForm> getExamForm(){return examForms;}
+    public void setExamForm(List<ExamForm> examForms)
+    {
+        this.examForms = new ArrayList<>(examForms);
+    }
+    public void addExamForm(ExamForm examForm)
+    {
+        if(!this.examForms.contains(examForm))
+            examForms.add(examForm);
+    }
+
+
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
-    public List<String> getIncorrectAnswers(){return incorrectAnswers;}
-    public void setIncorrectAnswers(List<String> newAnswers){this.incorrectAnswers =newAnswers;}
+    public List<String> getAnswers(){return answers;}
+    public void setAnswers(List<String> newAnswers){this.answers=newAnswers;}
     public String getCorrectAnswer(){return correctAnswer;}
     public void setCorrectAnswer(String  correctAnswer){this.correctAnswer=correctAnswer;}
     public  String getTeacherNote(){return teacherNote;}
@@ -59,27 +95,7 @@ public Question(){}
     public String getStudentNote(){return studentNote;}
     public void setStudentNote(String newNote){this.studentNote=newNote;}
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public List<ExamForm> getExamForms() {
-        return examForms;
-    }
-
-    public void setExamForms(List<ExamForm> examForms) {
-        this.examForms = examForms;
-    }
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public int getID() {
+        return ID;
     }
 }

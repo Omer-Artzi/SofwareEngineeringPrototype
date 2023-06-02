@@ -172,6 +172,7 @@ public abstract class AbstractClient implements Runnable
     }
     output.reset();
     output.writeObject(msg);
+    System.out.println("Client: Message sent to the server : "+msg);
   }
 
 

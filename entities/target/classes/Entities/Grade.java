@@ -12,7 +12,7 @@ public class Grade implements Serializable,Comparable {
     private int grade;
     private String subject;
     private String course;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studentID")
     private Student student;
 

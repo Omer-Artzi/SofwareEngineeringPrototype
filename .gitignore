@@ -8,3 +8,6 @@ entities/target/classes/Entities/
 /client/target/
 /server/target/
 /server/target/classes/
+*/target/*
+*.txt
+server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml

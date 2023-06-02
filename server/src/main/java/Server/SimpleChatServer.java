@@ -25,6 +25,7 @@ public class SimpleChatServer extends Application
         catch (IOException e)
         {
             e.printStackTrace();
+            System.exit(1);
         }
         FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatServer.class.getResource("Primary.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 785, 390);

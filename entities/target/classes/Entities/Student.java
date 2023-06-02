@@ -20,9 +20,19 @@ public class Student extends Person implements Serializable, Comparable<Student>
     @ManyToMany(mappedBy = "students")
     private List<ClassExam> classExams = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "students")
+    private List<Course> courses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentExam> studentExams = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "students")
+    private List<ClassExam> classExams = new ArrayList<>();
+
     public Student() {}
 
-    public Student( String firstName, String lastName, Gender gender, String email, String password) {
+    public Student(String firstName, String lastName, Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
 
@@ -37,7 +47,39 @@ public class Student extends Person implements Serializable, Comparable<Student>
     public void setGrades(List<Grade> grades) {
         this.grades = grades;
     }
+    public void addGrade(Grade grade){grades.add(grade);}
+    public List<Course> getCourse() {
+        return courses;
+    }
 
+    public void setCourse(List<Course> courses) {
+        this.courses = courses;
+    }
+    public void addCourse(Course course)
+    {
+        if(!courses.contains(course))
+            courses.add(course);
+    }
+
+    public List<StudentExam> getStudentExam() {
+        return studentExams;
+    }
+
+    public void setStudentExam(List<StudentExam> studentExams) {
+        this.studentExams = studentExams;
+    }
+
+    public void addStudentExam(StudentExam studentExam){studentExams.add(studentExam);}
+
+    public List<ClassExam> getClassExams() {
+        return classExams;
+    }
+
+    public void setClassExams(List<ClassExam> classExams) {
+        this.classExams = new ArrayList<>(classExams);
+    }
+
+    public void addClassExam(ClassExam classExam){classExams.add(classExam);}
 
     @Override
     public String toString() {

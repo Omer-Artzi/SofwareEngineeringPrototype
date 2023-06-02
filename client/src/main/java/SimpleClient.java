@@ -11,7 +11,6 @@ import java.util.List;
 
 public class SimpleClient extends AbstractClient {
 	private static Person user;
-
 	private static SimpleClient client = null;
 	private static  String IP;
 	private static int port;
@@ -28,6 +27,9 @@ public class SimpleClient extends AbstractClient {
 		if (message.getMessage().startsWith("Students")) {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
@@ -58,10 +60,24 @@ public class SimpleClient extends AbstractClient {
 
 		} else if(message.getMessage().startsWith("Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
-		}else if (message.getMessage().equals("Error! we got an empty message")) {
+		}
+		else if(message.getMessage().startsWith("Success: new ExamForm")){
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+		}
+
+		else if (message.getMessage().equals("Error! we got an empty message")) {
 			EventBus.getDefault().post(new ErrorEvent(message));
 		} else if (message.getMessage().startsWith("Grade Saved")) {
-		}else if(message.getMessage().startsWith("Success: User")){
+		}
+		else if (message.getMessage().startsWith("Success: StudentExam Approved"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+		}
+		else if (message.getMessage().startsWith("Failure: Failed to save StudentExam"))
+		{
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
+		}
+		else if(message.getMessage().startsWith("Success: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
@@ -72,7 +88,14 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().equals("Server is closed")) {
 			String warning = "further updates cannot be made until connection is re-established";
 			JOptionPane.showMessageDialog(null, warning, "Error: The Server Was Closed ", JOptionPane.WARNING_MESSAGE);
-		} else {
+		}
+		else if(message.getMessage().startsWith("Questions in Course")) // Added by Ilan 30.5
+		{
+			CourseQuestionsListEvent stMsg = new CourseQuestionsListEvent((List<Question>) message.getData());
+			// System.out.println("Check");
+			EventBus.getDefault().post(stMsg);
+		}
+		else {
 			EventBus.getDefault().post(new MessageEvent(message));
 		}
 	}
@@ -106,7 +129,7 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 640, 480));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
 		}
 		catch (Exception e)
@@ -120,12 +143,11 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.port = port;
 	}
 
-	public static void setUser(Person otherUser) {
-		user = otherUser;
+	public void setUser(Person user) {
+		this.user = user;
 	}
 
 	public static Person getUser() {
 		return user;
 	}
-
 }

@@ -81,7 +81,8 @@ public class ResponseQuestion {
     }
     public void convert(Question question)
     {
-        question.setIncorrectAnswers(incorrect_answers);
+        incorrect_answers.add(correct_answer);
+        question.setAnswers(incorrect_answers);
         question.setQuestionData(getQuestion());
         question.setCorrectAnswer(correct_answer);
     }
