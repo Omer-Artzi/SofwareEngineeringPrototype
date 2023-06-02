@@ -115,7 +115,8 @@ public class TeacherViewQuestionsController {
     private void HandleChooseState(){
         state = ContextualState.CHOOSE;
         ContextualButton.textProperty().setValue("Add Questions to Exam");
-        //ContextualButton.setVisible(true);
+        ContextualButton.setVisible(true);
+        ContextualButton.setDisable(false);
     }
 
     private void PopulateSubjects() {
@@ -239,10 +240,6 @@ public class TeacherViewQuestionsController {
                 AddQuestionsButtonPressed();
                 break;
         }
-    }
-
-    @FXML
-    void switchToPrimary(ActionEvent event) {
     }
 
 // send requests to the server
