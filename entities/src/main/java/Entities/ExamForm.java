@@ -35,10 +35,14 @@ public class ExamForm implements Serializable {
     private List<Integer> questionsScores = new ArrayList<>();
 
     private String code;
+    private String headerText;
+    private String footerText;
+    private String examNotesForTeacher;
+    private String examNotesForStudent;
     private Date dateCreated;
     private Date lastUsed;
 
-    private double examTime;
+    private double examTime; // unnecessary - we need this in classExam
 
 
     public ExamForm(){}
@@ -47,6 +51,19 @@ public class ExamForm implements Serializable {
         this.creator =teacher;
         this.subject=subject;
         this.questionList=questionList;
+    }
+
+    public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList, List<Integer> questionsScores, Date dateCreated, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent) {
+        this.course = course;
+        this.creator = creator;
+        this.subject = subject;
+        this.questionList = questionList;
+        this.questionsScores = questionsScores;
+        this.dateCreated = dateCreated;
+        this.headerText = headerText;
+        this.footerText = footerText;
+        this.examNotesForTeacher = examNotesForTeacher;
+        this.examNotesForStudent = examNotesForStudent;
     }
 
     public int getID() {

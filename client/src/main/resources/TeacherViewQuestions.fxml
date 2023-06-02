@@ -41,7 +41,7 @@
                </columnResizePolicy>
             </TableView>
             <Pane fx:id="previewWindow" prefHeight="168.0" prefWidth="480.0" />
-            <Button fx:id="addQuestionsToExamButton" mnemonicParsing="false" onAction="#addQuestionsToExamButtonPressed" prefHeight="25.0" prefWidth="95.0" text="add questions" visible="false" />
+            <Button fx:id="ContextualButton" mnemonicParsing="false" onAction="#ContextualButtonPressed" prefHeight="25.0" prefWidth="95.0" text="add questions" visible="false" />
          </children>
       </VBox>
    </children>

@@ -20,7 +20,7 @@
          <font>
             <Font name="System Bold" size="13.0" />
          </font></Text>
-      <TableView fx:id="questionTable" layoutX="118.0" layoutY="188.0" prefHeight="353.0" prefWidth="752.0">
+      <TableView fx:id="questionTable" layoutX="118.0" layoutY="188.0" onMouseClicked="#rowClicked" prefHeight="353.0" prefWidth="752.0">
         <columns>
           <TableColumn fx:id="questionIdColumn" prefWidth="99.5" text="Question ID" />
           <TableColumn fx:id="questionTextColumn" prefWidth="546.0" text="Question Text" />
