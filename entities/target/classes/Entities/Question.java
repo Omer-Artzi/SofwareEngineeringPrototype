@@ -11,20 +11,22 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
+    private String questionID;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "QuestionID"),
     inverseJoinColumns = @JoinColumn(name ="CourseID"))
     private List<Course> courses = new ArrayList<>();
 
-    // The question problem text
+    // The question
     private String questionData;
     @ElementCollection
     private List<String> answers;
     private String correctAnswer;
     private String teacherNote;
     private String studentNote;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             joinColumns = @JoinColumn(name ="QuestionID" ),
             inverseJoinColumns = @JoinColumn(name = "ExamFormID"))
@@ -51,6 +53,16 @@ public class Question implements Serializable {
         this.correctAnswer = correctAnswer;
         this.teacherNote = teacherNote;
         this.studentNote = studentNote;
+    }
+
+
+    public void setQuestionID(String ID)
+    {
+        this.questionID = ID;
+    }
+    public String getQuestionID()
+    {
+        return questionID;
     }
 
     public List<Course> getCourses(){return courses;}

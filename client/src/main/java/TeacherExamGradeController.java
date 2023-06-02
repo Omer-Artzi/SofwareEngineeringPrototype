@@ -1,12 +1,6 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
-import Events.MessageEvent;
 import Events.StudentExamEvent;
-import Events.SubjectMessageEvent;
-import Server.Events.ApiResponse;
-import Server.Events.ResponseQuestion;
-import com.github.javafaker.Faker;
-import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,23 +9,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import javafx.beans.property.SimpleStringProperty;
-import org.mindrot.jbcrypt.BCrypt;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-public class ClassExamGradeController {
+public class TeacherExamGradeController {
 
 
 
@@ -167,7 +150,7 @@ public class ClassExamGradeController {
         ExamIDCombo.getItems().clear();
         ClassExamTv.getItems().clear();
 
-        // select course
+
         // collect the courses of the subject
         List<Course> teacherCourses = clientTeacher.getCourses();
         List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName() == chosenSubjectStr)
@@ -217,7 +200,7 @@ public class ClassExamGradeController {
         }
 
         // select subject
-        assert SubjectCombo != null : "fx:id=\"SubjectCombo\" was not injected: check your FXML file 'ClassExamGrade.fxml'.";
+        assert SubjectCombo != null : "fx:id=\"SubjectCombo\" was not injected: check your FXML file 'TeacherExamGrade.fxml'.";
         for (int i = 0; i < teacherSubjects.size(); i++)
         {
             SubjectCombo.getItems().add(teacherSubjects.get(i).getName());
@@ -227,6 +210,8 @@ public class ClassExamGradeController {
         StatusColumn.setComparator(StatusColumn.getComparator().reversed());
         ClassExamTv.getSortOrder().add(StatusColumn);
 
+
+        // center columns
         StatusColumn.setStyle( "-fx-alignment: CENTER;");
         ExamIDCombo.setStyle( "-fx-alignment: CENTER;");
         GradeColumn.setStyle( "-fx-alignment: CENTER;");

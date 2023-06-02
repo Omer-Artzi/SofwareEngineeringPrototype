@@ -13,9 +13,11 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
+
+    String examFormID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
-    private Course course = null;
+    private Course course;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
@@ -35,26 +37,57 @@ public class ExamForm implements Serializable {
     private List<Integer> questionsScores = new ArrayList<>();
 
     private String code;
+    private String headerText;
+    private String footerText;
+    private String examNotesForTeacher;
+    private String examNotesForStudent;
     private Date dateCreated;
     private Date lastUsed;
 
-    private double examTime;
+    private boolean used;
+
+    private double examTime; // unnecessary - we need this in classExam
 
 
-    public ExamForm(){}
+    public ExamForm(){this.used = false;}
     public ExamForm(Course course, Teacher teacher, Subject subject, List<Question> questionList){
         this.course=course;
         this.creator =teacher;
         this.subject=subject;
         this.questionList=questionList;
+        this.used = false;
+    }
+
+    public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList,
+                    List<Integer> questionsScores, Date dateCreated, String headerText, String footerText,
+                    String examNotesForTeacher, String examNotesForStudent) {
+        this.course = course;
+        this.creator = creator;
+        this.subject = subject;
+        this.questionList = questionList;
+        this.questionsScores = questionsScores;
+        this.dateCreated = dateCreated;
+        this.headerText = headerText;
+        this.footerText = footerText;
+        this.examNotesForTeacher = examNotesForTeacher;
+        this.examNotesForStudent = examNotesForStudent;
+        this.used = false;
     }
 
     public int getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(int examFormID) {
         this.ID = ID;
+    }
+
+    public String getExamFormID() {
+        return examFormID;
+    }
+
+    public void setExamFormID(String examFormID) {
+        this.examFormID = examFormID;
     }
 
     public String getCode() {
@@ -97,7 +130,14 @@ public class ExamForm implements Serializable {
 
     public List<ClassExam> getClassExam(){return classExams;}
     public void setClassExam(List<ClassExam> classExam){this.classExams=classExam;}
-    public void addClassExam(ClassExam classExam){this.classExams.add(classExam);}
+    public void addClassExam(ClassExam classExam)
+    {
+        if (!classExams.contains(classExam))
+        {
+            this.classExams.add(classExam);
+            used = true;
+        }
+    }
 
     public Subject getSubject() {
         return subject;
@@ -125,6 +165,8 @@ public class ExamForm implements Serializable {
 
     public double getExamTime(){return examTime;}
     public void setExamTime(double examTime){this.examTime=examTime;}
+
+    public boolean getUsedStatus() {return used;}
 
 
 }

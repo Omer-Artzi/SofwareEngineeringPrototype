@@ -17,13 +17,13 @@ public abstract class Person implements Serializable{
 
     private String firstName;
     private String lastName;
-    private Gender gender;
+    private HSTS_Enums.Gender gender;
     private String email;
     private String password;
 
     public Person(){}
 
-    public Person(String firstName, String lastName, Gender gender, String email, String password)  {
+    public Person(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password)  {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -64,11 +64,11 @@ public abstract class Person implements Serializable{
     	return firstName + " " + lastName;
     }
 
-    public Gender getGender() {
+    public HSTS_Enums.Gender getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(HSTS_Enums.Gender gender) {
         this.gender = gender;
     }
 
