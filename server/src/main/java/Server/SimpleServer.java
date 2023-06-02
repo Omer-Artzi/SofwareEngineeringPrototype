@@ -296,6 +296,23 @@ public class SimpleServer extends AbstractServer {
 					System.out.println(response);
 				}
 			}
+			else if (request.startsWith("Add ExamForm")){ // Added by Ilan
+				ExamForm newExamForm = ((ExamForm)(message.getData()));
+				try{
+					session.save(newExamForm);
+					session.flush();
+					response = ("Success: new ExamForm in " + newExamForm.getCourse() + " was successfully added to the database");
+					message.setMessage(response);
+					client.sendToClient(message);
+					System.out.println(response);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					response = ("ExamForm in " + newExamForm.getCourse() + " could not be added to the database");
+					System.out.println(response);
+				}
+			}
 			// Lior's addition
 			else if(request.startsWith("Change Student Exam"))
 			{
