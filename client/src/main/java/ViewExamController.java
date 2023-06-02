@@ -114,7 +114,7 @@ public class ViewExamController {
 			answers.add("Ilan");
 			answers.add("Edan");
 			answers.add("Alon");
-			question1.setAnswers(answers);
+			question1.setIncorrectAnswers(answers);
 			sampleQuestions.add(question1);
 			sample.setQuestionList(sampleQuestions);
 			LocalDate localDate = LocalDate.now();
@@ -198,7 +198,7 @@ public class ViewExamController {
 		{
 			XWPFParagraph questionParagraph = document.createParagraph();
 			XWPFRun questionBody = questionParagraph.createRun();
-			List<String> answers = question.getAnswers();
+			List<String> answers = question.getIncorrectAnswers();
 			int randPlace = random.nextInt(3);
 			answers.add(randPlace,question.getCorrectAnswer());
 			questionBody.setText(questionID++ +". " + question.getQuestionData());

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
-@Table(name="Questions")
+@Table(name="questions")
 public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +15,11 @@ public class Question implements Serializable {
     private Course course;
     private String questionData;
     @ElementCollection
-    private List<String> Answers;
+    private List<String> incorrectAnswers;
     private String correctAnswer;
     private String teacherNote;
     private String studentNote;
+    private String code;
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name ="Question_ID" ),
@@ -32,7 +33,7 @@ public Question(){}
     {
         this.course=course;
         this.questionData=questionData;
-        this.Answers=Answer;
+        this.incorrectAnswers =Answer;
         this.correctAnswer=correctAnswer;
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
@@ -49,8 +50,8 @@ public Question(){}
     public void setCourse(Course newCourse){this.course=newCourse;}
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
-    public List<String> getAnswers(){return Answers;}
-    public void setAnswers(List<String> newAnswers){this.Answers=newAnswers;}
+    public List<String> getIncorrectAnswers(){return incorrectAnswers;}
+    public void setIncorrectAnswers(List<String> newAnswers){this.incorrectAnswers =newAnswers;}
     public String getCorrectAnswer(){return correctAnswer;}
     public void setCorrectAnswer(String  correctAnswer){this.correctAnswer=correctAnswer;}
     public  String getTeacherNote(){return teacherNote;}
@@ -58,4 +59,27 @@ public Question(){}
     public String getStudentNote(){return studentNote;}
     public void setStudentNote(String newNote){this.studentNote=newNote;}
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public List<ExamForm> getExamForms() {
+        return examForms;
+    }
+
+    public void setExamForms(List<ExamForm> examForms) {
+        this.examForms = examForms;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 }

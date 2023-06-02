@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.greenrobot.eventbus.EventBus;
+import org.hibernate.SessionFactory;
 
 import java.io.IOException;
 
@@ -33,9 +34,23 @@ public class SimpleChatServer extends Application
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+                try {
+                    EventBus.getDefault().post(new TerminationEvent());
+                    SessionFactory sessionFactory = SimpleServer.getSessionFactory();
+                    if (sessionFactory != null && !sessionFactory.isClosed()){
 
-                EventBus.getDefault().post(new TerminationEvent());
+                        SimpleServer.session.close();
+                        sessionFactory.close();
+                        System.out.println("Closed Session Factory");
+                    }
+
+                }
+                    catch (Exception e){
+                    e.printStackTrace();
+                }
                 Platform.exit();
+
+
             }
         });
         stage.show();

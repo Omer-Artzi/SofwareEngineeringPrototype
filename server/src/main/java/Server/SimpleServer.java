@@ -37,31 +37,35 @@ import java.util.*;
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
+import static java.lang.Thread.sleep;
+
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
 	static Session session;
 	private static int transmissionID = 0;
+	private static SessionFactory  sessionFactory;
 
-	public static SessionFactory getSessionFactory() throws HibernateException {
-		Configuration configuration = new Configuration();
-		configuration.addAnnotatedClass(Student.class);
-		configuration.addAnnotatedClass(Grade.class);
-		configuration.addAnnotatedClass(Subject.class);
-		configuration.addAnnotatedClass(Course.class);
-		configuration.addAnnotatedClass(Teacher.class);
-		configuration.addAnnotatedClass(Question.class);
-		configuration.addAnnotatedClass(ExamForm.class);
-		configuration.addAnnotatedClass(ClassExam.class);
-		configuration.addAnnotatedClass(Person.class);
+	public static SessionFactory getSessionFactory() throws HibernateException, InterruptedException {
+		if(sessionFactory == null) {
+			Configuration configuration = new Configuration();
+			configuration.addAnnotatedClass(Student.class);
+			configuration.addAnnotatedClass(Grade.class);
+			configuration.addAnnotatedClass(Subject.class);
+			configuration.addAnnotatedClass(Course.class);
+			configuration.addAnnotatedClass(Teacher.class);
+			configuration.addAnnotatedClass(Question.class);
+			configuration.addAnnotatedClass(ExamForm.class);
+			configuration.addAnnotatedClass(ClassExam.class);
+			configuration.addAnnotatedClass(Person.class);
 
 
+			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+					.applySettings(configuration.getProperties())
+					.build();
 
-
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties())
-				.build();
-
-		return configuration.buildSessionFactory(serviceRegistry);
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		}
+		return  sessionFactory;
 	}
 	public SimpleServer(int port) {
 		super(port);
@@ -70,7 +74,7 @@ public class SimpleServer extends AbstractServer {
 			SessionFactory sessionFactory = getSessionFactory();
 			session = sessionFactory.openSession();
 			session.beginTransaction();
-			DataGenerator.generateData();
+			//DataGenerator.generateData();
 		}
 		catch (Exception exception)
 		{
@@ -95,8 +99,6 @@ public class SimpleServer extends AbstractServer {
 	public void CloseServer(TerminationEvent event) throws IOException {
 		Message message = new Message(1,"Server is closed");
 		sendToAllClients(message);
-		session.getTransaction().commit();
-		session.close();
 		this.close();
 	}
 

@@ -81,7 +81,7 @@ public class SimpleChatClient extends Application {
     @Override
 	public void stop() throws Exception {
             Message message = new Message(1, "Client Closed");
-            client.sendToServer(message);
+            SimpleClient.getClient().sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
             System.exit(0);

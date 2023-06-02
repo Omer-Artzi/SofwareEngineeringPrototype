@@ -32,6 +32,11 @@ public class Course implements Serializable {
             joinColumns = @JoinColumn(name = "Course_ID"),
             inverseJoinColumns = @JoinColumn(name = "ExamForm_ID"))
     private List<ExamForm> examForms = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "Course_ID"),
+            inverseJoinColumns = @JoinColumn(name = "Student_ID"))
+    private List<Student> students = new ArrayList<>();
 
 
 

@@ -20,6 +20,7 @@ public class Student extends Person implements Serializable, Comparable<Student>
     @ManyToMany(mappedBy = "students")
     private List<ClassExam> classExams = new ArrayList<>();
 
+
     public Student() {}
 
     public Student( String firstName, String lastName, Gender gender, String email, String password) {

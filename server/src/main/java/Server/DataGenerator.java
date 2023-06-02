@@ -98,8 +98,14 @@ public class DataGenerator {
                         responseQuestion.convert(question);
                         question.setCourse(subjectList.get(i).getCourses().get(0));
                         questionsList.add(question);
-                        SimpleServer.session.save(question);
-                        SimpleServer.session.flush();
+                        try {
+                            SimpleServer.session.saveOrUpdate(question);
+                            SimpleServer.session.flush();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                     //System.out.println(questions);
                     generateTestForms(questionsList);
@@ -137,9 +143,17 @@ public class DataGenerator {
                 Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 examForm.setDateCreated(date);
                 examForm.setLastUsed(date);
-                SimpleServer.session.saveOrUpdate(examForm);
+                try {
+                    SimpleServer.session.saveOrUpdate(examForm);
+                    SimpleServer.session.flush();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
             }
-            SimpleServer.session.flush();
+
         }
         else {
             System.out.println("No question Retrieved");
@@ -155,8 +169,6 @@ public class DataGenerator {
             admin.setGender(Gender.Female);
             admin.setFirstName("super");
             admin.setLastName("user");
-            SimpleServer.session.saveOrUpdate(admin);
-            SimpleServer.session.flush();
             HashSet<Subject> tempSubjects = new HashSet<Subject>();
             HashSet<Course> tempCourses = new HashSet<Course>();
             Faker faker = new Faker();
@@ -178,7 +190,14 @@ public class DataGenerator {
                         coursesList.add(subject.getCourses().get(randomCourse));
                     }
                 }
-                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+                Teacher teacher;
+                if(i == 0)
+                {
+                     teacher = admin;
+                }
+                else {
+                     teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+                }
                 for (Course course : coursesList) {
                     course.getTeachers().add(teacher);
                     if(!(tempCourses.contains(course))){
@@ -195,7 +214,6 @@ public class DataGenerator {
                 }
                 SimpleServer.session.saveOrUpdate(teacher);
             }
-            SimpleServer.session.flush();
             List<Course> allCourses = new ArrayList<>();
             List<Subject> allSubjects = new ArrayList<>();
             allSubjects.addAll(tempSubjects);
@@ -226,12 +244,15 @@ public class DataGenerator {
     }
     public static List<Student> generateStudents() {
         Faker faker = new Faker();
+        String salt = BCrypt.gensalt();
         List<Student> students = new ArrayList<>();
         for(int  i = 0; i < 10;i++)
         {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            Student student = new Student(firstName,lastName);
+            String email = firstName + "_" + lastName + "@Gmail.com";
+            String password = BCrypt.hashpw(faker.internet().password(),salt);
+            Student student = new Student(firstName,lastName, Gender.Female, email, password);
             students.add(student);
             SimpleServer.session.save(student);
             SimpleServer.session.flush();
