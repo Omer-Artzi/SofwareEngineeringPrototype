@@ -31,8 +31,11 @@ Events\ClassExamGradeEvent.class
 Events\RefreshPerson.class
 ExamScreenController$1$1.class
 StudentMainScreenController.class
+Events\FinishEditExistingQuestionEvent.class
 Events\SubjectsOfTeacherMessageEvent.class
+TeacherViewQuestionsController$ContextualState.class
 LoginController.class
+TeacherViewQuestionsController$1.class
 ShowStatisticsController.class
 ocsf\AdaptableClient.class
 ExamScreenController.class
@@ -46,6 +49,7 @@ Events\MessageEvent.class
 PreviewQuestionController.class
 SecondaryController.class
 SimpleChatClient.class
+Events\StartEditExistingQuestionEvent.class
 Events\UserMessageEvent.class
 Events\ChangePreviewEvent.class
 Events\ExamMessageEvent.class

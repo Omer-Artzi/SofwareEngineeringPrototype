@@ -12,15 +12,20 @@ public class Subject implements Serializable, Comparable<Subject> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String name;
+
     @OneToMany(mappedBy = "subject")
     private List<Course> courses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "subject")
+    private List<ExamForm> examForms = new ArrayList<>();
+
     // Updated by Ilan 27.5
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "SubjectID"),
     inverseJoinColumns = @JoinColumn(name ="TeacherID" ))
     private List<Teacher> teachers = new ArrayList<>(); //list of teachers that teaches the course
+    private int questionNumber;
     private String code;
     private static int codeNum = 0;
 
@@ -28,8 +33,10 @@ public class Subject implements Serializable, Comparable<Subject> {
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
 
-    public Subject() {
+    public Subject()
+    {
         code = Integer.toString(++codeNum);
+        questionNumber = 0;
     }
 
     public Subject(Long id, String name, List<Course> courses) {
@@ -37,16 +44,19 @@ public class Subject implements Serializable, Comparable<Subject> {
         this.name = name;
         this.courses = courses;
         code = Integer.toString(++codeNum);
+        questionNumber = 0;
     }
 
     public Subject(String name) {
         this.name = name;
         code = Integer.toString(++codeNum);
+        questionNumber = 0;
     }
 
     public Subject(List<Course> courses) {
         this.courses = courses;
         code = Integer.toString(++codeNum);
+        questionNumber = 0;
     }
 
     public void setId(Long id) {
@@ -75,12 +85,42 @@ public class Subject implements Serializable, Comparable<Subject> {
     }
 
     public void setCourses(List<Course> courses) {
-        this.courses = courses;
+        this.courses =  new ArrayList<>(courses);
     }
     public void addSetCourse(Course course)
     {
         if(!this.courses.contains(course))
             courses.add(course);
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = new ArrayList<>(questions);
+        questionNumber = questions.size();
+    }
+    public void addQuestion(Question question)
+    {
+        if(!this.questions.contains(question)) {
+            questions.add(question);
+            questionNumber++;
+        }
+    }
+
+    public List<ExamForm> getExamForms() {
+        return examForms;
+    }
+
+    public void setExamForms(List<ExamForm> examForms) {
+        this.examForms = new ArrayList<>(examForms);
+    }
+    public void addExamForm(ExamForm examForm)
+    {
+        if(!this.examForms.contains(examForm)) {
+            examForms.add(examForm);
+        }
     }
 
 
@@ -100,6 +140,8 @@ public class Subject implements Serializable, Comparable<Subject> {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public int getQuestionNumber() {return questionNumber;}
 
     @Override
     public int compareTo(Subject o) {

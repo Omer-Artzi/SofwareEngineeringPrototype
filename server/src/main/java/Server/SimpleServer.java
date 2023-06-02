@@ -507,6 +507,7 @@ public class SimpleServer extends AbstractServer {
 			session.flush();
 		}
 	}
+
 	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -516,7 +517,7 @@ public class SimpleServer extends AbstractServer {
 		return students;
 	}
 
-	public List<Subject> retrieveSubjects()
+	public static List<Subject> retrieveSubjects()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);

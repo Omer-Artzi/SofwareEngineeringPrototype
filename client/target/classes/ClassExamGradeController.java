@@ -167,7 +167,7 @@ public class ClassExamGradeController {
         ExamIDCombo.getItems().clear();
         ClassExamTv.getItems().clear();
 
-        // select course
+
         // collect the courses of the subject
         List<Course> teacherCourses = clientTeacher.getCourses();
         List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName() == chosenSubjectStr)
@@ -227,6 +227,8 @@ public class ClassExamGradeController {
         StatusColumn.setComparator(StatusColumn.getComparator().reversed());
         ClassExamTv.getSortOrder().add(StatusColumn);
 
+
+        // center columns
         StatusColumn.setStyle( "-fx-alignment: CENTER;");
         ExamIDCombo.setStyle( "-fx-alignment: CENTER;");
         GradeColumn.setStyle( "-fx-alignment: CENTER;");

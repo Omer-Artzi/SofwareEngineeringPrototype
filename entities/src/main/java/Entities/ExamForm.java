@@ -13,9 +13,11 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
+
+    String examFormID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
-    private Course course = null;
+    private Course course;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
@@ -70,8 +72,16 @@ public class ExamForm implements Serializable {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(int examFormID) {
         this.ID = ID;
+    }
+
+    public String getExamFormID() {
+        return examFormID;
+    }
+
+    public void setExamFormID(String examFormID) {
+        this.examFormID = examFormID;
     }
 
     public String getCode() {

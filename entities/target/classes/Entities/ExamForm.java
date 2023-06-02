@@ -13,9 +13,11 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
+
+    String examFormID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
-    private Course course = null;
+    private Course course;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
@@ -35,10 +37,14 @@ public class ExamForm implements Serializable {
     private List<Integer> questionsScores = new ArrayList<>();
 
     private String code;
+    private String headerText;
+    private String footerText;
+    private String examNotesForTeacher;
+    private String examNotesForStudent;
     private Date dateCreated;
     private Date lastUsed;
 
-    private double examTime;
+    private double examTime; // unnecessary - we need this in classExam
 
 
     public ExamForm(){}
@@ -49,12 +55,33 @@ public class ExamForm implements Serializable {
         this.questionList=questionList;
     }
 
+    public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList, List<Integer> questionsScores, Date dateCreated, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent) {
+        this.course = course;
+        this.creator = creator;
+        this.subject = subject;
+        this.questionList = questionList;
+        this.questionsScores = questionsScores;
+        this.dateCreated = dateCreated;
+        this.headerText = headerText;
+        this.footerText = footerText;
+        this.examNotesForTeacher = examNotesForTeacher;
+        this.examNotesForStudent = examNotesForStudent;
+    }
+
     public int getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(int examFormID) {
         this.ID = ID;
+    }
+
+    public String getExamFormID() {
+        return examFormID;
+    }
+
+    public void setExamFormID(String examFormID) {
+        this.examFormID = examFormID;
     }
 
     public String getCode() {
