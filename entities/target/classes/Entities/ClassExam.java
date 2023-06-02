@@ -75,7 +75,6 @@ public class ClassExam implements Serializable
 
     public void UpdateStudentExam(StudentExam studentExam)
     {
-        System.out.println("index = " + studentExams.indexOf(studentExam));
         studentExams.set(studentExams.indexOf(studentExam), studentExam);
     }
 

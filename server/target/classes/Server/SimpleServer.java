@@ -155,7 +155,7 @@ public class SimpleServer extends AbstractServer {
 					}
 					else
 					{
-						//LoggedInUsers.add(user);
+						LoggedInUsers.add(user);
 						response = "Success: User found";
 						message.setData(user);
 					}

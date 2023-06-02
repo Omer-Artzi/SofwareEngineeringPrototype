@@ -212,7 +212,7 @@ public class StudentExamGradeController
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES)
                 {
-                    SimpleChatClient.setRoot("ClassExamGrade");
+                    SimpleChatClient.setRoot("TeacherExamGrade");
                     String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
                     String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
                     String classExamID = Integer.toString(solvedExam.getClassExam().getID());

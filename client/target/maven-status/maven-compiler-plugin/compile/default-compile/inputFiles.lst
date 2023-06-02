@@ -6,6 +6,7 @@ C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\Sofw
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\SubjectsOfTeacherMessageEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\StudentExamGradeController.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ExamMessageEvent.java
+C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\TeacherExamGradeController.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\StudentExamEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ChangePreviewEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ChooseQuestionsEvent.java
@@ -38,7 +39,6 @@ C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\Sofw
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SimpleClient.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\ErrorEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\RefreshEvent.java
-C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\ClassExamGradeController.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\SecondaryController.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\UserMessageEvent.java
 C:\Users\liorm\Documents\lior\CSdegree\semester_g\Software Engineer\Project\SofwareEngineeringPrototype\client\src\main\java\Events\AddGradeSuccesEvent.java

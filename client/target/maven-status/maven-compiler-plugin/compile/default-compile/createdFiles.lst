@@ -1,6 +1,5 @@
 Events\AddGradeSuccesEvent.class
 TeacherSidebarController.class
-ClassExamGradeController.class
 SimpleClient.class
 PrincipalMainScreenController.class
 PreLogInController.class
@@ -46,6 +45,7 @@ Answer.class
 StudentExamGradeController.class
 TeacherMainScreenController.class
 Events\MessageEvent.class
+TeacherExamGradeController.class
 PreviewQuestionController.class
 SecondaryController.class
 SimpleChatClient.class
