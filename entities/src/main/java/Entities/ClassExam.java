@@ -36,6 +36,7 @@ public class ClassExam implements Serializable
 
 
     private int approvedExamsNum;
+    private int examToEvaluate;
 
     private double gradesMean;
 
@@ -56,6 +57,7 @@ public class ClassExam implements Serializable
         this.examForm = examForm;
         tester.addClassExam(this);
         this.approvedExamsNum=0;
+        this.examToEvaluate=0;
         this.gradesMean=0;
         this.gradesVariance=0;
         this.code = code;
@@ -101,6 +103,8 @@ public class ClassExam implements Serializable
 
     public int getApprovedExamsNum(){return approvedExamsNum;}
     public void setApprovedExamsNum(int approvedExamsNum){this.approvedExamsNum=approvedExamsNum;}
+    public int getExamToEvaluate(){return examToEvaluate;}
+    public void setExamToEvaluate(int examToEvaluate){this.examToEvaluate=examToEvaluate;}
 
     public double getGradesMean(){return gradesMean;}
     public void setGradesMean(double gradesMean){this.gradesMean=gradesMean;}
