@@ -37,7 +37,7 @@ public class TeacherSidebarController implements SideBar {
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
-        changeScene("AddQuestion");
+        changeScene("TeacherAddQuestion");
 
 
     }
