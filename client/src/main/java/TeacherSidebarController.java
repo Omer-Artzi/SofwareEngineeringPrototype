@@ -70,7 +70,7 @@ public class TeacherSidebarController implements SideBar {
     @FXML
     void viewClassExams(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
-        changeScene("ViewClassExams");
+        changeScene("viewLiveExams");
     }
 
     @FXML
