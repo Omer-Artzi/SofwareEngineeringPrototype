@@ -20,7 +20,7 @@ public class NotificationEvent {
 
     //** check if the principle who get the event is selected when teacher selected the principles she wants to request from them**//
     public boolean IsFound(Person user){
-        for (Principle item: extraTime.getPrincipals())
+        for (Principal item: extraTime.getPrincipals())
         {
             if (item.getID()==user.getID())
                 return true;

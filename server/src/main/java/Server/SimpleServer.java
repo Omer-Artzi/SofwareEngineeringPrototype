@@ -1,10 +1,6 @@
 package Server;
-import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
-import Server.Events.ResponseQuestion;
 //import Server.Events.TerminationEvent;
-import com.google.gson.Gson;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
@@ -24,22 +20,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import Entities.Principle;
-import java.time.LocalDate;
+
+import Entities.Principal;
+
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
-
-import static javax.management.Query.or;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -425,8 +414,8 @@ public class SimpleServer extends AbstractServer {
 			} catch (Exception e2)
 			{
 				try{
-					CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
-					Root<Principle> root = query.from(Principle.class);
+					CriteriaQuery<Principal> query = builder.createQuery(Principal.class);
+					Root<Principal> root = query.from(Principal.class);
 					query.where(builder.equal(root.get("email"), email));
 					Person user = session.createQuery(query).getSingleResult();
 					return user;
@@ -486,12 +475,12 @@ public class SimpleServer extends AbstractServer {
 	}
 
 
-	private List<Principle> getPrinciples() {
+	private List<Principal> getPrinciples() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
-		query.from(Principle.class);
-		List<Principle> principles = session.createQuery(query).getResultList();
-		return principles;
+		CriteriaQuery<Principal> query = builder.createQuery(Principal.class);
+		query.from(Principal.class);
+		List<Principal> principals = session.createQuery(query).getResultList();
+		return principals;
 	}
 
 	private Student getStudent(int iStudentID) {

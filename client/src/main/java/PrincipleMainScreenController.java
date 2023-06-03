@@ -2,8 +2,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import Entities.Principle;
-import Entities.Teacher;
+import Entities.Principal;
 import Events.NotificationEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +26,7 @@ public class PrincipleMainScreenController {
 
     @Subscribe
     public void update(NotificationEvent event) throws IOException {
-        Principle user=((Principle)(SimpleClient.getClient().getUser()));
+        Principal user=((Principal)(SimpleClient.getClient().getUser()));
         if(event.IsFound(user))
             event.show();
     }

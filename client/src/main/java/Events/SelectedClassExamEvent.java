@@ -1,6 +1,6 @@
 package Events;
 import Entities.ClassExam;
-import Entities.Principle;
+import Entities.Principal;
 
 import java.util.List;
 
@@ -8,14 +8,14 @@ import java.util.List;
 public class SelectedClassExamEvent {
     private ClassExam exam;
     private List<Object> objectList;
-    private List<Principle> principle;
+    private List<Principal> principal;
     public SelectedClassExamEvent(List<Object>object) {
         this.exam=(ClassExam) object.get(0);
-        this.principle=(List<Principle>) object.get(1);
+        this.principal =(List<Principal>) object.get(1);
     }
-    public SelectedClassExamEvent(ClassExam exam, List<Principle>principles) {
+    public SelectedClassExamEvent(ClassExam exam, List<Principal> principals) {
         this.objectList.add(exam);
-        this.objectList.add(principles);
+        this.objectList.add(principals);
     }
     public SelectedClassExamEvent(ClassExam exam) {
         this.exam = exam;
@@ -29,11 +29,11 @@ public class SelectedClassExamEvent {
         return exam;
     }
 
-    public List<Principle> getPrinciple() {
-        return principle;
+    public List<Principal> getPrinciple() {
+        return principal;
     }
 
-    public void setPrinciple(List<Principle> principle) {
-        this.principle = principle;
+    public void setPrinciple(List<Principal> principal) {
+        this.principal = principal;
     }
 }

@@ -1,20 +1,20 @@
 package Events;
 
-import Entities.Principle;
+import Entities.Principal;
 
 import java.util.List;
 
 /* Get from the Server the Principle List in order to select Principle to send them the Extre Time Request*/
 public class PrinciplesMessageEvent {
-    private List<Principle> principlesList;
-    public PrinciplesMessageEvent(List<Principle> principlesList) {
+    private List<Principal> principlesList;
+    public PrinciplesMessageEvent(List<Principal> principlesList) {
         this.principlesList = principlesList;
     }
-    public List<Principle> getPrinciples() {
+    public List<Principal> getPrinciples() {
         return principlesList;
     }
 
-    public void setSubjects(List<Principle> principles) {
-        this.principlesList = principles;
+    public void setSubjects(List<Principal> principals) {
+        this.principlesList = principals;
     }
 }

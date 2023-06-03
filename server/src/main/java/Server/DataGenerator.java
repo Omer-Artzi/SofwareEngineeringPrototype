@@ -280,11 +280,11 @@ public class DataGenerator {
     private static void generatePrinciple() {
         try {
             // String salt = BCrypt.gensalt(); // TODO
-            Principle admin = new Principle("admin1","admin2");
+            Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
             admin.setEmail("adminP");
             //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
             admin.setPassword("1234");
-            admin.setGender(Gender.Female);
+            admin.setGender(HSTS_Enums.Gender.Female);
             SimpleServer.session.save(admin);
             SimpleServer.session.flush();
             Faker faker = new Faker();
@@ -295,7 +295,7 @@ public class DataGenerator {
                 String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
                 // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
                 String password = "1234";
-                Principle principle = new Principle(PrincipleFirstName, PrincipleLastName, Gender.Male, PrincipleEmail, password);
+                Principal principal = new Principal(PrincipleFirstName, PrincipleLastName, HSTS_Enums.Gender.Male, PrincipleEmail, password);
                 /*
                 if(i == 0)
                 {
@@ -307,7 +307,7 @@ public class DataGenerator {
                 }
                 */
 
-                SimpleServer.session.saveOrUpdate(principle);
+                SimpleServer.session.saveOrUpdate(principal);
             }
             SimpleServer.session.flush();
             //SimpleServer.session.saveOrUpdate(admin);

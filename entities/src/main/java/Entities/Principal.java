@@ -8,25 +8,28 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "Principles")
 @DiscriminatorValue("3")
-public class Principle extends Person {
+public class Principal extends Person {
 
     @ManyToMany(mappedBy = "principles")
     private List<ExtraTime> extraTimeRequests=new ArrayList<>();
     public void extraTimeRequest(ExtraTime data) {
-        for(Principle principal:data.getPrincipals()) {
+        for(Principal principal:data.getPrincipals()) {
             if(principal.getFullName() == getFullName())
 
             //TODO: pop message that extra time is requested when conditions are met
             extraTimeRequests.add(data);
         }
     }
-    public  Principle(){}
-    public Principle( String firstName, String lastName, Gender gender, String email, String password) {
+    public Principal(){}
+    public Principal(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
-    public Principle(String firstName, String lastName){
+    /*
+    public Principal(String principleFirstName, String principleLastName, HSTS_Enums.Gender male, String firstName, String lastName){
         super(firstName,lastName);
     }
+    */
+
     @Override
     public void receiveExtraTime(ExtraTime data) {
 

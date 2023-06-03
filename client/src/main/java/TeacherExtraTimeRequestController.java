@@ -15,10 +15,10 @@ import java.util.List;
 //** A controller to fill details about the Request to Extra Time**//
 public class TeacherExtraTimeRequestController {
     private ClassExam exam;
-    private List<Principle>principles=new ArrayList<>();
-    private List<Principle>selectedPrinciples=new ArrayList<>();
+    private List<Principal> principals =new ArrayList<>();
+    private List<Principal> selectedPrincipals =new ArrayList<>();
     @FXML
-    private ListSelectionView<Principle> Principles;
+    private ListSelectionView<Principal> Principles;
     @FXML
     private TextArea TeacherNoteTF;
     @FXML
@@ -34,8 +34,8 @@ public class TeacherExtraTimeRequestController {
     public void updateExam(SelectedClassExamEvent event)
     {
         System.out.println("in @Subscribe");
-        principles=event.getPrinciple();
-        Principles.getSourceItems().addAll(principles);
+        principals =event.getPrinciple();
+        Principles.getSourceItems().addAll(principals);
         exam=event.getExam();
     }
     @FXML
@@ -65,10 +65,10 @@ public class TeacherExtraTimeRequestController {
     /* Send a notification to the relevant Principles*/
     @FXML
     void sendExtraTimeRequest(ActionEvent event) throws IOException {
-        selectedPrinciples=Principles.getTargetItems();
+        selectedPrincipals =Principles.getTargetItems();
         String note=TeacherNoteTF.getText();
         Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
-        ExtraTime extraTime=new ExtraTime(exam,selectedPrinciples,teacher,note);
+        ExtraTime extraTime=new ExtraTime(exam, selectedPrincipals,teacher,note);
         NotificationEvent NE=new NotificationEvent(extraTime);
         EventBus.getDefault().post(NE);
     }

@@ -39,7 +39,7 @@ public class SimpleClient extends AbstractClient {
 			List<Object>data=(List<Object>) message.getData();
 			if (data.get(0)==null)
 				System.out.println("Empty exam in client");
-			if(((List<Principle>)data.get(1)).isEmpty())
+			if(((List<Principal>)data.get(1)).isEmpty())
 				System.out.println("Empty principles in client");
 			System.out.println("SelectedClassExamEvent in client2");
 			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
@@ -49,7 +49,7 @@ public class SimpleClient extends AbstractClient {
 				System.out.println("the event is null");
 			EventBus.getDefault().post(stMsg);
 		}  else if (message.getMessage().startsWith("Principles")) {
-			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principle>) message.getData());
+			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principal>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Live Exams")) {
 			System.out.println("Live exams in client");

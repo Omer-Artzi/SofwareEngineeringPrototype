@@ -53,7 +53,7 @@ public class TeacherLiveExamsController {
         Person person=SimpleClient.getClient().getUser();
 
         /* case 1: the user is principle*/
-        if(person instanceof Principle)
+        if(person instanceof Principal)
             return LiveExam;
 
         /*case 2: the user is teacher */

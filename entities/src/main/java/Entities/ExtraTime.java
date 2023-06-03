@@ -15,13 +15,13 @@ public class ExtraTime {
     @JoinTable(
             joinColumns = @JoinColumn(name = "ExtraTime_ID"),
             inverseJoinColumns = @JoinColumn(name ="Principle_ID"))
-    private List<Principle> principles;
+    private List<Principal> principals;
     public ExtraTime(){}
-    public ExtraTime(ClassExam exam,List<Principle> principles,Teacher teacher,String teacherNote)
+    public ExtraTime(ClassExam exam, List<Principal> principals, Teacher teacher, String teacherNote)
     {
         this.teacher=teacher;
         this.exam=exam;
-        this.principles=principles;
+        this.principals = principals;
         this.TeacherNote=teacherNote;
     }
     public ClassExam getExam(){return exam;}
@@ -30,8 +30,8 @@ public class ExtraTime {
     public void setTeacher(Teacher newTeacher){this.teacher=newTeacher;}
     public String getNote(){return TeacherNote;}
     public void setNote(String newNote){this.TeacherNote=newNote;}
-    public List<Principle> getPrincipals() {
-        return this.principles;
+    public List<Principal> getPrincipals() {
+        return this.principals;
     }
-    public void setPrinciples(List<Principle> newPrinciples){this.principles=newPrinciples;}
+    public void setPrinciples(List<Principal> newPrincipals){this.principals = newPrincipals;}
 }
