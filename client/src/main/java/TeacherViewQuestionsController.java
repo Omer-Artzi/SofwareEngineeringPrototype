@@ -91,7 +91,6 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         // subscribe to server
         EventBus.getDefault().register(this);
-        //registerSaveBeforeExit();
 
         // get logged-in User (Teacher or Principal)
         user = SimpleClient.getUser();
@@ -373,10 +372,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
 //  SaveBeforeExit methods
 
-    @Override
+    /*@Override
     public boolean CheckForUnsavedData() {
         System.out.println("Checking for unsaved data in ViewQuestions");
         return true;
-    }
+    }*/
 
 }

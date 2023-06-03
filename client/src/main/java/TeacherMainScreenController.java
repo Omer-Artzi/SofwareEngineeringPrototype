@@ -18,8 +18,6 @@ public class TeacherMainScreenController extends SaveBeforeExit {
     @FXML
     void initialize() {
 
-        //registerSaveBeforeExit();
-
         EventBus.getDefault().register(this);
 
         assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'TeacherMainScreen.fxml'.";
