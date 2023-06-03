@@ -156,6 +156,7 @@ public class SimpleServer extends AbstractServer {
 					else
 					{
 						LoggedInUsers.add(user);
+						System.out.println("User " + user.getFullName() + " logged in");
 						response = "Success: User found";
 						message.setData(user);
 					}
@@ -272,7 +273,8 @@ public class SimpleServer extends AbstractServer {
 			}
 			else if(request.startsWith("Client Closed")){
 				response ="";
-				LoggedInUsers.remove((Person)message.getData());
+				boolean userRemoved =  LoggedInUsers.remove((Person)message.getData());
+				System.out.println("user: " + ((Person)message.getData()).getFullName() + " removed: " + userRemoved);
 				for(SubscribedClient subscriber: SubscribersList)
 				{
 					if(subscriber.getClient().equals(client)) {

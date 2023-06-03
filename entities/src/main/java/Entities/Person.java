@@ -3,6 +3,7 @@ package Entities;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @MappedSuperclass
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
@@ -91,4 +92,17 @@ public abstract class Person implements Serializable{
     public abstract void extraTimeRequest(ExtraTime data);
 
     public abstract void receiveExtraTime(ExtraTime data);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return Objects.equals(getEmail(), person.getEmail()) && Objects.equals(getPassword(), person.getPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEmail(), getPassword());
+    }
 }

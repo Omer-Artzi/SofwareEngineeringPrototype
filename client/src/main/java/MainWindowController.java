@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.URL;
 import java.security.Principal;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import Entities.Student;
 import Entities.Teacher;
@@ -22,6 +22,8 @@ public class MainWindowController {
 
     @FXML
     private AnchorPane sidePane;
+
+    private Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
 
     @FXML
     private void initialize() throws IOException {
@@ -61,7 +63,22 @@ public class MainWindowController {
 
     @FXML
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
-        Parent mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        Parent mainWindowParent;
+
+        // scene reuse code, currently creates problems
+        /*if (loadedScenes.containsKey(sceneName)) {
+            mainWindowParent = loadedScenes.get(sceneName);
+        }
+        else {
+            mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+            loadedScenes.put(sceneName, mainWindowParent);
+        }*/
+
+
+        mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        loadedScenes.put(sceneName, mainWindowParent);
+
+
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
     }

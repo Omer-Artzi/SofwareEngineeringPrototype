@@ -4,8 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import Entities.*;
-import Events.*;
+import Entities.Course;
+import Entities.Message;
+import Entities.Person;
+import Entities.Question;
+import Entities.Subject;
+import Entities.Teacher;
+import Events.ChangePreviewEvent;
+import Events.ChooseQuestionsEvent;
+import Events.CourseQuestionsListEvent;
+import Events.FinishEditExistingQuestionEvent;
+import Events.SendChosenQuestionsEvent;
+import Events.StartEditExistingQuestionEvent;
+import Events.SubjectMessageEvent;
+import Events.SubjectsOfTeacherMessageEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,7 +31,7 @@ import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class TeacherViewQuestionsController {
+public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     @FXML
     private ResourceBundle resources;
@@ -79,6 +91,7 @@ public class TeacherViewQuestionsController {
 
         // subscribe to server
         EventBus.getDefault().register(this);
+        //registerSaveBeforeExit();
 
         // get logged-in User (Teacher or Principal)
         user = SimpleClient.getUser();
@@ -110,6 +123,7 @@ public class TeacherViewQuestionsController {
         state = ContextualState.VIEW;
         ContextualButton.setText("Edit Question");
         ContextualButton.setDisable(true);
+        ContextualButton.setVisible(true);
     }
 
     private void HandleChooseState(){
@@ -355,6 +369,14 @@ public class TeacherViewQuestionsController {
         System.out.println("Returning from edit question");
 
         SetPickersCourse(event.getCourse());
+    }
+
+//  SaveBeforeExit methods
+
+    @Override
+    public boolean CheckForUnsavedData() {
+        System.out.println("Checking for unsaved data in ViewQuestions");
+        return true;
     }
 
 }
