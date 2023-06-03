@@ -78,7 +78,8 @@ public class StudentDoExamManualController {
             {
                 FileInputStream fis = new FileInputStream(file);
                  DocumentWrapper document = new DocumentWrapper(fis);
-            ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, document);
+                 System.out.println(document.getDocument().getBody());
+                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, document);
                 Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                 message.setData(manualStudentExam);
                 SimpleClient.getClient().sendToServer(message);
@@ -105,40 +106,41 @@ public class StudentDoExamManualController {
         fileRecievedLabel.setText("Drop File Here");
         timeLeftLabel.setAlignment(Pos.CENTER);
 
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                if(timeInSeconds>0) {
-                    timeInSeconds--;
-                    Platform.runLater(() ->{timeLeftLabel.setText("Time Left: " + String.format("%02d",timeInSeconds/60)+ ":" + String.format("%02d",timeInSeconds%60));});
 
-                }
-                else {
-                    try {
-                        //SimpleClient.getClient().sendToServer(new Message(1,"Exam Fail: Time Ended"));
-                        timer.cancel();
-                        SimpleChatClient.setRoot("ChooseExam");
-                        JOptionPane.showMessageDialog(null,"Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-            }
-            };
-        timer.schedule(task,0, 1000);
         }
         @Subscribe
        public  void getExam(StartExamEvent event)
         {
             mainClassExam = event.getClassExam();
-            timeInSeconds = (int)(mainClassExam.getExamTime());
+            timeInSeconds = (int)(mainClassExam.getExamTime()) * 60;
             ViewExamController.createManualExam(mainClassExam);
             studentExam.setStudent(((Student)(SimpleClient.getUser())));
             studentExam.setClassExam(mainClassExam);
-            studentExam.setStatus(StudentExam.statusEnum.ToEvaluate);
+            studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    if(timeInSeconds>0) {
+                        timeInSeconds--;
+                        Platform.runLater(() ->{timeLeftLabel.setText("Time Left: " + String.format("%02d",timeInSeconds/60)+ ":" + String.format("%02d",timeInSeconds%60));});
+
+                    }
+                    else {
+                        try {
+                            SimpleClient.getClient().sendToServer(new Message(1,"Exam Fail: Time Ended"));
+                            timer.cancel();
+                            SimpleChatClient.setRoot("ChooseExam");
+                            JOptionPane.showMessageDialog(null,"Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+            };
+            timer.schedule(task,0, 1000);
 
         }
         @Subscribe

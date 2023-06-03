@@ -53,6 +53,8 @@ public class ClassExam implements Serializable
     private double examTime;
     private String code;
 
+    private HSTS_Enums.ExamType examType;
+
     public ClassExam() {
     }
 
@@ -171,5 +173,13 @@ public class ClassExam implements Serializable
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public HSTS_Enums.ExamType getExamType() {
+        return examType;
+    }
+
+    public void setExamType(HSTS_Enums.ExamType examType) {
+        this.examType = examType;
     }
 }

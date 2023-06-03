@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentChooseExamController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentChooseExamController">
    <children>
       <VBox prefHeight="766.0" prefWidth="1028.0">
          <children>
@@ -20,14 +20,14 @@
                   <ComboBox fx:id="CoursesCB" onAction="#onCourseSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Course" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="635.0" prefWidth="1028.0">
+            <HBox alignment="CENTER" prefHeight="612.0" prefWidth="938.0">
                <children>
-                  <TableView fx:id="ExamsTV" editable="true" onMouseClicked="#chooseType" prefHeight="500.0" prefWidth="951.0">
+                  <TableView fx:id="ExamsTV" editable="true" onMouseClicked="#chooseType" prefHeight="597.0" prefWidth="955.0">
                     <columns>
-                      <TableColumn fx:id="IDColumn" prefWidth="236.15187072753906" text="ID" />
-                      <TableColumn fx:id="codeColumn" prefWidth="492.84812927246094" text="Code" />
-                        <TableColumn prefWidth="129.0" text="Type" />
-                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="91.0" text="Time" />
+                      <TableColumn fx:id="IDColumn" prefWidth="72.0" text="ID" />
+                      <TableColumn fx:id="codeColumn" prefWidth="208.0" text="Code" />
+                        <TableColumn prefWidth="300.0" text="Type" />
+                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="116.0" text="Time" />
                     </columns>
                   </TableView>
                </children>

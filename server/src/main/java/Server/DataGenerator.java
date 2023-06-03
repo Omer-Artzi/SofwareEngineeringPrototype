@@ -145,6 +145,7 @@ public class DataGenerator {
     }
     private static void generateTestForms(List<Question> questionsList) {
         if(questionsList != null) {
+            Teacher teacher = SimpleServer.retrieveTeachers().get(0);
             for(int  i = 0; i < 3; i++) {
                 ExamForm examForm = new ExamForm();
                 for(int  j = 0; j < 10;j++) {

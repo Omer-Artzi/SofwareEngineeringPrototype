@@ -8,11 +8,11 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 public class DocumentWrapper extends XWPFDocument implements Serializable {
-    public DocumentWrapper(OPCPackage pkg) throws IOException {
-        super(pkg);
+
+
+    public DocumentWrapper(InputStream fis) throws IOException {
+        super(fis);
     }
 
-    public DocumentWrapper(InputStream is) throws IOException {
-        super(is);
-    }
+
 }

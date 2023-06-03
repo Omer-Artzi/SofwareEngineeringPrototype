@@ -10,6 +10,7 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -24,10 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -48,21 +46,7 @@ public class SimpleServer extends AbstractServer {
 
 	private static List<Person> LoggedInUsers = new ArrayList<>();
 
-	public static SessionFactory getSessionFactory() throws HibernateException {
-		Configuration configuration = new Configuration();
-		configuration.addAnnotatedClass(Student.class);
-		configuration.addAnnotatedClass(Grade.class);
-		configuration.addAnnotatedClass(Subject.class);
-		configuration.addAnnotatedClass(Course.class);
-		configuration.addAnnotatedClass(Teacher.class);
-		configuration.addAnnotatedClass(Question.class);
-		configuration.addAnnotatedClass(ExamForm.class);
-		configuration.addAnnotatedClass(Person.class);
-		configuration.addAnnotatedClass(StudentExam.class);
-		configuration.addAnnotatedClass(ClassExam.class);
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties())
-				.build();
+
 	public static SessionFactory getSessionFactory() throws HibernateException, InterruptedException {
 		if (sessionFactory == null) {
 			Configuration configuration = new Configuration();
@@ -224,10 +208,12 @@ public class SimpleServer extends AbstractServer {
 					message.setMessage(response);
 					session.saveOrUpdate(((ManualStudentExam) (message.getData())).getStudentExam());
 					ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
-					String fileName = "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
-					XWPFDocument document = ((ManualStudentExam) (message.getData())).getExamFile().getXWPFDocument();
+					String fileName = System.getProperty("user.dir") +"\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
+					DocumentWrapper document = ((ManualStudentExam) (message.getData())).getExamFile();
+					System.out.println(document.getDocument().getBody());
 					FileOutputStream outputStream = new FileOutputStream(fileName);
 					document.write(outputStream);
+					outputStream.close();
 					System.out.println("Document Saved successfully.");
 					sendToAllClients(message);
 				}
@@ -236,9 +222,6 @@ public class SimpleServer extends AbstractServer {
 					response = "Manual Exam could not be saved";
 					e.printStackTrace();
 				}
-			}
-			else if (message.getMessage().startsWith("Extra time approved"))
-			{
 			}
 			else if (message.getMessage().startsWith("Extra time approved")) {
 				response = "Extra time approved";
@@ -259,19 +242,19 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("Get Exams Forms for Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("Get Exams Forms for Course")){
-				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("Get Exams for Subject")){
-				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+				response ="Exams in Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);

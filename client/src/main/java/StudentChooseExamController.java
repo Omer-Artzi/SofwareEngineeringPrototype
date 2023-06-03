@@ -56,7 +56,7 @@ public class StudentChooseExamController {
       {
           for(StudentExam studentExam: classExam.getStudentExams())
           {
-              if(studentExam.getStudent().equals(((Student) SimpleClient.getUser())) && studentExam.getStatus() == StudentExam.statusEnum.NotTaken)
+              if(studentExam.getStudent().equals(((Student) SimpleClient.getUser())) && studentExam.getStatus() == HSTS_Enums.StatusEnum.NotTaken)
               {
                   ExamsTV.getItems().add(classExam);
               }
@@ -104,7 +104,7 @@ public class StudentChooseExamController {
 
         ClassExam selectedExam = ExamsTV.getSelectionModel().getSelectedItem();
         if( selectedExam != null ) {
-            if (/*selectedExam.getType() == Digital*/ false) {
+            if (selectedExam.getExamType() == HSTS_Enums.ExamType.Automatic) {
                 //TODO: change to "real" ID
                 if(selectedExam.getCode().equals(examCodeTF.getText()) && Integer.parseInt(IDTF.getText()) == ((Student)(SimpleClient.getUser())).getID()) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
@@ -134,7 +134,7 @@ public class StudentChooseExamController {
         ClassExam selectedExam = ExamsTV.getSelectionModel().getSelectedItem();
         if( selectedExam != null )
         {
-            if( true)
+            if( selectedExam.getExamType() == HSTS_Enums.ExamType.Automatic)
             {
                 IDTF.setDisable(false);
             }
