@@ -1,3 +1,4 @@
+
 import Entities.*;
 import Events.SubjectMessageEvent;
 import javafx.collections.FXCollections;
@@ -75,7 +76,7 @@ public class addQuestionController {
 
     @Subscribe
     public void updateData1(SubjectMessageEvent eventSUB) throws IOException {
-        Person person=(Teacher)SimpleClient.getClient().getUser();
+        Person person=(Teacher) SimpleClient.getClient().getUser();
         if(person instanceof Teacher){
             Teacher teacher=(Teacher) person;
             CourseOfTeacher=teacher.getCourses();

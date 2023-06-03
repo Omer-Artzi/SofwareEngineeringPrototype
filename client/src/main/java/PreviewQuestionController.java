@@ -67,7 +67,7 @@ public class PreviewQuestionController {
     private void CreateAnswers() {
         // TODO: handle saving the answer
         answersToggleGroup = new ToggleGroup();
-        List<String> answers = new ArrayList<>(question.getAnswers());
+        List<String> answers = new ArrayList<>(question.getIncorrectAnswers());
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {
             RadioButton answer = new RadioButton(questionAnswer);

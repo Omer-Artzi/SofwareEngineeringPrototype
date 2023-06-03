@@ -13,18 +13,18 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "CourseID")
     private Course course = null;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "SubjectID")
     private Subject subject;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinColumn(name = "examForms")
     private List<Question> questionList = new ArrayList<>();
 

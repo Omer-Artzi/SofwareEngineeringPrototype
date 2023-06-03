@@ -15,13 +15,13 @@ public class Course implements Serializable, Comparable<Course> {
     private Long ID;
     private String name;
     //list of teachers that teaches the course
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "CourseID"),
     inverseJoinColumns = @JoinColumn(name ="TeacherID"))
     private List<Teacher> teachers;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "CourseID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
@@ -36,11 +36,10 @@ public class Course implements Serializable, Comparable<Course> {
 
     @OneToMany(mappedBy = "course")
     private List<ExamForm> examForms = new ArrayList<>();
-    @ManyToMany
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "Course_ID"),
-            inverseJoinColumns = @JoinColumn(name = "Student_ID"))
-    private List<Student> students = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private List<ClassExam> classExams = new ArrayList<>();
+
+
 
     private String code;
     private static int codeNum = 0;

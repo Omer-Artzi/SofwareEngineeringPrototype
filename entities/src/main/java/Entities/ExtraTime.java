@@ -10,7 +10,7 @@ public class ExtraTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "ExtraTimeID"),
             inverseJoinColumns = @JoinColumn(name ="principlesID"))

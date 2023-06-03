@@ -17,22 +17,30 @@ public class ClassExam implements Serializable
     private Date startDate;
     private Date finalSubmissionDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "Teacher")
     private Teacher tester;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "ExamForm")
     private ExamForm examForm;
 
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "ClassExamID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "Subject")
+    private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "Course")
+    private Course course;
+
 
 
     private int approvedExamsNum;
@@ -121,4 +129,44 @@ public class ClassExam implements Serializable
         return code;
     }
 
+    public Date getFinalSubmissionDate() {
+        return finalSubmissionDate;
+    }
+
+    public void setFinalSubmissionDate(Date finalSubmissionDate) {
+        this.finalSubmissionDate = finalSubmissionDate;
+    }
+
+    public Teacher getTester() {
+        return tester;
+    }
+
+    public void setTester(Teacher tester) {
+        this.tester = tester;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

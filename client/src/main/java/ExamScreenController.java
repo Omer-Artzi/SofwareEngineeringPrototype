@@ -1,4 +1,3 @@
-
 import Entities.*;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -37,7 +36,7 @@ public class ExamScreenController implements Initializable {
             ArrayList<String> options = new ArrayList<String>();
             //for (String answer : question.getAnswers()) {options.add(answer);}
             for (int i = 0; i < 3; i++) {
-                options.add(question.getAnswers().get(i));
+                options.add(question.getIncorrectAnswers().get(i));
             }
             options.add(question.getCorrectAnswer());
             Collections.shuffle(options);
@@ -187,13 +186,13 @@ public class ExamScreenController implements Initializable {
 
             this.currentQuestion = this.studentExam.getClassExam().getExamForm().getQuestionList().get(currentIndex);
             List<String> options = new ArrayList<>();
-            options.add(this.currentQuestion.getAnswers().get(0));
-            options.add(this.currentQuestion.getAnswers().get(1));
-            options.add(this.currentQuestion.getAnswers().get(2));
+            options.add(this.currentQuestion.getIncorrectAnswers().get(0));
+            options.add(this.currentQuestion.getIncorrectAnswers().get(1));
+            options.add(this.currentQuestion.getIncorrectAnswers().get(2));
             options.add(this.currentQuestion.getCorrectAnswer());
             Collections.shuffle(options);
 
-            this.currentQuestion.setAnswers(options);
+            this.currentQuestion.setIncorrectAnswers(options);
 
             this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;

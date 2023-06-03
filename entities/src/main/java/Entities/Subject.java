@@ -33,6 +33,8 @@ public class Subject implements Serializable, Comparable<Subject> {
     // New paste, check if works
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "subject")
+    private List<ClassExam> classExams = new ArrayList<>();
 
     public Subject() {
         code = Integer.toString(++codeNum);

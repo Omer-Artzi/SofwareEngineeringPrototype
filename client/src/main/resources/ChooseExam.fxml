@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ChooseExamController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentChooseExamController">
    <children>
       <VBox prefHeight="766.0" prefWidth="1028.0">
          <children>
@@ -22,11 +22,12 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="635.0" prefWidth="1028.0">
                <children>
-                  <TableView fx:id="ExamsTV" editable="true" prefHeight="500.0" prefWidth="951.0">
+                  <TableView fx:id="ExamsTV" editable="true" onMouseClicked="#chooseType" prefHeight="500.0" prefWidth="951.0">
                     <columns>
                       <TableColumn fx:id="IDColumn" prefWidth="236.15187072753906" text="ID" />
                       <TableColumn fx:id="codeColumn" prefWidth="492.84812927246094" text="Code" />
-                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="221.28836059570312" text="Time" />
+                        <TableColumn prefWidth="129.0" text="Type" />
+                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="91.0" text="Time" />
                     </columns>
                   </TableView>
                </children>
@@ -34,8 +35,8 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="11.0">
                <children>
                   <TextField fx:id="examCodeTF" promptText="Enter Exam Code" />
-                  <Button fx:id="ViewManualButton" mnemonicParsing="false" onAction="#takeManual" prefHeight="25.0" prefWidth="132.0" text="Take Manual Version" />
-                  <Button fx:id="ViewDIgitalButton" mnemonicParsing="false" onAction="#takeDigital" prefHeight="25.0" prefWidth="132.0" text="Take Digital Version " />
+                  <TextField fx:id="IDTF" promptText="Enter ID" />
+                  <Button fx:id="startExamButton" mnemonicParsing="false" onAction="#startExam" prefHeight="25.0" prefWidth="132.0" text="Start Exam" />
                </children>
             </HBox>
          </children>

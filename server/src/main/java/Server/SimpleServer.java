@@ -6,6 +6,7 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -20,10 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -51,6 +49,7 @@ public class SimpleServer extends AbstractServer {
 			configuration.addAnnotatedClass(Question.class);
 			configuration.addAnnotatedClass(ExamForm.class);
 			configuration.addAnnotatedClass(ClassExam.class);
+			configuration.addAnnotatedClass(StudentExam.class);
 			configuration.addAnnotatedClass(Person.class);
 
 
@@ -58,8 +57,9 @@ public class SimpleServer extends AbstractServer {
 					.applySettings(configuration.getProperties())
 					.build();
 
-			return configuration.buildSessionFactory(serviceRegistry);
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		}
+		return  sessionFactory;
 	}
 	public SimpleServer(int port) {
 		super(port);
@@ -125,7 +125,8 @@ public class SimpleServer extends AbstractServer {
 				response = "Error! we got an empty message";
 				message.setMessage(response);
 				client.sendToClient(message);
-			}else if(request.startsWith("Login")){
+			}
+			else if(request.startsWith("Login")){
 				System.out.println("Login request received");
 				List<String> credentials = (List<String>)message.getData();
 				String password = credentials.get(1);
@@ -149,7 +150,18 @@ public class SimpleServer extends AbstractServer {
 				response = ("1Subjects of: " + teacher.getFullName());
 				System.out.println(response); /////
 				message.setMessage(response);
-				message.setData(getSubjects());
+				message.setData(getSubjects(iTeacherID));
+				System.out.println("Subjects: " + teacher.getSubjectList()); /////
+				client.sendToClient(message);
+			} else if(request.startsWith("1Get Courses of Teacher")) {  // Added by Ilan 30.5
+				String teacherID = request.substring(25);
+				System.out.println("Teacher ID: " + teacherID); /////
+				int iTeacherID = Integer.parseInt(teacherID);
+				Teacher teacher = getTeacher(iTeacherID);
+				response = ("1Courses of: " + teacher.getFullName());
+				System.out.println(response); /////
+				message.setMessage(response);
+				message.setData(getCourses(iTeacherID));
 				System.out.println("Subjects: " + teacher.getSubjectList()); /////
 				client.sendToClient(message);
 			} else if(request.startsWith("Get Subjects")){
@@ -163,7 +175,27 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
 				sendToAllClients(message);
-			}else if (message.getMessage().startsWith("Extra time approved"))
+			}else if (message.getMessage().startsWith("Manual Exam"))
+			{
+				try {
+					response = "Manual Exam Received";
+					message.setMessage(response);
+					session.saveOrUpdate(((ManualStudentExam) (message.getData())).getStudentExam());
+					ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
+					String fileName = "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
+					XWPFDocument document = ((ManualStudentExam) (message.getData())).getExamFile().getXWPFDocument();
+					FileOutputStream outputStream = new FileOutputStream(fileName);
+					document.write(outputStream);
+					System.out.println("Document Saved successfully.");
+					sendToAllClients(message);
+				}
+				catch (Exception e)
+				{
+					response = "Manual Exam could not be saved";
+					e.printStackTrace();
+				}
+			}
+			else if (message.getMessage().startsWith("Extra time approved"))
 			{
 				response = "Extra time approved";
 				message.setMessage(response);
@@ -181,13 +213,13 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Exams Forms for Entities.Subject")){
+			} else if(request.startsWith("Get Exams for Subject")){
 				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams Forms for Entities.Course")){
-				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+			}else if(request.startsWith("Get Exams For Course")){
+				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
@@ -371,21 +403,21 @@ public class SimpleServer extends AbstractServer {
 
 	}
 
-	private List<ExamForm> getExamsForCourse(Course course) {
+	private List<ClassExam> getExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
-		Root<ExamForm> root = query.from(ExamForm.class);
+		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+		Root<ClassExam> root = query.from(ClassExam.class);
 		query.where(builder.equal(root.get("course"), course));
-		List<ExamForm> examForms = session.createQuery(query).getResultList();
+		List<ClassExam> examForms = session.createQuery(query).getResultList();
 		return examForms;
 	}
-	private List<ExamForm> getExamsForSubjects(Subject subject) {
+	private List<ClassExam> getExamsForSubjects(Subject subject) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
 		Root<ExamForm> root = query.from(ExamForm.class);
 		query.where(builder.equal(root.get("subject"), subject));
-		List<ExamForm> examForms = session.createQuery(query).getResultList();
-		return examForms;
+		List<ClassExam> classExams = session.createQuery(query).getResultList();
+		return classExams;
 	}
 
 	private List<Question> getQuestionsForCourse(Course course) {
@@ -404,6 +436,22 @@ public class SimpleServer extends AbstractServer {
 		query.from(Subject.class);
 		List<Subject> subjects = session.createQuery(query).getResultList();
 		return subjects;
+	}
+	private List<Subject> getSubjects(int iTeacherid) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+		Root<Teacher> root = query.from(Teacher.class);
+		query.where(builder.equal(root.get("ID"), iTeacherid));
+		List<Subject> subjects = session.createQuery(query).getSingleResult().getSubjects();
+		return subjects;
+	}
+	private List<Course> getCourses(int iTeacherid) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
+		Root<Teacher> root = query.from(Teacher.class);
+		query.where(builder.equal(root.get("ID"), iTeacherid));
+		List<Course> courses = session.createQuery(query).getSingleResult().getCourses();
+		return courses;
 	}
 
 	private Student getStudent(int iStudentID) {
@@ -444,7 +492,7 @@ public class SimpleServer extends AbstractServer {
 			e1.printStackTrace();
 		}
 	}
-	public List<Student> retrieveStudents()
+	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);

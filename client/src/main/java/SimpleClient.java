@@ -28,8 +28,15 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+		}else if (message.getMessage().startsWith("Manual Exam")) { //Added by Omer 3.6
+			ManualExamEvent stMsg = new ManualExamEvent();
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
 			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Courses of")) { //Added by Ilan 30.5
+			CoursesOfTeacherEvent stMsg = new CoursesOfTeacherEvent((List<Course>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
@@ -59,7 +66,7 @@ public class SimpleClient extends AbstractClient {
 			user.extraTimeRequest((ExtraTime)message.getData());
 
 		} else if(message.getMessage().startsWith("Exams in ")){
-			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
+			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
 		else if(message.getMessage().startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
@@ -143,8 +150,8 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.port = port;
 	}
 
-	public void setUser(Person user) {
-		this.user = user;
+	public static void  setUser(Person otherUser) {
+		user = otherUser;
 	}
 
 	public static Person getUser() {

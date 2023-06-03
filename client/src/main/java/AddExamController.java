@@ -1,18 +1,16 @@
+
 import Entities.*;
 import Events.*;
-import antlr.ASTFactory;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.util.converter.IntegerStringConverter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import javafx.scene.control.Button;
@@ -26,8 +24,6 @@ import javafx.scene.input.MouseEvent;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
-
-import static javafx.scene.control.cell.TextFieldTableCell.*;
 
 public class AddExamController {
     private int examID;
@@ -263,7 +259,7 @@ public class AddExamController {
     @Subscribe
     public void updateSubjects(SubjectsOfTeacherMessageEvent eventSUB) throws IOException {
         resetButton.setVisible(false);
-        teacher = (Teacher)SimpleClient.getClient().getUser();
+        teacher = (Teacher) SimpleClient.getClient().getUser();
         teacherSubjects=eventSUB.getSubjects();
         if (teacherSubjects != null){
             Collections.sort(teacherSubjects);

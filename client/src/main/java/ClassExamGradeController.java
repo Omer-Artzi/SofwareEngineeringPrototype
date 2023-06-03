@@ -1,12 +1,6 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
-import Events.MessageEvent;
 import Events.StudentExamEvent;
-import Events.SubjectMessageEvent;
-import Server.Events.ApiResponse;
-import Server.Events.ResponseQuestion;
-import com.github.javafaker.Faker;
-import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,20 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import javafx.beans.property.SimpleStringProperty;
-import org.mindrot.jbcrypt.BCrypt;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class ClassExamGradeController {
@@ -199,7 +182,7 @@ public class ClassExamGradeController {
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
 
-        clientTeacher = (Teacher)SimpleClient.getClient().getUser();
+        clientTeacher = (Teacher) SimpleClient.getClient().getUser();
         // Get teacher courses and return if the teacher not assigned to any course
         List<Course> teacherCourses = clientTeacher.getCourses();
         if (teacherCourses.isEmpty())

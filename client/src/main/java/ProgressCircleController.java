@@ -2,7 +2,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 

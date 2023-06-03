@@ -39,7 +39,6 @@ public class SimpleChatServer extends Application
                     EventBus.getDefault().post(new TerminationEvent());
                     SessionFactory sessionFactory = SimpleServer.getSessionFactory();
                     if (sessionFactory != null && !sessionFactory.isClosed()){
-
                         SimpleServer.session.close();
                         sessionFactory.close();
                         System.out.println("Closed Session Factory");

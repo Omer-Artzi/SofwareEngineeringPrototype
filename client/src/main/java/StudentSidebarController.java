@@ -1,5 +1,8 @@
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -40,38 +43,16 @@ public class StudentSidebarController {
     @FXML
     private Button viewTestFormsButton;
 
-    @FXML
-    void addQuestion(ActionEvent event) {
 
+
+    @FXML
+    void takeExam(ActionEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
     }
 
     @FXML
-    void addTestForms(ActionEvent event) {
+    void viewGrades(ActionEvent event) throws IOException {
 
-    }
-
-    @FXML
-    void gradeExam(ActionEvent event) {
-
-    }
-
-    @FXML
-    void showStatistics(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewClassExams(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewQuestion(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewTestForms(ActionEvent event) {
 
     }
 

@@ -75,22 +75,10 @@
 <version>14</version>
 <classifier>win</classifier>
 </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>win</version>
-            <scope>compile</scope>
-        </dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>win</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>20</version>
+			<version>16</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -111,7 +99,7 @@
 				<configuration>
 					<release>13</release>
                     <source>19</source>
-                    <target>19</target>s
+                    <target>19</target>
                 </configuration>
 			</plugin>
 			<plugin>

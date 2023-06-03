@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -6,9 +7,10 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Entities.ClassExam;
-import Entities.Message;
+import Entities.*;
 import Events.CreateExamEvent;
+import Events.ManualExamEvent;
+import Events.StartExamEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -17,12 +19,13 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 
-public class DoExamManualController {
+public class StudentDoExamManualController {
 
     @FXML
     private ResourceBundle resources;
@@ -37,21 +40,15 @@ public class DoExamManualController {
     private Label timeLeftLabel;
     @FXML
     private Label fileRecievedLabel;
-    private ClassExam classExam;
+
 
     private int timeInSeconds;
      private ClassExam mainClassExam;
+     private StudentExam studentExam = new StudentExam();
 
     @FXML
     void fileDropped(DragEvent event){
-            System.out.println("File Dropped");
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(0);
-            dragAndDropImg.setEffect(colorAdjust);
-            dragAndDropImg.setImage(new Image("/Images/accept.png"));
-            fileRecievedLabel.setText("File Uploaded!");
-            List<File> files = event.getDragboard().getFiles();
-            System.out.println("File gotten: " + files.get(0));
+
     }
     @FXML
     void fileDetected(DragEvent event) {
@@ -68,27 +65,46 @@ public class DoExamManualController {
     }
     @FXML
     void fileExited(DragEvent event) {
+        File file = null;
         try {
+            System.out.println("File Dropped");
             ColorAdjust colorAdjust = new ColorAdjust();
             colorAdjust.setBrightness(0);
             dragAndDropImg.setEffect(colorAdjust);
-            System.out.println("Changing Brightness");
+            dragAndDropImg.setImage(new Image("/Images/accept.png"));
+
+            file = event.getDragboard().getFiles().get(0);
+            try
+            {
+                FileInputStream fis = new FileInputStream(file);
+                 DocumentWrapper document = new DocumentWrapper(fis);
+            ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, document);
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                message.setData(manualStudentExam);
+                SimpleClient.getClient().sendToServer(message);
+                fileRecievedLabel.setText("File Uploaded!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("File gotten: " + file);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
     }
 
     @FXML
     void initialize() {
-        timeInSeconds = mainClassExam.getTime();
-        assert dragAndDropImg != null : "fx:id=\"dragAndDropImg\" was not injected: check your FXML file 'DoExamManual.fxml'.";
-        assert timeLeftLabel != null : "fx:id=\"timeLeftLabel\" was not injected: check your FXML file 'DoExamManual.fxml'.";
+        EventBus.getDefault().register(this);
+
+        assert dragAndDropImg != null : "fx:id=\"dragAndDropImg\" was not injected: check your FXML file 'StudentDoExamManual.fxml'.";
+        assert timeLeftLabel != null : "fx:id=\"timeLeftLabel\" was not injected: check your FXML file 'StudentDoExamManual.fxml'.";
         fileRecievedLabel.setAlignment(Pos.CENTER);
         fileRecievedLabel.setText("Drop File Here");
         timeLeftLabel.setAlignment(Pos.CENTER);
-        ViewExamController.createManualExam(classExam.getExamForm());
+
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -102,7 +118,7 @@ public class DoExamManualController {
                     try {
                         //SimpleClient.getClient().sendToServer(new Message(1,"Exam Fail: Time Ended"));
                         timer.cancel();
-                        SimpleChatClient.setScene("ChooseExam",1024,768);
+                        SimpleChatClient.setRoot("ChooseExam");
                         JOptionPane.showMessageDialog(null,"Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);
 
                     } catch (IOException e) {
@@ -115,9 +131,20 @@ public class DoExamManualController {
         timer.schedule(task,0, 1000);
         }
         @Subscribe
-    void createManualExam(CreateExamEvent event)
+       public  void getExam(StartExamEvent event)
         {
+            mainClassExam = event.getClassExam();
+            timeInSeconds = (int)(mainClassExam.getExamTime());
+            ViewExamController.createManualExam(mainClassExam);
+            studentExam.setStudent(((Student)(SimpleClient.getUser())));
+            studentExam.setClassExam(mainClassExam);
+            studentExam.setStatus(StudentExam.statusEnum.ToEvaluate);
 
+        }
+        @Subscribe
+    public void endExam(ManualExamEvent event) throws IOException {
+            JOptionPane.showMessageDialog(null,"Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
         }
     }
 

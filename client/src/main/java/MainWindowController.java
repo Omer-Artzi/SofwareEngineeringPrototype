@@ -1,10 +1,8 @@
 import java.io.IOException;
 import java.net.URL;
-import java.security.Principal;
 import java.util.ResourceBundle;
 
-import Entities.Student;
-import Entities.Teacher;
+
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
