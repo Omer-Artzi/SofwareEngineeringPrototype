@@ -1,19 +1,12 @@
-import Entities.Message;
-import Entities.School;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 
-public class TeacherSidebarController {
-    private int messageId;
-    @FXML
-    private Button viewClassExamBT;
+public class TeacherSidebarController implements SideBar {
+
     @FXML
     private Label Menu;
 
@@ -41,69 +34,53 @@ public class TeacherSidebarController {
     @FXML
     private Label userTypeLabel;
 
-    @Subscribe
-    public void nothing(){}
-
-
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherAddQuestion");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
+        changeScene("AddQuestion");
+
 
     }
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+        changeScene("AddExam");
     }
 
     @FXML
     void gradeExam(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
+        changeScene("TeacherExamGrade");
     }
 
 
     @FXML
     void showStatistics(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
+        changeScene("ShowStatistics");
     }
 
     @FXML
     void viewQuestion(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+        changeScene("TeacherViewQuestions");
     }
 
     @FXML
     void viewClassExams(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
+        changeScene("ViewClassExams");
     }
 
     @FXML
     void viewTestForms(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
+        changeScene("ViewTestForms");
     }
-    @FXML
-    public void viewLiveExam(ActionEvent event) throws IOException {
-        //EventBus.getDefault().register(this);
-        //EventBus.getDefault().post(event);
-        //Message message=new Message(1,"Get Live Exams");
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewLiveExams");
-        Platform.runLater(()-> {
-            try {
-                System.out.println("Liad!!!!!!!!!!");
-                //System.out.println(School.getInstance().);
-                Message message=new Message(messageId++,"Get Live Exams");
-                SimpleClient.getClient().sendToServer(message);
-                //System.out.println(School.getInstance().getClassExams().get(0).getID());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        //SimpleClient.getClient().sendToServer(message);
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewLiveExams");
-    }
+
     @FXML
     void initialize() {
-        //EventBus.getDefault().register(this);
         InitializationAsserts();
         userTypeLabel.setText("Logged in as: Teacher");
     }

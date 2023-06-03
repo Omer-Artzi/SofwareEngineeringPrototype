@@ -3,7 +3,10 @@
 *.class
 *.iml
 *.lst
-*/target/*
+*/target/
 *.txt
 server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml
 .idea/misc.xml
+/client/target/
+/server/target/
+/entities/target/

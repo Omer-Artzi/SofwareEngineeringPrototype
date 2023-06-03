@@ -24,12 +24,15 @@ public class SimpleChatClient extends Application {
     private static Scene scene;
     private static Stage clientStage;
     private static FXMLLoader fxmlLoader;
-    private SimpleClient client;
+    private static SimpleClient client;
 
     private static MainWindowController mainWindowController;
 
     public static final double version = 1.7;
 
+    public static void setClient(SimpleClient simpleClient) {
+        client = simpleClient;
+    }
 
 
     @Override
@@ -44,12 +47,13 @@ public class SimpleChatClient extends Application {
                 @Override
                 public void handle(WindowEvent event) {
 
-                    try {
+                    /*try {
                         if (SimpleClient.getClient().isConnected())
                             SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
-                    }
+                    }*/
+                    System.out.println("Client platformexit");
                     Platform.exit();
                 }
             });
@@ -77,6 +81,7 @@ public class SimpleChatClient extends Application {
     @Override
 	public void stop() throws Exception {
             Message message = new Message(1, "Client Closed");
+            System.out.println("Client stop");
             message.setData(SimpleClient.getUser());
             client.sendToServer(message);
             EventBus.getDefault().unregister(this);

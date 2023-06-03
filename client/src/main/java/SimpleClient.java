@@ -18,6 +18,7 @@ public class SimpleClient extends AbstractClient {
 
 	private SimpleClient(String host, int port) {
 		super(host, port);
+		SimpleChatClient.setClient(this);
 	}
 
 	@Override
