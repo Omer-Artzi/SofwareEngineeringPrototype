@@ -145,8 +145,9 @@ public class StudentDoExamManualController {
         }
         @Subscribe
     public void endExam(ManualExamEvent event) throws IOException {
-            JOptionPane.showMessageDialog(null,"Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
             SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+            JOptionPane.showMessageDialog(null,"Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+
         }
     }
 
