@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ListExtraTimeRequestController">
+   <children>
+      <Button fx:id="SeeDetailsBT" layoutX="268.0" layoutY="343.0" mnemonicParsing="false" onAction="#SeeDetails" prefHeight="29.0" prefWidth="118.0" text="See Details">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <TableView fx:id="ExtraTimeList" layoutX="158.0" layoutY="73.0" prefHeight="245.0" prefWidth="372.0">
+        <columns>
+          <TableColumn fx:id="IDColumn" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="CodeColumn" prefWidth="98.4000244140625" text="Code" />
+            <TableColumn fx:id="SentByColumn" prefWidth="197.5999755859375" text="Sent By" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

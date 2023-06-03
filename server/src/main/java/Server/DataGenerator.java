@@ -277,6 +277,49 @@ public class DataGenerator {
         {
             e.printStackTrace();
         }
+
+    }
+/*Generate Principles, by Liad*/
+    private static void generatePrinciple() {
+        try {
+            // String salt = BCrypt.gensalt(); // TODO
+            Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
+            admin.setEmail("adminP");
+            //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            admin.setPassword("1234");
+            admin.setGender(HSTS_Enums.Gender.Female);
+            SimpleServer.session.save(admin);
+            SimpleServer.session.flush();
+            Faker faker = new Faker();
+            Random random = new Random();
+            for (int i = 0; i < 5; i++) {
+                String PrincipleFirstName = faker.name().firstName();
+                String PrincipleLastName = faker.name().lastName();
+                String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
+                // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
+                String password = "1234";
+                Principal principal = new Principal(PrincipleFirstName, PrincipleLastName, HSTS_Enums.Gender.Male, PrincipleEmail, password);
+                /*
+                if(i == 0)
+                {
+                    principle.setEmail("p");
+                    principle.setPassword(BCrypt.hashpw("1234", salt));
+                    principle.setGender(Gender.Female);
+                    principle.setFirstName("superUser");
+                    principle.setLastName("Principle");
+                }
+                */
+
+                SimpleServer.session.saveOrUpdate(principal);
+            }
+            SimpleServer.session.flush();
+            //SimpleServer.session.saveOrUpdate(admin);
+            //SimpleServer.session.flush();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     private static void generateGrades(List<Student> students) {
         Random r = new Random();

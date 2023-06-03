@@ -17,18 +17,18 @@ public class ClassExam implements Serializable
     private Date startDate;
     private Date finalSubmissionDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Teacher")
     private Teacher tester;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ExamForm")
     private ExamForm examForm;
 
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
     joinColumns = @JoinColumn(name = "ClassExamID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
@@ -181,5 +181,22 @@ public class ClassExam implements Serializable
 
     public void setExamType(HSTS_Enums.ExamType examType) {
         this.examType = examType;
+    }
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public Date getFinalSubmissionDate() {
+        return finalSubmissionDate;
+    }
+
+    public void setFinalSubmissionDate(Date finalSubmissionDate) {
+        this.finalSubmissionDate = finalSubmissionDate;
+    }
+    public Course getCourse(){
+        return examForm.getCourse();
+    }
+    public Subject getSubject(){
+        return examForm.getSubject();
     }
 }

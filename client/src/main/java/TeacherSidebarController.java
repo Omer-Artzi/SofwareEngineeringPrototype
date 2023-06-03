@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class TeacherSidebarController {
+public class TeacherSidebarController implements SideBar {
 
     @FXML
     private Label Menu;
@@ -39,39 +39,47 @@ public class TeacherSidebarController {
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
+        changeScene("TeacherAddQuestion");
+
 
     }
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+        changeScene("AddExam");
     }
 
     @FXML
     void gradeExam(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
+        changeScene("TeacherExamGrade");
     }
 
 
     @FXML
     void showStatistics(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
+        changeScene("ShowStatistics");
     }
 
     @FXML
     void viewQuestion(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+        changeScene("TeacherViewQuestions");
     }
 
     @FXML
     void viewClassExams(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
+        changeScene("viewLiveExams");
     }
 
     @FXML
     void viewTestForms(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
+        changeScene("ViewTestForms");
     }
     @FXML
     void createExam(ActionEvent event) throws IOException {

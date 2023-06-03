@@ -24,9 +24,6 @@ public class PreLogInController {
 	@FXML
 	private Button enterButton;
 
-
-
-
 	@Subscribe
 	public void errorEvent(ErrorEvent event){
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");

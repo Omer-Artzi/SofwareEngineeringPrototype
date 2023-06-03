@@ -18,6 +18,7 @@ public class SimpleClient extends AbstractClient {
 
 	private SimpleClient(String host, int port) {
 		super(host, port);
+		SimpleChatClient.setClient(this);
 	}
 
 	@Override
@@ -40,6 +41,27 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
+			System.out.println("SelectedClassExamEvent in client");
+			List<Object>data=(List<Object>) message.getData();
+			if (data.get(0)==null)
+				System.out.println("Empty exam in client");
+			if(((List<Principal>)data.get(1)).isEmpty())
+				System.out.println("Empty principles in client");
+			System.out.println("SelectedClassExamEvent in client2");
+			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
+				System.out.println("Somethings wrong with message");
+			SelectedClassExamEvent stMsg = new SelectedClassExamEvent((List<Object>) message.getData());
+			if(stMsg==null)
+				System.out.println("the event is null");
+			EventBus.getDefault().post(stMsg);
+		}  else if (message.getMessage().startsWith("Principles")) {
+			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principal>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Live Exams")) {
+			System.out.println("Live exams in client");
+			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
@@ -153,8 +175,8 @@ public class SimpleClient extends AbstractClient {
 		SimpleClient.port = port;
 	}
 
-	public static void  setUser(Person otherUser) {
-		user = otherUser;
+	public void setUser(Person user) {
+		this.user = user;
 	}
 
 	public static Person getUser() {

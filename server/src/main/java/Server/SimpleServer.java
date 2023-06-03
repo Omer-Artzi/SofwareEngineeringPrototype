@@ -10,7 +10,6 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -20,15 +19,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
+
+import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDate;
+import java.io.IOException;
+
+import Entities.Principal;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -168,7 +169,8 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			}else if(request.startsWith("1Get Subjects of Teacher")) {  // Added by Ilan 30.5
+			}
+			else if(request.startsWith("1Get Subjects of Teacher")) {  // Added by Ilan 30.5
 				String teacherID = request.substring(26);
 				System.out.println("Teacher ID: " + teacherID); /////
 				int iTeacherID = Integer.parseInt(teacherID);
@@ -190,13 +192,14 @@ public class SimpleServer extends AbstractServer {
 				message.setData(getCourses(iTeacherID));
 				System.out.println("Subjects: " + teacher.getSubjectList()); /////
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Subjects")){
+			}
+			else if(request.startsWith("Get Subjects")){
 				response ="Subjects";
 				message.setMessage(response);
 				message.setData(getSubjects());
 				client.sendToClient(message);
-			} else if (message.getMessage().startsWith("Extra time request"))
-			{
+			}
+			else if (message.getMessage().startsWith("Extra time request")) {
 				response = "Extra Time Requested";
 				message.setMessage(response);
 				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
@@ -288,8 +291,7 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			//The user decided to update a grade, we will update the SQL server and send the new grade list
-			else if(request.startsWith("Change Grade"))
-			{
+			else if(request.startsWith("Change Grade")) {
 				try {
 					Grade newGrade = ((Grade) (message.getData()));
 					response = "Grade Saved: " + newGrade.getStudent().getFullName() + "'s grade in " + newGrade.getCourse() + " was changed to " + newGrade.getGrade();
@@ -312,8 +314,11 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				client.sendToClient(message);
 				EventBus.getDefault().post(new ClientUpdateEvent(SubscribersList.size()));
-			}else if(request.startsWith("Client Closed")){
+			}
+			else if(request.startsWith("Client Closed")){
 				response ="";
+				boolean userRemoved =  LoggedInUsers.remove((Person)message.getData());
+				System.out.println("user: " + ((Person)message.getData()).getFullName() + " removed: " + userRemoved);
 				for(SubscribedClient subscriber: SubscribersList)
 				{
 					if(subscriber.getClient().equals(client)) {
@@ -358,6 +363,26 @@ public class SimpleServer extends AbstractServer {
 					response = (newGrade.getStudent().getFullName() + "'s new grade could not be added to the database");
 					System.out.println(response);
 				}
+			}else if(request.startsWith("Save Question")){
+				Question newQuestion = ((Question)(message.getData()));
+				try {
+					session.save(newQuestion);
+					//Course updateCourse=newQuestion.getCourse();
+					//updateCourse.getQuestions().add(newQuestion);
+					//session.merge(updateCourse);
+					session.flush();
+					response = ("Question added succefully");
+					message.setMessage(response);
+					client.sendToClient(message);
+					System.out.println(response);
+
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					response = ("new question could not be added to the database");
+					System.out.println(response);
+				}
 			}
 			else if (request.startsWith("Add ExamForm")){ // Added by Ilan
 				ExamForm newExamForm = ((ExamForm)(message.getData()));
@@ -377,8 +402,7 @@ public class SimpleServer extends AbstractServer {
 				}
 			}
 			// Lior's addition
-			else if(request.startsWith("Change Student Exam"))
-			{
+			else if(request.startsWith("Change Student Exam")) {
 				StudentExam studentExam = ((StudentExam)(message.getData()));
 				try {
 					// draw student from database and update him
@@ -407,8 +431,7 @@ public class SimpleServer extends AbstractServer {
 					System.out.println(response);
 				}
 			}
-			else
-			{
+			else {
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);
 				response = "[Unrecognized Message]";
@@ -421,7 +444,7 @@ public class SimpleServer extends AbstractServer {
 		{
 			e1.printStackTrace();
 		}
-		// Check if there were new changes in the database before commint
+		// Check if there were new changes in the database before commit
 		if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
 			session.getTransaction().commit();
 	}
@@ -450,8 +473,8 @@ public class SimpleServer extends AbstractServer {
 			} catch (Exception e2)
 			{
 				try{
-					CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
-					Root<Principle> root = query.from(Principle.class);
+					CriteriaQuery<Principal> query = builder.createQuery(Principal.class);
+					Root<Principal> root = query.from(Principal.class);
 					query.where(builder.equal(root.get("email"), email));
 					Person user = session.createQuery(query).getSingleResult();
 					return user;
@@ -517,6 +540,24 @@ public class SimpleServer extends AbstractServer {
 		return courses;
 	}
 
+	private List<ClassExam> retrieveClassExam() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+		query.from(ClassExam.class);
+		List<ClassExam> exams = session.createQuery(query).getResultList();
+		System.out.println("Live Exams in retrieveClassExam");
+		return exams;
+	}
+
+
+	private List<Principal> getPrinciples() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Principal> query = builder.createQuery(Principal.class);
+		query.from(Principal.class);
+		List<Principal> principals = session.createQuery(query).getResultList();
+		return principals;
+	}
+
 	private Student getStudent(int iStudentID) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Student> query = builder.createQuery(Student.class);
@@ -566,6 +607,7 @@ public class SimpleServer extends AbstractServer {
 			session.flush();
 		}
 	}
+
 	public static List<Student> retrieveStudents()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();

@@ -1,4 +1,5 @@
 import Entities.*;
+import Entities.ClassExam;
 import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
 import Events.RefreshPerson;
@@ -27,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 public class StudentExamGradeController
 {
-
     @FXML
     private VBox AnswersVBOX;
 

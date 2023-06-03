@@ -1,12 +1,14 @@
 package Entities;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class School {
-    private static School school;
-    private static List<Subject> subjects;
-    private static List<Principal> principals;
+    private static School school=null;
+    private static List<Subject> subjects = new ArrayList<>();
+    private static List<Principal> principals = new ArrayList<>();
+    private List<ClassExam> classExams = new ArrayList<>();
 
     // plus class exam list
 
@@ -26,5 +28,29 @@ public class School {
 
     public static List<Subject> getSubjects() {
         return subjects;
+    }
+
+    public static School getSchool() {
+        return school;
+    }
+
+    public static List<Principal> getPrincipals() {
+        return principals;
+    }
+
+    public List<ClassExam> getClassExams() {
+        return classExams;
+    }
+
+    public static void setSchool(School school) {
+        School.school = school;
+    }
+
+    public static void setPrincipals(List<Principal> principals) {
+        School.principals = principals;
+    }
+
+    public void setClassExams(List<ClassExam> classExams) {
+        this.classExams = classExams;
     }
 }

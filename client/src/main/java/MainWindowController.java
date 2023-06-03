@@ -1,8 +1,10 @@
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.security.Principal;
+import java.util.*;
 
-
+import Entities.Student;
+import Entities.Teacher;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -21,10 +23,12 @@ public class MainWindowController {
     @FXML
     private AnchorPane sidePane;
 
+    private Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
+
     @FXML
     private void initialize() throws IOException {
         InitializationAsserts();
-
+        //System.out.println("Liad and Ilan in MainWindow");
         SimpleChatClient.setMainWindowController(this);
 
         SimpleChatClient.getScene().getWindow().setHeight(768);
@@ -33,7 +37,8 @@ public class MainWindowController {
         // Load the sidebar
         Parent sideBarParent = null;
         String userType = SimpleClient.getUser().getClass().getSimpleName();
-        //System.out.println("User type: " + userType);
+        //String userType="Principle";
+       // System.out.println("User type: " + userType);
         String sideBarName = userType + "Sidebar";
         // load correct sidebar according to user type
         sideBarParent = SimpleChatClient.loadFXML(sideBarName);
@@ -59,7 +64,22 @@ public class MainWindowController {
 
     @FXML
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
-        Parent mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        Parent mainWindowParent;
+
+        // scene reuse code, currently creates problems
+        /*if (loadedScenes.containsKey(sceneName)) {
+            mainWindowParent = loadedScenes.get(sceneName);
+        }
+        else {
+            mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+            loadedScenes.put(sceneName, mainWindowParent);
+        }*/
+
+
+        mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        loadedScenes.put(sceneName, mainWindowParent);
+
+
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
     }
