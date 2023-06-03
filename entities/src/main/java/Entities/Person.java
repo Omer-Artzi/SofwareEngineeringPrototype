@@ -91,4 +91,9 @@ public abstract class Person implements Serializable{
     public abstract void extraTimeRequest(ExtraTime data);
 
     public abstract void receiveExtraTime(ExtraTime data);
+
+    @Override
+    public String toString() {
+        return firstName+lastName;
+    }
 }

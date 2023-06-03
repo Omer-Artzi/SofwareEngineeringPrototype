@@ -27,9 +27,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class DataGenerator {
     static Faker faker = new Faker();
     public static void generateData() throws IOException {
-         List<Student> students = DataGenerator.generateStudents();
+         //List<Student> students = DataGenerator.generateStudents();
         generatePrinciple();
-        generateGrades(students);
+        //generateGrades(students);
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
         SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
@@ -167,7 +167,7 @@ public class DataGenerator {
     }
     private static void generateTeachers(List<Subject> subjects) {
         try {
-            String salt = BCrypt.gensalt();
+            //String salt = BCrypt.gensalt(); //TODO
             //String principalFirstName = faker.name().firstName();
             //String principalLastName = faker.name().lastName();
             //String principalEmail = principalFirstName + "_" + principalLastName + "@gmail.com";
@@ -185,7 +185,8 @@ public class DataGenerator {
                 String teacherFirstName = faker.name().firstName();
                 String teacherLastName = faker.name().lastName();
                 String teacherEmail = teacherFirstName + "_" + teacherLastName + "@gmail.com";
-                String password = BCrypt.hashpw(faker.internet().password(), salt);
+                //String password = BCrypt.hashpw(faker.internet().password(), salt); //TODO
+                String password = "1234";
                 List<Course> coursesList = new ArrayList<>();
                 List<Subject> subjectsList = new ArrayList<>();
                 for (int j = 0; j < 5; j++) {
@@ -198,15 +199,19 @@ public class DataGenerator {
                     }
                 }
                 Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
-                    teacher.setPassword(BCrypt.hashpw("1234", salt));
+                    //teacher.setPassword(BCrypt.hashpw("1234", salt)); //TODO
+                    teacher.setPassword("1234");
                     teacher.setGender(Gender.Female);
                     teacher.setFirstName("super");
                     teacher.setLastName("user");
                     admin = teacher;
                 }
+
+
                 for (Course course : coursesList) {
                     course.getTeachers().add(teacher);
                     if(!(tempCourses.contains(course))){
@@ -246,14 +251,13 @@ public class DataGenerator {
 /*Generate Principles, by Liad*/
     private static void generatePrinciple() {
         try {
-            Principle admin = new Principle();
-            String salt = BCrypt.gensalt();
-            admin.setEmail("p");
-            admin.setPassword(BCrypt.hashpw("1234", salt));
+            // String salt = BCrypt.gensalt(); // TODO
+            Principle admin = new Principle("admin1","admin2");
+            admin.setEmail("adminP");
+            //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            admin.setPassword("1234");
             admin.setGender(Gender.Female);
-            admin.setFirstName("superUser");
-            admin.setLastName("Principle");
-            SimpleServer.session.saveOrUpdate(admin);
+            SimpleServer.session.save(admin);
             SimpleServer.session.flush();
             Faker faker = new Faker();
             Random random = new Random();
@@ -261,8 +265,10 @@ public class DataGenerator {
                 String PrincipleFirstName = faker.name().firstName();
                 String PrincipleLastName = faker.name().lastName();
                 String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
-                String password = BCrypt.hashpw(faker.internet().password(), salt);
+                // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
+                String password = "1234";
                 Principle principle = new Principle(PrincipleFirstName, PrincipleLastName, Gender.Male, PrincipleEmail, password);
+                /*
                 if(i == 0)
                 {
                     principle.setEmail("p");
@@ -271,6 +277,8 @@ public class DataGenerator {
                     principle.setFirstName("superUser");
                     principle.setLastName("Principle");
                 }
+                */
+
                 SimpleServer.session.saveOrUpdate(principle);
             }
             SimpleServer.session.flush();
@@ -349,6 +357,7 @@ public class DataGenerator {
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
                 ClassExam classExam = new ClassExam(ExamForms.get(i), testStartDate, testEndDate, examTime*60, teacher, code);
+                //School.getInstance().getClassExams().add(classExam);
 
                 // set last used on creation date
                 ExamForms.get(i).setLastUsed(ConvertToDate(LocalDateTime.now()));
@@ -387,6 +396,7 @@ public class DataGenerator {
 
                 SimpleServer.session.saveOrUpdate(classExam);
                 SimpleServer.session.flush();
+
 
                 for (Student student : studentsReceive)
                 {

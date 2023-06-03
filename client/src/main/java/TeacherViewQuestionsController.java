@@ -78,6 +78,7 @@ public class TeacherViewQuestionsController {
 
         // handle contextual state
         state = ContextualState.VIEW;
+        ContextualButton.setVisible(true);
         ContextualButton.setText("Edit Question");
         ContextualButton.setDisable(true);
 
@@ -216,7 +217,6 @@ public class TeacherViewQuestionsController {
         System.out.println("Populating questions");
         questionsTable.getItems().clear();
         questionsTable.getItems().addAll(event.getQuestions());
-
     }
 
     @Subscribe

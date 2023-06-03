@@ -130,6 +130,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="viewClassExamBT" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewLiveExam" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="View ClassExam" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/report.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </VBox>
       <Label fx:id="userTypeLabel" prefHeight="17.0" prefWidth="180.0" text="Label" />

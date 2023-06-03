@@ -34,10 +34,7 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Current Exams")) {
-			CurrentExamsEvent stMsg = new CurrentExamsEvent((List<Exam>) message.getData());
-			EventBus.getDefault().post(stMsg);
-		}else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
+		} else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
 			System.out.println("SelectedClassExamEvent in client");
 			List<Object>data=(List<Object>) message.getData();
 			if (data.get(0)==null)
@@ -55,7 +52,8 @@ public class SimpleClient extends AbstractClient {
 			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principle>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Live Exams")) {
-			LiveExamsEvent stMsg = new LiveExamsEvent((List<Exam>) message.getData());
+			System.out.println("Live exams in client");
+			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
@@ -99,6 +97,7 @@ public class SimpleClient extends AbstractClient {
 			System.out.println("client principle");
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
+			System.out.println("Fail : User");
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
 		} else if (message.getMessage().startsWith("Success")) {
 		} else if (message.getMessage().startsWith("Failed to save grade")) {

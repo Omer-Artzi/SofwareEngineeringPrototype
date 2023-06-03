@@ -1,75 +1,43 @@
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import Entities.Principle;
+import Entities.Teacher;
 import Events.NotificationEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import java.io.IOException;
 
 public class PrincipleMainScreenController {
 
     @FXML
-    private Button ExtraTimeRequestBT;
-
-    @FXML
-    private Label Menu;
-
-    @FXML
-    private Label MenuBack;
-
-    @FXML
-    private Button gradeExamButton;
-
-    @FXML
     private Button seeCurrentTestsBT;
+    @FXML
+    private ResourceBundle resources;
 
     @FXML
-    private Button showStatisticsButton;
+    private URL location;
 
     @FXML
-    private AnchorPane slider;
-
-    @FXML
-    private Button viewQuestionButton;
-
-    @FXML
-    private Button viewTestFormsButton;
+    private Label MainMessageLabel;
 
     @Subscribe
-    public void notification(NotificationEvent event) throws IOException {
-        if(event.IsFound(SimpleClient.getClient().getUser()))
+    public void update(NotificationEvent event) throws IOException {
+        Principle user=((Principle)(SimpleClient.getClient().getUser()));
+        if(event.IsFound(user))
             event.show();
     }
-
     @FXML
-    void ExtraTimeRequest(ActionEvent event) throws IOException {
-        SimpleChatClient.setRoot("ListExtraTimeRequest");
-    }
-
-    @FXML
-    void gradeExam(ActionEvent event) {
+    void initialize() {
+        EventBus.getDefault().register(this);
+        assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'PrincipleMainScreen.fxml'.";
 
     }
 
-    @FXML
-    void seeCurrentTests(ActionEvent event) {
-
+    public void seeCurrentTests(ActionEvent actionEvent) {
     }
-
-    @FXML
-    void showStatistics(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewQuestion(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewTestForms(ActionEvent event) {
-
-    }
-
 }
