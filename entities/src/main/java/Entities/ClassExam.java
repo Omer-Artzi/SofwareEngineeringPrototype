@@ -121,4 +121,21 @@ public class ClassExam implements Serializable
         return code;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public Date getFinalSubmissionDate() {
+        return finalSubmissionDate;
+    }
+
+    public void setFinalSubmissionDate(Date finalSubmissionDate) {
+        this.finalSubmissionDate = finalSubmissionDate;
+    }
+    public Course getCourse(){
+        return examForm.getCourse();
+    }
+    public Subject getSubject(){
+        return examForm.getSubject();
+    }
 }

@@ -47,6 +47,7 @@ public class SimpleServer extends AbstractServer {
 		configuration.addAnnotatedClass(ClassExam.class);
 		configuration.addAnnotatedClass(StudentExam.class);
 		configuration.addAnnotatedClass(Person.class); //TODO: add principle and ExtraTimeRequest
+		configuration.addAnnotatedClass(ExtraTime.class); ///// added by Liad
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
@@ -112,14 +113,16 @@ public class SimpleServer extends AbstractServer {
 				List<String> credentials = (List<String>)message.getData();
 				String password = credentials.get(1);
 				Person user = retrieveUser(credentials.get(0));
-				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
+				 //if(BCrypt.checkpw(password, user.getPassword()) && user != null) // TODO
+				if(user.getPassword().equals("1234"))
 				{
-					System.out.println("found principle");
+					//System.out.println("found principle");
 					response = "Success: User found";
 					message.setData(user);
 				}
 				else
 				{
+					//System.out.println(user.getEmail());
 					response = "Fail: User not found";
 				}
 				message.setMessage(response);
@@ -154,12 +157,7 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(getSubjects());
 				client.sendToClient(message);
-			}else if(request.equals("Get Current Exams")){
-				response ="Current Exams";
-				message.setMessage(response);
-				message.setData(getExams());
-				client.sendToClient(message);
-			}else if(request.startsWith("Get Principles")){
+			}else if(request.startsWith("Get Principles")){	//Added by Liad
 				System.out.println("get principle request");
 				response="Principles";
 				message.setMessage(response);
@@ -205,10 +203,11 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(getQuestionsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Live Exams")){
+			}else if(request.startsWith("Get Live Exams")){	//Added by Liad
+				System.out.println("Live Exams in server");
 				response ="Live Exams";
 				message.setMessage(response);
-				message.setData(getLiveExams());
+				message.setData(retrieveClassExam());
 				client.sendToClient(message);
 			}
 			//Client asked for the student list, we will pull it from the SQL server and send it over
@@ -345,20 +344,16 @@ public class SimpleServer extends AbstractServer {
 			Person user = session.createQuery(query).getSingleResult();
 			return user;
 		}
-		catch (Exception e)
+		catch (Exception e)		//TODO: Add anothe option
 		{
-			CriteriaQuery<Student> query = builder.createQuery(Student.class);
-			Root<Student> root = query.from(Student.class);
+			CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
+			Root<Principle> root = query.from(Principle.class);
 			query.where(builder.equal(root.get("email"), email));
 			Person user = session.createQuery(query).getSingleResult();
 			return user;
 		}
+	}
 
-	}
-	private List<Exam> getLiveExams() { //TODO: write this function
-		List<Exam>exams=new ArrayList<>();
-		return exams;
-	}
 	private List<ExamForm> getExamsForCourse(Course course) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
@@ -394,22 +389,21 @@ public class SimpleServer extends AbstractServer {
 		return subjects;
 	}
 
-	private List<Exam> getExams() {
+	private List<ClassExam> retrieveClassExam() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Exam> query = builder.createQuery(Exam.class);
-		query.from(Exam.class);
-		List<Exam> exams = session.createQuery(query).getResultList();
+		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+		query.from(ClassExam.class);
+		List<ClassExam> exams = session.createQuery(query).getResultList();
+		System.out.println("Live Exams in retrieveClassExam");
 		return exams;
 	}
+
+
 	private List<Principle> getPrinciples() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
 		query.from(Principle.class);
 		List<Principle> principles = session.createQuery(query).getResultList();
-		if(principles.isEmpty()) {
-			Principle principle=new Principle("arvatz","liad",Gender.Female,"EMAIL","PASS");
-			principles.add(principle);
-		}
 		return principles;
 	}
 

@@ -1,5 +1,4 @@
 package Events;
-
 import Entities.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -32,12 +31,12 @@ public class NotificationEvent {
     //**show the notification with the details about the request time **//
     public void show()
     {
-       Notifications notification=Notifications.create();
-       notification.title("New Request Time");
-      // notification.text("From"+ extraTime..getFullName());
-      notification.position(Pos.BOTTOM_LEFT);
-      notification.onAction(event -> openController());
-      notification.show();
+        Notifications notification=Notifications.create();
+        notification.title("New Request Time");
+        notification.text("From: "+ extraTime.getTeacher().getFullName());
+        notification.position(Pos.BOTTOM_RIGHT);
+         notification.onAction(event -> openController());
+         notification.show();
     }
 
     //** click on the notification will jump the principle to see more details about the request**//

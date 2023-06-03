@@ -1,9 +1,6 @@
 import Entities.ClassExam;
-import Entities.ExamForm;
 import Entities.Message;
-import Entities.Teacher;
-import Events.CurrentExamsEvent;
-import Events.SelectedClassExamEvent;
+import Events.LiveExamsEvent;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,13 +11,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import javax.persistence.criteria.Join;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class LiveExamsController {
+public class TeacherLiveExamsController {
+    //TableView<ClassExam> data;
+    ObservableList<ClassExam> data;
+    private List<ClassExam> examList=new ArrayList<>();
     private ClassExam SelectedExam=null;
     @FXML
     private TableView<ClassExam> ExamsTable;
@@ -41,31 +39,34 @@ public class LiveExamsController {
     private TableColumn<ClassExam, String> SubjectColumn;
 
     @Subscribe
-    public void update(CurrentExamsEvent event) {}
+    public void update(LiveExamsEvent event) {
+        System.out.println("In LiveExamsController");
+        examList=event.getLiveExams();
+        //data = FXCollections.observableArrayList(
+       //         event.getLiveExams()
+       // );
+        if (!examList.isEmpty())
+        {
+            for (ClassExam item:examList)
+            {
+                System.out.println("hi");
+            }
+        }
+        data.addAll(examList);
+    }
+
+
     @FXML
    void initialize() throws IOException {     // TODO:fill this function after merging with lior
         EventBus.getDefault().register(this);
-        Teacher liad=new Teacher();
-        Date currentDate=new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DAY_OF_YEAR, 7);
-        Date nextWeekDate = calendar.getTime();
-        ExamForm e1=new ExamForm();
-        ExamForm e2=new ExamForm();
-        ExamForm e3=new ExamForm();
-        ClassExam E1=new ClassExam(e1,currentDate,nextWeekDate,2.0,liad);
-        ClassExam E2=new ClassExam(e2,currentDate,nextWeekDate,2.0,liad);
-        ClassExam E3=new ClassExam(e3,currentDate,nextWeekDate,2.0,liad);
-        ObservableList<ClassExam> data = ExamsTable.getItems();
-      //  SubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-     //  CourseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
+        //data=new TableView<>();
+        data = ExamsTable.getItems();
+        SubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        CourseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
         StartTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-       // EndTimeColumn.setCellValueFactory(new PropertyValueFactory<>("finalSubmissionDate"));
-        data.add(E1);
-        data.add(E2);
-        data.add(E3);
-
+        EndTimeColumn.setCellValueFactory(new PropertyValueFactory<>("finalSubmissionDate"));
+        //data.get
+        //data.addAll(StartTimeColumn, EndTimeColumn);
         //When select a row in the table
         ExamsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -86,10 +87,8 @@ public class LiveExamsController {
                 e.printStackTrace();
             }
         });
-       // SimpleClient.getClient().sendToServer(message);
         System.out.println("SelectedClassExamEvent in LiveExamController2");
 
-        //SimpleChatClient.setRoot("ExtraTimeRequest");
     }
 
 }

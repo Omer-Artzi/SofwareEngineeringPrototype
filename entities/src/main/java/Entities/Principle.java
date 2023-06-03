@@ -24,11 +24,18 @@ public class Principle extends Person {
     public Principle( String firstName, String lastName, Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
+    public Principle(String firstName, String lastName){
+        super(firstName,lastName);
+    }
     @Override
     public void receiveExtraTime(ExtraTime data) {
 
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
     public List<ExtraTime> getExtraTimeRequests() {
         return extraTimeRequests;
     }
@@ -36,4 +43,5 @@ public class Principle extends Person {
     public void setExtraTimeRequests(List<ExtraTime> extraTimeRequests) {
         this.extraTimeRequests = extraTimeRequests;
     }
+
 }

@@ -7,6 +7,7 @@ public class Answer {
         this.number=number;
         this.answer=answer;
     }
+    public Answer(){}
     public String getNumber(){return number;}
     public void setNumber(String number) {
         this.number = number;
