@@ -40,6 +40,8 @@ public class ClassExam implements Serializable
     @ManyToOne
     @JoinColumn(name = "Course")
     private Course course;
+    @OneToOne
+    private ExtraTime extraTime;
 
 
 
@@ -182,21 +184,6 @@ public class ClassExam implements Serializable
     public void setExamType(HSTS_Enums.ExamType examType) {
         this.examType = examType;
     }
-    public void setID(int ID) {
-        this.ID = ID;
-    }
 
-    public Date getFinalSubmissionDate() {
-        return finalSubmissionDate;
-    }
 
-    public void setFinalSubmissionDate(Date finalSubmissionDate) {
-        this.finalSubmissionDate = finalSubmissionDate;
-    }
-    public Course getCourse(){
-        return examForm.getCourse();
-    }
-    public Subject getSubject(){
-        return examForm.getSubject();
-    }
 }

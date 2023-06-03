@@ -11,7 +11,9 @@ public class ExtraTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
     private String TeacherNote;
+    @ManyToOne
     private Teacher teacher;
+    @OneToOne
     private  ClassExam exam;
     @ManyToMany
     @JoinTable(

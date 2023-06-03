@@ -23,6 +23,9 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "creator")
     private List<ExamForm> examForms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "teacher")
+    private List<ExtraTime> extraTimes = new ArrayList<>();
+
 
     public Teacher() {}
     public Teacher(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {

@@ -26,6 +26,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import Entities.Principal;
@@ -61,6 +62,10 @@ public class SimpleServer extends AbstractServer {
 			configuration.addAnnotatedClass(ClassExam.class);
 			configuration.addAnnotatedClass(StudentExam.class);
 			configuration.addAnnotatedClass(Person.class);
+			configuration.addAnnotatedClass(ExtraTime.class);
+			configuration.addAnnotatedClass(Principal.class);
+
+
 
 
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()

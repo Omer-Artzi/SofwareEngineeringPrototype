@@ -10,7 +10,7 @@ import java.util.List;
 @DiscriminatorValue("3")
 public class Principal extends Person {
 
-    @ManyToMany(mappedBy = "principles")
+    @ManyToMany(mappedBy = "principals")
     private List<ExtraTime> extraTimeRequests=new ArrayList<>();
     public void extraTimeRequest(ExtraTime data) {
         for(Principal principal:data.getPrincipals()) {
