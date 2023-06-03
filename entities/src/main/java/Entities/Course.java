@@ -27,7 +27,7 @@ public class Course implements Serializable, Comparable<Course> {
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subjectID")
     private Subject subject = null;
 
@@ -42,20 +42,27 @@ public class Course implements Serializable, Comparable<Course> {
 
 
     private String code;
+
+    private int examFormsNumber = 0;
     private static int codeNum = 0;
 
-    public Course(){
+    public Course()
+    {
         code = Integer.toString(++codeNum);
+        examFormsNumber = 0;
     }
     public Course(String Name,List<Teacher>TeacherList)
     {
         this.name=Name;
-        this.teachers =TeacherList;
+        this.teachers = TeacherList;
         code = Integer.toString(++codeNum);;
+        examFormsNumber = 0;
     }
 
-    public Course(String name) {
+    public Course(String name)
+    {
         code = Integer.toString(++codeNum);
+        examFormsNumber = 0;
     }
 
 
@@ -98,7 +105,10 @@ public class Course implements Serializable, Comparable<Course> {
     public void addExamForm(ExamForm examForm)
     {
         if (!examForms.contains(examForm))
+        {
             examForms.add(examForm);
+            examFormsNumber++;
+        }
     }
 
 
@@ -135,6 +145,7 @@ public class Course implements Serializable, Comparable<Course> {
     public void setCode(String code) {
         this.code = code;
     }
+    public int getExamFormsNumber() {return this.examFormsNumber;}
 
     @Override
     public int compareTo(Course o) {

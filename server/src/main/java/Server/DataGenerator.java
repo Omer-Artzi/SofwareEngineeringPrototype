@@ -6,6 +6,7 @@ import Server.Events.ResponseQuestion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
+import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.BufferedReader;
@@ -14,10 +15,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -68,6 +71,7 @@ public class DataGenerator {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
+        Random random = new Random();
         int randCourse;
         for (int i = 0; i < requests.length;i++) {
             try {
@@ -101,9 +105,23 @@ public class DataGenerator {
                     {
                         Question question = new Question();
                         responseQuestion.convert(question);
-                        // Recently uncommented
-                        question.setSubject(subjectList.get(i));
+
+                        // question subjects link
+                        Subject subject = subjectList.get(i);
+                        question.setSubject(subject);
+                        String QuestionID = OperationUtils.IDZeroPadding(subject.getId().toString(), 2)
+                                + OperationUtils.IDZeroPadding(Integer.toString(subject.getQuestionNumber()), 3);
+                        question.setQuestionID(QuestionID);
+                        subject.addQuestion(question);
+
+                        // question courses link
+                        List<Course> courses = subjectList.get(i).getCourses();
                         question.setCourses(subjectList.get(i).getCourses());
+                        for (Course course : courses)
+                        {
+                            course.addQuestion(question);
+                        }
+
                         questionsList.add(question);
                         SimpleServer.session.save(question);
                         SimpleServer.session.flush();
@@ -133,19 +151,46 @@ public class DataGenerator {
                     examForm.addQuestion(questionsList.get((i * 10) + j));
                     examForm.AddQuestionsScores(10);
                 }
-                List<Question> examQuestions =  examForm.getQuestionList();
+                // examForm - question link
+                List<Question> examQuestions = examForm.getQuestionList();
+
+                // Other way connection cause error on client login
+                //for (Question question : questionsList)
+                //{
+                //    question.addExamForm(examForm);
+                //}
+
+                // examForm - subject link
                 Course examCourse = examQuestions.get(0).getCourses().get(0);
                 Subject examSubject = examCourse.getSubject();
                 examForm.setSubject(examSubject);
+                examSubject.addExamForm(examForm);
+
+                // examForm - course link
                 examForm.setCourse(examCourse);
-                examForm.setCreator(examCourse.getTeachers().get(0));
-                //LocalDate localDate = LocalDate.now();
+
+                // Other way  connection cause error on client login
+                //examCourse.addExamForm(examForm);
+
+                // examForm - teacher link
+                examForm.setCreator(teacher);
+                teacher.addExamForm(examForm);
+
                 examForm.getCode();
-                // Convert LocalDate to Date
+
+
                 Date date = ConvertToDate(LocalDateTime.now());
                 //Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
                 examForm.setDateCreated(date);
                 examForm.setLastUsed(date);
+
+
+                String examFormID = OperationUtils.IDZeroPadding(Long.toString(examSubject.getId()), 2)
+                        + OperationUtils.IDZeroPadding(Long.toString(examCourse.getId()), 2) +
+                        OperationUtils.IDZeroPadding(Long.toString(examCourse.getExamFormsNumber()), 2);
+
+                examForm.setExamFormID(examFormID);
+
                 SimpleServer.session.saveOrUpdate(examForm);
             }
             SimpleServer.session.flush();
@@ -166,8 +211,8 @@ public class DataGenerator {
             //SimpleServer.session.saveOrUpdate(principle);
             //SimpleServer.session.flush();
             Teacher admin = null;
-            HashSet<Subject> tempSubjects = new HashSet<>();
-            HashSet<Course> tempCourses = new HashSet<>();
+            HashSet<Subject> tempSubjects = new HashSet<Subject>();
+            HashSet<Course> tempCourses = new HashSet<Course>();
 
             Random random = new Random();
             int randomSubject, randomCourse;
@@ -187,12 +232,12 @@ public class DataGenerator {
                         coursesList.add(subject.getCourses().get(randomCourse));
                     }
                 }
-                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Gender.Male, teacherEmail, password, coursesList, subjectsList);
+                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, HSTS_Enums.Gender.Male, teacherEmail, password, coursesList, subjectsList);
                 if(i == 0)
                 {
-                    teacher.setEmail("teacher");
+                    teacher.setEmail("admin");
                     teacher.setPassword(BCrypt.hashpw("1234", salt));
-                    teacher.setGender(Gender.Female);
+                    teacher.setGender(HSTS_Enums.Gender.Female);
                     teacher.setFirstName("super");
                     teacher.setLastName("user");
                     admin = teacher;
@@ -247,38 +292,32 @@ public class DataGenerator {
     public static List<Student> generateStudents(List<Course> courses) {
         List<Student> students = new ArrayList<>();
         String salt = BCrypt.gensalt();
-        Student admin = new Student();
-        admin.setEmail("student");
-        admin.setPassword(BCrypt.hashpw("1234",salt));
-        admin.setFirstName("Super");
-        admin.setLastName("User");
-        admin.setGender(Gender.Female);
-        SimpleServer.session.saveOrUpdate(admin);
-        SimpleServer.session.flush();
-        for(int  i = 0; i < 10;i++)
+        List<String> IDList = new ArrayList<>();
+        for(int  i = 0; i < 40;i++)
         {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
-            String email = firstName + "_" + lastName + "@Gmail.com";
-            String password = BCrypt.hashpw(faker.internet().password(),salt);
+            String password = BCrypt.hashpw(faker.internet().password(), salt);
+            String studentEmail = firstName + "_" + lastName + "@gmail.com";
+            String personID =  faker.number().digits(9).toString();
+            while (IDList.contains(personID)) { personID =  faker.number().digits(9).toString();}
+            IDList.add(personID);
             Student student;
-            if(i == 0)
-            {
-                student = admin;
-            }
-            else {
-                student = new Student(firstName,lastName, Gender.Female, email,password);
-            }
+            if (i == 0)
+                student = new Student("Super","Student", HSTS_Enums.Gender.Female, "student",
+                        BCrypt.hashpw("1234", salt), "123456789");
+            else
+                student = new Student(firstName,lastName, HSTS_Enums.Gender.Female, studentEmail, password, personID);
             for (int  j = 0; j < 2;j++)
             {
                 int courseNum = faker.number().numberBetween(0, courses.size());
                 student.addCourse(courses.get(courseNum));
-                student.addSubject(courses.get(courseNum).getSubject());
                 courses.get(courseNum).addStudents(student);
                 SimpleServer.session.save(courses.get(courseNum));
             }
             students.add(student);
-            SimpleServer.session.saveOrUpdate(student);
+            SimpleServer.session.save(student);
+
             SimpleServer.session.flush();
         }
         return  students;
@@ -300,8 +339,13 @@ public class DataGenerator {
     private static void GenerateClassExams(List<ExamForm> ExamForms)
     {
         if(ExamForms != null) {
+            List<HSTS_Enums.StatusEnum> statusList = new ArrayList<HSTS_Enums.StatusEnum>() {{
+                add(HSTS_Enums.StatusEnum.Approved);
+                add(HSTS_Enums.StatusEnum.NotTaken);
+                add(HSTS_Enums.StatusEnum.ToEvaluate);
+                add(HSTS_Enums.StatusEnum.Disapproved);}};
             // generate list of Class Exam
-            for(int i = 0; i < 3; i++) {
+            for(int examNumber = 0; examNumber < 6; examNumber++) {
 
                 // generate random start and end time
                 LocalDate currentDate = LocalDate.now();
@@ -313,25 +357,31 @@ public class DataGenerator {
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                Student student =  SimpleServer.retrieveStudents().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
-                ClassExam classExam = new ClassExam(ExamForms.get(i), testStartDate, testEndDate, examTime*60, teacher, code);
+                ClassExam classExam = new ClassExam(ExamForms.get(examNumber), testStartDate, testEndDate, examTime*60, teacher, code);
 
                 // set last used on creation date
-                ExamForms.get(i).setLastUsed(ConvertToDate(LocalDateTime.now()));
+                ExamForms.get(examNumber).setLastUsed(ConvertToDate(LocalDateTime.now()));
 
-                // compel the teacher to have the course if she not already have it
-                teacher.addCourse(ExamForms.get(i).getCourse());
+                // compel the teacher to have the course if she not already has it
+                teacher.addCourse(ExamForms.get(examNumber).getCourse());
+                ExamForms.get(examNumber).addClassExam(classExam);
                 SimpleServer.session.saveOrUpdate(teacher);
                 SimpleServer.session.flush();
 
                 // Generate for every Class Exam a list of studentExams
                 List<Student> studentsTemp = new ArrayList<>(SimpleServer.retrieveStudents());
                 List<Student> studentsReceive = new ArrayList<>(SimpleServer.retrieveStudents());
-                int numberOfElements = faker.number().numberBetween(3,  studentsTemp.size());
+                int numberOfElements = faker.number().numberBetween(8,  studentsTemp.size());
                 List<StudentExam> StudentExams = new ArrayList<>();
                 for (int examineeNum = 0; examineeNum < numberOfElements; examineeNum++) {
-                    int randomIndex = faker.number().numberBetween(0,  studentsTemp.size());
+                    // inserting "admin student in the first place
+                    int randomIndex;
+                    if(examineeNum == 0)
+                        randomIndex = 0;
+                    else
+                        randomIndex = faker.number().numberBetween(0,  studentsTemp.size());
+
                     Student randomStudent = studentsTemp.get(randomIndex);
                     studentsReceive.add(studentsTemp.remove(randomIndex));
 
@@ -339,31 +389,39 @@ public class DataGenerator {
                     randomStudent.addClassExam(classExam);
                     classExam.addStudent(randomStudent);
 
-                    List<Integer> studentAnswers =  new ArrayList<>();
-                    for(int  j = 0; j < classExam.getExamForm().getQuestionList().size() ;j++) {
-                        studentAnswers.add(faker.number().numberBetween(1, 5));
+                    if (examNumber == 0)
+                    {
+                        List<Integer> studentAnswers =  new ArrayList<>();
+                        for(int  j = 0; j < classExam.getExamForm().getQuestionList().size() ;j++) {
+                            studentAnswers.add(faker.number().numberBetween(1, 5));
+                        }
+                        HSTS_Enums.StatusEnum status;
+                        status = HSTS_Enums.StatusEnum.ToEvaluate;
+                        StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
+                        StudentExams.add(currentExam);
                     }
-                    StudentExam.statusEnum status;
-                    status = StudentExam.statusEnum.ToEvaluate;
-                    StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
-                    StudentExams.add(currentExam);
+                    else
+                    {
+                        HSTS_Enums.StatusEnum status = statusList.get(examNumber % 4);
+                        StudentExam currentExam = new StudentExam(randomStudent, classExam, null, -1, status);
+                        StudentExams.add(currentExam);
+                    }
 
-                    //SimpleServer.session.saveOrUpdate(randomStudent);
-                    //SimpleServer.session.flush();
+
                 }
 
                 SimpleServer.session.saveOrUpdate(classExam);
                 SimpleServer.session.flush();
 
-                for (Student student1 : studentsReceive)
+                for (Student student : studentsReceive)
                 {
-                    SimpleServer.session.saveOrUpdate(student1);
+                    SimpleServer.session.saveOrUpdate(student);
                     SimpleServer.session.flush();
                 }
 
 
-                for (StudentExam studentExam : StudentExams) {
-                    SimpleServer.session.saveOrUpdate(studentExam);
+                for(int examineeNum = 0; examineeNum < StudentExams.size() ;examineeNum++) {
+                    SimpleServer.session.saveOrUpdate(StudentExams.get(examineeNum));
                     SimpleServer.session.flush();
                 }
             }

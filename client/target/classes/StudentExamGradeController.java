@@ -1,6 +1,7 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
+import Events.RefreshPerson;
 import Events.StudentExamEvent;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -79,7 +80,7 @@ public class StudentExamGradeController
     //@Subscribe
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
-        solvedExam.setStatus(StudentExam.statusEnum.Approved);
+        solvedExam.setStatus(HSTS_Enums.StatusEnum.Approved);
         // send to server to set student Exam
         Message studentExamMessage = new Message(0, "Change Student Exam");
         studentExamMessage.setData(solvedExam);
@@ -197,20 +198,21 @@ public class StudentExamGradeController
     }
 
     @Subscribe
-    public void ExamApproved(GeneralEvent event) throws IOException, InterruptedException {
+    public void ExamApproved(RefreshPerson event) throws IOException, InterruptedException {
         Platform.runLater(() -> {
-        Message msg = event.getMessage();
-        if (msg.getMessage().startsWith("Success"))
+        String msg = event.getMessage();
+        if (msg.startsWith("Success"))
         {
             try
             {
+                SimpleClient.getClient().setUser(event.getPerson());
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES);
                 alert.setTitle("Student grading saved");
                 alert.setHeaderText("CONFIRMATION: Approved");
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES)
                 {
-                    SimpleChatClient.setRoot("ClassExamGrade");
+                    SimpleChatClient.setRoot("TeacherExamGrade");
                     String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
                     String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
                     String classExamID = Integer.toString(solvedExam.getClassExam().getID());
@@ -222,9 +224,9 @@ public class StudentExamGradeController
                 throw new RuntimeException(e);
             }
         }
-        else if (msg.getMessage().startsWith("Failure"))
+        else if (msg.startsWith("Failure"))
         {
-            solvedExam.setStatus(StudentExam.statusEnum.ToEvaluate);
+            solvedExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Student grading failed to save");
             alert.setHeaderText("Error: Saving Failed");

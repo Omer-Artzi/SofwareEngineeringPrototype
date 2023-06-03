@@ -30,9 +30,9 @@ public class StudentExam implements Serializable {
     // Switch to Grade class? Delete Grade Class?
     private int grade;
 
-    public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
+    //public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
 
-    private statusEnum status;
+    private HSTS_Enums.StatusEnum status;
 
     private String teacherNote;
     private String scoreChangeReason;
@@ -40,7 +40,7 @@ public class StudentExam implements Serializable {
     public StudentExam() {
     }
 
-    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, statusEnum status)
+    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, HSTS_Enums.StatusEnum status)
     {
         this.student = student;
         this.student.addStudentExam(this);
@@ -103,12 +103,12 @@ public class StudentExam implements Serializable {
         this.grade = grade;
     }
 
-    public statusEnum getStatus()
+    public HSTS_Enums.StatusEnum getStatus()
     {
         return status;
     }
 
-    public void setStatus(statusEnum status)
+    public void setStatus(HSTS_Enums.StatusEnum status)
     {
         this.status = status;
     }

@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClassExamGradeController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TeacherExamGradeController">
    <children>
       <ComboBox fx:id="SubjectCombo" layoutX="301.0" layoutY="81.0" maxWidth="110.0" onAction="#SubjectComboAct" />
       <ComboBox fx:id="CourseCombo" layoutX="505.0" layoutY="81.0" maxWidth="110.0" onAction="#CourseComboAct" />

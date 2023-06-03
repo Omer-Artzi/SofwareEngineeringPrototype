@@ -1,5 +1,7 @@
 package Entities;
 
+import antlr.StringUtils;
+
 import javax.persistence.*;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
@@ -11,6 +13,9 @@ import java.util.List;
 @Table(name = "Students")
 @DiscriminatorValue("2")
 public class Student extends Person implements Serializable, Comparable<Student> {
+
+    private String personID;
+
     @OneToMany(mappedBy = "student")
     private List<Grade> grades = new ArrayList<>();
     @ManyToMany(mappedBy = "students")
@@ -24,12 +29,25 @@ public class Student extends Person implements Serializable, Comparable<Student>
     private List<StudentExam> studentExams = new ArrayList<>();
     public Student() {}
 
-    public Student(String firstName, String lastName, Gender gender, String email, String password) {
+    public Student(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password, String personID) {
         super(firstName, lastName, gender, email, password);
+        setPersonID(personID);
     }
 
     public Student(String firstName, String lastName) {
         super(firstName, lastName);
+    }
+
+
+    public void setPersonID(String personID)
+    {
+        if(personID.chars().allMatch(Character::isDigit))
+            this.personID = personID;
+    }
+
+    public String getPersonID()
+    {
+        return personID;
     }
 
     public List<Grade> getGrades() {

@@ -20,9 +20,12 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "tester")
     private List<ClassExam> classExams = new ArrayList<>();
 
+    @OneToMany(mappedBy = "creator")
+    private List<ExamForm> examForms = new ArrayList<>();
+
 
     public Teacher() {}
-    public Teacher(String firstName, String lastName, Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
+    public Teacher(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
         super(firstName, lastName, gender, email, password);
         this.courses = course_list;
         this.subjects = subject_list;
@@ -55,6 +58,21 @@ public class Teacher extends Person{
         if (!classExams.contains(classExam))
         {
             this.classExams.add(classExam);
+        }
+    }
+
+    public List<ExamForm> getExamForm() {
+        return examForms;
+    }
+
+    public void setExamForm(List<ExamForm> classExam) {
+        this.examForms = examForms;
+    }
+    public void addExamForm(ExamForm examForm)
+    {
+        if (!examForms.contains(examForm))
+        {
+            this.examForms.add(examForm);
         }
     }
 

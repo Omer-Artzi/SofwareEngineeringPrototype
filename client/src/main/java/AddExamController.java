@@ -158,6 +158,9 @@ public class AddExamController {
                 resetButton.setVisible(true);
                 resetButton.setDisable(false);
                 enable();
+                addQuestionButton.setDisable(false);
+
+
 
                 //List<Question> addedQuestions = event.getQuestions();
                 for (Question q : event.getQuestions()) { // add questions to addedQuestions list if they are not already there

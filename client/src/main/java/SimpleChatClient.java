@@ -1,5 +1,6 @@
 import Entities.Message;
 import Events.MessageEvent;
+import Entities.TerminationEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -44,10 +45,8 @@ public class SimpleChatClient extends Application {
                 public void handle(WindowEvent event) {
 
                     try {
-                        if (SimpleClient.getClient().isConnected()) {
-                            SimpleClient.getClient().sendToServer(new Message(1, "Client Closed"));
-                        }
-
+                        if (SimpleClient.getClient().isConnected())
+                            SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -77,6 +76,9 @@ public class SimpleChatClient extends Application {
 
     @Override
 	public void stop() throws Exception {
+            Message message = new Message(1, "Client Closed");
+            message.setData(SimpleClient.getUser());
+            client.sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
             System.exit(0);

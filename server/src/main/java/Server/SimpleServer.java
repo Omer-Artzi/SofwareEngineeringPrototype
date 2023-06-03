@@ -1,12 +1,15 @@
 package Server;
+import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
-import Entities.TerminationEvent;
+import Server.Events.ResponseQuestion;
+//import Server.Events.TerminationEvent;
+import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -21,7 +24,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -32,12 +38,31 @@ import java.util.*;
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
+import static javax.management.Query.or;
+
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
-	static Session session;
+	public static Session session;
 	private static int transmissionID = 0;
 	private static SessionFactory  sessionFactory;
 
+	private static List<Person> LoggedInUsers = new ArrayList<>();
+
+	public static SessionFactory getSessionFactory() throws HibernateException {
+		Configuration configuration = new Configuration();
+		configuration.addAnnotatedClass(Student.class);
+		configuration.addAnnotatedClass(Grade.class);
+		configuration.addAnnotatedClass(Subject.class);
+		configuration.addAnnotatedClass(Course.class);
+		configuration.addAnnotatedClass(Teacher.class);
+		configuration.addAnnotatedClass(Question.class);
+		configuration.addAnnotatedClass(ExamForm.class);
+		configuration.addAnnotatedClass(Person.class);
+		configuration.addAnnotatedClass(StudentExam.class);
+		configuration.addAnnotatedClass(ClassExam.class);
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(configuration.getProperties())
+				.build();
 	public static SessionFactory getSessionFactory() throws HibernateException, InterruptedException {
 		if (sessionFactory == null) {
 			Configuration configuration = new Configuration();
@@ -82,13 +107,6 @@ public class SimpleServer extends AbstractServer {
 		}
 	}
 
-
-
-
-
-
-
-
 	@Subscribe
 	public void CloseServer(TerminationEvent event) throws IOException {
 		System.out.println("Server is closed");
@@ -103,7 +121,20 @@ public class SimpleServer extends AbstractServer {
 	}
 
 	//Generating grades and saving in the SQL server
-
+	private void generateGrades() {
+		List<Student> students = retrieveStudents();
+		Faker faker = new Faker();
+		Random r = new Random();
+		for(Student student : students)
+		{
+			for(int i = 0; i < 8;i++ ) {
+				Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
+				student.getGrades().add(grade);
+				session.save(grade);
+			}
+		}
+		session.flush();
+	}
 
 	@Override
 	protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
@@ -119,6 +150,9 @@ public class SimpleServer extends AbstractServer {
 		transmission.setClient(subscribedClient.getClient().toString());
 		transmission.setID(transmissionID++);
 		System.out.println("Message Received: " + request);
+
+		// Todo: find better solution to start and commit transaction
+		session.beginTransaction();
 		try {
 			//we got an empty message, so we will send back an error message with the error details.
 			if (request.isBlank()){
@@ -133,8 +167,16 @@ public class SimpleServer extends AbstractServer {
 				Person user = retrieveUser(credentials.get(0));
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
-					response = "Success: User found";
-					message.setData(user);
+					if(LoggedInUsers.contains(user))
+					{
+						response = "Fail: User already logged in";
+					}
+					else
+					{
+						LoggedInUsers.add(user);
+						response = "Success: User found";
+						message.setData(user);
+					}
 				}
 				else
 				{
@@ -197,6 +239,8 @@ public class SimpleServer extends AbstractServer {
 			}
 			else if (message.getMessage().startsWith("Extra time approved"))
 			{
+			}
+			else if (message.getMessage().startsWith("Extra time approved")) {
 				response = "Extra time approved";
 				message.setMessage(response);
 				sendToAllClients(message);
@@ -213,7 +257,20 @@ public class SimpleServer extends AbstractServer {
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
-			} else if(request.startsWith("Get Exams for Subject")){
+			}
+			else if(request.startsWith("Get Exams Forms for Subject")){
+				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
+				message.setMessage(response);
+				message.setData(getExamsForSubjects((Subject)(message.getData())));
+				client.sendToClient(message);
+			}
+			else if(request.startsWith("Get Exams Forms for Course")){
+				response ="Exams in Entities.Course " + ((Course)(message.getData())).getName();
+				message.setMessage(response);
+				message.setData(getExamsForCourse((Course)(message.getData())));
+				client.sendToClient(message);
+			}
+			else if(request.startsWith("Get Exams for Subject")){
 				response ="Exams in Entities.Subject " + ((Subject)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
@@ -355,6 +412,7 @@ public class SimpleServer extends AbstractServer {
 					session.flush();
 					response = ("Success: StudentExam Approved");
 					message.setMessage(response);
+					message.setData(exam.getTeacher());
 					client.sendToClient(message);
 					System.out.println(response);
 
@@ -375,7 +433,9 @@ public class SimpleServer extends AbstractServer {
 			}
 			transmission.setResponse(response);
 			EventBus.getDefault().post(new TransmissionEvent(transmission));
-		} catch (IOException e1) {
+		}
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 		}
 		// Check if there were new changes in the database before commint
@@ -385,6 +445,10 @@ public class SimpleServer extends AbstractServer {
 
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
+
+		// TODO: refactor to a more generic version
+		// TODO: check if user is already logged in
+
 		try {
 			CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
 			Root<Teacher> root = query.from(Teacher.class);
@@ -394,11 +458,27 @@ public class SimpleServer extends AbstractServer {
 		}
 		catch (Exception e)
 		{
-			CriteriaQuery<Student> query = builder.createQuery(Student.class);
-			Root<Student> root = query.from(Student.class);
-			query.where(builder.equal(root.get("email"), email));
-			Person user = session.createQuery(query).getSingleResult();
-			return user;
+			try{
+				CriteriaQuery<Student> query = builder.createQuery(Student.class);
+				Root<Student> root = query.from(Student.class);
+				query.where(builder.equal(root.get("email"), email));
+				Person user = session.createQuery(query).getSingleResult();
+				return user;
+			} catch (Exception e2)
+			{
+				try{
+					CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
+					Root<Principle> root = query.from(Principle.class);
+					query.where(builder.equal(root.get("email"), email));
+					Person user = session.createQuery(query).getSingleResult();
+					return user;
+				} catch (Exception e3)
+				{
+					System.out.println("User not found");
+					return null;
+				}
+			}
+
 		}
 
 	}
@@ -490,6 +570,17 @@ public class SimpleServer extends AbstractServer {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
+	}
+	public void generateStudents() {
+		Faker faker = new Faker();
+		for(int  i = 0; i < 10;i++)
+		{
+			String firstName = faker.name().firstName();
+			String lastName = faker.name().lastName();
+			Student student = new Student(firstName,lastName);
+			session.save(student);
+			session.flush();
 		}
 	}
 	public static List<Student> retrieveStudents()
