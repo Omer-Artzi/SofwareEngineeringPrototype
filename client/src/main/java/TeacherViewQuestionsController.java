@@ -69,7 +69,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     private Person user;
 
-    List<Question> chosenQuestions;
+    List<Question> chosenQuestions = new ArrayList<>();
 
     private PreviewQuestionController previewController;
 
@@ -154,7 +154,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         // create a listener for the course picker
         coursePicker.setOnAction(e -> {
             try {
-                RequestQuestions();
+                if(coursePicker.getValue() != null)
+                    RequestQuestions();
             }
             catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -323,18 +324,29 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         state = ContextualState.CHOOSE;
 
         // set subject and course
-        SetPickersCourse(event.getCourse());
         DisablePickers();
+        SetPickersCourse(event.getCourse());
+
 
         // add a checkbox column to the table
         TableColumn<Question, Boolean> checkBoxColumn = new TableColumn<>("Choose");
         //checkBoxColumn.setCellValueFactory(new PropertyValueFactory<>("chosen"));
 
+        List<Question> previousChoices = event.getQuestions();
+        System.out.println("Previous choices: " + previousChoices);
+
         checkBoxColumn.setCellValueFactory(
                 cell -> {
                     Question question = cell.getValue();
                     CheckBox checkBox = new CheckBox();
-                    checkBox.selectedProperty().setValue(false);
+                    if(previousChoices.contains(question)) {
+                        System.out.println("Contains question: " + question);
+                        checkBox.selectedProperty().setValue(true);
+                        chosenQuestions.add(question);
+                    }
+                    else
+                        checkBox.selectedProperty().setValue(false);
+                    //checkBox.selectedProperty().setValue(false);
                     checkBox
                             .selectedProperty()
                             .addListener((ov, old_val, new_val) -> CheckboxPressed(question));
@@ -342,23 +354,6 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
                 });
 
         questionsTable.getColumns().add(checkBoxColumn);
-
-        List<Question> previousChoices = event.getQuestions();
-        if (chosenQuestions != null) {
-            for (Question question : previousChoices) {
-                // find the question in the table
-                for (Question tableQuestion : questionsTable.getItems()) {
-                    if (tableQuestion.getID() == question.getID()) {
-                        // check the checkbox
-                        CheckBox checkBox = (CheckBox) checkBoxColumn.getCellObservableValue(tableQuestion);
-                        checkBox.setSelected(true);
-                        chosenQuestions.add(tableQuestion);
-                    }
-                }
-            }
-        } else {
-            chosenQuestions = new ArrayList<>();
-        }
 
         HandleChooseState();
     }
