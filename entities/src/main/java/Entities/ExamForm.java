@@ -46,7 +46,7 @@ public class ExamForm implements Serializable {
 
     private boolean used;
 
-    private double examTime; // unnecessary - we need this in classExam
+    private int examTime; // in minutes
 
 
     public ExamForm(){this.used = false;}
@@ -60,7 +60,7 @@ public class ExamForm implements Serializable {
 
     public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList,
                     List<Integer> questionsScores, Date dateCreated, String headerText, String footerText,
-                    String examNotesForTeacher, String examNotesForStudent) {
+                    String examNotesForTeacher, String examNotesForStudent, int examTime) {
         this.course = course;
         this.creator = creator;
         this.subject = subject;
@@ -72,6 +72,7 @@ public class ExamForm implements Serializable {
         this.examNotesForTeacher = examNotesForTeacher;
         this.examNotesForStudent = examNotesForStudent;
         this.used = false;
+        this.examTime = examTime;
     }
 
     public int getID() {
@@ -164,10 +165,11 @@ public class ExamForm implements Serializable {
     }
 
     public double getExamTime(){return examTime;}
-    public void setExamTime(double examTime){this.examTime=examTime;}
+    public void setExamTime(int examTime){this.examTime=examTime;}
+    public void getExamTime(int examTime){this.examTime=examTime;}
 
     public boolean getUsedStatus() {return used;}
-
+    public void setUsedStatus(boolean used) {this.used = used;}
 
 }
 

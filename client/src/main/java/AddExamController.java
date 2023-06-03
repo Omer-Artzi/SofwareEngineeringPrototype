@@ -31,6 +31,7 @@ import static javafx.scene.control.cell.TextFieldTableCell.*;
 
 public class AddExamController {
     private int examID;
+    private int examTime = 0;
     private Teacher teacher;
     private Subject chosenSubject = null;
     private Course chosenCourse = null;
@@ -67,6 +68,9 @@ public class AddExamController {
     private Button saveTestButton;
 
     @FXML
+    private Button setTimeButton;
+
+    @FXML
     private Button resetButton;
 
     @FXML
@@ -98,35 +102,36 @@ public class AddExamController {
 
     }*/
 
+
     @FXML
-    void addNotesForStudent(ActionEvent event) {
-        // open new input dialog for notes for student
+    void setTime(ActionEvent event) {
+        // open new input dialog for time
         TextInputDialog dialog = new TextInputDialog();
         dialog.getDialogPane().setMinWidth(400);
         dialog.getDialogPane().setMinHeight(200);
-        dialog.setTitle("Notes for student");
-        dialog.setHeaderText("Add notes for student");
-        dialog.setContentText("Notes:");
+        dialog.setTitle("Set time");
+        dialog.setHeaderText("Set time for exam (in minutes)");
+        dialog.setContentText("Time:");
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            examNotesForStudent = result.get();
+            // check if input is valid
+            if (result.get().matches("[0-9]+")) {
+                int time = Integer.parseInt(result.get());
+                if (time > 0 && time < 180) {
+                    // set time
+                    setTimeButton.setText("Exam time: " + time + " minutes");
+                    examTime = time;
+                }
+                else {
+                    // invalid input
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid input");
+                    alert.setContentText("Please enter a number between 1 and 180 minutes");
+                    alert.showAndWait();
+                }
+            }
         }
-    }
-
-    @FXML
-    void addNotesForTeacher(ActionEvent event) {
-        // open new input dialog for notes for student
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.getDialogPane().setMinWidth(400);
-        dialog.getDialogPane().setMinHeight(200);
-        dialog.setTitle("Notes for teacher");
-        dialog.setHeaderText("Add notes for teacher");
-        dialog.setContentText("Notes:");
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            examNotesForTeacher = result.get();
-        }
-
     }
 
     @FXML
@@ -205,6 +210,16 @@ public class AddExamController {
             alert.showAndWait();
             return;
         }
+        if (examTime<0 || examTime>180)
+        {
+            // show error message
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error");
+            alert.setContentText("Please set the time for the exam");
+            alert.showAndWait();
+            return;
+        }
         teacher = ((Teacher)(SimpleClient.getClient().getUser()));
         headerText= headerTextTF.getText();
         footerText= footerTextTF.getText();
@@ -218,14 +233,14 @@ public class AddExamController {
                 }
             }
         }
-        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher);
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher, examTime);
         Message message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
         message.setData(examForm);
         SimpleClient.getClient().sendToServer(message);
     }
 
     @Subscribe
-    void examSaved(GeneralEvent event) throws IOException {
+    void examSaved(GeneralEvent event) throws IOException { // TODO: Error in this method, doesn't get called after exam is saved to DB
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Exam Saved");
         alert.setHeaderText("Exam Saved");
@@ -328,7 +343,7 @@ public class AddExamController {
         }
     }
 
-    @FXML
+    @FXML // activated when user clicks on a row in the table of questions, opens a dialog to edit the grade percentage
     void rowClicked(MouseEvent event) {
         if (questionTable.getSelectionModel().getSelectedItem() == null){
             return;
@@ -386,6 +401,7 @@ public class AddExamController {
     }
 
 
+//////////////////////////// diasble and enable buttons ////////////////////////////
     void disable(){
         CourseCB.setDisable(true);
         headerTextTF.setDisable(true);
@@ -396,6 +412,7 @@ public class AddExamController {
         addNotesForTeacherButton.setDisable(true);
         previewTestButton.setDisable(true);
         saveTestButton.setDisable(true);
+        setTimeButton.setDisable(true);
     }
 
     void enable(){
@@ -407,6 +424,42 @@ public class AddExamController {
         addNotesForTeacherButton.setDisable(false);
         previewTestButton.setDisable(false);
         saveTestButton.setDisable(false);
+        setTimeButton.setDisable(false);
+
     }
+
+/////////////////////// add notes buttons ///////////////////////
+    @FXML
+    void addNotesForStudent(ActionEvent event) {
+        // open new input dialog for notes for student
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.getDialogPane().setMinWidth(400);
+        dialog.getDialogPane().setMinHeight(200);
+        dialog.setTitle("Notes for student");
+        dialog.setHeaderText("Add notes for student");
+        dialog.setContentText("Notes:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            examNotesForStudent = result.get();
+        }
+    }
+
+    @FXML
+    void addNotesForTeacher(ActionEvent event) {
+        // open new input dialog for notes for student
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.getDialogPane().setMinWidth(400);
+        dialog.getDialogPane().setMinHeight(200);
+        dialog.setTitle("Notes for teacher");
+        dialog.setHeaderText("Add notes for teacher");
+        dialog.setContentText("Notes:");
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            examNotesForTeacher = result.get();
+        }
+    }
+/////////////////////////////////////////////////////////////
+
+
 
 }
