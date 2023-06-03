@@ -7,7 +7,7 @@ public class StartEditExistingQuestionEvent {
     private Question question;
 
     private Course course;
-
+//*get this event and send finishEvent
     public StartEditExistingQuestionEvent(Question question, Course course) {
         this.question = question;
         this.course = course;

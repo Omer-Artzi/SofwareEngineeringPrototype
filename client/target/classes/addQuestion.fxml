@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="addQuestionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddQuestionController">
     <children>
         <ChoiceBox fx:id="addCourseChoiceBox" layoutX="330.0" layoutY="64.0" prefHeight="26.0" prefWidth="93.0" />
         <ChoiceBox fx:id="addSubjectChoiceBox" layoutX="156.0" layoutY="64.0" prefHeight="26.0" prefWidth="93.0" />
@@ -19,12 +19,12 @@
                 <TableColumn fx:id="AnswerColumn" prefWidth="266.4" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButtom" layoutX="274.0" layoutY="476.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
+        <Button fx:id="addQuestionButtom" layoutX="264.0" layoutY="468.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <Button fx:id="previewButtom" layoutX="178.0" layoutY="476.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
+        <Button fx:id="previewButtom" layoutX="169.0" layoutY="469.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
             <font>
                 <Font size="14.0" />
             </font>
@@ -47,15 +47,16 @@
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="93.0" layoutY="345.0" prefHeight="18.0" prefWidth="125.0" text="Student Note">
+        <Label layoutX="96.0" layoutY="345.0" prefHeight="18.0" prefWidth="125.0" text="Student Note">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Button fx:id="correctBT" layoutX="175.0" layoutY="435.0" mnemonicParsing="false" onAction="#correctAnswer" prefHeight="30.0" prefWidth="166.0" text="choose correct answer">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
+      <ChoiceBox fx:id="CorrectAnswerCB" layoutX="298.0" layoutY="430.0" prefHeight="26.0" prefWidth="30.0" />
+      <Label layoutX="144.0" layoutY="433.0" prefHeight="20.0" prefWidth="154.0" text="Choose Correct Answer">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

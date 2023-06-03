@@ -186,7 +186,7 @@ public class DataGenerator {
                 String examFormID = OperationUtils.IDZeroPadding(Long.toString(examSubject.getId()), 2)
                         + OperationUtils.IDZeroPadding(Long.toString(examCourse.getId()), 2) +
                         OperationUtils.IDZeroPadding(Long.toString(examCourse.getExamFormsNumber()), 2);
-                
+
                 examForm.setExamFormID(examFormID);
 
                 SimpleServer.session.saveOrUpdate(examForm);
@@ -269,6 +269,49 @@ public class DataGenerator {
             SimpleServer.session.saveOrUpdate(admin);
             //SimpleServer.session.saveOrUpdate(principle);
             SimpleServer.session.flush();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+/*Generate Principles, by Liad*/
+    private static void generatePrinciple() {
+        try {
+            // String salt = BCrypt.gensalt(); // TODO
+            Principle admin = new Principle("admin1","admin2");
+            admin.setEmail("adminP");
+            //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            admin.setPassword("1234");
+            admin.setGender(Gender.Female);
+            SimpleServer.session.save(admin);
+            SimpleServer.session.flush();
+            Faker faker = new Faker();
+            Random random = new Random();
+            for (int i = 0; i < 5; i++) {
+                String PrincipleFirstName = faker.name().firstName();
+                String PrincipleLastName = faker.name().lastName();
+                String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
+                // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
+                String password = "1234";
+                Principle principle = new Principle(PrincipleFirstName, PrincipleLastName, Gender.Male, PrincipleEmail, password);
+                /*
+                if(i == 0)
+                {
+                    principle.setEmail("p");
+                    principle.setPassword(BCrypt.hashpw("1234", salt));
+                    principle.setGender(Gender.Female);
+                    principle.setFirstName("superUser");
+                    principle.setLastName("Principle");
+                }
+                */
+
+                SimpleServer.session.saveOrUpdate(principle);
+            }
+            SimpleServer.session.flush();
+            //SimpleServer.session.saveOrUpdate(admin);
+            //SimpleServer.session.flush();
         }
         catch (Exception e)
         {

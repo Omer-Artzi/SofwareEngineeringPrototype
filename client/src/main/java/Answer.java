@@ -1,12 +1,13 @@
 public class Answer {
     private String answer;
     private String number;
-    public Answer(){}
+    public Answer(String answer){this.answer=answer;}
     public Answer(String number,String answer)
     {
         this.number=number;
         this.answer=answer;
     }
+    public Answer(){}
     public String getNumber(){return number;}
     public void setNumber(String number) {
         this.number = number;
@@ -14,5 +15,6 @@ public class Answer {
     public String getAnswer(){return answer;}
     public void setAnswer(String answer){this.answer=answer;}
 
-    public void setStyle(String s){}
+    public void setStyle(String s) {
+    }
 }

@@ -19,8 +19,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
-
-import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -317,6 +315,26 @@ public class SimpleServer extends AbstractServer {
 					response = (newGrade.getStudent().getFullName() + "'s new grade could not be added to the database");
 					System.out.println(response);
 				}
+			}else if(request.startsWith("Save Question")){
+				Question newQuestion = ((Question)(message.getData()));
+				try {
+					session.save(newQuestion);
+					//Course updateCourse=newQuestion.getCourse();
+					//updateCourse.getQuestions().add(newQuestion);
+					//session.merge(updateCourse);
+					session.flush();
+					response = ("Question added succefully");
+					message.setMessage(response);
+					client.sendToClient(message);
+					System.out.println(response);
+
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					response = ("new question could not be added to the database");
+					System.out.println(response);
+				}
 			}
 			else if (request.startsWith("Add ExamForm")){ // Added by Ilan
 				ExamForm newExamForm = ((ExamForm)(message.getData()));
@@ -396,7 +414,7 @@ public class SimpleServer extends AbstractServer {
 			Person user = session.createQuery(query).getSingleResult();
 			return user;
 		}
-		catch (Exception e)
+		catch (Exception e)		//TODO: Add anothe option
 		{
 			try{
 				CriteriaQuery<Student> query = builder.createQuery(Student.class);
@@ -456,6 +474,24 @@ public class SimpleServer extends AbstractServer {
 		query.from(Subject.class);
 		List<Subject> subjects = session.createQuery(query).getResultList();
 		return subjects;
+	}
+
+	private List<ClassExam> retrieveClassExam() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+		query.from(ClassExam.class);
+		List<ClassExam> exams = session.createQuery(query).getResultList();
+		System.out.println("Live Exams in retrieveClassExam");
+		return exams;
+	}
+
+
+	private List<Principle> getPrinciples() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Principle> query = builder.createQuery(Principle.class);
+		query.from(Principle.class);
+		List<Principle> principles = session.createQuery(query).getResultList();
+		return principles;
 	}
 
 	private Student getStudent(int iStudentID) {

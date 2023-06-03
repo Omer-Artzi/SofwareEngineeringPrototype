@@ -1,5 +1,4 @@
 package Server;
-
 import Entities.ClassExam;
 import Entities.HSTS_Enums;
 import Entities.StudentExam;

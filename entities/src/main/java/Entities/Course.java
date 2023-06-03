@@ -86,7 +86,7 @@ public class Course implements Serializable, Comparable<Course> {
         if (!students.contains(student))
             students.add(student);
     }
-    public List<Question> getQuestions(){return questions;}
+    //public List<Question> getQuestions(){return questions;}
     public void setQuestions(List<Question> students){this.questions =questions;}
 
     public void addQuestion(Question question)
@@ -136,6 +136,10 @@ public class Course implements Serializable, Comparable<Course> {
             code = faker.bothify("##");
         }
         return code;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     public void setCode(String code) {

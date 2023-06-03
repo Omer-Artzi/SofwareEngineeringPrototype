@@ -26,7 +26,7 @@ public class MainWindowController {
     @FXML
     private void initialize() throws IOException {
         InitializationAsserts();
-
+        //System.out.println("Liad and Ilan in MainWindow");
         SimpleChatClient.setMainWindowController(this);
 
         SimpleChatClient.getScene().getWindow().setHeight(768);
@@ -35,7 +35,8 @@ public class MainWindowController {
         // Load the sidebar
         Parent sideBarParent = null;
         String userType = SimpleClient.getUser().getClass().getSimpleName();
-        //System.out.println("User type: " + userType);
+        //String userType="Principle";
+       // System.out.println("User type: " + userType);
         String sideBarName = userType + "Sidebar";
         // load correct sidebar according to user type
         sideBarParent = SimpleChatClient.loadFXML(sideBarName);
