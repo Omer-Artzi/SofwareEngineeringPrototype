@@ -114,13 +114,15 @@ public class DataGenerator {
                         subject.addQuestion(question);
 
                         // question courses link
-                        List<Course> courses = subjectList.get(i).getCourses();
-                        question.setCourses(subjectList.get(i).getCourses());
-                        for (Course course : courses)
-                        {
-                            course.addQuestion(question);
-                        }
 
+                        // COMMENTED OUT IN ATTEMPT TO AVOID STACK OVERFLOW
+                        //List<Course> courses = subjectList.get(i).getCourses();
+                        //question.setCourses(subjectList.get(i).getCourses());
+                        //for (Course course : courses)
+                        //{
+                        //    course.addQuestion(question);
+                        //}
+                        //
                         questionsList.add(question);
                         SimpleServer.session.save(question);
                         SimpleServer.session.flush();
@@ -161,16 +163,20 @@ public class DataGenerator {
                 //}
 
                 // examForm - subject link
-                Course examCourse = examQuestions.get(0).getCourses().get(0);
+                Course examCourse = examQuestions.get(0).getSubject().getCourses().get(0);
                 Subject examSubject = examCourse.getSubject();
-                examForm.setSubject(examSubject);
-                examSubject.addExamForm(examForm);
+
+                // Commented out in efforts to reduce unnecessary data generation.
+                //examForm.setSubject(examSubject);
+                //examSubject.addExamForm(examForm);
+                /////////////////////////////////////////////////////////////////////
 
                 // examForm - course link
                 examForm.setCourse(examCourse);
 
                 // Other way  connection cause error on client login
-                //examCourse.addExamForm(examForm);
+                // Update: uncommented to try something.
+                examCourse.addExamForm(examForm);
 
                 // examForm - teacher link
                 examForm.setCreator(teacher);
@@ -249,13 +255,14 @@ public class DataGenerator {
                     }
                 }
 
-                for (Subject subject : subjectsList) {
+                // Redundant data generation, teachers are assigned COURSES.
+/*                for (Subject subject : subjectsList) {
                     subject.getTeachers().add(teacher);
                     if(!(tempSubjects.contains(subject))){
                         tempSubjects.add(subject);
                         subject.getTeachers().add(admin);
                     }
-                }
+                }*/
                 SimpleServer.session.saveOrUpdate(teacher);
 
             }
@@ -265,7 +272,8 @@ public class DataGenerator {
             List<Subject> allSubjects = new ArrayList<>();
             allSubjects.addAll(tempSubjects);
             allCourses.addAll(tempCourses);
-            admin.setSubjects(allSubjects);
+            // Admin already has courses, can get subjects via them.
+            //admin.setSubjects(allSubjects);
             admin.setCourses(allCourses);
             SimpleServer.session.saveOrUpdate(admin);
             //SimpleServer.session.saveOrUpdate(principle);
@@ -372,6 +380,7 @@ public class DataGenerator {
         return LocalDate.ofEpochDay(randomEpochDay).atTime(faker.number().numberBetween(8, 17), 0);
     }
 
+    // TODO maybe move some of these useful functions to entities, rather than keep them in server
     private static Date ConvertToDate(LocalDateTime localDate) {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zonedDateTime = localDate.atZone(zoneId);
@@ -432,8 +441,9 @@ public class DataGenerator {
                     studentsReceive.add(studentsTemp.remove(randomIndex));
 
                     // student - class exam connection
-                    randomStudent.addClassExam(classExam);
-                    classExam.addStudent(randomStudent);
+                    // COMMENTED OUT TO ATTEMPT TO SOLVE STACK OVERFLOW
+                    //randomStudent.addClassExam(classExam);
+                    //classExam.addStudent(randomStudent);
 
                     if (examNumber == 0)
                     {

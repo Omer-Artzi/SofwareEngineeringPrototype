@@ -4,8 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import java.io.IOException;
 
-public class PrincipalSidebarController {
+public class PrincipalSidebarController implements SideBar {
 
     @FXML
     private ResourceBundle resources;
@@ -56,8 +57,10 @@ public class PrincipalSidebarController {
     }
 
     @FXML
-    void showStatistics(ActionEvent event) {
-
+    void showStatistics(ActionEvent event) throws IOException {
+        // The principal's statistics button should lead it to the new, principal-oriented stats window.
+        System.out.println("In principal sidebar, trying to go to ShowStatAndReports.");
+        changeScene("ShowStatsAndReports");
     }
 
     @FXML
@@ -66,13 +69,13 @@ public class PrincipalSidebarController {
     }
 
     @FXML
-    void viewQuestion(ActionEvent event) {
-
+    void viewQuestion(ActionEvent event) throws IOException {
+        changeScene("TeacherViewQuestions");
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) {
-
+    void viewTestForms(ActionEvent event) throws IOException {
+        changeScene("viewLiveExams");
     }
 
     @FXML

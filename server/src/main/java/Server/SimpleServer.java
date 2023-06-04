@@ -376,6 +376,28 @@ public class SimpleServer extends AbstractServer {
 					System.out.println(response);
 				}
 			}
+
+			// Liad's addition, but it was previously lost in a merge ;(
+			else if (request.startsWith("Get Live Exams"))
+			{
+				List<ClassExam> listOfAllExams = retrieveClassExam();
+				response = ("Live Exams");
+				message.setMessage(response);
+				message.setData(listOfAllExams);
+				client.sendToClient(message);
+			}
+
+			// Alon's addition, to get all exams that exist for the sake of stats and reports
+			else if (request.startsWith("Retrieve all class exams"))
+			{
+				System.out.println("Server attempting to retrieve all class exams.");
+				List<ClassExam> listOfAllExams = retrieveClassExam();
+				response = ("Success: Retrieved ALL class exams");
+				message.setMessage(response);
+				message.setData(listOfAllExams);
+				client.sendToClient(message);
+			}
+
 			else {
 				//we got a message from client we couldn't identify, so we will send back to all clients the message
 				message.setMessage(request);

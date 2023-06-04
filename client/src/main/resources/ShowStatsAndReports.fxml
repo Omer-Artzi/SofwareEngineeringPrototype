@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ShowStatsAndReportsController">
+   <children>
+      <TableView fx:id="ClassExamStatsTv" layoutX="192.0" layoutY="290.0" prefHeight="360.0" prefWidth="640.0">
+         <columns>
+            <TableColumn fx:id="ExamIDCol" prefWidth="78.85716247558594" text="Exam ID" />
+            <TableColumn fx:id="TesterCol" prefWidth="99.42852783203125" text="Tester" />
+            <TableColumn fx:id="DateCol" prefWidth="102.85711669921875" text="Date" />
+            <TableColumn fx:id="ExamineeCol" prefWidth="116.0" text="Examinee Number" />
+            <TableColumn fx:id="PassedCol" prefWidth="51.4285888671875" text="Passed" />
+            <TableColumn fx:id="MeanCol" minWidth="2.857177734375" prefWidth="46.8570556640625" text="Mean" />
+            <TableColumn fx:id="StandardDeviationCol" minWidth="0.0" prefWidth="37.7142333984375" text="SD" />
+            <TableColumn fx:id="HistogramCol" prefWidth="100.5714111328125" text="Histogram" />
+         </columns>
+      </TableView>
+      <Label layoutX="426.0" layoutY="59.0" prefHeight="30.0" prefWidth="171.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Stats and Reports" />
+      <ComboBox fx:id="chooseReportTypeCombo" layoutX="192.0" layoutY="171.0" onAction="#reportTypeChosen" prefHeight="45.0" prefWidth="206.0" promptText="Choose exam filtering method" />
+      <ComboBox fx:id="chooseStatsForCombo" layoutX="625.0" layoutY="171.0" onAction="#reportNameChosen" prefHeight="45.0" prefWidth="206.0" />
+   </children>
+</AnchorPane>
