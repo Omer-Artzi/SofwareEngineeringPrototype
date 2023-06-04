@@ -2,10 +2,16 @@ package Events;
 
 import Entities.Question;
 
-public class ChangePreviewEvent {
+public class StudentAnswerToQuestion {
+
     private Question question;
 
     private String selectedAnswer = null;
+
+    public StudentAnswerToQuestion(Question question, String selectedAnswer) {
+        this.question = question;
+        this.selectedAnswer = selectedAnswer;
+    }
 
     public void setQuestion(Question question) {
         this.question = question;
