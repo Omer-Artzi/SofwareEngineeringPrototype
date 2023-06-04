@@ -443,7 +443,8 @@ public class DataGenerator {
                         }
                         HSTS_Enums.StatusEnum status;
                         status = HSTS_Enums.StatusEnum.ToEvaluate;
-                        StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
+
+                        StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, faker.number().numberBetween(0, 101), status);
                         StudentExams.add(currentExam);
                     }
                     else

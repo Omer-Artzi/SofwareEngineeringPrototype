@@ -2,12 +2,18 @@ import Entities.*;
 import Events.ClassExamGradeEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -20,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShowStatisticsController {
+public class ShowStatisticsController extends SaveBeforeExit {
 
     @FXML
     private TableView<ClassExam> ClassExamStatsTv;
@@ -62,8 +68,9 @@ public class ShowStatisticsController {
     }
 
     // not working
-    private void DisplayHistogram(List<Integer> grades)
+    private BarChart GetHistogram(List<Integer> grades)
     {
+        //System.out.println("in hist func");
         // Create a CategoryAxis for the X-axis
         CategoryAxis xAxis = new CategoryAxis();
 
@@ -76,20 +83,21 @@ public class ShowStatisticsController {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
 
         // Iterate through the grade buckets (0 to 100 with a range of 10)
-        for (int i = 0; i <= 100; i += 10) {
-            final int bucketStart = i;
+        for (int i = 0; i < 100; i += 10) {
+            int bucketStart = i;
             int bucketEnd = i + 10;
-            //grades.removeIf(grade-> grade <= (i+1)*10);
             // Create a data point for the bucket
-
-            int bucketSize = grades.stream().filter(grade ->
+            int bucketSize = 0;
+            for (Integer grade : grades)
             {
-                if (grade <= bucketStart);
+                if (grade < bucketEnd && grade >= bucketStart)
+                    bucketSize += 1;
+
+                if (i == 90 && grade == 100)
                 {
-                    grades.remove(grade);
-                    return true;
+                    bucketSize += 1;
                 }
-            }).collect(Collectors.toList()).size();
+            }
 
             XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(
                     bucketStart + "-" + bucketEnd, bucketSize);
@@ -100,6 +108,8 @@ public class ShowStatisticsController {
 
         // Add the Series to the BarChart
         gradeHistogramChart.getData().add(series);
+
+        return gradeHistogramChart;
     }
 
     @FXML
@@ -145,6 +155,9 @@ public class ShowStatisticsController {
         StandardDeviationCol.setCellValueFactory(param -> new SimpleStringProperty(Double.toString(Math.sqrt(param.getValue().
                 getGradesVariance()))));
 
+        // Set cell factory for the action column
+        HistogramCol.setCellFactory(generateButtonCellFactory());
+
         // insert content to table
         ClassExamStatsTv.getItems().addAll(classExamList);
 
@@ -155,6 +168,7 @@ public class ShowStatisticsController {
         PassedCol.setStyle( "-fx-alignment: CENTER;");
         MeanCol.setStyle( "-fx-alignment: CENTER;");
         StandardDeviationCol.setStyle( "-fx-alignment: CENTER;");
+        HistogramCol.setStyle( "-fx-alignment: CENTER;");
 
 
         ClassExamStatsTv.getSortOrder().add(ExamIDCol);
@@ -162,6 +176,48 @@ public class ShowStatisticsController {
         ClassExamStatsTv.sort();
 
 
+    }
+
+
+    // Generate buttons for histogram column
+    private Callback<TableColumn<ClassExam, String>, TableCell<ClassExam, String>> generateButtonCellFactory() {
+        return new Callback<>() {
+            @Override
+            public TableCell<ClassExam, String> call(final TableColumn<ClassExam, String> param) {
+                final TableCell<ClassExam, String> cell = new TableCell<>() {
+                    private final Button button = new Button("Click");
+
+                    {
+                        button.setOnAction(event ->
+                        {
+                            Stage histStage = new Stage();
+                            AnchorPane root = new AnchorPane();
+                            Scene histScene = new Scene(root, 400, 400);
+                            List<StudentExam> exams = getTableView().getItems().get(getIndex()).getStudentExams();
+                            System.out.println("number of exams: " + exams.size());
+                            List<Integer> grades = exams.stream().map(exam -> exam.getGrade()).collect(Collectors.toList());
+                            System.out.println("number of grades: " + grades.size());
+                            root.getChildren().add(GetHistogram(grades));
+                            histStage.setScene(histScene);
+
+                            histStage.showAndWait();
+
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(button);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
     }
 
 }
