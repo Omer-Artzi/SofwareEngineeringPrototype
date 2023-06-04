@@ -65,6 +65,7 @@ public class StudentDoExamDigitalController {
     private List<Question> questionList;
     private List<String> rightAnswers = new ArrayList<>();
     private List<String> studentAnswers;
+    private List<JFXButton> progressButtons = new ArrayList<>();
     private Question currentQuestion;
     int numberOfQuestions;
     int currentIndex = 0;
@@ -141,7 +142,6 @@ public class StudentDoExamDigitalController {
             public void run() {
                 if(timeInSeconds>0) {
                     timeInSeconds--;
-                    //Platform.runLater(() ->{timeLeft.setText("Time Left: " + String.format("%02d",timeInSeconds/60)+ ":" + String.format("%02d",timeInSeconds/60)+ ":" + String.format("%02d",timeInSeconds%60));});
                     Platform.runLater(() ->{timeLeft.setText("Time Left: " + String.format("%02d",timeInSeconds/3600)+ ":" + String.format("%02d",(timeInSeconds%3600)/60)+ ":" + String.format("%02d",timeInSeconds%60));});
 
                 }
@@ -201,6 +201,8 @@ public class StudentDoExamDigitalController {
         private void UpdateQuestion() {
             currentQuestion = questionList.get(currentIndex);
             System.out.println("Updating preview");
+            System.out.println("currentQuestion: " + currentQuestion);
+            System.out.println(currentQuestion.getCorrectAnswer());
             ChangePreviewEvent event = new ChangePreviewEvent();
             event.setQuestion(currentQuestion);
             EventBus.getDefault().post(event);
@@ -286,12 +288,13 @@ public class StudentDoExamDigitalController {
 
     private void renderProgress() {
         System.out.println("rendering progress: questionList.size() = " + questionList.size());
+        progressButtons = new ArrayList<>();
         for (int i = 0; i < questionList.size(); i++) {
             JFXButton button = new JFXButton();
             button.setText(String.valueOf(i + 1));
             button.setPrefWidth(50);
             button.setPrefHeight(50);
-            button.setStyle("-fx-background-color:  #669bbc; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold;");
+            button.setStyle("-fx-background-color:  #669bbc; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold; ");
             button.setUserData(i);
             button.setOnAction(e -> {
                 int index = (int) button.getUserData();
@@ -301,6 +304,8 @@ public class StudentDoExamDigitalController {
             this.progressPane.getChildren().add(button);
         }
     }
+
+
 
 
     /*
