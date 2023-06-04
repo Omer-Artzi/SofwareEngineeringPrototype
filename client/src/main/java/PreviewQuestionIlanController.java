@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class PreviewQuestionController {
+public class PreviewQuestionIlanController {
 
     @FXML
     private ResourceBundle resources;
@@ -75,10 +75,7 @@ public class PreviewQuestionController {
             //answers.add(questionAnswer);
             answersBox.getChildren().add(answer);
         }
-
     }
-
-
     private void AssertFXMLComponents() {
         assert answersBox != null : "fx:id=\"answersBox\" was not injected: check your FXML file 'PreviewQuestion.fxml'.";
         assert questionText != null : "fx:id=\"questionText\" was not injected: check your FXML file 'PreviewQuestion.fxml'.";

@@ -1,4 +1,5 @@
 import Entities.*;
+import Events.StartExamEvent;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,16 +14,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 //import static sun.swing.SwingUtilities2.submit;
 
-public class ExamScreenController implements Initializable {
+public class ExamScreenController {
     private class QuestionsObservable {
         Property<String> question = new SimpleStringProperty();
         Property<String> option1 = new SimpleStringProperty();
@@ -81,9 +86,81 @@ public class ExamScreenController implements Initializable {
     @FXML
     private Label title;
 
+    //NON FXML FIELDS
+    //private ExamForm examForm;
+    private ClassExam mainClassExam;
+    private StudentExam studentExam = new StudentExam();
+    private List<Question> questionList;
+    private List<String> rightAnswers;
+    private List<String> studentAnswers;
+    private Question currentQuestion;
+    int numberOfQuestions;
+    int currentIndex = 0;
+    private QuestionsObservable questionsObservable;
+    //private Map<Question, String> studentAnswers = new HashMap<>();
+    private Integer numberOfRightAnswers = 0;
+    private int timeInSeconds;
+    //private Student student;
+
+    //    timer fields
+    private long min, sec, hr, totalSec = 0;
+    private Timer timer;
+
+    @FXML
+    void initialize() {
+        EventBus.getDefault().register(this);
+        nextButton.setVisible(true);
+        submitButton.setVisible(false);
+
+        this.questionsObservable = new QuestionsObservable();
+        bindFields();
+
+        this.option1.setSelected(true);
+    }
+
+    @Subscribe
+    public void getExam(StartExamEvent event) {
+        mainClassExam = event.getClassExam();
+        System.out.println(mainClassExam);
+        System.out.println(mainClassExam.getCourse());
+
+        createDigitalExam(mainClassExam);
+        timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
+        studentExam.setStudent(((Student) (SimpleClient.getUser())));
+        studentExam.setClassExam(mainClassExam);
+        studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+
+
+    }
+
+    public void createDigitalExam(ClassExam selectedExam) {
+        ExamForm selectedForm = selectedExam.getExamForm();
+        title.setText("Exam in " + selectedForm.getSubject().getName() + " - " + selectedForm.getCourse().getName());
+        questionList = selectedForm.getQuestionList();
+        numberOfQuestions = selectedForm.getQuestionList().size();
+        studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
+        Random random = new Random();
+
+        /*for (Question question : questionList) {
+            ProgressCircleController controller = new ProgressCircleController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProgressCircle.fxml"));
+            loader.setController(controller);
+            try {
+                Node node = loader.load();
+                node.setUserData(controller);
+                progressPane.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
+        for (Question question : selectedForm.getQuestionList()) {
+            rightAnswers.add(question.getCorrectAnswer());
+        }
+    }
+
     @FXML
     void nextQuestion(ActionEvent event) {
-        boolean isRight = false;
+        /*boolean isRight = false;
         {
             // checking answer
             RadioButton selectedButton = (RadioButton) options.getSelectedToggle();
@@ -95,7 +172,7 @@ public class ExamScreenController implements Initializable {
             }
 
             // saving Answer to hashMap
-            studentAnswers.put(this.currentQuestion, userAnswer);
+            //studentAnswers.put(this.currentQuestion, userAnswer);
         }
         Node circleNode = this.progressPane.getChildren().get(currentIndex - 1);
         ProgressCircleController controller = (ProgressCircleController) circleNode.getUserData();
@@ -103,7 +180,7 @@ public class ExamScreenController implements Initializable {
             controller.setRightAnswerColor();
         } else {
             controller.setWrongAnswerColor();
-        }
+        }*/
         this.setNextQuestion();
     }
 
@@ -120,7 +197,7 @@ public class ExamScreenController implements Initializable {
             // show error notification
         }*/
     }
-
+    /*
     @FXML
     void initialize() {
         assert options != null : "fx:id=\"Options\" was not injected: check your FXML file 'ExamScreen.fxml'.";
@@ -135,19 +212,10 @@ public class ExamScreenController implements Initializable {
         assert timing != null : "fx:id=\"timing\" was not injected: check your FXML file 'ExamScreen.fxml'.";
         assert title != null : "fx:id=\"title\" was not injected: check your FXML file 'ExamScreen.fxml'.";
 
-    }
+    }*/
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.showNextQuestionButton();
-        this.hideSubmitQuizButton();
 
-        this.questionsObservable = new QuestionsObservable();
-        bindFields();
 
-        this.option1.setSelected(true);
-
-    }
 
     private void bindFields() {
         this.question.textProperty().bind(this.questionsObservable.question);
@@ -157,26 +225,11 @@ public class ExamScreenController implements Initializable {
         this.option1.textProperty().bind(this.questionsObservable.option1);
     }
 
-    //NON FXML FIELDS
-    //private ExamForm examForm;
-    private StudentExam studentExam;
-    private List<Question> questionList;
-    private Question currentQuestion;
-    int currentIndex = 0;
-    private QuestionsObservable questionsObservable;
-    private Map<Question, String> studentAnswers = new HashMap<>();
-    private Integer numberOfRightAnswers = 0;
-    //private Student student;
-
-    //    timer fields
-    private long min, sec, hr, totalSec = 0;
-    private Timer timer;
 
 
 
     private void setNextQuestion() {
         if (!(currentIndex >= studentExam.getClassExam().getExamForm().getQuestionList().size())) {
-
             {
                 // changing the color
                 Node circleNode = this.progressPane.getChildren().get(currentIndex);
@@ -197,8 +250,8 @@ public class ExamScreenController implements Initializable {
             this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;
         } else {
-            hideNextQuestionButton();
-            showSubmitQuizButton();
+            nextButton.setVisible(false);
+            submitButton.setVisible(true);
         }
     }
 
@@ -229,21 +282,6 @@ public class ExamScreenController implements Initializable {
         }
     }
 
-    private void hideNextQuestionButton() {
-        this.nextButton.setVisible(false);
-    }
-
-    private void showNextQuestionButton() {
-        this.nextButton.setVisible(true);
-    }
-
-    private void hideSubmitQuizButton() {
-        this.submitButton.setVisible(false);
-    }
-
-    private void showSubmitQuizButton() {
-        this.submitButton.setVisible(true);
-    }
 
 
     //   timer methods
@@ -269,7 +307,6 @@ public class ExamScreenController implements Initializable {
     private void setTimer() {
         double totalMin = this.studentExam.getClassExam().getExamForm().getExamTime();
         this.timer = new Timer();
-
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -289,7 +326,6 @@ public class ExamScreenController implements Initializable {
                 });
             }
         };
-
         timer.schedule(timerTask, 0, 1000);
     }
 

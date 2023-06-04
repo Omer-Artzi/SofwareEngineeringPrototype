@@ -502,6 +502,7 @@ public class SimpleServer extends AbstractServer {
 		List<ClassExam> examForms = session.createQuery(query).getResultList();
 		return examForms;
 	}
+
 	private List<ClassExam> getExamsForSubjects(Subject subject) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
@@ -648,5 +649,15 @@ public class SimpleServer extends AbstractServer {
 		query.from(ExamForm.class);
 		List<ExamForm> exams = session.createQuery(query).getResultList();
 		return exams;
+	}
+
+	public static ExamForm getExamForm (int iExamFormID)
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		Root<ExamForm> root = query.from(ExamForm.class);
+		query.where(builder.equal(root.get("ID"), iExamFormID));
+		ExamForm examForm = session.createQuery(query).getSingleResult();
+		return examForm;
 	}
 }

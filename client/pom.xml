@@ -66,7 +66,13 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.17</version>
 		</dependency>
-	<dependency>
+		<!-- https://mvnrepository.com/artifact/com.jfoenix/jfoenix -->
+		<dependency>
+			<groupId>com.jfoenix</groupId>
+			<artifactId>jfoenix</artifactId>
+			<version>9.0.1</version>
+		</dependency>
+		<dependency>
 		<groupId>org.openjfx</groupId>
 		<artifactId>javafx-controls</artifactId>
 		<version>14</version>

@@ -104,18 +104,20 @@ public class StudentChooseExamController {
 
         ClassExam selectedExam = ExamsTV.getSelectionModel().getSelectedItem();
         if( selectedExam != null ) {
-            if (selectedExam.getExamType() == HSTS_Enums.ExamType.Automatic) {
+            if (selectedExam.getExamType() == HSTS_Enums.ExamType.Manual) {
                 //TODO: change to "real" ID
                 if(selectedExam.getCode().equals(examCodeTF.getText()) && Integer.parseInt(IDTF.getText()) == ((Student)(SimpleClient.getUser())).getID()) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
+                    //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code or ID", "Error", JOptionPane.WARNING_MESSAGE);
                 }
-            } else {
-
+            } else
+            {
                 if(selectedExam.getCode().equals(examCodeTF.getText())) {
-                    SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
+                    SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
+                    //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code", "Error", JOptionPane.WARNING_MESSAGE);
