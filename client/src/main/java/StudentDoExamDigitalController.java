@@ -1,6 +1,8 @@
 import Entities.*;
 import Events.ChangePreviewEvent;
+import Events.RequestStudentAnswerToQuestion;
 import Events.StartExamEvent;
+import Events.StudentAnswerToQuestion;
 import Server.SimpleServer;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -12,10 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
@@ -69,9 +68,9 @@ public class StudentDoExamDigitalController {
     private Question currentQuestion;
     int numberOfQuestions;
     int currentIndex = 0;
-    //private QuestionsObservable questionsObservable;
-    //private Map<Question, String> studentAnswers = new HashMap<>();
+    private Map<Question, String> studentQuestionsAnswers = new HashMap<>();
     private int numberOfRightAnswers = 0;
+    private int numberOfQuestionsAnswered = 0;
     private int timeInSeconds;
 
 
@@ -126,6 +125,7 @@ public class StudentDoExamDigitalController {
         studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
         for (Question question : selectedForm.getQuestionList()) {
             rightAnswers.add(question.getCorrectAnswer());
+            //studentQuestionsAnswers.put(question, "0");
         }
         System.out.println("4. in getExam- currentQuestion: " + currentQuestion);
         setTimer();
@@ -133,6 +133,17 @@ public class StudentDoExamDigitalController {
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
         System.out.println("5. after sending first question to preview");
+    }
+
+    @Subscribe
+    private void getAnswer(StudentAnswerToQuestion event){
+        if (studentQuestionsAnswers.put(currentQuestion, event.getSelectedAnswer()) == null) {
+            System.out.println("Answer to question " + currentQuestion.getID() + " was added");
+            numberOfQuestionsAnswered++;
+        } else {
+            System.out.println("Answer to question " + currentQuestion.getID() + " was updated");
+        }
+        progressButtons.get(currentIndex).setStyle("-fx-background-color: #80d780");
     }
 
     private void setTimer() {
@@ -198,11 +209,13 @@ public class StudentDoExamDigitalController {
         }
 
         @Subscribe
-        private void UpdateQuestion() {
+        private void UpdateQuestion() { // TODO: work with Edan on solution to Randomize question answers
             currentQuestion = questionList.get(currentIndex);
             System.out.println("Updating preview");
             System.out.println("currentQuestion: " + currentQuestion);
             System.out.println(currentQuestion.getCorrectAnswer());
+            RequestStudentAnswerToQuestion request = new RequestStudentAnswerToQuestion();
+            EventBus.getDefault().post(request);
             ChangePreviewEvent event = new ChangePreviewEvent();
             event.setQuestion(currentQuestion);
             EventBus.getDefault().post(event);
@@ -243,8 +256,59 @@ public class StudentDoExamDigitalController {
 
     @FXML
     void submitExam(ActionEvent event) {
-        System.out.println(this.studentAnswers);
-        System.out.println(this.studentExam.getStudent());
+        //System.out.println(this.studentAnswers);
+        //System.out.println(this.studentExam.getStudent());
+        // TODO - examForm grade percentage is missing!
+        for (Question q : questionList){
+            String studentAnswer = studentQuestionsAnswers.get(q);
+            if (studentAnswer != null){
+                numberOfQuestionsAnswered++;
+                if (studentAnswer.equals(q.getCorrectAnswer())){
+                    numberOfRightAnswers++;
+                }
+            }
+        }
+        System.out.println("numberOfQuestionsAnswered: " + numberOfQuestionsAnswered);
+        System.out.println("numberOfRightAnswers: " + numberOfRightAnswers);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Are you sure you want to submit the exam?");
+        if (timeInSeconds > 0){
+        if ( numberOfQuestionsAnswered < numberOfQuestions) {
+            alert.setHeaderText("You have not answered all the questions");}
+        else {
+            alert.setHeaderText("You answered all the questions");}
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                try {
+                    SimpleClient.getClient().sendToServer(new Message(1, "Exam Submitted"));
+                    SimpleChatClient.setRoot("ChooseExam");
+                    JOptionPane.showMessageDialog(null, "Exam submitted successfully", "Submission Exam", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                // ... user chose CANCEL or closed the dialog
+                return;
+            }
+        }
+        else {
+            alert.setHeaderText("Time is up!");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                try {
+                    SimpleClient.getClient().sendToServer(new Message(1, "Exam Submitted"));
+                    SimpleChatClient.setRoot("ChooseExam");
+                    JOptionPane.showMessageDialog(null, "Exam submitted successfully", "Submission Exam", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                // ... user chose CANCEL or closed the dialog
+                return;
+            }
+        }
+
         //boolean result = StudentExam.save(this.studentAnswers);
         /*if (result) {
             // show success notification
@@ -325,52 +389,6 @@ public class StudentDoExamDigitalController {
             }
         }
     }*/
-
-
-//////////////// timer methods //////////////////////
-    /*private void setTimer() {
-        double totalMin = (double)mainClassExam.getExamTime();
-        this.timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("After 1 sec...");
-                        convertTime();
-                        if (totalMin <= 0) {
-                            timer.cancel();
-                            timing.setText("00:00:00");
-                            // saveing data to database
-                            //submitExam(null);
-                            // "time is up" notification;
-                        }
-                    }
-                });
-            }
-        };
-        timer.schedule(timerTask, 0, 1000);
-    }
-
-    public void convertTime() {
-        TimeUnit TimeUnit = null;
-        min = TimeUnit.SECONDS.toMinutes(totalSec);
-        sec = totalSec - (min * 60);
-        hr = TimeUnit.MINUTES.toHours(min);
-        min = min - (hr * 60);
-        timing.setText(format(hr) + ":" + format(min) + ":" + format(sec));
-
-        totalSec--;
-    }
-
-    private String format(long value) {
-        if (value < 10) {
-            return 0 + "" + value;
-        }
-        return value + "";
-    }*/
-//////////////////////////////////////////////////////////
 
     @FXML
     void AssertFXMLComponents() {
