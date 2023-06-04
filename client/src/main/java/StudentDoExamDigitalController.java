@@ -177,7 +177,7 @@ public class StudentDoExamDigitalController {
 
             //create a listener for the next Question button
             nextButton.setOnAction(e -> {
-                if (currentIndex < numberOfQuestions - 2) {
+                if (currentIndex < numberOfQuestions - 1) {
                     currentIndex++;
                     if (currentIndex != 0) {
                         previousButton.setVisible(true);
