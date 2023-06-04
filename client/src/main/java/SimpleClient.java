@@ -103,7 +103,6 @@ public class SimpleClient extends AbstractClient {
 			//EventBus.getDefault().post(new GeneralEvent(new Message(0, "Failure")));
 		}
 		else if(message.getMessage().startsWith("Success: User")){
-			System.out.println("client principle");
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
 			System.out.println("Fail : User");

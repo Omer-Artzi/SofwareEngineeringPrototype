@@ -85,7 +85,7 @@ public class TeacherLiveExamsController {
     public void update(LiveExamsEvent event) throws IOException {
         System.out.println("In LiveExamsController");
         examList=event.getLiveExams();
-        List<ClassExam>LiveExam=SelectedExams(event.getLiveExams());
+        //List<ClassExam>LiveExam=SelectedExams(event.getLiveExams());
         if (!examList.isEmpty())
         {
             for (ClassExam item:examList)
@@ -94,7 +94,8 @@ public class TeacherLiveExamsController {
                 //if(item.)
             }
         }
-        data.addAll(LiveExam);
+        data.addAll(examList);
+       // data.addAll(LiveExam);
     }
 
 

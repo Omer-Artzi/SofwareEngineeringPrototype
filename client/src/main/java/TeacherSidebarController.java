@@ -54,7 +54,6 @@ public class TeacherSidebarController implements SideBar {
         changeScene("TeacherExamGrade");
     }
 
-
     @FXML
     void showStatistics(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");

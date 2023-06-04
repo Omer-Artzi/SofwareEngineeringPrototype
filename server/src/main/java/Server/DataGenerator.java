@@ -46,6 +46,7 @@ public class DataGenerator {
             List<Subject> subjectList = subjects.getSubjects();
             generateTeachers(subjectList);
             generateQuestions(subjectList);
+           generatePrincipal();
             List<ExamForm> examFormList = SimpleServer.retrieveExamForm();
             GenerateClassExams(examFormList);
             SimpleServer.session.getTransaction().commit();
@@ -277,13 +278,13 @@ public class DataGenerator {
 
     }
 /*Generate Principles, by Liad*/
-    private static void generatePrinciple() {
+    private static void generatePrincipal() {
         try {
-            // String salt = BCrypt.gensalt(); // TODO
+            String salt = BCrypt.gensalt(); // TODO
             Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
             admin.setEmail("adminP");
-            //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
-            admin.setPassword("1234");
+            admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            //admin.setPassword("1234");
             admin.setGender(HSTS_Enums.Gender.Female);
             SimpleServer.session.save(admin);
             SimpleServer.session.flush();
