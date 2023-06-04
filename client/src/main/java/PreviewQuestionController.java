@@ -1,10 +1,10 @@
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import Entities.Question;
 import Events.ChangePreviewEvent;
+import Events.RequestStudentAnswerToQuestion;
+import Events.StudentAnswerToQuestion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -39,6 +39,8 @@ public class PreviewQuestionController {
 
     private ToggleGroup answersToggleGroup;
 
+    private String selectedAnswer = null;
+
     @FXML
     void initialize() {
         AssertFXMLComponents();
@@ -53,6 +55,9 @@ public class PreviewQuestionController {
         }
         answersBox.getChildren().clear();
         this.question = event.getQuestion();
+        if(event.getSelectedAnswer() != null){
+            this.selectedAnswer = event.getSelectedAnswer();
+        }
         PopulateQuestion();
         CreateAnswers();
     }
@@ -68,14 +73,26 @@ public class PreviewQuestionController {
         // TODO: handle saving the answer
         answersToggleGroup = new ToggleGroup();
         List<String> answers = new ArrayList<>(question.getIncorrectAnswers());
+        Collections.shuffle(answers);
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {
             RadioButton answer = new RadioButton(questionAnswer);
+            if(answer.getText().equals(selectedAnswer)){
+                answer.setSelected(true);
+            }
             answer.setToggleGroup(answersToggleGroup);
             //answers.add(questionAnswer);
             answersBox.getChildren().add(answer);
         }
 
+    }
+
+    public void ReceiveAnswerRequest(RequestStudentAnswerToQuestion event) {
+        System.out.println("PreviewQuestionController.ReceiveAnswerRequest");
+        if (answersToggleGroup.getSelectedToggle() != null) {
+            selectedAnswer = ((RadioButton) answersToggleGroup.getSelectedToggle()).getText();
+        }
+        EventBus.getDefault().post(new StudentAnswerToQuestion(question, selectedAnswer));
     }
 
 
