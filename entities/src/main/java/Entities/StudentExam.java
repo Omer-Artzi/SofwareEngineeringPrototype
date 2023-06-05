@@ -56,6 +56,8 @@ public class StudentExam implements Serializable {
         this.grade = other.grade;
         this.studentAnswers = new ArrayList<>(other.getStudentAnswers());
         this.status = other.status;
+        this.teacherNote = other.teacherNote;
+        this.scoreChangeReason = other.scoreChangeReason;
     }
 
     public int getID()

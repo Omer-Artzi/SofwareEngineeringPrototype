@@ -169,6 +169,19 @@ public class ExamForm implements Serializable {
     public boolean getUsedStatus() {return used;}
 
 
+    public void setFooterText(String footerText){this.footerText = footerText;}
+    public String getFooterText(){return this.footerText;}
+    public void setHeaderText(String headerText){this.headerText = headerText;}
+    public String getHeaderText(){return this.headerText;}
+
+    public void setExamNotesForTeacher(String examNotesForTeacher){this.examNotesForTeacher = examNotesForTeacher;}
+    public String getExamNotesForTeacher(){return this.examNotesForTeacher;}
+
+    public void setExamNotesForStudent(String examNotesForStudent){this.examNotesForStudent = examNotesForStudent;}
+    public String getExamNotesForStudent(){return this.examNotesForStudent;}
+
+
+
 }
 
 

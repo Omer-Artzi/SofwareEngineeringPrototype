@@ -13,20 +13,20 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentExamGradeController">
+<AnchorPane fx:id="root" prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentExamGradeController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="377.0" layoutY="14.0" prefHeight="34.0" prefWidth="171.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Exam Assessment" />
-      <ScrollPane fx:id="ScrollPane" layoutX="179.0" layoutY="103.0" prefHeight="391.0" prefWidth="592.0">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="267.0" layoutY="14.0" prefHeight="34.0" prefWidth="171.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Exam Assessment" />
+      <ScrollPane fx:id="ScrollPane" layoutX="49.0" layoutY="103.0" prefHeight="597.0" prefWidth="730.0">
          <content>
-            <VBox fx:id="AnswersVBOX" alignment="TOP_CENTER">
+            <VBox fx:id="AnswersVBOX" alignment="TOP_CENTER" prefWidth="730.0">
                <children>
                   <Label style="-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #336699;" text="Student Answers" wrapText="true" />
-                  <AnchorPane prefHeight="47.0" prefWidth="557.0">
+                  <AnchorPane prefHeight="47.0">
                      <children>
-                        <Label layoutX="243.0" layoutY="10.0" style="-fx-font-weight: bold; font-s: 11px;" text="Answers" />
-                        <Label layoutX="456.0" layoutY="7.0" prefHeight="34.0" prefWidth="51.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Student Choice" wrapText="true" />
-                        <Label layoutX="507.0" layoutY="7.0" prefHeight="34.0" prefWidth="59.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Question Point" wrapText="true" />
-                        <Label layoutX="6.0" layoutY="10.0" prefHeight="34.0" prefWidth="50.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Question Number" wrapText="true" />
+                        <Label layoutX="243.0" layoutY="10.0" style="-fx-font-weight: bold; font-s: 11px;" text="Questions" />
+                        <Label layoutX="532.0" layoutY="7.0" prefHeight="34.0" prefWidth="51.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Student Choice" wrapText="true" />
+                        <Label layoutX="603.0" layoutY="10.0" prefHeight="34.0" prefWidth="59.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Question Point" wrapText="true" />
+                        <Label layoutX="23.0" layoutY="10.0" prefHeight="34.0" prefWidth="50.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Question Number" wrapText="true" />
                      </children>
                   </AnchorPane>
                   <TextFlow fx:id="GradeTF" textAlignment="CENTER">
@@ -76,7 +76,8 @@
                         <TextArea fx:id="FeedbackTextArea" prefWidth="400.0" promptText="Please enter Exam notes here">
                            <HBox.margin>
                               <Insets left="20.0" right="60.0" />
-                           </HBox.margin></TextArea>
+                           </HBox.margin>
+                        </TextArea>
                         <Button fx:id="FeedbackSaveBtn" mnemonicParsing="false" onAction="#FeedbackSaveAct" text="Save">
                            <HBox.margin>
                               <Insets />
@@ -92,13 +93,15 @@
                         <TextArea fx:id="ChangeScoreTextArea" prefWidth="400.0" promptText="Please write The reason for the score change">
                            <HBox.margin>
                               <Insets left="20.0" right="30.0" />
-                           </HBox.margin></TextArea>
+                           </HBox.margin>
+                        </TextArea>
                         <VBox alignment="BOTTOM_CENTER" prefHeight="120.0" prefWidth="106.0">
                            <children>
                               <Label fx:id="ChangeScoreErrLbl" alignment="CENTER" prefWidth="106.0" text="Wrong Input" textFill="#da2121" wrapText="true">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
-                                 </VBox.margin></Label>
+                                 </VBox.margin>
+                              </Label>
                               <TextField fx:id="ChangeScoreSaveField" promptText="New Grade">
                                  <VBox.margin>
                                     <Insets bottom="5.0" />
@@ -107,7 +110,8 @@
                               <Button fx:id="ChangeScoreSaveBtn" mnemonicParsing="false" onAction="#ChangeScoreSaveAct" text="Save">
                                  <VBox.margin>
                                     <Insets />
-                                 </VBox.margin></Button>
+                                 </VBox.margin>
+                              </Button>
                            </children>
                            <HBox.margin>
                               <Insets />
