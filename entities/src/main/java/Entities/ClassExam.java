@@ -60,7 +60,7 @@ public class ClassExam implements Serializable
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code,Course course,Subject subject)
     {
         this.startDate=startDate;
         this.finalSubmissionDate=finalSubmissionDate;
@@ -73,6 +73,8 @@ public class ClassExam implements Serializable
         this.gradesMean=0;
         this.gradesVariance=0;
         this.code = code;
+        this.course =course;
+        this.subject = subject;
     }
 
     public int getID() {return ID;}

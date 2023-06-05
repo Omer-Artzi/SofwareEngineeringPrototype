@@ -27,7 +27,7 @@ public class Course implements Serializable, Comparable<Course> {
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "subjectID")
     private Subject subject = null;
 

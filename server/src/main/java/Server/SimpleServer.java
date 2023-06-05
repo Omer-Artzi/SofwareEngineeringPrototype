@@ -207,6 +207,13 @@ public class SimpleServer extends AbstractServer {
 				message.setData(getSubjects());
 				client.sendToClient(message);
 			}
+			else if (message.getMessage().startsWith("Get Student Exams For Student ID:")) {
+				response = "Student Exams For Student";
+				int studentID = Integer.parseInt(request.substring(33));
+				message.setMessage(response);
+				message.setData(retrieveStudentExams(studentID));
+				sendToAllClients(message);
+			}
 			else if (message.getMessage().startsWith("Extra time request")) {
 				response = "Extra Time Requested";
 				message.setMessage(response);
@@ -457,6 +464,8 @@ public class SimpleServer extends AbstractServer {
 			session.getTransaction().commit();
 	}
 
+
+
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -582,6 +591,14 @@ public class SimpleServer extends AbstractServer {
 		query.where(builder.equal(root.get("ID"), iTeacherID));
 		Teacher teacher = session.createQuery(query).getSingleResult();
 		return teacher;
+	}
+	private List<StudentExam> retrieveStudentExams(int studentID) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Student> query = builder.createQuery(Student.class);
+		Root<Student> root = query.from(Student.class);
+		query.where(builder.equal(root.get("ID"), studentID));
+		Student student = session.createQuery(query).getSingleResult();
+		return student.getStudentExam();
 	}
 
 

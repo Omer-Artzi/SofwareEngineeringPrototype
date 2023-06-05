@@ -17,16 +17,13 @@ public class StudentExam implements Serializable {
     @JoinColumn(name = "Student")
     private Student student;
 
-    @ManyToOne
+    @ManyToOne(cascade =CascadeType.ALL)
     @JoinColumn(name = "ClassExam")
     private ClassExam classExam;
 
     @ElementCollection
     private List<Integer> studentAnswers = new ArrayList<>();
-
     private int grade;
-
-
     private HSTS_Enums.StatusEnum status;
 
     private String teacherNote;

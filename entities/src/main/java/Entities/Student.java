@@ -16,16 +16,16 @@ public class Student extends Person implements Serializable, Comparable<Student>
 
     private String personID;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<Grade> grades = new ArrayList<>();
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<Subject> subjects = new ArrayList<>();
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<ClassExam> classExams = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<StudentExam> studentExams = new ArrayList<>();
     public Student() {}
 

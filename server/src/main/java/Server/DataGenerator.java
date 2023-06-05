@@ -6,9 +6,7 @@ import Server.Events.ResponseQuestion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
-import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -19,45 +17,59 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DataGenerator {
     static Faker faker = new Faker();
+    static Random rand = new Random();
     public static void generateData() throws IOException {
+       System.out.println("Generating Subjects and Courses");
+        List<Subject> subjects = generateSubjectsAndCourses();
+        System.out.println("Generating Students");
+        assert subjects != null;
+        List<Student> students = generateStudents(subjects.get(0).getCourses());
+        System.out.println("Generating Teachers");
+        generateTeachers(subjects);
+        System.out.println("Generating Questions");
+        List<Question> questionsList = generateQuestions(subjects);
+        System.out.println("Generating Test Forms");
+        List<ExamForm> examFormList = generateTestForms(questionsList);
+        System.out.println("Generating Class Exams");
+        List<ClassExam> classExams = generateClassExams(examFormList);
+        System.out.println("Generating Student Exams");
+        assert classExams != null;
+        List<StudentExam> studentExams = generateStudentExams(classExams,students);
+        System.out.println("Generating Principals");
+        generatePrincipals();
+        SimpleServer.session.getTransaction().commit();
+    }
+    private static List<Subject>  generateSubjectsAndCourses() throws IOException {
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
         SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
         school.setSubjects(subjects.getSubjects());
         try {
             for (Subject subject : subjects.getSubjects()) {
-                SimpleServer.session.saveOrUpdate(subject);
-                for (Course course : subject.getCourses()) {
+                for(Course course:subject.getCourses())
+                {
                     course.setSubject(subject);
-                    SimpleServer.session.saveOrUpdate(course);
                 }
+                SimpleServer.session.save(subject);
                 SimpleServer.session.flush();
             }
 
-            // sign the students to the first subject courses
-            List<Student> students = DataGenerator.generateStudents(subjects.getSubjects().get(0).getCourses());
-            generateGrades(students);
-
-            List<Subject> subjectList = subjects.getSubjects();
-            generateTeachers(subjectList);
-            generateQuestions(subjectList);
-            List<ExamForm> examFormList = SimpleServer.retrieveExamForm();
-            GenerateClassExams(examFormList);
-            SimpleServer.session.getTransaction().commit();
+            return subjects.getSubjects();
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return null;
         }
 
     }
-    private static void generateQuestions(List<Subject> subjectList) {
+
+    private static List<Question> generateQuestions(List<Subject> subjectList) {
         int questionAmount = 30;
         String[] requests = {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=9&type=multiple",
@@ -70,9 +82,8 @@ public class DataGenerator {
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=27&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=24&type=multiple",
                 "https://opentdb.com/api.php?amount="+ questionAmount + "&category=18&type=multiple",};
-        Random random = new Random();
-        int randCourse;
-        for (int i = 0; i < requests.length;i++) {
+        List<Question> questionsList = new ArrayList<>();
+        for (int i = 0; i < requests.length; i++) {
             try {
                 // Create URL object and open connection
                 URL url = new URL(requests[i]);
@@ -99,7 +110,7 @@ public class DataGenerator {
                     Gson gson = new Gson();
                     ApiResponse apiResponse = gson.fromJson(response.toString(), ApiResponse.class);
                     List<ResponseQuestion> questions = apiResponse.getResults();
-                    List<Question> questionsList = new ArrayList<>();
+
                     for(ResponseQuestion responseQuestion: questions)
                     {
                         Question question = new Question();
@@ -111,40 +122,38 @@ public class DataGenerator {
                         String QuestionID = OperationUtils.IDZeroPadding(subject.getId().toString(), 2)
                                 + OperationUtils.IDZeroPadding(Integer.toString(subject.getQuestionNumber()), 3);
                         question.setQuestionID(QuestionID);
-                        subject.addQuestion(question);
 
                         // question courses link
                         List<Course> courses = subjectList.get(i).getCourses();
-                        question.setCourses(subjectList.get(i).getCourses());
-                        for (Course course : courses)
-                        {
-                            course.addQuestion(question);
-                        }
-
+                        question.setCourses(courses);
                         questionsList.add(question);
                         SimpleServer.session.save(question);
                         SimpleServer.session.flush();
                     }
-                    generateTestForms(questionsList);
+
+
                 }
                 else
                 {
                     System.out.println("Error: " + responseCode);
+                    connection.disconnect();
+                    return null;
                 }
-
-                connection.disconnect();
 
             }
             catch(IOException e)
             {
                 e.printStackTrace();
+                return null;
             }
 
         }
+        return questionsList;
     }
-    private static void generateTestForms(List<Question> questionsList) {
+    private static List<ExamForm> generateTestForms(List<Question> questionsList) {
         if(questionsList != null) {
             Teacher teacher = SimpleServer.retrieveTeachers().get(0);
+            List<ExamForm> examForms = new ArrayList<>();
             for(int  i = 0; i < 3; i++) {
                 ExamForm examForm = new ExamForm();
                 for(int  j = 0; j < 10;j++) {
@@ -154,27 +163,17 @@ public class DataGenerator {
                 // examForm - question link
                 List<Question> examQuestions = examForm.getQuestionList();
 
-                // Other way connection cause error on client login
-                //for (Question question : questionsList)
-                //{
-                //    question.addExamForm(examForm);
-                //}
-
                 // examForm - subject link
                 Course examCourse = examQuestions.get(0).getCourses().get(0);
                 Subject examSubject = examCourse.getSubject();
                 examForm.setSubject(examSubject);
-                examSubject.addExamForm(examForm);
+                //examSubject.addExamForm(examForm);
 
                 // examForm - course link
                 examForm.setCourse(examCourse);
 
-                // Other way  connection cause error on client login
-                //examCourse.addExamForm(examForm);
-
                 // examForm - teacher link
                 examForm.setCreator(teacher);
-                teacher.addExamForm(examForm);
 
                 examForm.getCode();
 
@@ -190,26 +189,22 @@ public class DataGenerator {
                         OperationUtils.IDZeroPadding(Long.toString(examCourse.getExamFormsNumber()), 2);
 
                 examForm.setExamFormID(examFormID);
+                examForms.add(examForm);
 
                 SimpleServer.session.saveOrUpdate(examForm);
             }
             SimpleServer.session.flush();
+            return examForms;
         }
         else {
             System.out.println("No question Retrieved");
+            return null;
         }
 
     }
     private static void generateTeachers(List<Subject> subjects) {
         try {
             String salt = BCrypt.gensalt();
-            //String principalFirstName = faker.name().firstName();
-            //String principalLastName = faker.name().lastName();
-            //String principalEmail = principalFirstName + "_" + principalLastName + "@gmail.com";
-            //String priciplepassword = BCrypt.hashpw(faker.internet().password(), salt);
-            //Principle principle = new Principle(principalFirstName, principalLastName,  Gender.Female, principalEmail, priciplepassword);
-            //SimpleServer.session.saveOrUpdate(principle);
-            //SimpleServer.session.flush();
             Teacher admin = null;
             HashSet<Subject> tempSubjects = new HashSet<Subject>();
             HashSet<Course> tempCourses = new HashSet<Course>();
@@ -242,30 +237,13 @@ public class DataGenerator {
                     teacher.setLastName("user");
                     admin = teacher;
                 }
-                for (Course course : coursesList) {
-                    course.getTeachers().add(teacher);
-                    if(!(tempCourses.contains(course))){
-                        tempCourses.add(course);
-                        course.getTeachers().add(admin);
-                    }
-                }
-
-                for (Subject subject : subjectsList) {
-                    subject.getTeachers().add(teacher);
-                    if(!(tempSubjects.contains(subject))){
-                        tempSubjects.add(subject);
-                        subject.getTeachers().add(admin);
-                    }
-                }
                 SimpleServer.session.saveOrUpdate(teacher);
 
             }
             SimpleServer.session.flush();
 
-            List<Course> allCourses = new ArrayList<>();
-            List<Subject> allSubjects = new ArrayList<>();
-            allSubjects.addAll(tempSubjects);
-            allCourses.addAll(tempCourses);
+            List<Subject> allSubjects = new ArrayList<>(tempSubjects);
+            List<Course> allCourses = new ArrayList<>(tempCourses);
             admin.setSubjects(allSubjects);
             admin.setCourses(allCourses);
             SimpleServer.session.saveOrUpdate(admin);
@@ -278,9 +256,9 @@ public class DataGenerator {
         }
 
     }
-/*Generate Principles, by Liad*/
-    private static void generatePrinciple() {
+    private static List<Principal> generatePrincipals() {
         try {
+            List<Principal> principals = new ArrayList<>();
             // String salt = BCrypt.gensalt(); // TODO
             Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
             admin.setEmail("adminP");
@@ -288,9 +266,8 @@ public class DataGenerator {
             admin.setPassword("1234");
             admin.setGender(HSTS_Enums.Gender.Female);
             SimpleServer.session.save(admin);
+            principals.add(admin);
             SimpleServer.session.flush();
-            Faker faker = new Faker();
-            Random random = new Random();
             for (int i = 0; i < 5; i++) {
                 String PrincipleFirstName = faker.name().firstName();
                 String PrincipleLastName = faker.name().lastName();
@@ -308,29 +285,17 @@ public class DataGenerator {
                     principle.setLastName("Principle");
                 }
                 */
-
+                principals.add(principal);
                 SimpleServer.session.saveOrUpdate(principal);
             }
             SimpleServer.session.flush();
-            //SimpleServer.session.saveOrUpdate(admin);
-            //SimpleServer.session.flush();
+            return principals;
         }
         catch (Exception e)
         {
             e.printStackTrace();
+            return null;
         }
-    }
-    private static void generateGrades(List<Student> students) {
-        Random r = new Random();
-        for(Student student : students)
-        {
-            for(int i = 0; i < 8;i++ ) {
-                Grade grade = new Grade(r.nextInt(100),faker.educator().course(),faker.pokemon().name() , student);
-                student.getGrades().add(grade);
-                SimpleServer.session.save(grade);
-            }
-        }
-        SimpleServer.session.flush();
     }
     public static List<Student> generateStudents(List<Course> courses) {
         List<Student> students = new ArrayList<>();
@@ -342,8 +307,8 @@ public class DataGenerator {
             String lastName = faker.name().lastName();
             String password = BCrypt.hashpw(faker.internet().password(), salt);
             String studentEmail = firstName + "_" + lastName + "@gmail.com";
-            String personID =  faker.number().digits(9).toString();
-            while (IDList.contains(personID)) { personID =  faker.number().digits(9).toString();}
+            String personID =  faker.number().digits(9);
+            while (IDList.contains(personID)) { personID = faker.number().digits(9);}
             IDList.add(personID);
             Student student;
             if (i == 0)
@@ -355,15 +320,13 @@ public class DataGenerator {
             {
                 int courseNum = faker.number().numberBetween(0, courses.size());
                 student.addCourse(courses.get(courseNum));
-                courses.get(courseNum).addStudents(student);
-                SimpleServer.session.save(courses.get(courseNum));
             }
             students.add(student);
             SimpleServer.session.save(student);
 
             SimpleServer.session.flush();
         }
-        return  students;
+        return students;
     }
 
     private static LocalDateTime GenerateRandomDate(LocalDate startDate, LocalDate endDate) {
@@ -379,16 +342,13 @@ public class DataGenerator {
         return Date.from(zonedDateTime.toInstant());
     }
 
-    private static void GenerateClassExams(List<ExamForm> ExamForms)
+    private static List<ClassExam> generateClassExams(List<ExamForm> examForms)
     {
-        if(ExamForms != null) {
-            List<HSTS_Enums.StatusEnum> statusList = new ArrayList<HSTS_Enums.StatusEnum>() {{
-                add(HSTS_Enums.StatusEnum.Approved);
-                add(HSTS_Enums.StatusEnum.NotTaken);
-                add(HSTS_Enums.StatusEnum.ToEvaluate);
-                add(HSTS_Enums.StatusEnum.Disapproved);}};
+        if(examForms != null) {
+
             // generate list of Class Exam
-            for(int examNumber = 0; examNumber < 6; examNumber++) {
+            List<ClassExam> classExams = new ArrayList<>();
+            for(ExamForm examForm: examForms) {
 
                 // generate random start and end time
                 LocalDate currentDate = LocalDate.now();
@@ -401,77 +361,70 @@ public class DataGenerator {
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
-                ClassExam classExam = new ClassExam(ExamForms.get(examNumber), testStartDate, testEndDate, examTime*60, teacher, code);
-
-                // set last used on creation date
-                ExamForms.get(examNumber).setLastUsed(ConvertToDate(LocalDateTime.now()));
-
-                // compel the teacher to have the course if she not already has it
-                teacher.addCourse(ExamForms.get(examNumber).getCourse());
-                ExamForms.get(examNumber).addClassExam(classExam);
-                SimpleServer.session.saveOrUpdate(teacher);
-                SimpleServer.session.flush();
-
+                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject());
                 // Generate for every Class Exam a list of studentExams
-                List<Student> studentsTemp = new ArrayList<>(SimpleServer.retrieveStudents());
-                List<Student> studentsReceive = new ArrayList<>(SimpleServer.retrieveStudents());
-                int numberOfElements = faker.number().numberBetween(8,  studentsTemp.size());
-                List<StudentExam> StudentExams = new ArrayList<>();
-                for (int examineeNum = 0; examineeNum < numberOfElements; examineeNum++) {
-                    // inserting "admin student in the first place
-                    int randomIndex;
-                    if(examineeNum == 0)
-                        randomIndex = 0;
-                    else
-                        randomIndex = faker.number().numberBetween(0,  studentsTemp.size());
-
-                    Student randomStudent = studentsTemp.get(randomIndex);
-                    studentsReceive.add(studentsTemp.remove(randomIndex));
-
-                    // student - class exam connection
-                    randomStudent.addClassExam(classExam);
-                    classExam.addStudent(randomStudent);
-
-                    if (examNumber == 0)
-                    {
-                        List<Integer> studentAnswers =  new ArrayList<>();
-                        for(int  j = 0; j < classExam.getExamForm().getQuestionList().size() ;j++) {
-                            studentAnswers.add(faker.number().numberBetween(1, 5));
-                        }
-                        HSTS_Enums.StatusEnum status;
-                        status = HSTS_Enums.StatusEnum.ToEvaluate;
-                        StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
-                        StudentExams.add(currentExam);
-                    }
-                    else
-                    {
-                        HSTS_Enums.StatusEnum status = statusList.get(examNumber % 4);
-                        StudentExam currentExam = new StudentExam(randomStudent, classExam, null, -1, status);
-                        StudentExams.add(currentExam);
-                    }
-
-
-                }
-
                 SimpleServer.session.saveOrUpdate(classExam);
+                classExams.add(classExam);
                 SimpleServer.session.flush();
-
-                for (Student student : studentsReceive)
-                {
-                    SimpleServer.session.saveOrUpdate(student);
-                    SimpleServer.session.flush();
-                }
-
-
-                for(int examineeNum = 0; examineeNum < StudentExams.size() ;examineeNum++) {
-                    SimpleServer.session.saveOrUpdate(StudentExams.get(examineeNum));
-                    SimpleServer.session.flush();
-                }
             }
+            return classExams;
         }
         else {
             System.out.println("No Exam Form Retrieved");
+            return null;
         }
+
+    }
+    public static List<StudentExam> generateStudentExams(List<ClassExam> classExams,List<Student> students)
+    {
+        int  i = 0;
+        List<StudentExam> studentExams = new ArrayList<>();
+        for(ClassExam classExam: classExams)
+        {
+        List<HSTS_Enums.StatusEnum> statusList = new ArrayList<>() {{
+            add(HSTS_Enums.StatusEnum.Approved);
+            add(HSTS_Enums.StatusEnum.NotTaken);
+            add(HSTS_Enums.StatusEnum.ToEvaluate);
+            add(HSTS_Enums.StatusEnum.Disapproved);
+        }};
+        //List<Student> studentsReceive = students;
+        int numberOfElements = faker.number().numberBetween(8,  students.size());
+        for (int examineeNum = 0; examineeNum < numberOfElements; examineeNum++) {
+            // inserting "admin student in the first place
+            int randomIndex;
+            if (examineeNum == 0) {
+                randomIndex = 0;
+            }
+            else {
+                randomIndex = rand.nextInt( students.size());
+            }
+            Student randomStudent = students.get(randomIndex);
+            if (i == 0) {
+                List<Integer> studentAnswers = new ArrayList<>();
+                int amountOfQuestions = classExam.getExamForm().getQuestionList().size();
+                for (int j = 0; j < amountOfQuestions; j++) {
+                    studentAnswers.add(faker.number().numberBetween(1, 5));
+                }
+                HSTS_Enums.StatusEnum status;
+                status = HSTS_Enums.StatusEnum.ToEvaluate;
+                StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
+                classExam.addStudent(randomStudent);
+                studentExams.add(currentExam);
+            } else {
+                HSTS_Enums.StatusEnum status = statusList.get(i % 4);
+                StudentExam currentExam = new StudentExam(randomStudent, classExam, null, -1, status);
+                studentExams.add(currentExam);
+            }
+            i++;
+        }
+        }
+        for(StudentExam studentExam:studentExams ) {
+            SimpleServer.session.saveOrUpdate(studentExam);
+            SimpleServer.session.flush();
+        }
+
+        return studentExams;
+
     }
 
 }

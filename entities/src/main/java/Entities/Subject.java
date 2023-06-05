@@ -12,7 +12,7 @@ public class Subject implements Serializable, Comparable<Subject> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String name;
-    @OneToMany(mappedBy = "subject")
+    @OneToMany(mappedBy = "subject",cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
 
     @ManyToMany

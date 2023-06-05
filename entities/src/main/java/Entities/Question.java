@@ -13,7 +13,7 @@ public class Question implements Serializable {
 
     private String questionID;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
     joinColumns = @JoinColumn(name = "QuestionID"),
     inverseJoinColumns = @JoinColumn(name ="CourseID"))

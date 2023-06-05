@@ -45,10 +45,12 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
 			System.out.println("SelectedClassExamEvent in client");
 			List<Object>data=(List<Object>) message.getData();
-			if (data.get(0)==null)
+			if (data == null) {
 				System.out.println("Empty exam in client");
-			if(((List<Principal>)data.get(1)).isEmpty())
+			}
+			if(((List<Principal>)data.get(1)).isEmpty()) {
 				System.out.println("Empty principles in client");
+			}
 			System.out.println("SelectedClassExamEvent in client2");
 			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
 				System.out.println("Somethings wrong with message");
@@ -63,7 +65,11 @@ public class SimpleClient extends AbstractClient {
 			System.out.println("Live exams in client");
 			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Grades")) {
+		} else if (message.getMessage().startsWith("Student Exams For Student")) {
+			StudentExamsMessageEvent stMsg = new StudentExamsMessageEvent((List<StudentExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
 			List<Grade> grades = student.getGrades();
