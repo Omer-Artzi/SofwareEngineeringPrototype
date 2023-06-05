@@ -114,12 +114,12 @@ public class DataGenerator {
                         subject.addQuestion(question);
 
                         // question courses link
-                        List<Course> courses = subjectList.get(i).getCourses();
-                        question.setCourses(subjectList.get(i).getCourses());
-                        for (Course course : courses)
-                        {
-                            course.addQuestion(question);
-                        }
+                        //List<Course> courses = subjectList.get(i).getCourses();
+                        //question.setCourses(subjectList.get(i).getCourses());
+                        //for (Course course : courses)
+                        //{
+                        //    course.addQuestion(question);
+                        //}
 
                         questionsList.add(question);
                         SimpleServer.session.save(question);
@@ -161,16 +161,16 @@ public class DataGenerator {
                 //}
 
                 // examForm - subject link
-                Course examCourse = examQuestions.get(0).getCourses().get(0);
+                Course examCourse = examQuestions.get(0).getSubject().getCourses().get(0);
                 Subject examSubject = examCourse.getSubject();
                 examForm.setSubject(examSubject);
                 examSubject.addExamForm(examForm);
 
                 // examForm - course link
                 examForm.setCourse(examCourse);
+                examCourse.addExamForm(examForm);
 
                 // Other way  connection cause error on client login
-                //examCourse.addExamForm(examForm);
 
                 // examForm - teacher link
                 examForm.setCreator(teacher);

@@ -78,7 +78,7 @@ public class ExamForm implements Serializable {
         return ID;
     }
 
-    public void setID(int examFormID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 

@@ -215,8 +215,9 @@ public class StudentExamGradeController
                     SimpleChatClient.setRoot("TeacherExamGrade");
                     String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
                     String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
-                    String classExamID = Integer.toString(solvedExam.getClassExam().getID());
-                    EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, classExamID));
+                    String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
+                    int ExamExamSqlID = solvedExam.getClassExam().getExamForm().getID();
+                    EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, ExamExamID, ExamExamSqlID));
                 }
             }
             catch (Exception e)
@@ -395,8 +396,8 @@ public class StudentExamGradeController
 
         SetStudentScore(studentScore);
 
-        StudentIDLabel.setText(Long.toString(solvedExam.getStudent().getID()));
-        StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
+        StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         StudentNameLabel.setText(solvedExam.getStudent().getFullName());
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
