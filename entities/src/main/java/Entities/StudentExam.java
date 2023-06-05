@@ -24,13 +24,8 @@ public class StudentExam implements Serializable {
     @ElementCollection
     private List<Integer> studentAnswers = new ArrayList<>();
 
-
-
-
-    // Switch to Grade class? Delete Grade Class?
     private int grade;
 
-    //public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
 
     private HSTS_Enums.StatusEnum status;
 

@@ -1,6 +1,4 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -43,13 +41,14 @@ public class StudentDoExamManualController {
 
 
     private int timeInSeconds;
-     private ClassExam mainClassExam;
-     private StudentExam studentExam = new StudentExam();
+    private ClassExam mainClassExam;
+    private StudentExam studentExam = new StudentExam();
 
     @FXML
-    void fileDropped(DragEvent event){
+    void fileDropped(DragEvent event) {
 
     }
+
     @FXML
     void fileDetected(DragEvent event) {
         try {
@@ -57,12 +56,11 @@ public class StudentDoExamManualController {
             colorAdjust.setBrightness(0.5);
             dragAndDropImg.setEffect(colorAdjust);
             System.out.println("Changing Brightness");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     void fileExited(DragEvent event) {
         File file = null;
@@ -74,12 +72,11 @@ public class StudentDoExamManualController {
             dragAndDropImg.setImage(new Image("/Images/accept.png"));
 
             file = event.getDragboard().getFiles().get(0);
-            try
-            {
+            try {
                 FileInputStream fis = new FileInputStream(file);
-                 DocumentWrapper document = new DocumentWrapper(fis);
-                 System.out.println(document.getDocument().getBody());
-                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, document);
+                XWPFDocument document = new XWPFDocument(fis);
+                System.out.println(document.getDocument().getBody());
+                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializeXWPFDocument(document));
                 Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                 message.setData(manualStudentExam);
                 SimpleClient.getClient().sendToServer(message);
@@ -88,9 +85,7 @@ public class StudentDoExamManualController {
                 e.printStackTrace();
             }
             System.out.println("File gotten: " + file);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -107,48 +102,64 @@ public class StudentDoExamManualController {
         timeLeftLabel.setAlignment(Pos.CENTER);
 
 
-        }
-        @Subscribe
-       public  void getExam(StartExamEvent event)
-        {
-            mainClassExam = event.getClassExam();
-            timeInSeconds = (int)(mainClassExam.getExamTime()) * 60;
-            ViewExamController.createManualExam(mainClassExam);
-            studentExam.setStudent(((Student)(SimpleClient.getUser())));
-            studentExam.setClassExam(mainClassExam);
-            studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    if(timeInSeconds>0) {
-                        timeInSeconds--;
-                        Platform.runLater(() ->{timeLeftLabel.setText("Time Left: " + String.format("%02d",timeInSeconds/60)+ ":" + String.format("%02d",timeInSeconds%60));});
-
-                    }
-                    else {
-                        try {
-                            SimpleClient.getClient().sendToServer(new Message(1,"Exam Fail: Time Ended"));
-                            timer.cancel();
-                            SimpleChatClient.setRoot("ChooseExam");
-                            JOptionPane.showMessageDialog(null,"Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);
-
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-
-                }
-            };
-            timer.schedule(task,0, 1000);
-
-        }
-        @Subscribe
-    public void endExam(ManualExamEvent event) throws IOException {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
-            JOptionPane.showMessageDialog(null,"Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-        }
     }
+
+    @Subscribe
+    public void getExam(StartExamEvent event) {
+        mainClassExam = event.getClassExam();
+        timeInSeconds = (int) (mainClassExam.getExamTime()) * 60;
+        ViewExamController.createManualExam(mainClassExam);
+        studentExam.setStudent(((Student) (SimpleClient.getUser())));
+        studentExam.setClassExam(mainClassExam);
+        studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (timeInSeconds > 0) {
+                    timeInSeconds--;
+                    Platform.runLater(() -> {
+                        timeLeftLabel.setText("Time Left: " + String.format("%02d", timeInSeconds / 60) + ":" + String.format("%02d", timeInSeconds % 60));
+                    });
+
+                } else {
+                    try {
+                        SimpleClient.getClient().sendToServer(new Message(1, "Exam Fail: Time Ended"));
+                        timer.cancel();
+                        SimpleChatClient.setRoot("ChooseExam");
+                        JOptionPane.showMessageDialog(null, "Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+        };
+        timer.schedule(task, 0, 1000);
+
+    }
+
+    @Subscribe
+    public void endExam(ManualExamEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    public static byte[] serializeXWPFDocument(XWPFDocument document) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(document);
+        oos.flush();
+        byte[] serializedDocument = bos.toByteArray();
+        oos.close();
+        bos.close();
+        return serializedDocument;
+    }
+
+
+}
+
 
 

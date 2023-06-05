@@ -52,7 +52,7 @@ public class StudentSidebarController {
 
     @FXML
     void viewGrades(ActionEvent event) throws IOException {
-
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentViewExam");
 
     }
 

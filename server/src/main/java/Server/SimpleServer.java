@@ -10,6 +10,7 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
@@ -26,11 +27,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import Entities.Principal;
 
+import java.io.ObjectInputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -217,13 +220,13 @@ public class SimpleServer extends AbstractServer {
 					session.saveOrUpdate(((ManualStudentExam) (message.getData())).getStudentExam());
 					ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
 					String fileName = System.getProperty("user.dir") +"\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
-					DocumentWrapper document = ((ManualStudentExam) (message.getData())).getExamFile();
-					System.out.println(document.getDocument().getBody());
+					byte[] document = ((ManualStudentExam) (message.getData())).getExamFile();
+					XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
 					FileOutputStream outputStream = new FileOutputStream(fileName);
-					document.write(outputStream);
+					transmittedDocument.write(outputStream);
 					outputStream.close();
 					System.out.println("Document Saved successfully.");
-					sendToAllClients(message);
+					client.sendToClient(message);
 				}
 				catch (Exception e)
 				{
@@ -648,5 +651,13 @@ public class SimpleServer extends AbstractServer {
 		query.from(ExamForm.class);
 		List<ExamForm> exams = session.createQuery(query).getResultList();
 		return exams;
+	}
+	public static XWPFDocument deserializeXWPFDocument(byte[] serializedDocument) throws IOException, ClassNotFoundException {
+		ByteArrayInputStream bis = new ByteArrayInputStream(serializedDocument);
+		ObjectInputStream ois = new ObjectInputStream(bis);
+		XWPFDocument document = (XWPFDocument) ois.readObject();
+		ois.close();
+		bis.close();
+		return document;
 	}
 }

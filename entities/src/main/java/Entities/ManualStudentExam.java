@@ -6,9 +6,9 @@ import java.io.Serializable;
 public class ManualStudentExam implements Serializable {
 
     private StudentExam studentExam;
-    private DocumentWrapper examFile;
+    private byte[] examFile;
 
-    public ManualStudentExam(StudentExam studentExam, DocumentWrapper examFile) {
+    public ManualStudentExam(StudentExam studentExam, byte[] examFile) {
         this.studentExam = studentExam;
         this.examFile = examFile;
     }
@@ -21,11 +21,11 @@ public class ManualStudentExam implements Serializable {
         this.studentExam = studentExam;
     }
 
-    public DocumentWrapper getExamFile() {
+    public byte[] getExamFile() {
         return examFile;
     }
 
-    public void setExamFile(DocumentWrapper examFile) {
+    public void setExamFile(byte[] examFile) {
         this.examFile = examFile;
     }
 }
