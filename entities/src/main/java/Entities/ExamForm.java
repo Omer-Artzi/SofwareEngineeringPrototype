@@ -51,7 +51,7 @@ public class ExamForm implements Serializable {
     public ExamForm(){this.used = false;}
     public ExamForm(Course course, Teacher teacher, Subject subject, List<Question> questionList){
         this.course=course;
-        this.creator =teacher;
+        this.creator = teacher;
         this.subject=subject;
         this.questionList=questionList;
         this.used = false;

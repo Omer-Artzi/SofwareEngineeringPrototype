@@ -4,7 +4,6 @@ import Events.ClassExamGradeEvent;
 import Events.GeneralEvent;
 import Events.RefreshPerson;
 import Events.StudentExamEvent;
-import Server.SimpleServer;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -342,16 +341,17 @@ public class StudentExamGradeController extends SaveBeforeExit
             // TODO: change "footer" string
             AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 4, GenerateText("Footer: ", footerStr));
         }
-
         List<Question> questions = solvedExam.getClassExam().getExamForm().getQuestionList();
         int studentScore = 0;
 
-        for (int questionNumber = 0; questionNumber < questions.size(); questionNumber++)
+        List<String> studentAnswers = solvedExam.getStudentAnswers();
+        for (int questionNumber = 0; studentAnswers != null && questionNumber < questions.size(); questionNumber++)
         {
+
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber);
+            String studentAnswerStr = studentAnswers.get(questionNumber);
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
             double rowWidth = AnswersVBOX.getWidth();
@@ -443,12 +443,12 @@ public class StudentExamGradeController extends SaveBeforeExit
 
             // Set student answer
             BorderPane bord3 = new BorderPane();
-            Label studentAnswer = new Label(Integer.toString(studentAnswerInt));
+            Label studentAnswer = new Label(Integer.toString(question.getAnswers().indexOf(studentAnswerStr)+1));
             studentAnswer.setAlignment(Pos.CENTER);
             bord3.setCenter(studentAnswer);
             bord3.setPrefWidth(50);
 
-            if (studentAnswerInt == correctAnswerInt)
+            if (question.getAnswers().indexOf(studentAnswerStr) == correctAnswerInt)
             {
                 studentScore += questionScoreInt;
                 bord3.setStyle("-fx-background-color: #66BB6A; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
@@ -463,13 +463,13 @@ public class StudentExamGradeController extends SaveBeforeExit
             questionScore.setAlignment(Pos.CENTER);
             bord4.setCenter(questionScore);
             qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
-            AnswersVBOX_t.getChildren().add(questionNumber + 2, qustionHbox);
+            AnswersVBOX_t.getChildren().add(questionIndexPlace++, qustionHbox);
         }
 
         SetStudentScore(studentScore);
 
-        StudentIDLabel.setText(Long.toString(solvedExam.getStudent().getID()));
-        StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
+        StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         StudentNameLabel.setText(solvedExam.getStudent().getFullName());
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);

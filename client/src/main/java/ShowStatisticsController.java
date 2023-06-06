@@ -214,9 +214,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
                             AnchorPane root = new AnchorPane();
                             Scene histScene = new Scene(root, 500, 400);
                             List<StudentExam> exams = getTableView().getItems().get(getIndex()).getStudentExams();
-                            System.out.println("number of exams: " + exams.size());
                             List<Integer> grades = exams.stream().map(exam -> exam.getGrade()).collect(Collectors.toList());
-                            System.out.println("number of grades: " + grades.size());
                             root.getChildren().add(GetHistogram(grades));
                             histStage.setScene(histScene);
                             DisableAllNodes(controllerRoot, true);

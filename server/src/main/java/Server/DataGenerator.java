@@ -177,6 +177,7 @@ public class DataGenerator {
 
                 // examForm - teacher link
                 examForm.setCreator(teacher);
+                teacher.addExamForm(examForm);
 
                 examForm.getCode();
 
@@ -240,13 +241,30 @@ public class DataGenerator {
                     teacher.setLastName("user");
                     admin = teacher;
                 }
+                for (Course course : coursesList) {
+                    course.getTeachers().add(teacher);
+                    if(!(tempCourses.contains(course))){
+                        tempCourses.add(course);
+                        course.getTeachers().add(admin);
+                    }
+                }
+
+                for (Subject subject : subjectsList) {
+                    subject.getTeachers().add(teacher);
+                    if(!(tempSubjects.contains(subject))){
+                        tempSubjects.add(subject);
+                        subject.getTeachers().add(admin);
+                    }
+                }
                 SimpleServer.session.saveOrUpdate(teacher);
 
             }
             SimpleServer.session.flush();
 
-            List<Subject> allSubjects = new ArrayList<>(tempSubjects);
-            List<Course> allCourses = new ArrayList<>(tempCourses);
+            List<Course> allCourses = new ArrayList<>();
+            List<Subject> allSubjects = new ArrayList<>();
+            allSubjects.addAll(tempSubjects);
+            allCourses.addAll(tempCourses);
             admin.setSubjects(allSubjects);
             admin.setCourses(allCourses);
             SimpleServer.session.saveOrUpdate(admin);
@@ -262,11 +280,11 @@ public class DataGenerator {
     private static List<Principal> generatePrincipals() {
         try {
             List<Principal> principals = new ArrayList<>();
-            // String salt = BCrypt.gensalt(); // TODO
+            String salt = BCrypt.gensalt(); // TODO
             Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
             admin.setEmail("adminP");
-            //admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
-            admin.setPassword("1234");
+            admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            //admin.setPassword("1234");
             admin.setGender(HSTS_Enums.Gender.Female);
             SimpleServer.session.save(admin);
             principals.add(admin);
@@ -275,8 +293,8 @@ public class DataGenerator {
                 String PrincipleFirstName = faker.name().firstName();
                 String PrincipleLastName = faker.name().lastName();
                 String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
-                // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
-                String password = "1234";
+                String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
+                //String password = "1234";
                 Principal principal = new Principal(PrincipleFirstName, PrincipleLastName, HSTS_Enums.Gender.Male, PrincipleEmail, password);
                 /*
                 if(i == 0)
@@ -366,6 +384,9 @@ public class DataGenerator {
                 HSTS_Enums.ExamType examType = HSTS_Enums.ExamType.values()[rand.nextInt(2)];
                 ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
+                examForm.addClassExam(classExam);
+
+                teacher.addClassExam(classExam);
                 for(Student student: students)
                 {
                     student.addClassExam(classExam);
@@ -373,8 +394,8 @@ public class DataGenerator {
                 }
                 // Generate for every Class Exam a list of studentExams
 
-                SimpleServer.session.saveOrUpdate(classExam);
                 classExams.add(classExam);
+                SimpleServer.session.saveOrUpdate(classExam);
                 SimpleServer.session.flush();
             }
             return classExams;
@@ -387,35 +408,38 @@ public class DataGenerator {
     }
     public static List<StudentExam> generateStudentExams(List<ClassExam> classExams,List<Student> students)
     {
-        int  i = 0;
+
         List<StudentExam> studentExams = new ArrayList<>();
         for(ClassExam classExam: classExams)
         {
+            int i = 0;
             for(Student student:students)
             {
-            int randGrade = rand.nextInt(100);
-            HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
-            if (i == 0) {
-                List<String> studentAnswers = new ArrayList<>();
-                List<Question> questions = classExam.getExamForm().getQuestionList();
-                for (Question question:questions) {
-                    studentAnswers.add(question.getAnswers().get(faker.number().numberBetween(0, 3)));
-                }
-                if(status == HSTS_Enums.StatusEnum.ToEvaluate) {
+                int randGrade = rand.nextInt(100);
+                HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
+
+                if (status != HSTS_Enums.StatusEnum.Approved)
                     randGrade = -1;
+
+                if (status == HSTS_Enums.StatusEnum.Approved || status == HSTS_Enums.StatusEnum.ToEvaluate) {
+                    List<String> studentAnswers = new ArrayList<>();
+                    List<Question> questions = classExam.getExamForm().getQuestionList();
+                    for (Question question:questions) {
+                        studentAnswers.add(question.getAnswers().get(faker.number().numberBetween(0, 4)));
+                    }
+
+                    StudentExam currentExam = new StudentExam(student, classExam, studentAnswers, randGrade, status);
+                    student.addClassExam(classExam);
+                    studentExams.add(currentExam);
+                } else {
+                    StudentExam currentExam = new StudentExam(student, classExam, null, randGrade, status);
+                    studentExams.add(currentExam);
                 }
-                StudentExam currentExam = new StudentExam(student, classExam, studentAnswers, randGrade, status);
-                //classExam.addStudent(student);
-                student.addClassExam(classExam);
-                studentExams.add(currentExam);
-            } else {
-                StudentExam currentExam = new StudentExam(student, classExam, null, randGrade, status);
-                studentExams.add(currentExam);
+                classExam = OperationUtils.UpdateClassExamStats(classExam);
+                i++;
             }
-            i++;
         }
-        }
-        for(StudentExam studentExam:studentExams ) {
+        for(StudentExam studentExam:studentExams) {
             SimpleServer.session.saveOrUpdate(studentExam);
             SimpleServer.session.flush();
         }

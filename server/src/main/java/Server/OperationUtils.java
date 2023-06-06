@@ -24,11 +24,11 @@ public class OperationUtils {
         {
             mean += grades.get(i);
         }
-        mean /= approvedExamsNum;
 
         // variance calculation
-        if (approvedExamsNum != 1)
+        if (approvedExamsNum != 1 || approvedExamsNum == 0)
         {
+            mean /= approvedExamsNum;
             for (int i = 0; i < approvedExamsNum; i++)
             {
                 variance += Math.pow((grades.get(i) - mean), 2);
