@@ -23,6 +23,7 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
+		System.out.println("Converting message...");
 		Message message = (Message) msg;
 		System.out.println("Message Received: " + message.getMessage());
 		if (message.getMessage().startsWith("Students")) {
@@ -56,7 +57,13 @@ public class SimpleClient extends AbstractClient {
 			System.out.println("Live exams in client");
 			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("Grades")) {
+		}
+		// TODO maybe change from LiveExamsEvent to something more appropriate
+		else if (message.getMessage().startsWith("Success: Retrieved ALL class exams")) {
+			System.out.println("All class exams in client");
+			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
 			List<Grade> grades = student.getGrades();

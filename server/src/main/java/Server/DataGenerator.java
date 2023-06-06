@@ -171,6 +171,7 @@ public class DataGenerator {
                 examCourse.addExamForm(examForm);
 
                 // Other way  connection cause error on client login
+                //examCourse.addExamForm(examForm);
 
                 // examForm - teacher link
                 examForm.setCreator(teacher);
@@ -402,7 +403,7 @@ public class DataGenerator {
                 int examHours = faker.number().numberBetween((int)examTime, 23);
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
 
-                Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
+                Teacher teacher = SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
                 ClassExam classExam = new ClassExam(ExamForms.get(examNumber), testStartDate, testEndDate, examTime*60, teacher, code);
 

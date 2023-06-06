@@ -94,7 +94,7 @@ public class ExamForm implements Serializable {
         Faker faker= new Faker();
         if(code == null)
         {
-            code = subject.getCode() + course.getCode() + faker.bothify("##");
+            code = course.getSubject().getCode() + course.getCode() + faker.bothify("##");
         }
         return code;
     }
