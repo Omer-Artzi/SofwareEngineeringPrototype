@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import Entities.*;
 import Events.CreateExamEvent;
+import Events.ExamEndedMessageEvent;
 import Events.ManualExamEvent;
 import Events.StartExamEvent;
 import javafx.application.Platform;
@@ -159,6 +160,15 @@ public class StudentDoExamManualController {
         oos.close();
         bos.close();
         return serializedDocument;
+    }
+
+    @Subscribe
+    public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
+        if(event.getClassExam().getID()  == mainClassExam.getID())
+        {
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+            JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
 }

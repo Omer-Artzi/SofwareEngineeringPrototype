@@ -1,6 +1,7 @@
 package Server;
 
 import Entities.TerminationEvent;
+import Server.Events.ServerConnectionEvent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
@@ -16,18 +18,32 @@ import java.io.IOException;
 
 public class SimpleChatServer extends Application
 {
+    private Stage serverStage;
     private final double version = 1.7;
-    public void start(Stage stage) throws IOException {
-        try {
-            SimpleServer server = new SimpleServer(3000);
-            server.listen();
-        }
-        catch (IOException e)
+
+    @Subscribe
+    public void connect(ServerConnectionEvent event)
+    {
+        if(event != null)
         {
-            e.printStackTrace();
-            System.exit(1);
+            try {
+                System.out.println("Trying to connect to server at port " + event.getPort() + "...");
+                SimpleServer server = new SimpleServer(event.getPort());
+                server.listen();
+                FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatServer.class.getResource("Primary.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 785, 390);
+                serverStage.setScene(scene);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                System.exit(1);
+            }
         }
-        FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatServer.class.getResource("Primary.fxml"));
+    }
+    public void start(Stage stage) throws IOException {
+        EventBus.getDefault().register(this);
+        FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatServer.class.getResource("PreLogIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 785, 390);
         stage.setScene(scene);
         stage.setTitle("Server Management Tool - Version " + version);
@@ -49,12 +65,13 @@ public class SimpleChatServer extends Application
                     e.printStackTrace();
                 }
                 Platform.exit();
-
-
             }
         });
+        serverStage = stage;
         stage.show();
     }
+
     public static void main( String[] args )
     {launch();}
+
 }

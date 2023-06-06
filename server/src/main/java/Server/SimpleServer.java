@@ -2,7 +2,6 @@ package Server;
 import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.ResponseQuestion;
-//import Server.Events.TerminationEvent;
 import com.google.gson.Gson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
@@ -20,6 +19,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
+import java.sql.Date;
 
 import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,6 +38,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Timer;
+
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -68,9 +70,6 @@ public class SimpleServer extends AbstractServer {
 			configuration.addAnnotatedClass(ExtraTime.class);
 			configuration.addAnnotatedClass(Principal.class);
 
-
-
-
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties())
 					.build();
@@ -87,6 +86,24 @@ public class SimpleServer extends AbstractServer {
 			session = sessionFactory.openSession();
 			session.beginTransaction();
 			DataGenerator.generateData();
+			Timer timer = new Timer();
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run() {
+					List<ClassExam> classExams = retrieveClassExam();
+					for(ClassExam classExam : classExams)
+					{
+						if(classExam.getExamStatus() == HSTS_Enums.ExamStatus.Active && classExam.getFinalSubmissionDate().before(Date.valueOf(LocalDateTime.now().toLocalDate())))
+						{
+							classExam.setExamStatus(HSTS_Enums.ExamStatus.Inactive);
+							Message message = new Message(1,"The exam " + classExam.getID() + " has run out of time, it is now closed");
+							message.setData(classExam);
+							sendToAllClients(message);
+						}
+					}
+				}
+			};
+			timer.schedule(task, 0, 1000*60);
 		}
 		catch (Exception exception)
 		{
@@ -576,7 +593,7 @@ public class SimpleServer extends AbstractServer {
 		CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
 		query.from(ClassExam.class);
 		List<ClassExam> exams = session.createQuery(query).getResultList();
-		System.out.println("Live Exams in retrieveClassExam");
+		System.out.println("Checking for dead exams");
 		return exams;
 	}
 

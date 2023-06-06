@@ -32,6 +32,9 @@ public class SimpleClient extends AbstractClient {
 		}else if (message.getMessage().startsWith("class exams for student ID")) { //Added by Omer 3.6
 			ExamMessageEvent stMsg = new ExamMessageEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().endsWith("has run out of time, it is now closed")) { //Added by Omer 3.6
+			ExamEndedMessageEvent stMsg = new ExamEndedMessageEvent((ClassExam) message.getData());
+			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Manual Exam")) { //Added by Omer 3.6
 			ManualExamEvent stMsg = new ManualExamEvent();
 			EventBus.getDefault().post(stMsg);
