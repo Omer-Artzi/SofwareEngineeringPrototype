@@ -2,6 +2,7 @@ import java.net.URL;
 import java.util.*;
 
 import Entities.Question;
+import Entities.Teacher;
 import Events.ChangePreviewEvent;
 import Events.RequestStudentAnswerToQuestion;
 import Events.StudentAnswerToQuestion;
@@ -45,6 +46,7 @@ public class PreviewQuestionController {
     void initialize() {
         AssertFXMLComponents();
         EventBus.getDefault().register(this);
+        teacherNotes.setVisible(false);
     }
 
     @Subscribe
@@ -65,15 +67,20 @@ public class PreviewQuestionController {
     private void PopulateQuestion() {
         questionText.setText(question.getQuestionData());
         studentNotes.setText(question.getStudentNote());
-        // TODO: verify that the logged in user is a teacher
-        teacherNotes.setText(question.getTeacherNote());
+        if(studentNotes.getText() == ""){
+            studentNotes.setVisible(false);
+        }
+        //verify that the logged-in user is a teacher
+        if(SimpleClient.getUser() instanceof Teacher){
+            teacherNotes.setText(question.getTeacherNote());
+            teacherNotes.setVisible(true);
+        }
     }
 
     private void CreateAnswers() {
-        // TODO: handle saving the answer
         answersToggleGroup = new ToggleGroup();
         List<String> answers = new ArrayList<>(question.getIncorrectAnswers());
-        Collections.shuffle(answers);
+        //Collections.shuffle(answers);
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {
             RadioButton answer = new RadioButton(questionAnswer);
@@ -87,11 +94,13 @@ public class PreviewQuestionController {
 
     }
 
+    @Subscribe
     public void ReceiveAnswerRequest(RequestStudentAnswerToQuestion event) {
         System.out.println("PreviewQuestionController.ReceiveAnswerRequest");
         if (answersToggleGroup.getSelectedToggle() != null) {
             selectedAnswer = ((RadioButton) answersToggleGroup.getSelectedToggle()).getText();
         }
+        System.out.println("sending back selectedAnswer: " + selectedAnswer);
         EventBus.getDefault().post(new StudentAnswerToQuestion(question, selectedAnswer));
     }
 
