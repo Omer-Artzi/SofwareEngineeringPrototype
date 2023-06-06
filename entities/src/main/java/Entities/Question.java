@@ -24,7 +24,7 @@ public class Question implements Serializable {
     // The question problem text
     private String questionData;
     @ElementCollection
-    private List<String> incorrectAnswers;
+    private List<String> answers;
     private String correctAnswer;
     private String teacherNote;
     private String studentNote;
@@ -40,11 +40,11 @@ public class Question implements Serializable {
 
     public Question(){}
 
-    public Question(List<Course> courses, String questionData, List<String> incorrectAnswers, String correctAnswer, String teacherNote, String studentNote)
+    public Question(List<Course> courses, String questionData, List<String> answers, String correctAnswer, String teacherNote, String studentNote)
     {
         this.courses=courses;
         this.questionData=questionData;
-        this.incorrectAnswers = incorrectAnswers;
+        this.answers = answers;
         this.correctAnswer=correctAnswer;
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
@@ -100,8 +100,8 @@ public class Question implements Serializable {
 
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
-    public List<String> getIncorrectAnswers(){return incorrectAnswers;}
-    public void setIncorrectAnswers(List<String> newAnswers){this.incorrectAnswers =newAnswers;}
+    public List<String> getAnswers(){return answers;}
+    public void setAnswers(List<String> newAnswers){this.answers =newAnswers;}
     public String getCorrectAnswer(){return correctAnswer;}
     public void setCorrectAnswer(String  correctAnswer){this.correctAnswer=correctAnswer;}
     public  String getTeacherNote(){return teacherNote;}

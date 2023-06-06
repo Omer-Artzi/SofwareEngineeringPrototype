@@ -81,7 +81,9 @@ public class ResponseQuestion {
     }
     public void convert(Question question)
     {
-        question.setIncorrectAnswers(incorrect_answers);
+        int randInt = (int)(Math.random() * 4);
+        incorrect_answers.add(randInt,correct_answer);
+        question.setAnswers(incorrect_answers);
         question.setQuestionData(getQuestion());
         question.setCorrectAnswer(correct_answer);
     }

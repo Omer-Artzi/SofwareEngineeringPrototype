@@ -79,7 +79,7 @@ public class PreviewQuestionController {
 
     private void CreateAnswers() {
         answersToggleGroup = new ToggleGroup();
-        List<String> answers = new ArrayList<>(question.getIncorrectAnswers());
+        List<String> answers = new ArrayList<>(question.getAnswers());
         //Collections.shuffle(answers);
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {

@@ -3,15 +3,10 @@ import Events.ChangePreviewEvent;
 import Events.RequestStudentAnswerToQuestion;
 import Events.StartExamEvent;
 import Events.StudentAnswerToQuestion;
-import Server.SimpleServer;
 import javafx.application.Platform;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -24,10 +19,8 @@ import com.jfoenix.controls.JFXButton;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 //import static sun.swing.SwingUtilities2.submit;
 
@@ -334,13 +327,13 @@ public class StudentDoExamDigitalController {
 
             this.currentQuestion = this.studentExam.getClassExam().getExamForm().getQuestionList().get(currentIndex);
             List<String> options = new ArrayList<>();
-            options.add(this.currentQuestion.getIncorrectAnswers().get(0));
-            options.add(this.currentQuestion.getIncorrectAnswers().get(1));
-            options.add(this.currentQuestion.getIncorrectAnswers().get(2));
+            options.add(this.currentQuestion.getAnswers().get(0));
+            options.add(this.currentQuestion.getAnswers().get(1));
+            options.add(this.currentQuestion.getAnswers().get(2));
             options.add(this.currentQuestion.getCorrectAnswer());
             Collections.shuffle(options);
 
-            this.currentQuestion.setIncorrectAnswers(options);
+            this.currentQuestion.setAnswers(options);
 
             //this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;

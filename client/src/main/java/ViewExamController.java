@@ -157,9 +157,7 @@ public class ViewExamController {
 		{
 			XWPFParagraph questionParagraph = document.createParagraph();
 			XWPFRun questionBody = questionParagraph.createRun();
-			List<String> answers = question.getIncorrectAnswers();
-			int randPlace = random.nextInt(3);
-			answers.add(randPlace,question.getCorrectAnswer());
+			List<String> answers = question.getAnswers();
 			questionBody.setText(questionID++ +". " + StringEscapeUtils.unescapeHtml4(question.getQuestionData()));
 			questionBody.addBreak();
 			questionBody.addBreak();
