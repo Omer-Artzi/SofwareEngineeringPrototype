@@ -15,19 +15,19 @@ public class Course implements Serializable, Comparable<Course> {
     private Long ID;
     private String name;
     //list of teachers that teaches the course
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "CourseID"),
     inverseJoinColumns = @JoinColumn(name ="TeacherID"))
     private List<Teacher> teachers;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "CourseID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "subjectID")
     private Subject subject = null;
 
@@ -36,6 +36,10 @@ public class Course implements Serializable, Comparable<Course> {
 
     @OneToMany(mappedBy = "course")
     private List<ExamForm> examForms = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private List<ClassExam> classExams = new ArrayList<>();
+
+
 
     private String code;
 

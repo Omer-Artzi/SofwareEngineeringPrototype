@@ -43,20 +43,6 @@ public class SimpleChatClient extends Application {
             scene = new Scene(loadFXML("PreLogIn"));
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-
-                    /*try {
-                        if (SimpleClient.getClient().isConnected())
-                            SimpleClient.getClient().sendToServer(new Message(1,"Client Closed"));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }*/
-                    System.out.println("Client platformexit");
-                    Platform.exit();
-                }
-            });
             stage.show();
         }
         catch (Exception e)
@@ -86,7 +72,7 @@ public class SimpleChatClient extends Application {
             client.sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
-            System.exit(0);
+            Platform.exit();
 	}
 
 

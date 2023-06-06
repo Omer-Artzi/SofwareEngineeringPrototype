@@ -85,6 +85,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="createExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#createExam" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="Create Exam" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/add.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             <Button fx:id="gradeExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#gradeExam" prefHeight="50.0" prefWidth="242.0" style="-fx-background-color: #669bbc;" text="Grade Exam" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />

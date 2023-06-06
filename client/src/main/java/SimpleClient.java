@@ -30,8 +30,21 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+		}else if (message.getMessage().startsWith("class exams for student ID")) { //Added by Omer 3.6
+			ExamMessageEvent stMsg = new ExamMessageEvent((List<ClassExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().endsWith("has run out of time, it is now closed")) { //Added by Omer 3.6
+			ExamEndedMessageEvent stMsg = new ExamEndedMessageEvent((ClassExam) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Manual Exam")) { //Added by Omer 3.6
+			ManualExamEvent stMsg = new ManualExamEvent();
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
 			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Courses of")) { //Added by Ilan 30.5
+			CoursesOfTeacherEvent stMsg = new CoursesOfTeacherEvent((List<Course>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
@@ -39,10 +52,12 @@ public class SimpleClient extends AbstractClient {
 		} else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
 			System.out.println("SelectedClassExamEvent in client");
 			List<Object>data=(List<Object>) message.getData();
-			if (data.get(0)==null)
+			if (data == null) {
 				System.out.println("Empty exam in client");
-			if(((List<Principal>)data.get(1)).isEmpty())
+			}
+			if(((List<Principal>)data.get(1)).isEmpty()) {
 				System.out.println("Empty principles in client");
+			}
 			System.out.println("SelectedClassExamEvent in client2");
 			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
 				System.out.println("Somethings wrong with message");
@@ -64,6 +79,11 @@ public class SimpleClient extends AbstractClient {
 			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Grades")) {
+		} else if (message.getMessage().startsWith("Student Exams For Student")) {
+			StudentExamsMessageEvent stMsg = new StudentExamsMessageEvent((List<StudentExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("Grades")) {
 			GradeMessageEvent stMsg = new GradeMessageEvent(message);
 			Student student = (Student) message.getData();
 			List<Grade> grades = student.getGrades();
@@ -84,11 +104,11 @@ public class SimpleClient extends AbstractClient {
 		{
 			user.receiveExtraTime((ExtraTime)message.getData());
 		}
-		//else if (message.getMessage().startsWith("Extra Time Requested")) {
-			//user.extraTimeRequest((ExtraTime)message.getData());
-		//	EventBus.getDefault().post(new notificationEvent((ExtraTime)message.getData()));
-		 else if(message.getMessage().startsWith("Exams in ")){
-			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
+		else if (message.getMessage().startsWith("Extra Time Requested")) {
+			user.extraTimeRequest((ExtraTime)message.getData());
+
+		} else if(message.getMessage().startsWith("Exams in ")){
+			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
 		else if(message.getMessage().startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
@@ -162,8 +182,9 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 1024, 768));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
+			SimpleChatClient.getClientStage().centerOnScreen();
 		}
 		catch (Exception e)
 		{

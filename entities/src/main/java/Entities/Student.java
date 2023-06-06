@@ -16,19 +16,17 @@ public class Student extends Person implements Serializable, Comparable<Student>
 
     private String personID;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<Grade> grades = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
+    private List<Subject> subjects = new ArrayList<>();
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
-
-    @OneToMany(mappedBy = "student")
-    private List<StudentExam> studentExams = new ArrayList<>();
-
-
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<ClassExam> classExams = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+    private List<StudentExam> studentExams = new ArrayList<>();
     public Student() {}
 
     public Student(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password, String personID) {
@@ -87,10 +85,6 @@ public class Student extends Person implements Serializable, Comparable<Student>
         return classExams;
     }
 
-    public void setClassExams(List<ClassExam> classExams) {
-        this.classExams = new ArrayList<>(classExams);
-    }
-
     public void addClassExam(ClassExam classExam){classExams.add(classExam);}
 
     @Override
@@ -108,5 +102,33 @@ public class Student extends Person implements Serializable, Comparable<Student>
     @Override
     public void receiveExtraTime(ExtraTime data) {
         //TODO: Add extra time
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+
+    public void setClassExams(List<ClassExam> classExams) {
+        this.classExams = classExams;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+
+    }
+
+    public void addSubject(Subject subject) {
+        if(!subjects.contains(subject)) {
+            subjects.add(subject);
+        }
     }
 }

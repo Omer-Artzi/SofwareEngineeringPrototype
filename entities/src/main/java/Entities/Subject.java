@@ -12,15 +12,20 @@ public class Subject implements Serializable, Comparable<Subject> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String name;
-
-    @OneToMany(mappedBy = "subject")
+    @OneToMany(mappedBy = "subject",cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "Subject_ID"),
+            inverseJoinColumns = @JoinColumn(name ="Student_ID" ))
+    private List<Student> students = new ArrayList<>();
 
     @OneToMany(mappedBy = "subject")
     private List<ExamForm> examForms = new ArrayList<>();
 
     // Updated by Ilan 27.5
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
     joinColumns = @JoinColumn(name = "SubjectID"),
     inverseJoinColumns = @JoinColumn(name ="TeacherID" ))
@@ -32,6 +37,8 @@ public class Subject implements Serializable, Comparable<Subject> {
     // New paste, check if works
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "subject")
+    private List<ClassExam> classExams = new ArrayList<>();
 
     public Subject()
     {
@@ -85,7 +92,7 @@ public class Subject implements Serializable, Comparable<Subject> {
     }
 
     public void setCourses(List<Course> courses) {
-        this.courses =  new ArrayList<>(courses);
+        this.courses = courses;
     }
     public void addSetCourse(Course course)
     {

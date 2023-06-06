@@ -28,11 +28,22 @@ public class ClassExam implements Serializable
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
     joinColumns = @JoinColumn(name = "ClassExamID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "Subject")
+    private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "Course")
+    private Course course;
+    @OneToOne
+    private ExtraTime extraTime;
+    private HSTS_Enums.ExamStatus examStatus;
+
 
 
     private int approvedExamsNum;
@@ -45,10 +56,12 @@ public class ClassExam implements Serializable
     private double examTime;
     private String code;
 
+    private HSTS_Enums.ExamType examType;
+
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code,Course course,Subject subject,HSTS_Enums.ExamType examType)
     {
         this.startDate=startDate;
         this.finalSubmissionDate=finalSubmissionDate;
@@ -61,6 +74,9 @@ public class ClassExam implements Serializable
         this.gradesMean=0;
         this.gradesVariance=0;
         this.code = code;
+        this.course =course;
+        this.subject = subject;
+        this.examType = examType;
     }
 
     public int getID() {return ID;}
@@ -124,10 +140,6 @@ public class ClassExam implements Serializable
         return code;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
     public Date getFinalSubmissionDate() {
         return finalSubmissionDate;
     }
@@ -135,10 +147,61 @@ public class ClassExam implements Serializable
     public void setFinalSubmissionDate(Date finalSubmissionDate) {
         this.finalSubmissionDate = finalSubmissionDate;
     }
-    public Course getCourse(){
-        return examForm.getCourse();
+
+    public Teacher getTester() {
+        return tester;
     }
-    public Subject getSubject(){
-        return examForm.getSubject();
+
+    public void setTester(Teacher tester) {
+        this.tester = tester;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public HSTS_Enums.ExamType getExamType() {
+        return examType;
+    }
+
+    public void setExamType(HSTS_Enums.ExamType examType) {
+        this.examType = examType;
+    }
+
+    public ExtraTime getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(ExtraTime extraTime) {
+        this.extraTime = extraTime;
+    }
+
+    public HSTS_Enums.ExamStatus getExamStatus() {
+        return examStatus;
+    }
+
+    public void setExamStatus(HSTS_Enums.ExamStatus examStatus) {
+        this.examStatus = examStatus;
     }
 }

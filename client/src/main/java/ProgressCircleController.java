@@ -3,12 +3,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class ProgressCircleController implements Initializable {
     public Circle circle;
     public Label questionNumber;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @MappedSuperclass
+@Table(name = "Person")
 @DiscriminatorColumn(name="person_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Person implements Serializable{
 
@@ -14,7 +15,7 @@ public abstract class Person implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private int ID;
 
     private String firstName;
     private String lastName;
@@ -37,11 +38,11 @@ public abstract class Person implements Serializable{
         this.lastName = lastName;
     }
 
-    public long getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setPersonID(long personID) {
+    public void setPersonID(int personID) {
         this.ID = personID;
     }
 
@@ -99,6 +100,14 @@ public abstract class Person implements Serializable{
         if (!(o instanceof Person)) return false;
         Person person = (Person) o;
         return Objects.equals(getEmail(), person.getEmail()) && Objects.equals(getPassword(), person.getPassword());
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 
     @Override

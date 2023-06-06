@@ -322,7 +322,7 @@ public class StudentExamGradeController extends SaveBeforeExit
                 AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 6, GenerateText("Teacher Notes: ", teachersNote));
             }
         }
-        
+
 
 
         String studentsNotes = solvedExam.getClassExam().getExamForm().getExamNotesForStudent();
@@ -332,7 +332,7 @@ public class StudentExamGradeController extends SaveBeforeExit
             // TODO: change "header" string
             AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 6, GenerateText("Student Notes: ", studentsNotes));
         }
-        
+
 
         String footerStr = solvedExam.getClassExam().getExamForm().getFooterText();
         footerStr = headerStr;
@@ -438,7 +438,7 @@ public class StudentExamGradeController extends SaveBeforeExit
 
             bord2.setCenter(answersVbox);
             bord2.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord2.setPrefWidth(AnswersVBOX.getPrefWidth()*6 / 10);
+            bord2.setPrefWidth(400);
             bord2.setStyle("-fx-border-color: black;");
 
             // Set student answer
@@ -446,7 +446,7 @@ public class StudentExamGradeController extends SaveBeforeExit
             Label studentAnswer = new Label(Integer.toString(studentAnswerInt));
             studentAnswer.setAlignment(Pos.CENTER);
             bord3.setCenter(studentAnswer);
-            bord3.setPrefWidth(AnswersVBOX.getPrefWidth() / 10);
+            bord3.setPrefWidth(50);
 
             if (studentAnswerInt == correctAnswerInt)
             {
@@ -458,22 +458,18 @@ public class StudentExamGradeController extends SaveBeforeExit
 
             BorderPane bord4 = new BorderPane();
             Label questionScore = new Label(Integer.toString(questionScoreInt));
-            bord4.setPrefWidth(AnswersVBOX.getPrefWidth() / 10);
+            bord4.setPrefWidth(60);
             bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
             questionScore.setAlignment(Pos.CENTER);
-
             bord4.setCenter(questionScore);
             qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
-            AnswersVBOX_t.getChildren().add(AnswersVBOX_t.getChildren().size() - questionIndexPlace, qustionHbox);
+            AnswersVBOX_t.getChildren().add(questionNumber + 2, qustionHbox);
         }
 
-        if (solvedExam.getGrade() != -1 && solvedExam.getStatus() != HSTS_Enums.StatusEnum.Approved)
-            SetStudentScore(solvedExam.getGrade());
-        else
-            SetStudentScore(studentScore);
+        SetStudentScore(studentScore);
 
-        StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
-        StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        StudentIDLabel.setText(Long.toString(solvedExam.getStudent().getID()));
+        StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         StudentNameLabel.setText(solvedExam.getStudent().getFullName());
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);

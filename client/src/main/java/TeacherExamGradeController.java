@@ -23,6 +23,9 @@ public class TeacherExamGradeController extends SaveBeforeExit{
     private TableView<StudentExam> ClassExamTv;
 
     @FXML
+    private Button EditExamBtn;
+
+    @FXML
     private TableColumn<StudentExam, String> GradeColumn;
 
     @FXML
