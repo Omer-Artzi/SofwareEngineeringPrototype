@@ -25,6 +25,10 @@ public class StudentChooseExamController {
     private TableColumn<ClassExam, Integer> IDColumn;
     @FXML
     private TableColumn<ClassExam, HSTS_Enums.ExamType> examTypeColumn;
+    @FXML
+    private TableColumn<ClassExam, Subject> subjectColumn;
+    @FXML
+    private TableColumn<ClassExam, Course> courseColumn;
 
     @FXML
     private Button startExamButton;
@@ -53,6 +57,8 @@ public class StudentChooseExamController {
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
         timeColumm.setCellValueFactory(new PropertyValueFactory<>("examTime"));
+        subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
         examTypeColumn.setCellValueFactory(new PropertyValueFactory<>("examType"));
         examTypeColumn.setCellFactory(tc -> new TableCell<>(){
             @Override
@@ -82,10 +88,11 @@ public class StudentChooseExamController {
            {
         if(classExam.getSubject().equals(selectedSubject))
         {
-           classExams.add(classExam);
+           ExamsTV.getItems().add(classExam);
         }
        }
        }
+       ExamsTV.refresh();
     }
     @FXML
     void onCourseSelection()
@@ -99,10 +106,11 @@ public class StudentChooseExamController {
             {
                 if(classExam.getCourse().equals(selectCourse))
                 {
-                    classExams.add(classExam);
+                    ExamsTV.getItems().add(classExam);
                 }
             }
         }
+        ExamsTV.refresh();
 
     }
     @FXML
@@ -113,16 +121,14 @@ public class StudentChooseExamController {
                 //TODO: change to "real" ID
                 if(selectedExam.getCode().equals(examCodeTF.getText()) ) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
-                    //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code or ID", "Error", JOptionPane.WARNING_MESSAGE);
                 }
             } else//Digital Exam
             {
-                if(selectedExam.getCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == ((SimpleClient.getUser())).getID()) {
+                if(selectedExam.getCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == (SimpleClient.getUser().getID())) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
-                    //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code", "Error", JOptionPane.WARNING_MESSAGE);

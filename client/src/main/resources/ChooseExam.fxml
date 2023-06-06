@@ -24,9 +24,11 @@
                   <TableView fx:id="ExamsTV" editable="true" onMouseClicked="#chooseType" prefHeight="597.0" prefWidth="955.0">
                     <columns>
                       <TableColumn fx:id="IDColumn" prefWidth="72.0" text="ID" />
-                      <TableColumn fx:id="codeColumn" prefWidth="208.0" text="Code" />
-                        <TableColumn fx:id="examTypeColumn" prefWidth="300.0" text="Type" />
-                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="116.0" text="Time" />
+                      <TableColumn fx:id="codeColumn" prefWidth="102.0" text="Code" />
+                        <TableColumn fx:id="subjectColumn" prefWidth="261.83973693847656" text="Subject" />
+                        <TableColumn fx:id="courseColumn" prefWidth="225.6602783203125" text="Course" />
+                        <TableColumn fx:id="examTypeColumn" prefWidth="121.074951171875" text="Type" />
+                        <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="172.34136962890625" text="Time" />
                     </columns>
                   </TableView>
                </children>

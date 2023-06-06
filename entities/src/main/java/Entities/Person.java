@@ -15,7 +15,7 @@ public abstract class Person implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private int ID;
 
     private String firstName;
     private String lastName;
@@ -38,11 +38,11 @@ public abstract class Person implements Serializable{
         this.lastName = lastName;
     }
 
-    public long getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setPersonID(long personID) {
+    public void setPersonID(int personID) {
         this.ID = personID;
     }
 
