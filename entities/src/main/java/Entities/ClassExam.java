@@ -46,6 +46,8 @@ public class ClassExam implements Serializable
     // In Minutes
     private double examTime;
     private String code;
+    private HSTS_Enums.StatusEnum examStatus;
+    private HSTS_Enums.ExamType examType;
 
     public ClassExam() {
     }
@@ -152,4 +154,21 @@ public class ClassExam implements Serializable
     public void setExtraTime(ExtraTime extraTime) {
         this.extraTime = extraTime;
     }
+
+    public HSTS_Enums.StatusEnum getExamStatus() {
+        return examStatus;
+    }
+
+    public void setExamStatus(HSTS_Enums.StatusEnum examStatus) {
+        this.examStatus = examStatus;
+    }
+
+    public HSTS_Enums.ExamType getExamType() {
+        return examType;
+    }
+
+    public void setExamType(HSTS_Enums.ExamType examType) {
+        this.examType = examType;
+    }
+
 }

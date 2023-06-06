@@ -97,7 +97,7 @@ public class SimpleClient extends AbstractClient {
 			}
 		}
 		 else if(message.getMessage().startsWith("Exams in ")){
-			EventBus.getDefault().post(new ExamMessageEvent((List<ExamForm>)message.getData()));
+			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
 		else if(message.getMessage().startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
