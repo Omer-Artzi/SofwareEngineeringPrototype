@@ -23,6 +23,8 @@ public class Teacher extends Person{
     @OneToMany(mappedBy = "creator")
     private List<ExamForm> examForms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "teacher")
+    private List<ExtraTime> extraTimeList=new ArrayList<>();
 
     public Teacher() {}
     public Teacher(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password, List<Course> course_list, List<Subject> subject_list) {
@@ -31,6 +33,13 @@ public class Teacher extends Person{
         this.subjects = subject_list;
     }
 
+    public List<ExtraTime> getExtraTimeList() {
+        return extraTimeList;
+    }
+
+    public void setExtraTimeList(List<ExtraTime> extraTimeList) {
+        this.extraTimeList = extraTimeList;
+    }
     public void setCourses(List<Course> courses) {
         this.courses = new ArrayList<>(courses);
     }
