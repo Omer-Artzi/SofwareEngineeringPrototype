@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "Principles")
+@Table(name = "Principals")
 @DiscriminatorValue("3")
 public class Principal extends Person {
 

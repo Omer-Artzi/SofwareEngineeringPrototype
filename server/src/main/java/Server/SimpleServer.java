@@ -167,6 +167,7 @@ public class SimpleServer extends AbstractServer {
 					else
 					{
 						LoggedInUsers.add(user);
+						System.out.println("User " + user.getFullName() + " logged in");
 						response = "Success: User found";
 						message.setData(user);
 					}
@@ -655,7 +656,7 @@ public class SimpleServer extends AbstractServer {
 		return students;
 	}
 
-	public List<Subject> retrieveSubjects()
+	public static List<Subject> retrieveSubjects()
 	{
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Subject> query = builder.createQuery(Subject.class);

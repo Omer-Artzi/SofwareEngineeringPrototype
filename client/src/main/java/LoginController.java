@@ -100,6 +100,7 @@ public class LoginController {
             SimpleClient.getClient().setUser(event.getUser());
             //SimpleChatClient.setRoot("TeacherMainScreen");
             SimpleChatClient.NewSetRoot("MainWindow");
+
         }
         else {
 

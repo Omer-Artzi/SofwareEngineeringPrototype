@@ -1,8 +1,8 @@
 import java.io.IOException;
 import java.net.URL;
-import java.security.Principal;
 import java.util.*;
 
+import Entities.Principal;
 import Entities.Student;
 import Entities.Teacher;
 import javafx.fxml.FXML;
@@ -39,9 +39,10 @@ public class MainWindowController {
         String userType = SimpleClient.getUser().getClass().getSimpleName();
         //String userType="Principle";
        // System.out.println("User type: " + userType);
-        String sideBarName = userType + "Sidebar";
+       String sideBarName = userType + "Sidebar";
         // load correct sidebar according to user type
         sideBarParent = SimpleChatClient.loadFXML(sideBarName);
+        //sideBarParent = SimpleChatClient.loadFXML("PrincipalSidebar");
         //sideBarParent = SimpleChatClient.loadFXML("TeacherSidebar");
         sidePane.getChildren().clear();
         sidePane.getChildren().add(sideBarParent);
@@ -51,6 +52,7 @@ public class MainWindowController {
         String mainScreenName = userType + "MainScreen";
         // load correct window according to user type
         mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
+        //mainWindowParent = SimpleChatClient.loadFXML("PrincipalMainScreen");
         //mainWindowParent = SimpleChatClient.loadFXML("ViewQuestions");
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);

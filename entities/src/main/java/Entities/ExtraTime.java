@@ -18,7 +18,7 @@ public class ExtraTime {
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "ExtraTime_ID"),
-            inverseJoinColumns = @JoinColumn(name ="Principle_ID"))
+            inverseJoinColumns = @JoinColumn(name ="Principal_ID"))
     private List<Principal> principals;
     public ExtraTime(){}
     public ExtraTime(ClassExam exam, List<Principal> principals, Teacher teacher, String teacherNote)

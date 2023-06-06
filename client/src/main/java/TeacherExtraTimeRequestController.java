@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //** A controller to fill details about the Request to Extra Time**//
-public class TeacherExtraTimeRequestController {
+public class TeacherExtraTimeRequestController  {
     private ClassExam exam;
     private List<Principal> principals =new ArrayList<>();
     private List<Principal> selectedPrincipals =new ArrayList<>();

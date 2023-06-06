@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TeacherExamGradeController {
+public class TeacherExamGradeController extends SaveBeforeExit{
 
 
 

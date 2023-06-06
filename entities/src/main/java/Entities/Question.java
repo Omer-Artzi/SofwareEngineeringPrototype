@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name="Questions")
 public class Question implements Serializable {
@@ -109,5 +111,18 @@ public class Question implements Serializable {
 
     public int getID() {
         return ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Question)) return false;
+        Question question = (Question) o;
+        return getID() == question.getID();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getID());
     }
 }
