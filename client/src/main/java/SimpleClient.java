@@ -29,6 +29,9 @@ public class SimpleClient extends AbstractClient {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("class exams for student ID")) { //Added by Omer 3.6
+			ExamMessageEvent stMsg = new ExamMessageEvent((List<ClassExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
 		}else if (message.getMessage().startsWith("Manual Exam")) { //Added by Omer 3.6
 			ManualExamEvent stMsg = new ManualExamEvent();
 			EventBus.getDefault().post(stMsg);
@@ -167,8 +170,9 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 1024, 768));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
+			SimpleChatClient.getClientStage().centerOnScreen();
 		}
 		catch (Exception e)
 		{

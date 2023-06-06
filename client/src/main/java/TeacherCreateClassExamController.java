@@ -6,12 +6,10 @@ import java.util.regex.Pattern;
 
 import Entities.*;
 import Events.CoursesOfTeacherEvent;
-import Events.CoursesOfTeacherEvent;
 import Events.ExamMessageEvent;
 import Events.SubjectsOfTeacherMessageEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -142,7 +140,7 @@ public class TeacherCreateClassExamController {
     @Subscribe
     public void displayExamForms(ExamMessageEvent event)
     {
-        List<ClassExam> exams = event.getExamForms();
+        List<ClassExam> exams = event.getClassExams();
         if(exams != null && exams.isEmpty())
         {
             ExamFormsTV.getItems().addAll(exams);

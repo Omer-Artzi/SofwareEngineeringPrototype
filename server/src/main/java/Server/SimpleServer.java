@@ -160,7 +160,7 @@ public class SimpleServer extends AbstractServer {
 				Person user = retrieveUser(credentials.get(0));
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
-					if(LoggedInUsers.contains(user))
+					if(/*LoggedInUsers.contains(user)*/ false)
 					{
 						response = "Fail: User already logged in";
 					}
@@ -208,11 +208,18 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			else if (message.getMessage().startsWith("Get Student Exams For Student ID:")) {
-				response = "Student Exams For Student";
-				int studentID = Integer.parseInt(request.substring(33));
+				response = request.substring(4);
+				int studentID = Integer.parseInt(request.substring(34));
 				message.setMessage(response);
 				message.setData(retrieveStudentExams(studentID));
-				sendToAllClients(message);
+				client.sendToClient(message);
+			}
+			else if (message.getMessage().startsWith("Get class exams for student ID")) {
+				response = request.substring(4);
+				int studentID = Integer.parseInt(request.substring(32));
+				message.setMessage(response);
+				message.setData(getExamsForStudent(studentID));
+				client.sendToClient(message);
 			}
 			else if (message.getMessage().startsWith("Extra time request")) {
 				response = "Extra Time Requested";
@@ -521,6 +528,14 @@ public class SimpleServer extends AbstractServer {
 		query.where(builder.equal(root.get("subject"), subject));
 		List<ClassExam> classExams = session.createQuery(query).getResultList();
 		return classExams;
+	}
+	private List<ClassExam> getExamsForStudent(int studentID) {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Student> query = builder.createQuery(Student.class);
+		Root<Student> root = query.from(Student.class);
+		query.where(builder.equal(root.get("ID"),studentID ));
+		Student student = session.createQuery(query).getSingleResult();
+		return student.getClassExams();
 	}
 
 	private List<Question> getQuestionsForCourse(Course course) {

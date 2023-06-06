@@ -119,12 +119,15 @@ public class StudentDoExamManualController {
                 if (timeInSeconds > 0) {
                     timeInSeconds--;
                     Platform.runLater(() -> {
-                        timeLeftLabel.setText("Time Left: " + String.format("%02d", timeInSeconds / 60) + ":" + String.format("%02d", timeInSeconds % 60));
+                        timeLeftLabel.setText("Time Left: " + String.format("%02d:%02d:%02d", timeInSeconds / 3600, (timeInSeconds%3600)/60, timeInSeconds % 60));
                     });
 
                 } else {
                     try {
-                        SimpleClient.getClient().sendToServer(new Message(1, "Exam Fail: Time Ended"));
+                        Message message = new Message(1, "Exam Fail: Time Ended");
+                        studentExam.setStatus(HSTS_Enums.StatusEnum.Unsubmitted);
+                        message.setData(studentExam);
+                        SimpleClient.getClient().sendToServer(message);
                         timer.cancel();
                         SimpleChatClient.setRoot("ChooseExam");
                         JOptionPane.showMessageDialog(null, "Exam time ended and no exam was submitted", "Submission Exam", JOptionPane.WARNING_MESSAGE);

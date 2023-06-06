@@ -249,7 +249,7 @@ public class ViewExamController {
 	public void DisplayExam(ExamMessageEvent event)
 	{
 		ExamsTV.getItems().clear();
-		ExamsTV.getItems().addAll(event.getExamForms());
+		ExamsTV.getItems().addAll(event.getClassExams());
 		ExamsTV.refresh();
 	}
 

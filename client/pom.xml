@@ -94,6 +94,12 @@
             <version>20</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>20</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 	<build>
 		<plugins>

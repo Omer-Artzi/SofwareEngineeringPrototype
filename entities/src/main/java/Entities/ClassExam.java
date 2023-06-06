@@ -28,7 +28,7 @@ public class ClassExam implements Serializable
     @OneToMany(mappedBy = "classExam")
     private List<StudentExam> studentExams = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
     joinColumns = @JoinColumn(name = "ClassExamID"),
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
@@ -60,7 +60,7 @@ public class ClassExam implements Serializable
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code,Course course,Subject subject)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code,Course course,Subject subject,HSTS_Enums.ExamType examType)
     {
         this.startDate=startDate;
         this.finalSubmissionDate=finalSubmissionDate;
@@ -75,6 +75,7 @@ public class ClassExam implements Serializable
         this.code = code;
         this.course =course;
         this.subject = subject;
+        this.examType = examType;
     }
 
     public int getID() {return ID;}

@@ -26,7 +26,7 @@
                     <columns>
                       <TableColumn fx:id="IDColumn" prefWidth="72.0" text="ID" />
                       <TableColumn fx:id="codeColumn" prefWidth="208.0" text="Code" />
-                        <TableColumn prefWidth="300.0" text="Type" />
+                        <TableColumn fx:id="examTypeColumn" prefWidth="300.0" text="Type" />
                         <TableColumn fx:id="timeColumm" minWidth="0.0" prefWidth="116.0" text="Time" />
                     </columns>
                   </TableView>

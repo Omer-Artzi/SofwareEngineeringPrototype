@@ -1,5 +1,6 @@
 
 import Entities.*;
+import Events.ExamMessageEvent;
 import Events.StartExamEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ public class StudentChooseExamController {
 
     @FXML
     private TableColumn<ClassExam, Integer> IDColumn;
+    @FXML
+    private TableColumn<ClassExam, HSTS_Enums.ExamType> examTypeColumn;
 
     @FXML
     private Button startExamButton;
@@ -46,23 +49,26 @@ public class StudentChooseExamController {
 
     @FXML
     void initialize() throws IOException {
+        EventBus.getDefault().register(this);
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
         timeColumm.setCellValueFactory(new PropertyValueFactory<>("examTime"));
-        subjectsCB.getItems().addAll(((Student)(SimpleClient.getUser())).getSubjects());
-      List<ClassExam> classExams =  ((Student)(SimpleClient.getUser())).getClassExams();
-        ExamsTV.getItems().addAll(classExams);
-      for(ClassExam classExam: classExams)
-      {
-          for(StudentExam studentExam: classExam.getStudentExams())
-          {
-              if(studentExam.getStudent().equals(((Student) SimpleClient.getUser())) && studentExam.getStatus() == HSTS_Enums.StatusEnum.NotTaken)
-              {
-                  ExamsTV.getItems().add(classExam);
-              }
+        examTypeColumn.setCellValueFactory(new PropertyValueFactory<>("examType"));
+        examTypeColumn.setCellFactory(tc -> new TableCell<>(){
+            @Override
+            protected void updateItem(HSTS_Enums.ExamType item, boolean empty) {
+                super.updateItem(item, empty); // must be called
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    // replace with desired format
+                    setText(item.name());
+                }
+            }
+        });
 
-          }
-      }
+        Message message = new Message(1,"Get class exams for student ID: " + SimpleClient.getUser().getID());
+        SimpleClient.getClient().sendToServer(message);
         IDTF.setDisable(true);
     }
     @FXML
@@ -71,14 +77,17 @@ public class StudentChooseExamController {
     }
     @FXML
     void onSubjectSelection() throws IOException {
-
+        List<ClassExam> classExams = ((Student)(SimpleClient.getUser())).getClassExams();
+        ExamsTV.getItems().clear();
        Subject selectedSubject = subjectsCB.getSelectionModel().getSelectedItem();
        if(selectedSubject != null)
        {
-       List<Course> courses = ((Student)(SimpleClient.getUser())).getCourses();
-       for(Course course: courses) {
-           if (course.getSubject() == selectedSubject)
-               CoursesCB.getItems().add(course);
+           for(ClassExam classExam:classExams)
+           {
+        if(classExam.getSubject().equals(selectedSubject))
+        {
+           classExams.add(classExam);
+        }
        }
        }
     }
@@ -86,14 +95,15 @@ public class StudentChooseExamController {
     void onCourseSelection()
     {
         List<ClassExam> classExams = ((Student)(SimpleClient.getUser())).getClassExams();
-        Course selectedCourse = CoursesCB.getSelectionModel().getSelectedItem();
-        if(classExams != null && selectedCourse != null)
+        ExamsTV.getItems().clear();
+        Course selectCourse = CoursesCB.getSelectionModel().getSelectedItem();
+        if(selectCourse != null)
         {
-            for(ClassExam classExam: classExams)
+            for(ClassExam classExam:classExams)
             {
-                if(classExam.getCourse() == selectedCourse)
+                if(classExam.getCourse().equals(selectCourse))
                 {
-                    ExamsTV.getItems().add(classExam);
+                    classExams.add(classExam);
                 }
             }
         }
@@ -144,6 +154,32 @@ public class StudentChooseExamController {
             }
         }
 
+    }
+    @Subscribe
+    public  void displayExams(ExamMessageEvent event)
+    {
+        List<ClassExam> classExams = event.getClassExams();
+        System.out.println("Got " + classExams.size() + "Exams");
+        ((Student)SimpleClient.getUser()).setClassExams(classExams);
+        for(ClassExam classExam: classExams)
+        {
+            for(StudentExam studentExam: classExam.getStudentExams())
+            {
+                if(studentExam.getStudent().equals(SimpleClient.getUser()) && studentExam.getStatus() == HSTS_Enums.StatusEnum.NotTaken)
+                {
+                    ExamsTV.getItems().add(classExam);
+                }
+
+            }
+            if(!subjectsCB.getItems().contains(classExam.getSubject()))
+            {
+                subjectsCB.getItems().add(classExam.getSubject());
+            }
+            if(!CoursesCB.getItems().contains(classExam.getCourse()))
+            {
+                CoursesCB.getItems().add(classExam.getCourse());
+            }
+        }
     }
 
 

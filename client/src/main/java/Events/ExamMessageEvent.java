@@ -1,7 +1,6 @@
 package Events;
 
 import Entities.ClassExam;
-import Entities.ExamForm;
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ public class ExamMessageEvent {
         this.classExams = data;
     }
 
-    public List<ClassExam> getExamForms() {
+    public List<ClassExam> getClassExams() {
         return classExams;
     }
 
-    public void setExamForms(List<ClassExam> examForms) {
+    public void setClassExams(List<ClassExam> examForms) {
         this.classExams = examForms;
     }
 }

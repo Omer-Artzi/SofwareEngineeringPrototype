@@ -6,20 +6,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentViewExamController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentViewExamController">
    <children>
-      <Label layoutX="233.0" layoutY="44.0" text="Exam Grades">
+      <Label layoutX="353.0" layoutY="36.0" text="Exam Grades">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="ExamTV" layoutX="65.0" layoutY="82.0" prefHeight="273.0" prefWidth="471.0">
+      <TableView fx:id="ExamTV" layoutX="52.0" layoutY="87.0" prefHeight="619.0" prefWidth="734.0">
         <columns>
-          <TableColumn fx:id="subjectColumn" prefWidth="125.0" text="Subject" />
-          <TableColumn fx:id="courseColumn" prefWidth="131.0" text="Course" />
-            <TableColumn fx:id="examCodeColumn" prefWidth="126.0" text="Exam Code" />
-            <TableColumn fx:id="gradeColumn" prefWidth="88.0" text="Grade" />
+          <TableColumn fx:id="subjectColumn" prefWidth="207.29132080078125" text="Subject" />
+          <TableColumn fx:id="courseColumn" minWidth="0.0" prefWidth="256.43035888671875" text="Course" />
+            <TableColumn fx:id="examCodeColumn" prefWidth="130.569580078125" text="Exam Code" />
+            <TableColumn fx:id="gradeColumn" minWidth="3.0" prefWidth="138.50006103515625" text="Grade" />
         </columns>
       </TableView>
    </children>

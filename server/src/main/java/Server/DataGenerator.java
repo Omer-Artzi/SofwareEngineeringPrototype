@@ -36,13 +36,15 @@ public class DataGenerator {
         System.out.println("Generating Test Forms");
         List<ExamForm> examFormList = generateTestForms(questionsList);
         System.out.println("Generating Class Exams");
-        List<ClassExam> classExams = generateClassExams(examFormList);
+        List<ClassExam> classExams = generateClassExams(examFormList,students);
         System.out.println("Generating Student Exams");
         assert classExams != null;
         List<StudentExam> studentExams = generateStudentExams(classExams,students);
         System.out.println("Generating Principals");
         generatePrincipals();
         SimpleServer.session.getTransaction().commit();
+        System.out.println("Generation Done");
+
     }
     private static List<Subject>  generateSubjectsAndCourses() throws IOException {
         School school = School.getInstance();
@@ -137,7 +139,7 @@ public class DataGenerator {
                 {
                     System.out.println("Error: " + responseCode);
                     connection.disconnect();
-                    return null;
+                    //return null;
                 }
 
             }
@@ -154,7 +156,7 @@ public class DataGenerator {
         if(questionsList != null) {
             Teacher teacher = SimpleServer.retrieveTeachers().get(0);
             List<ExamForm> examForms = new ArrayList<>();
-            for(int  i = 0; i < 3; i++) {
+            for(int  i = 0; i < 30; i++) {
                 ExamForm examForm = new ExamForm();
                 for(int  j = 0; j < 10;j++) {
                     examForm.addQuestion(questionsList.get((i * 10) + j));
@@ -342,10 +344,9 @@ public class DataGenerator {
         return Date.from(zonedDateTime.toInstant());
     }
 
-    private static List<ClassExam> generateClassExams(List<ExamForm> examForms)
+    private static List<ClassExam> generateClassExams(List<ExamForm> examForms,List<Student> students)
     {
         if(examForms != null) {
-
             // generate list of Class Exam
             List<ClassExam> classExams = new ArrayList<>();
             for(ExamForm examForm: examForms) {
@@ -354,15 +355,23 @@ public class DataGenerator {
                 LocalDate currentDate = LocalDate.now();
                 LocalDateTime randomDay = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
                 Date testStartDate = ConvertToDate(randomDay);
-                double examTime = faker.number().numberBetween(0, 4);
+                double examTime = faker.number().numberBetween(1, 4);
                 int examDays = faker.number().numberBetween(0, 3);
                 int examHours = faker.number().numberBetween((int)examTime, 23);
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
-                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject());
+                HSTS_Enums.ExamType examType = HSTS_Enums.ExamType.values()[rand.nextInt(2)];
+                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject(),examType);
+                classExam.setStudents(students);
+                for(Student student: students)
+                {
+                    student.addClassExam(classExam);
+                    SimpleServer.session.saveOrUpdate(student);
+                }
                 // Generate for every Class Exam a list of studentExams
+
                 SimpleServer.session.saveOrUpdate(classExam);
                 classExams.add(classExam);
                 SimpleServer.session.flush();
@@ -381,38 +390,25 @@ public class DataGenerator {
         List<StudentExam> studentExams = new ArrayList<>();
         for(ClassExam classExam: classExams)
         {
-        List<HSTS_Enums.StatusEnum> statusList = new ArrayList<>() {{
-            add(HSTS_Enums.StatusEnum.Approved);
-            add(HSTS_Enums.StatusEnum.NotTaken);
-            add(HSTS_Enums.StatusEnum.ToEvaluate);
-            add(HSTS_Enums.StatusEnum.Disapproved);
-        }};
-        //List<Student> studentsReceive = students;
-        int numberOfElements = faker.number().numberBetween(8,  students.size());
-        for (int examineeNum = 0; examineeNum < numberOfElements; examineeNum++) {
-            // inserting "admin student in the first place
-            int randomIndex;
-            if (examineeNum == 0) {
-                randomIndex = 0;
-            }
-            else {
-                randomIndex = rand.nextInt( students.size());
-            }
-            Student randomStudent = students.get(randomIndex);
+            for(Student student:students)
+            {
+            int randGrade = rand.nextInt(100);
+            HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
             if (i == 0) {
                 List<Integer> studentAnswers = new ArrayList<>();
                 int amountOfQuestions = classExam.getExamForm().getQuestionList().size();
                 for (int j = 0; j < amountOfQuestions; j++) {
                     studentAnswers.add(faker.number().numberBetween(1, 5));
                 }
-                HSTS_Enums.StatusEnum status;
-                status = HSTS_Enums.StatusEnum.ToEvaluate;
-                StudentExam currentExam = new StudentExam(randomStudent, classExam, studentAnswers, -1, status);
-                classExam.addStudent(randomStudent);
+                if(status == HSTS_Enums.StatusEnum.ToEvaluate) {
+                    randGrade = -1;
+                }
+                StudentExam currentExam = new StudentExam(student, classExam, studentAnswers, randGrade, status);
+                //classExam.addStudent(student);
+                student.addClassExam(classExam);
                 studentExams.add(currentExam);
             } else {
-                HSTS_Enums.StatusEnum status = statusList.get(i % 4);
-                StudentExam currentExam = new StudentExam(randomStudent, classExam, null, -1, status);
+                StudentExam currentExam = new StudentExam(student, classExam, null, randGrade, status);
                 studentExams.add(currentExam);
             }
             i++;
