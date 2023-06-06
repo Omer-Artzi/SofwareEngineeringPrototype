@@ -70,6 +70,7 @@ public class TeacherExamGradeController extends SaveBeforeExit{
                 SimpleChatClient.setRoot("StudentExamGrade");
                 StudentExamGradeController controller = (StudentExamGradeController) SimpleChatClient.getScene().getProperties().get("controller");
                 EventBus.getDefault().post(new StudentExamEvent(ClassExamTv.getSelectionModel().getSelectedItem()));
+                EventBus.getDefault().unregister(this);
             }
             else
             {
@@ -206,8 +207,6 @@ public class TeacherExamGradeController extends SaveBeforeExit{
                     classExam.getID() == event.getExamFormID()).collect(Collectors.toList()).get(0));
             chosenExam = ExamFormTv.getSelectionModel().getSelectedItem();
             SetClassExamTv();
-
-            EventBus.getDefault().unregister(this);
         });
     }
 

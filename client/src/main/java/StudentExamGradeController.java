@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class StudentExamGradeController
+public class StudentExamGradeController extends SaveBeforeExit
 {
     @FXML
     private VBox AnswersVBOX;
@@ -83,7 +83,6 @@ public class StudentExamGradeController
             GradeText.setFill(Color.RED);
     }
 
-    //@Subscribe
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
         solvedExam.setStatus(HSTS_Enums.StatusEnum.Approved);
@@ -266,10 +265,8 @@ public class StudentExamGradeController
             try {
                 GetQuestions(AnswersVBOX);
 
-
                 if(solvedExam.getTeacherNote() != null)
                 {
-                    System.out.println("in set");
                     FeedbackTextArea.setText(solvedExam.getTeacherNote());
                 }
                 if(solvedExam.getScoreChangeReason() != null)
