@@ -103,6 +103,14 @@ public abstract class Person implements Serializable{
     }
 
     @Override
+    public String toString() {
+        return "Person{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(getEmail(), getPassword());
     }

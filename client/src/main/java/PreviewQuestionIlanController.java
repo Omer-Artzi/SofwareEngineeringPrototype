@@ -1,11 +1,10 @@
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import Entities.Question;
-import Entities.Teacher;
 import Events.ChangePreviewEvent;
-import Events.RequestStudentAnswerToQuestion;
-import Events.StudentAnswerToQuestion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -14,7 +13,7 @@ import javafx.scene.layout.VBox;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class PreviewQuestionController {
+public class PreviewQuestionIlanController {
 
     @FXML
     private ResourceBundle resources;
@@ -40,13 +39,10 @@ public class PreviewQuestionController {
 
     private ToggleGroup answersToggleGroup;
 
-    private String selectedAnswer = null;
-
     @FXML
     void initialize() {
         AssertFXMLComponents();
         EventBus.getDefault().register(this);
-        teacherNotes.setVisible(false);
     }
 
     @Subscribe
@@ -57,9 +53,6 @@ public class PreviewQuestionController {
         }
         answersBox.getChildren().clear();
         this.question = event.getQuestion();
-        if(event.getSelectedAnswer() != null){
-            this.selectedAnswer = event.getSelectedAnswer();
-        }
         PopulateQuestion();
         CreateAnswers();
     }
@@ -67,44 +60,22 @@ public class PreviewQuestionController {
     private void PopulateQuestion() {
         questionText.setText(question.getQuestionData());
         studentNotes.setText(question.getStudentNote());
-        if(studentNotes.getText() == ""){
-            studentNotes.setVisible(false);
-        }
-        //verify that the logged-in user is a teacher
-        if(SimpleClient.getUser() instanceof Teacher){
-            teacherNotes.setText(question.getTeacherNote());
-            teacherNotes.setVisible(true);
-        }
+        // TODO: verify that the logged in user is a teacher
+        teacherNotes.setText(question.getTeacherNote());
     }
 
     private void CreateAnswers() {
+        // TODO: handle saving the answer
         answersToggleGroup = new ToggleGroup();
         List<String> answers = new ArrayList<>(question.getIncorrectAnswers());
-        //Collections.shuffle(answers);
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {
             RadioButton answer = new RadioButton(questionAnswer);
-            if(answer.getText().equals(selectedAnswer)){
-                answer.setSelected(true);
-            }
             answer.setToggleGroup(answersToggleGroup);
             //answers.add(questionAnswer);
             answersBox.getChildren().add(answer);
         }
-
     }
-
-    @Subscribe
-    public void ReceiveAnswerRequest(RequestStudentAnswerToQuestion event) {
-        System.out.println("PreviewQuestionController.ReceiveAnswerRequest");
-        if (answersToggleGroup.getSelectedToggle() != null) {
-            selectedAnswer = ((RadioButton) answersToggleGroup.getSelectedToggle()).getText();
-        }
-        System.out.println("sending back selectedAnswer: " + selectedAnswer);
-        EventBus.getDefault().post(new StudentAnswerToQuestion(question, selectedAnswer));
-    }
-
-
     private void AssertFXMLComponents() {
         assert answersBox != null : "fx:id=\"answersBox\" was not injected: check your FXML file 'PreviewQuestion.fxml'.";
         assert questionText != null : "fx:id=\"questionText\" was not injected: check your FXML file 'PreviewQuestion.fxml'.";

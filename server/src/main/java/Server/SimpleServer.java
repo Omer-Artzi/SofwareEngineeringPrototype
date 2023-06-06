@@ -160,7 +160,7 @@ public class SimpleServer extends AbstractServer {
 				Person user = retrieveUser(credentials.get(0));
 				if(BCrypt.checkpw(password, user.getPassword()) && user != null)
 				{
-					if(/*LoggedInUsers.contains(user)*/ false)
+					if(LoggedInUsers.contains(user))
 					{
 						response = "Fail: User already logged in";
 					}
@@ -237,7 +237,7 @@ public class SimpleServer extends AbstractServer {
 					byte[] document = ((ManualStudentExam) (message.getData())).getExamFile();
 					XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
 					FileOutputStream outputStream = new FileOutputStream(fileName);
-					transmittedDocument.write(outputStream);
+					document.write(outputStream);
 					outputStream.close();
 					System.out.println("Document Saved successfully.");
 					client.sendToClient(message);
@@ -471,8 +471,6 @@ public class SimpleServer extends AbstractServer {
 			session.getTransaction().commit();
 	}
 
-
-
 	private Person retrieveUser(String email) {
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -691,5 +689,15 @@ public class SimpleServer extends AbstractServer {
 		ois.close();
 		bis.close();
 		return document;
+	}
+
+	public static ExamForm getExamForm (int iExamFormID)
+	{
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+		Root<ExamForm> root = query.from(ExamForm.class);
+		query.where(builder.equal(root.get("ID"), iExamFormID));
+		ExamForm examForm = session.createQuery(query).getSingleResult();
+		return examForm;
 	}
 }
