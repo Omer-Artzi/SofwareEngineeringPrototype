@@ -169,7 +169,6 @@ public class SimpleClient extends AbstractClient {
 			}
 		}
 
-		System.out.println("Liad");
 
 		/* only if the event is reject, we check if the student exist in class exam list */
 		 if(type.equals("approve")) {
