@@ -129,14 +129,16 @@ public class StudentDoExamDigitalController {
     }
 
     @Subscribe
-    private void getAnswer(StudentAnswerToQuestion event){
+    public void getAnswer(StudentAnswerToQuestion event){
+        System.out.println("Answer received: " +event.getSelectedAnswer());
         if (studentQuestionsAnswers.put(currentQuestion, event.getSelectedAnswer()) == null) {
             System.out.println("Answer to question " + currentQuestion.getID() + " was added");
             numberOfQuestionsAnswered++;
         } else {
             System.out.println("Answer to question " + currentQuestion.getID() + " was updated");
         }
-        progressButtons.get(currentIndex).setStyle("-fx-background-color: #80d780");
+        System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
+        progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
     }
 
     private void setTimer() {
@@ -345,7 +347,6 @@ public class StudentDoExamDigitalController {
 
     private void renderProgress() {
         System.out.println("rendering progress: questionList.size() = " + questionList.size());
-        progressButtons = new ArrayList<>();
         for (int i = 0; i < questionList.size(); i++) {
             JFXButton button = new JFXButton();
             button.setText(String.valueOf(i + 1));
@@ -358,6 +359,7 @@ public class StudentDoExamDigitalController {
                 this.currentIndex = index-1;
                 this.UpdateQuestion();
             });
+            progressButtons.add(button);
             this.progressPane.getChildren().add(button);
         }
     }

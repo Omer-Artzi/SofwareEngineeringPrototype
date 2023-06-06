@@ -1,8 +1,10 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.io.Serializable;
 import java.util.List;
+
 @Entity
 @Table(name = "ExtraTime")
 public class ExtraTime implements Serializable {

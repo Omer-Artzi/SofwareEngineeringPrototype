@@ -15,20 +15,20 @@ public class Question implements Serializable {
 
     private String questionID;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
     joinColumns = @JoinColumn(name = "QuestionID"),
     inverseJoinColumns = @JoinColumn(name ="CourseID"))
     private List<Course> courses = new ArrayList<>();
 
-    // The question
+    // The question problem text
     private String questionData;
     @ElementCollection
     private List<String> answers;
     private String correctAnswer;
     private String teacherNote;
     private String studentNote;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name ="QuestionID" ),
             inverseJoinColumns = @JoinColumn(name = "ExamFormID"))
@@ -40,11 +40,11 @@ public class Question implements Serializable {
 
     public Question(){}
 
-    public Question(List<Course> courses, String questionData,List<String>answers, String correctAnswer,String teacherNote,String studentNote)
+    public Question(List<Course> courses, String questionData, List<String> answers, String correctAnswer, String teacherNote, String studentNote)
     {
         this.courses=courses;
         this.questionData=questionData;
-        this.answers=answers;
+        this.answers = answers;
         this.correctAnswer=correctAnswer;
         this.teacherNote=teacherNote;
         this.studentNote=studentNote;
@@ -101,7 +101,7 @@ public class Question implements Serializable {
     public String getQuestionData(){return questionData;}
     public void setQuestionData(String questionData){this.questionData=questionData;}
     public List<String> getAnswers(){return answers;}
-    public void setAnswers(List<String> newAnswers){this.answers=newAnswers;}
+    public void setAnswers(List<String> newAnswers){this.answers =newAnswers;}
     public String getCorrectAnswer(){return correctAnswer;}
     public void setCorrectAnswer(String  correctAnswer){this.correctAnswer=correctAnswer;}
     public  String getTeacherNote(){return teacherNote;}

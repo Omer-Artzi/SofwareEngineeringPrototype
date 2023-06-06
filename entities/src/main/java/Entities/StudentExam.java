@@ -13,25 +13,17 @@ public class StudentExam implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "Student")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade =CascadeType.ALL)
     @JoinColumn(name = "ClassExam")
     private ClassExam classExam;
 
     @ElementCollection
-    private List<Integer> studentAnswers = new ArrayList<>();
-
-
-
-
-    // Switch to Grade class? Delete Grade Class?
+    private List<String> studentAnswers = new ArrayList<>();
     private int grade;
-
-    //public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
-
     private HSTS_Enums.StatusEnum status;
 
     private String teacherNote;
@@ -40,7 +32,7 @@ public class StudentExam implements Serializable {
     public StudentExam() {
     }
 
-    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, HSTS_Enums.StatusEnum status)
+    public StudentExam(Student student, ClassExam classExam, List<String> studentAnswers, int grade, HSTS_Enums.StatusEnum status)
     {
         this.student = student;
         this.student.addStudentExam(this);
@@ -83,12 +75,12 @@ public class StudentExam implements Serializable {
         this.classExam = classExam;
     }
 
-    public List<Integer> getStudentAnswers()
+    public List<String> getStudentAnswers()
     {
         return studentAnswers;
     }
 
-    public void setStudentAnswers(List<Integer> studentAnswers)
+    public void setStudentAnswers(List<String> studentAnswers)
     {
         this.studentAnswers = studentAnswers;
     }

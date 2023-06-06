@@ -1,3 +1,4 @@
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,6 +31,8 @@ public class TeacherSidebarController implements SideBar {
 
     @FXML
     private Button viewClassExamsButton;
+    @FXML
+    private Button createExamButton;
 
     @FXML
     private Label userTypeLabel;
@@ -76,6 +79,10 @@ public class TeacherSidebarController implements SideBar {
     void viewTestForms(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
         changeScene("ViewTestForms");
+    }
+    @FXML
+    void createExam(ActionEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherCreateClassExam");
     }
 
     @FXML

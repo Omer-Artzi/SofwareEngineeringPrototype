@@ -1,10 +1,8 @@
 import Entities.*;
 import Events.*;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import org.greenrobot.eventbus.EventBus;
 import ocsf.AbstractClient;
-import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -25,21 +23,46 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) throws IOException {
-		//EventBus.getDefault().register(this);
 		Message message = (Message) msg;
 		System.out.println("Message Received: " + message.getMessage());
 		if (message.getMessage().startsWith("Students")) {
 			studentMessageEvent stMsg = new studentMessageEvent(message);
 			stMsg.setStudents((List<Student>) message.getData());
 			EventBus.getDefault().post(stMsg);
-		} else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
+		}else if (message.getMessage().startsWith("class exams for student ID")) { //Added by Omer 3.6
+			ExamMessageEvent stMsg = new ExamMessageEvent((List<ClassExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().endsWith("has run out of time, it is now closed")) { //Added by Omer 3.6
+			ExamEndedMessageEvent stMsg = new ExamEndedMessageEvent((ClassExam) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Manual Exam")) { //Added by Omer 3.6
+			ManualExamEvent stMsg = new ManualExamEvent();
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("1Subjects of")) { //Added by Ilan 30.5
 			SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("1Courses of")) { //Added by Ilan 30.5
+			CoursesOfTeacherEvent stMsg = new CoursesOfTeacherEvent((List<Course>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("Subjects")) {
 			SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
 			EventBus.getDefault().post(stMsg);
 		} else if (message.getMessage().startsWith("ExtraTimeRequest data")) {////
+			System.out.println("SelectedClassExamEvent in client");
+			List<Object>data=(List<Object>) message.getData();
+			if (data == null) {
+				System.out.println("Empty exam in client");
+			}
+			if(((List<Principal>)data.get(1)).isEmpty()) {
+				System.out.println("Empty principles in client");
+			}
+			System.out.println("SelectedClassExamEvent in client2");
+			if(message.getData()==null||((List<Object>)(message.getData())).isEmpty())
+				System.out.println("Somethings wrong with message");
 			SelectedClassExamEvent stMsg = new SelectedClassExamEvent((List<Object>) message.getData());
+			if(stMsg==null)
+				System.out.println("the event is null");
 			EventBus.getDefault().post(stMsg);
 		}  else if (message.getMessage().startsWith("Principles")) {
 			PrinciplesMessageEvent stMsg = new PrinciplesMessageEvent((List<Principal>) message.getData());
@@ -48,6 +71,11 @@ public class SimpleClient extends AbstractClient {
 			System.out.println("Live exams in client");
 			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		} else if (message.getMessage().startsWith("Student Exams For Student")) {
+			StudentExamsMessageEvent stMsg = new StudentExamsMessageEvent((List<StudentExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}
+		else if (message.getMessage().startsWith("Grades")) {
 		} else if (message.getMessage().startsWith("Extra Time Requests")) {	///////
 			System.out.println("Extra Time Requests");
 			ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
@@ -220,8 +248,9 @@ public class SimpleClient extends AbstractClient {
 			Message message = new Message(1, "add client");
 			SimpleClient.getClient().sendToServer(message);
 			System.out.println("Connection Successful, moving to homepage");
-			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 800, 500));
+			SimpleChatClient.setScene(new Scene(SimpleChatClient.loadFXML("login"), 1024, 768));
 			SimpleChatClient.getClientStage().setScene(SimpleChatClient.getScene());
+			SimpleChatClient.getClientStage().centerOnScreen();
 		}
 		catch (Exception e)
 		{

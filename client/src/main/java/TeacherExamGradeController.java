@@ -184,7 +184,7 @@ public class TeacherExamGradeController extends SaveBeforeExit{
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
 
-        clientTeacher = (Teacher)SimpleClient.getClient().getUser();
+        clientTeacher = (Teacher) SimpleClient.getClient().getUser();
         // Get teacher courses and return if the teacher not assigned to any course
         List<Course> teacherCourses = clientTeacher.getCourses();
         if (teacherCourses.isEmpty())
