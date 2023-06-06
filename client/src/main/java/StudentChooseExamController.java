@@ -11,7 +11,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentChooseExamController {
@@ -167,7 +166,7 @@ public class StudentChooseExamController {
         {
             for(StudentExam studentExam: classExam.getStudentExams())
             {
-                if(studentExam.getStudent().equals(SimpleClient.getUser()) && studentExam.getStatus() == HSTS_Enums.StatusEnum.NotTaken)
+                if(studentExam.getStudent().equals(SimpleClient.getUser()) && studentExam.getStatus() == HSTS_Enums.submissionStatus.NotTaken)
                 {
                     ExamsTV.getItems().add(classExam);
                 }

@@ -108,7 +108,7 @@ public class StudentDoExamDigitalController {
         title.setText("Exam in " + selectedForm.getSubject().getName() + " - " + selectedForm.getCourse().getName());
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
-        studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+        studentExam.setStatus(HSTS_Enums.submissionStatus.ToEvaluate);
         questionList = selectedForm.getQuestionList();
         numberOfQuestions = selectedForm.getQuestionList().size();
         renderProgress();

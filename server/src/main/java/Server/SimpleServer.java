@@ -1,9 +1,5 @@
 package Server;
-import Server.Events.ApiResponse;
 import Server.Events.ClientUpdateEvent;
-import Server.Events.ResponseQuestion;
-import com.google.gson.Gson;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import Server.Events.*;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
@@ -21,7 +17,6 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
 import java.sql.Date;
 
-import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -35,15 +30,12 @@ import Entities.Principal;
 
 import java.io.ObjectInputStream;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Timer;
 
 import Entities.*;
 import org.mindrot.jbcrypt.BCrypt;
-
-import static javax.management.Query.or;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -93,9 +85,9 @@ public class SimpleServer extends AbstractServer {
 					List<ClassExam> classExams = retrieveClassExam();
 					for(ClassExam classExam : classExams)
 					{
-						if(classExam.getExamStatus() == HSTS_Enums.ExamStatus.Active && classExam.getFinalSubmissionDate().before(Date.valueOf(LocalDateTime.now().toLocalDate())))
+						if(classExam.getExamStatus() == HSTS_Enums.examStatus.Active && classExam.getFinalSubmissionDate().before(Date.valueOf(LocalDateTime.now().toLocalDate())))
 						{
-							classExam.setExamStatus(HSTS_Enums.ExamStatus.Inactive);
+							classExam.setExamStatus(HSTS_Enums.examStatus.Inactive);
 							Message message = new Message(1,"The exam " + classExam.getID() + " has run out of time, it is now closed");
 							message.setData(classExam);
 							sendToAllClients(message);

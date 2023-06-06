@@ -1,12 +1,10 @@
 import java.io.*;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import Entities.*;
-import Events.CreateExamEvent;
 import Events.ExamEndedMessageEvent;
 import Events.ManualExamEvent;
 import Events.StartExamEvent;
@@ -112,7 +110,7 @@ public class StudentDoExamManualController {
         ViewExamController.createManualExam(mainClassExam);
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
-        studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+        studentExam.setStatus(HSTS_Enums.submissionStatus.ToEvaluate);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -126,7 +124,7 @@ public class StudentDoExamManualController {
                 } else {
                     try {
                         Message message = new Message(1, "Exam Fail: Time Ended");
-                        studentExam.setStatus(HSTS_Enums.StatusEnum.Unsubmitted);
+                        studentExam.setStatus(HSTS_Enums.submissionStatus.Unsubmitted);
                         message.setData(studentExam);
                         SimpleClient.getClient().sendToServer(message);
                         timer.cancel();
