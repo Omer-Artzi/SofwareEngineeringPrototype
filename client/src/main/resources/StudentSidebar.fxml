@@ -25,37 +25,7 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="50.0" prefWidth="238.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Images/add.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="viewGradesButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#OnViewGradesButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="View Grades" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@Images/add.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="takeExamsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#OnTakeExamsButtonPressed" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="Available Exams" textFill="WHITE">
+            <Button fx:id="takeExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#takeExam" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="Take Exam" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -63,6 +33,21 @@
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@Images/view.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="ViewGradesButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewGrades" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="View Grades" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/add.png" />
                      </image>
                   </ImageView>
                </graphic>

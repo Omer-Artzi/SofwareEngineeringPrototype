@@ -278,7 +278,7 @@ public class StudentExamGradeController
         {
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
-            int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
+            int correctAnswerInt = question.getIncorrectAnswers().indexOf(correctAnswer) + 1;
             int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber);
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
@@ -313,7 +313,7 @@ public class StudentExamGradeController
             answersVbox.getChildren().add(questionText);
 
 
-            int answerNum = question.getAnswers().size();
+            int answerNum = question.getIncorrectAnswers().size();
             // insert the 4 answer
             for (int j = 1; j < answerNum + 1; j++)
             {
@@ -333,7 +333,7 @@ public class StudentExamGradeController
 
                 BorderPane bordLoop2 = new BorderPane();
                 HBox.setHgrow(bordLoop2, javafx.scene.layout.Priority.ALWAYS);
-                Label answerText = new Label(question.getAnswers().get(j-1));
+                Label answerText = new Label(question.getIncorrectAnswers().get(j-1));
                 answerText.setWrapText(true);
                 answerText.setPadding(new Insets(0, 10, 0 ,10));
                 // correct answer style

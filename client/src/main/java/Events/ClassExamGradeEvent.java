@@ -1,7 +1,5 @@
 package Events;
 
-import Entities.Message;
-
 public class ClassExamGradeEvent {
     String SubjectStr;
     String CourseStr;

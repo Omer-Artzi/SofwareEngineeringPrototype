@@ -1,7 +1,9 @@
 package Entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name = "ExtraTime")
 public class ExtraTime {
@@ -9,12 +11,14 @@ public class ExtraTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
     private String TeacherNote;
+    @ManyToOne
     private Teacher teacher;
+    @OneToOne
     private  ClassExam exam;
     @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "ExtraTime_ID"),
-            inverseJoinColumns = @JoinColumn(name ="Principle_ID"))
+            inverseJoinColumns = @JoinColumn(name ="Principal_ID"))
     private List<Principal> principals;
     public ExtraTime(){}
     public ExtraTime(ClassExam exam, List<Principal> principals, Teacher teacher, String teacherNote)

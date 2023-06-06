@@ -1,12 +1,14 @@
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class StudentSidebarController implements SideBar {
+public class StudentSidebarController {
 
     @FXML
     private ResourceBundle resources;
@@ -18,40 +20,53 @@ public class StudentSidebarController implements SideBar {
     private Label Menu;
 
     @FXML
-    private Button mainPageButton;
+    private Button addQuestionButton;
 
     @FXML
-    private Button takeExamsButton;
+    private Button addTestFormsButton;
+
+    @FXML
+    private Button gradeExamButton;
+
+    @FXML
+    private Button showStatisticsButton;
 
     @FXML
     private Label userTypeLabel;
 
     @FXML
-    private Button viewGradesButton;
+    private Button viewClassExamsButton;
 
     @FXML
-    void OnMainPageButtonPressed(ActionEvent event) {
+    private Button viewQuestionButton;
 
-        changeScene("StudentMainScreen");
+    @FXML
+    private Button viewTestFormsButton;
+
+
+
+    @FXML
+    void takeExam(ActionEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
     }
 
     @FXML
-    void OnTakeExamsButtonPressed(ActionEvent event) {
-        changeScene("StudentTakeExam");
-    }
+    void viewGrades(ActionEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentViewExam");
 
-    @FXML
-    void OnViewGradesButtonPressed(ActionEvent event) {
-        changeScene("StudentExamGrade");
     }
 
     @FXML
     void initialize() {
         assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
-        assert mainPageButton != null : "fx:id=\"mainPageButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
-        assert takeExamsButton != null : "fx:id=\"takeExamsButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
         assert userTypeLabel != null : "fx:id=\"userTypeLabel\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
-        assert viewGradesButton != null : "fx:id=\"viewGradesButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert viewClassExamsButton != null : "fx:id=\"viewClassExamsButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert viewQuestionButton != null : "fx:id=\"viewQuestionButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
+        assert viewTestFormsButton != null : "fx:id=\"viewTestFormsButton\" was not injected: check your FXML file 'StudentSidebar.fxml'.";
 
         userTypeLabel.setText("Logged in as: Student");
     }

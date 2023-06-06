@@ -83,7 +83,6 @@ public class SimpleChatClient extends Application {
             Message message = new Message(1, "Client Closed");
             System.out.println("Client stop");
             message.setData(SimpleClient.getUser());
-            client.sendToServer(message);
             EventBus.getDefault().unregister(this);
             super.stop();
             System.exit(0);

@@ -102,7 +102,6 @@ public class AddExamController {
 
     }*/
 
-
     @FXML
     void setTime(ActionEvent event) {
         // open new input dialog for time
@@ -133,6 +132,7 @@ public class AddExamController {
             }
         }
     }
+
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {

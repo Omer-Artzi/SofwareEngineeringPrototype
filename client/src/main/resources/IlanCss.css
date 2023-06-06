@@ -1,0 +1,26 @@
+*{
+    -fx-base: #b6e7c9;
+}
+
+.first-button{
+    -fx-shape: "M 0 0 L 100 0 L 100 100 L 0 100 Z";
+    -fx-background-color: #b6e7c9;
+    -fx-text-fill: #000000;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial";
+}
+
+.roundButton{
+    -fx-background-radius: 5em;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-max-width: 35px;
+    -fx-max-height: 35px;
+    -fx-background-color: -fx-body-color;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial";
+}

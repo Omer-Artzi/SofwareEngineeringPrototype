@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TeacherExamGradeController {
+public class TeacherExamGradeController extends SaveBeforeExit{
 
 
 
@@ -181,7 +181,7 @@ public class TeacherExamGradeController {
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
 
-        clientTeacher = (Teacher)SimpleClient.getClient().getUser();
+        clientTeacher = (Teacher) SimpleClient.getClient().getUser();
         // Get teacher courses and return if the teacher not assigned to any course
         List<Course> teacherCourses = clientTeacher.getCourses();
         if (teacherCourses.isEmpty())

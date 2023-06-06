@@ -1,12 +1,17 @@
 
 import Entities.Message;
 import Events.UserMessageEvent;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -14,9 +19,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class LoginController {
     @FXML
     private Button loginButton;
+
+    @FXML
+    private ImageView lockImageView;
 
     @FXML
     private PasswordField passwordTF;
@@ -26,6 +36,7 @@ public class LoginController {
 
     @FXML
     private Label wrongLoginLabel;
+    private static TranslateTransition translateTransition;
 
     // This method is called when the user clicks on the login button.
     // It sends a NewLoginMessage to the server with the username and password entered by the user.
@@ -44,11 +55,11 @@ public class LoginController {
      */
 
     @FXML
-    public void login(ActionEvent event) throws IOException {
+    public void login(ActionEvent event) throws IOException, InterruptedException {
         checkLogin();
     }
 
-    private void checkLogin() throws IOException {
+    private void checkLogin() throws IOException, InterruptedException {
         String username = usernameTF.getText();
         String password = passwordTF.getText();
         if(!username.isEmpty() && !password.isEmpty() &&!username.isBlank() && !password.isBlank()) {
@@ -62,9 +73,11 @@ public class LoginController {
             // after we will connect this part to the database we will check if the User is a teacher/student/principal, and accordingly we will open the right Main Screen
         }
         else if (usernameTF.getText().isEmpty() && passwordTF.getText().isEmpty()){
+            wiggle();
             wrongLoginLabel.setText("Please enter your data");
         }
         else {
+            wiggle();
             wrongLoginLabel.setText("Wrong username or password");
         }
     }
@@ -77,6 +90,7 @@ public class LoginController {
         assert usernameTF != null : "fx:id=\"usernameTF\" was not injected: check your FXML file 'login.fxml'.";
         assert wrongLoginLabel != null : "fx:id=\"wrongLoginLabel\" was not injected: check your FXML file 'login.fxml'.";
 
+
     }
     @Subscribe
     public void logIn(UserMessageEvent event) throws IOException {
@@ -86,10 +100,23 @@ public class LoginController {
             SimpleClient.getClient().setUser(event.getUser());
             //SimpleChatClient.setRoot("TeacherMainScreen");
             SimpleChatClient.NewSetRoot("MainWindow");
+
         }
         else {
+
             wrongLoginLabel.setText("E-mail address or password is wrong");
         }
+    }
+    private void wiggle() throws InterruptedException {
+        translateTransition = new TranslateTransition(Duration.millis(75), lockImageView);
+            //translateTransition configuration
+            translateTransition.setByX(10);
+            translateTransition.setInterpolator(Interpolator.LINEAR);
+            translateTransition.setAutoReverse(true);
+            translateTransition.setCycleCount(4);
+            // Start the RotateTransition
+            translateTransition.play();
+
     }
 
 }

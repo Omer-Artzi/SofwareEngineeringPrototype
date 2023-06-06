@@ -13,25 +13,17 @@ public class StudentExam implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "Student")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade =CascadeType.ALL)
     @JoinColumn(name = "ClassExam")
     private ClassExam classExam;
 
     @ElementCollection
     private List<Integer> studentAnswers = new ArrayList<>();
-
-
-
-
-    // Switch to Grade class? Delete Grade Class?
     private int grade;
-
-    //public enum statusEnum {NotTaken, ToEvaluate, Approved, Disapproved}
-
     private HSTS_Enums.StatusEnum status;
 
     private String teacherNote;

@@ -1,20 +1,20 @@
 package Events;
 
-import Entities.ExamForm;
+import Entities.ClassExam;
 
 import java.util.List;
 
 public class ExamMessageEvent {
-    private  List<ExamForm> examForms;
-    public ExamMessageEvent(List<ExamForm> data) {
-        this.examForms = data;
+    private  List<ClassExam> classExams;
+    public ExamMessageEvent(List<ClassExam> data) {
+        this.classExams = data;
     }
 
-    public List<ExamForm> getExamForms() {
-        return examForms;
+    public List<ClassExam> getClassExams() {
+        return classExams;
     }
 
-    public void setExamForms(List<ExamForm> examForms) {
-        this.examForms = examForms;
+    public void setClassExams(List<ClassExam> examForms) {
+        this.classExams = examForms;
     }
 }

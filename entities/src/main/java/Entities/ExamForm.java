@@ -13,11 +13,9 @@ public class ExamForm implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
-
-    String examFormID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CourseID")
-    private Course course;
+    private Course course = null;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TeacherID")
     private Teacher creator;
@@ -35,6 +33,7 @@ public class ExamForm implements Serializable {
 
     @ElementCollection
     private List<Integer> questionsScores = new ArrayList<>();
+    private String examFormID;
 
     private String code;
     private String headerText;
