@@ -3,6 +3,7 @@
 *.iml
 *.lst
 *.log
+*.docx
 /entities/target/
 entities/target/classes/Entities/
 /client/target/
