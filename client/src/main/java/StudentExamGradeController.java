@@ -1,29 +1,15 @@
 import Entities.*;
-import Events.ClassExamGradeEvent;
-import Events.RefreshPerson;
-import Events.StudentExamEvent;
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.util.Duration;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
- //TODO : make adjusments for the changed type for answers in StudentExam (from int to String)
+import java.io.IOException;
+
+//TODO : make adjusments for the changed type for answers in StudentExam (from int to String)
 public class StudentExamGradeController
 {
     @FXML
@@ -78,7 +64,7 @@ public class StudentExamGradeController
     //@Subscribe
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
-        solvedExam.setStatus(HSTS_Enums.StatusEnum.Approved);
+        solvedExam.setStatus(HSTS_Enums.submissionStatus.Approved);
         // send to server to set student Exam
         Message studentExamMessage = new Message(0, "Change Student Exam");
         studentExamMessage.setData(solvedExam);

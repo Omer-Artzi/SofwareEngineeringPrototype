@@ -393,14 +393,14 @@ public class DataGenerator {
             for(Student student:students)
             {
             int randGrade = rand.nextInt(100);
-            HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
+            HSTS_Enums.submissionStatus status = (HSTS_Enums.submissionStatus.values()[rand.nextInt(4)]);
             if (i == 0) {
                 List<String> studentAnswers = new ArrayList<>();
                 List<Question> questions = classExam.getExamForm().getQuestionList();
                 for (Question question:questions) {
                     studentAnswers.add(question.getAnswers().get(faker.number().numberBetween(0, 3)));
                 }
-                if(status == HSTS_Enums.StatusEnum.ToEvaluate) {
+                if(status == HSTS_Enums.submissionStatus.ToEvaluate) {
                     randGrade = -1;
                 }
                 StudentExam currentExam = new StudentExam(student, classExam, studentAnswers, randGrade, status);

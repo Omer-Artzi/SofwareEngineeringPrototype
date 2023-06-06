@@ -125,7 +125,7 @@ public class ExamScreenController {
         timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
-        studentExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+        studentExam.setStatus(HSTS_Enums.submissionStatus.ToEvaluate);
 
 
     }
