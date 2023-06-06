@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 import org.mindrot.jbcrypt.BCrypt;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class DataGenerator {
     static Faker faker = new Faker();
@@ -40,7 +40,6 @@ public class DataGenerator {
         List<ClassExam> classExams = generateClassExams(examFormList,students);
         System.out.println("Generating Student Exams");
         assert classExams != null;
-        List<StudentExam> studentExams = generateStudentExams(classExams,students);
         System.out.println("Generating Principals");
         generatePrincipals();
         SimpleServer.session.getTransaction().commit();
@@ -57,6 +56,7 @@ public class DataGenerator {
                 for(Course course:subject.getCourses())
                 {
                     course.setSubject(subject);
+                    subject.addSetCourse(course);
                 }
                 SimpleServer.session.save(subject);
                 SimpleServer.session.flush();
@@ -125,6 +125,7 @@ public class DataGenerator {
                         String QuestionID = OperationUtils.IDZeroPadding(subject.getId().toString(), 2)
                                 + OperationUtils.IDZeroPadding(Integer.toString(subject.getQuestionNumber()), 3);
                         question.setQuestionID(QuestionID);
+                        subject.addQuestion(question);
 
                         // question courses link
                         List<Course> courses = subjectList.get(i).getCourses();
@@ -174,6 +175,7 @@ public class DataGenerator {
 
                 // examForm - course link
                 examForm.setCourse(examCourse);
+                examCourse.addExamForm(examForm);
 
                 // examForm - teacher link
                 examForm.setCreator(teacher);
@@ -242,6 +244,7 @@ public class DataGenerator {
                     admin = teacher;
                 }
                 for (Course course : coursesList) {
+                    teacher.addCourse(course);
                     course.getTeachers().add(teacher);
                     if(!(tempCourses.contains(course))){
                         tempCourses.add(course);
@@ -250,6 +253,7 @@ public class DataGenerator {
                 }
 
                 for (Subject subject : subjectsList) {
+                    teacher.addSubject(subject);
                     subject.getTeachers().add(teacher);
                     if(!(tempSubjects.contains(subject))){
                         tempSubjects.add(subject);
@@ -392,7 +396,6 @@ public class DataGenerator {
                     student.addClassExam(classExam);
                     SimpleServer.session.saveOrUpdate(student);
                 }
-                // Generate for every Class Exam a list of studentExams
 
                 classExams.add(classExam);
                 SimpleServer.session.saveOrUpdate(classExam);
@@ -416,12 +419,12 @@ public class DataGenerator {
             for(Student student:students)
             {
                 int randGrade = rand.nextInt(100);
-                HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
+                HSTS_Enums.submissionStatus status = (HSTS_Enums.submissionStatus.values()[rand.nextInt(4)]);
 
-                if (status != HSTS_Enums.StatusEnum.Approved)
+                if (status != HSTS_Enums.submissionStatus.Approved)
                     randGrade = -1;
 
-                if (status == HSTS_Enums.StatusEnum.Approved || status == HSTS_Enums.StatusEnum.ToEvaluate) {
+                if (status == HSTS_Enums.submissionStatus.Approved || status == HSTS_Enums.submissionStatus.ToEvaluate) {
                     List<String> studentAnswers = new ArrayList<>();
                     List<Question> questions = classExam.getExamForm().getQuestionList();
                     for (Question question:questions) {
@@ -436,6 +439,9 @@ public class DataGenerator {
                     studentExams.add(currentExam);
                 }
                 classExam = OperationUtils.UpdateClassExamStats(classExam);
+                classExam.setExamToEvaluate(classExam.getStudentExams().stream().filter(studentExam ->
+                                studentExam.getStatus().equals(HSTS_Enums.submissionStatus.ToEvaluate)).collect(Collectors.toList())
+                        .size());
                 i++;
             }
         }

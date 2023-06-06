@@ -84,7 +84,7 @@ public class StudentExamGradeController extends SaveBeforeExit
 
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
-        solvedExam.setStatus(HSTS_Enums.StatusEnum.Approved);
+        solvedExam.setStatus(HSTS_Enums.submissionStatus.Approved);
         // send to server to set student Exam
         Message studentExamMessage = new Message(0, "Change Student Exam");
         studentExamMessage.setData(solvedExam);
@@ -231,7 +231,7 @@ public class StudentExamGradeController extends SaveBeforeExit
         }
         else if (msg.startsWith("Failure"))
         {
-            solvedExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+            solvedExam.setStatus(HSTS_Enums.submissionStatus.ToEvaluate);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Student grading failed to save");
             alert.setHeaderText("Error: Saving Failed");
