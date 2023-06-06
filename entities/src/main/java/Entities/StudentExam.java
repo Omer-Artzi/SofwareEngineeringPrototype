@@ -22,7 +22,7 @@ public class StudentExam implements Serializable {
     private ClassExam classExam;
 
     @ElementCollection
-    private List<Integer> studentAnswers = new ArrayList<>();
+    private List<String> studentAnswers = new ArrayList<>();
     private int grade;
     private HSTS_Enums.StatusEnum status;
 
@@ -32,7 +32,7 @@ public class StudentExam implements Serializable {
     public StudentExam() {
     }
 
-    public StudentExam(Student student, ClassExam classExam, List<Integer> studentAnswers, int grade, HSTS_Enums.StatusEnum status)
+    public StudentExam(Student student, ClassExam classExam, List<String> studentAnswers, int grade, HSTS_Enums.StatusEnum status)
     {
         this.student = student;
         this.student.addStudentExam(this);
@@ -75,12 +75,12 @@ public class StudentExam implements Serializable {
         this.classExam = classExam;
     }
 
-    public List<Integer> getStudentAnswers()
+    public List<String> getStudentAnswers()
     {
         return studentAnswers;
     }
 
-    public void setStudentAnswers(List<Integer> studentAnswers)
+    public void setStudentAnswers(List<String> studentAnswers)
     {
         this.studentAnswers = studentAnswers;
     }
