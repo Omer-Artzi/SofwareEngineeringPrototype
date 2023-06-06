@@ -66,7 +66,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
         addSubjectChoiceBox.setValue(question.getSubject().getName());
         ObservableList<Course> coursesOfQuestion=FXCollections.observableArrayList(question.getCourses());
         Courses.setTargetItems(coursesOfQuestion);
-        List<String>answers=question.getIncorrectAnswers();
+        List<String>answers=question.getAnswers();
         List<Answer>a=new ArrayList<>();
         for(int i=1;i<5;i++)
         {

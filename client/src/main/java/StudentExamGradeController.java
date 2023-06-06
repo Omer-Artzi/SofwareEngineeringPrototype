@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-
+ //TODO : make adjusments for the changed type for answers in StudentExam (from int to String)
 public class StudentExamGradeController
 {
     @FXML
@@ -85,7 +85,7 @@ public class StudentExamGradeController
         SimpleClient.getClient().sendToServer(studentExamMessage);
 
     }
-
+/*
     @FXML
     void ApproveBtnHover(MouseEvent event)
     {
@@ -277,7 +277,7 @@ public class StudentExamGradeController
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber);
+            //int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber); // TODO
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
             qustionHbox.prefWidth(557);
@@ -366,6 +366,7 @@ public class StudentExamGradeController
             bord2.setPrefWidth(400);
             bord2.setStyle("-fx-border-color: black;");
 
+
             // Set student answer
             BorderPane bord3 = new BorderPane();
             Label studentAnswer = new Label(Integer.toString(studentAnswerInt));
@@ -400,7 +401,7 @@ public class StudentExamGradeController
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
         return AnswersVBOX_t;
     }
-
+*/
 
 
 }

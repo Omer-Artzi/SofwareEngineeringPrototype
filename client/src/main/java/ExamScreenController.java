@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,9 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 
-import javax.swing.*;
 import java.io.IOException;
-import java.net.URL;
 import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +38,7 @@ public class ExamScreenController {
             ArrayList<String> options = new ArrayList<String>();
             //for (String answer : question.getAnswers()) {options.add(answer);}
             for (int i = 0; i < 3; i++) {
-                options.add(question.getIncorrectAnswers().get(i));
+                options.add(question.getAnswers().get(i));
             }
             options.add(question.getCorrectAnswer());
             Collections.shuffle(options);
@@ -239,13 +236,13 @@ public class ExamScreenController {
 
             this.currentQuestion = this.studentExam.getClassExam().getExamForm().getQuestionList().get(currentIndex);
             List<String> options = new ArrayList<>();
-            options.add(this.currentQuestion.getIncorrectAnswers().get(0));
-            options.add(this.currentQuestion.getIncorrectAnswers().get(1));
-            options.add(this.currentQuestion.getIncorrectAnswers().get(2));
+            options.add(this.currentQuestion.getAnswers().get(0));
+            options.add(this.currentQuestion.getAnswers().get(1));
+            options.add(this.currentQuestion.getAnswers().get(2));
             options.add(this.currentQuestion.getCorrectAnswer());
             Collections.shuffle(options);
 
-            this.currentQuestion.setIncorrectAnswers(options);
+            this.currentQuestion.setAnswers(options);
 
             this.questionsObservable.setQuestion(this.currentQuestion);
             currentIndex++;

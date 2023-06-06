@@ -395,10 +395,10 @@ public class DataGenerator {
             int randGrade = rand.nextInt(100);
             HSTS_Enums.StatusEnum status = (HSTS_Enums.StatusEnum.values()[rand.nextInt(4)]);
             if (i == 0) {
-                List<Integer> studentAnswers = new ArrayList<>();
-                int amountOfQuestions = classExam.getExamForm().getQuestionList().size();
-                for (int j = 0; j < amountOfQuestions; j++) {
-                    studentAnswers.add(faker.number().numberBetween(1, 5));
+                List<String> studentAnswers = new ArrayList<>();
+                List<Question> questions = classExam.getExamForm().getQuestionList();
+                for (Question question:questions) {
+                    studentAnswers.add(question.getAnswers().get(faker.number().numberBetween(0, 3)));
                 }
                 if(status == HSTS_Enums.StatusEnum.ToEvaluate) {
                     randGrade = -1;
