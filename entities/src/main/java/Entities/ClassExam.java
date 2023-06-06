@@ -42,6 +42,7 @@ public class ClassExam implements Serializable
     private Course course;
     @OneToOne
     private ExtraTime extraTime;
+    private HSTS_Enums.ExamStatus examStatus;
 
 
 
@@ -188,5 +189,19 @@ public class ClassExam implements Serializable
         this.examType = examType;
     }
 
+    public ExtraTime getExtraTime() {
+        return extraTime;
+    }
 
+    public void setExtraTime(ExtraTime extraTime) {
+        this.extraTime = extraTime;
+    }
+
+    public HSTS_Enums.ExamStatus getExamStatus() {
+        return examStatus;
+    }
+
+    public void setExamStatus(HSTS_Enums.ExamStatus examStatus) {
+        this.examStatus = examStatus;
+    }
 }
