@@ -162,7 +162,6 @@ public class StudentChooseExamController {
     public  void displayExams(ExamMessageEvent event)
     {
         List<ClassExam> classExams = event.getClassExams();
-        System.out.println("Got " + classExams.size() + "Exams");
         ((Student)SimpleClient.getUser()).setClassExams(classExams);
         for(ClassExam classExam: classExams)
         {
