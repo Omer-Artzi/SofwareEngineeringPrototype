@@ -12,75 +12,70 @@ public class SaveBeforeExit {
 
     @Subscribe
     public void TriggerDataCheck(ChangeMainSceneEvent event) {
-        boolean unsavedData =  CheckForUnsavedData();
+        boolean unsavedData = CheckForUnsavedData();
         if (unsavedData) {
-            boolean changeScreen =  PromptUserToSaveData(event.getSceneName());
-            if(changeScreen){
-                /*try {
-                    SimpleChatClient.setRoot(event.getSceneName());
+            boolean changeScreen = PromptUserToSaveData(event.getSceneName());
+            if (!changeScreen) {
+                try {
                     EventBus.getDefault().unregister(this);
+                    SimpleChatClient.setRoot(event.getSceneName());
+                    System.out.println("TriggerDataCheck changing scene");
                 }
                 catch (IOException e) {
                     throw new RuntimeException(e);
-                }*/
-            }
-        }
-        else {
-            try {
-                SimpleChatClient.setRoot(event.getSceneName());
-                EventBus.getDefault().unregister(this);
-                System.out.println("TriggerDataCheck changing scene");
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
+                }
             }
         }
     }
 
     @FXML
     public boolean PromptUserToSaveData(String sceneName) {
-       Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have unsaved data. Would you like to save it?", ButtonType.YES, javafx.scene.control.ButtonType.NO, ButtonType.CANCEL);
-       alert.setTitle("Unsaved Data");
-       Optional<ButtonType> result = alert.showAndWait();
-         if (result.isPresent()) {
-                if (result.get() == ButtonType.YES) {
-                    //System.out.println("User chose to save data.");
-                    try {
-                        SaveData();
-                        SimpleChatClient.setRoot(sceneName);
-                        EventBus.getDefault().unregister(this);
-                        System.out.println("PromptUserToSaveData changing scene");
-                        return true;
-                    } catch (SaveDataFailedException e) {
-                        Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Failed to save data.", ButtonType.OK);
-                        errorAlert.setTitle("Error");
-                        errorAlert.showAndWait();
-                        return false;
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else if (result.get() == ButtonType.NO) {
-                    //System.out.println("User chose not to save data.");
-                    try {
-                        SimpleChatClient.setRoot(sceneName);
-                        EventBus.getDefault().unregister(this);
-                        System.out.println("PromptUserToSaveData changing scene 2");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have unsaved data. Would you like to save it?", ButtonType.YES, javafx.scene.control.ButtonType.NO, ButtonType.CANCEL);
+        alert.setTitle("Unsaved Data");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == ButtonType.YES) {
+                //System.out.println("User chose to save data.");
+                try {
+                    SaveData();
                     EventBus.getDefault().unregister(this);
+                    SimpleChatClient.setRoot(sceneName);
+                    System.out.println("PromptUserToSaveData changing scene");
                     return true;
-                } else if (result.get() == ButtonType.CANCEL) {
-                    //System.out.println("User chose to cancel.");
+                }
+                catch (SaveDataFailedException e) {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Failed to save data.", ButtonType.OK);
+                    errorAlert.setTitle("Error");
+                    errorAlert.showAndWait();
                     return false;
                 }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else if (result.get().equals(ButtonType.NO)) {
+                //System.out.println("User chose not to save data.");
+                try {
+                    SimpleChatClient.setRoot(sceneName);
+                    EventBus.getDefault().unregister(this);
+                    System.out.println("PromptUserToSaveData changing scene 2");
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+            else if (result.get() == ButtonType.CANCEL) {
+                //System.out.println("User chose to cancel.");
+                return false;
+            }
 
-         }
-         return false;
+        }
+        return false;
     }
 
     // IMPLEMENT THIS METHOD IN THE CONTROLLER IF YOU HAVE SAVABLE DATA
-    public boolean CheckForUnsavedData(){
+    public boolean CheckForUnsavedData() {
         System.out.println("CheckForUnsavedData SaveBeforeExit");
         return false;
     }

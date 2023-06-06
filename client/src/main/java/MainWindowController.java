@@ -1,13 +1,11 @@
-import java.io.IOException;
-import java.net.URL;
-import java.security.Principal;
-import java.util.*;
-
-import Entities.Student;
-import Entities.Teacher;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
 
 public class MainWindowController {
 

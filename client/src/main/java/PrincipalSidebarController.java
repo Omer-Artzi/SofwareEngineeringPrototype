@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class PrincipalSidebarController {
+public class PrincipalSidebarController extends SideBar {
 
     @FXML
     private ResourceBundle resources;
