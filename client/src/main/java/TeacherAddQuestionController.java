@@ -1,7 +1,6 @@
 import Entities.*;
-import Events.ChangePreviewEvent;
-import Events.FinishEditExistingQuestionEvent;
-import Events.StartEditExistingQuestionEvent;
+import Events.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -90,7 +89,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
     }
 
     @FXML
-    void initialize() throws IOException {             //initialize the page. update the data and the elements
+    void initialize() throws IOException {
 
         EventBus.getDefault().register(this);
         Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
@@ -105,7 +104,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
             subject_name.add(item.getName());
         addSubjectChoiceBox.setItems(FXCollections.observableArrayList(subject_name));
 
-        Answer ans=new Answer("");
         ObservableList<Answer> data = AnswerTable.getItems();
 
         notes = new ArrayList<String>();
@@ -124,7 +122,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
                         SelectedCourse.add(item);
                     }
                 }
-                //Collection.sort(SelectedCourse); //TODO: sorting!
                     Courses.getSourceItems().addAll(SelectedCourse);
                     Elements(false);
                 String [] str={"1","2","3","4"};
@@ -146,7 +143,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
             }
         });
 
-        //**make the table editable function **//
+        //** make the table editable function **//
         AnswerTable.setEditable(true);
         NumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         NumberColumn.setOnEditCommit(event -> {
@@ -172,8 +169,10 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
-        /* check if the input is valid */
+
         Question question=CollectData();
+
+        /* check if the input is valid */
         String errorMSG="";
         if (question.getCourses().isEmpty())
             errorMSG="Error: Please choose course";
@@ -187,6 +186,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
             JOptionPane.showMessageDialog(null,errorMSG,"Invalid Input",JOptionPane.ERROR_MESSAGE);
             return;
         }
+
         Message message=new Message(1,"Save Question");
         message.setData(question);
         SimpleClient.getClient().sendToServer(message);
@@ -199,9 +199,11 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
         counter=0;
         /*get the data of question from TextFile*/
         String data=QuestionDataTF.getText();
+
         /*get the number of correct answer from ChoiceBox*/
         String correctAnswer=CorrectAnswerCB.getValue();
-        /*get list of answers of question from table*/
+
+        /* get list of answers of question from table */
         String correct="";
         List<String> answers= new ArrayList<>();
         List<Answer> dataList = AnswerTable.getItems();
@@ -216,10 +218,10 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
             if(!answer.getAnswer().equals(""))
                 counter++;
         }
-
+        answers.add(correct);
         System.out.println("counter is "+counter);
 
-        /* get the subject from the ChoiceBox*/
+        /* get the subject from the ChoiceBox */
         String selectedSubject=addSubjectChoiceBox.getValue();
         Subject subject = null;
         for(Subject item: subjectOfTeacher)
@@ -228,7 +230,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
                 subject=item;
         }
 
-        /* get the list of courses from the element*/
+        /* get the list of courses from the element */
         ObservableList<Course> observableCourses = Courses.getTargetItems();
         List<Course>SelectedCourses=new ArrayList<>();
         for (Course item: observableCourses)
@@ -238,9 +240,10 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
                     SelectedCourses.add(item1);
         }
 
-        /* get the notes*/
+        /* get the notes */
         String studentNote=StudentNote.getText();
         String teacherNote= TeacherNote.getText();
+
         Question question=new Question(SelectedCourses, data,answers,correct,teacherNote,studentNote);
         return question;
     }
@@ -258,7 +261,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
     @FXML
     void seePreview(ActionEvent event) throws IOException {
         Question question=CollectData();
-        //ContextualButton.setDisable(false);
         System.out.println("Updating preview");
         ChangePreviewEvent event1 = new ChangePreviewEvent();
         event1.setQuestion(question);

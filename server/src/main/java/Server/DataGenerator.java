@@ -280,34 +280,23 @@ public class DataGenerator {
 /*Generate Principles, by Liad*/
     private static void generatePrincipal() {
         try {
-            String salt = BCrypt.gensalt(); // TODO
+            String salt = BCrypt.gensalt();
             Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
             admin.setEmail("adminP");
-            admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
+            admin.setPassword(BCrypt.hashpw("1234", salt));
             //admin.setPassword("1234");
             admin.setGender(HSTS_Enums.Gender.Female);
             SimpleServer.session.save(admin);
             SimpleServer.session.flush();
             Faker faker = new Faker();
             Random random = new Random();
+
             for (int i = 0; i < 5; i++) {
                 String PrincipleFirstName = faker.name().firstName();
                 String PrincipleLastName = faker.name().lastName();
                 String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
-                // String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
-                String password = "1234";
+                String password = BCrypt.hashpw(faker.internet().password(), salt);
                 Principal principal = new Principal(PrincipleFirstName, PrincipleLastName, HSTS_Enums.Gender.Male, PrincipleEmail, password);
-                /*
-                if(i == 0)
-                {
-                    principle.setEmail("p");
-                    principle.setPassword(BCrypt.hashpw("1234", salt));
-                    principle.setGender(Gender.Female);
-                    principle.setFirstName("superUser");
-                    principle.setLastName("Principle");
-                }
-                */
-
                 SimpleServer.session.saveOrUpdate(principal);
             }
             SimpleServer.session.flush();
@@ -319,6 +308,7 @@ public class DataGenerator {
             e.printStackTrace();
         }
     }
+
     private static void generateGrades(List<Student> students) {
         Random r = new Random();
         for(Student student : students)
@@ -379,9 +369,6 @@ public class DataGenerator {
     }
 
 
-    //private static GenerateStaticExams()
-
-
     private static void GenerateClassExams(List<ExamForm> ExamForms)
     {
         if(ExamForms != null) {
@@ -404,6 +391,7 @@ public class DataGenerator {
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
+
                 ClassExam classExam = new ClassExam(ExamForms.get(examNumber), testStartDate, testEndDate, examTime*60, teacher, code);
 
                 // set last used on creation date
@@ -412,6 +400,7 @@ public class DataGenerator {
                 // compel the teacher to have the course if she not already has it
                 teacher.addCourse(ExamForms.get(examNumber).getCourse());
                 ExamForms.get(examNumber).addClassExam(classExam);
+
                 SimpleServer.session.saveOrUpdate(teacher);
                 SimpleServer.session.flush();
 
@@ -452,8 +441,6 @@ public class DataGenerator {
                         StudentExam currentExam = new StudentExam(randomStudent, classExam, null, -1, status);
                         StudentExams.add(currentExam);
                     }
-
-
                 }
 
                 SimpleServer.session.saveOrUpdate(classExam);

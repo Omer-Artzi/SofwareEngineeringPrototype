@@ -34,6 +34,8 @@ public class ClassExam implements Serializable
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
+    @OneToOne
+    private ExtraTime extraTime;
 
     private int approvedExamsNum;
     private int examToEvaluate;
@@ -61,6 +63,7 @@ public class ClassExam implements Serializable
         this.gradesMean=0;
         this.gradesVariance=0;
         this.code = code;
+        this.extraTime=null;
     }
 
     public int getID() {return ID;}
@@ -81,7 +84,7 @@ public class ClassExam implements Serializable
     }
 
     public List<Student> getStudents(){return students;}
-    public void setSStudents(List<Student> students){this.students= new ArrayList<>(students);}
+    public void setStudents(List<Student> students){this.students= new ArrayList<>(students);}
     public void addStudent(Student student)
     {
         if(!students.contains(student))
@@ -140,5 +143,13 @@ public class ClassExam implements Serializable
     }
     public Subject getSubject(){
         return examForm.getSubject();
+    }
+
+    public ExtraTime getExtraTime() {
+        return extraTime;
+    }
+
+    public void setExtraTime(ExtraTime extraTime) {
+        this.extraTime = extraTime;
     }
 }
