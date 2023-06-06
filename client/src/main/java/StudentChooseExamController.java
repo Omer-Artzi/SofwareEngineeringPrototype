@@ -111,21 +111,20 @@ public class StudentChooseExamController {
     }
     @FXML
     public void startExam() throws IOException {
-
         ClassExam selectedExam = ExamsTV.getSelectionModel().getSelectedItem();
         if( selectedExam != null ) {
             if (selectedExam.getExamType() == HSTS_Enums.ExamType.Manual) {
                 //TODO: change to "real" ID
-                if(selectedExam.getCode().equals(examCodeTF.getText()) && Integer.parseInt(IDTF.getText()) == ((Student)(SimpleClient.getUser())).getID()) {
-                    SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
+                if(selectedExam.getCode().equals(examCodeTF.getText()) ) {
+                    SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                     //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code or ID", "Error", JOptionPane.WARNING_MESSAGE);
                 }
-            } else
+            } else//Digital Exam
             {
-                if(selectedExam.getCode().equals(examCodeTF.getText())) {
+                if(selectedExam.getCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == ((SimpleClient.getUser())).getID()) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
                     //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }

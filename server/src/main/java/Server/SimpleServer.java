@@ -237,7 +237,7 @@ public class SimpleServer extends AbstractServer {
 					byte[] document = ((ManualStudentExam) (message.getData())).getExamFile();
 					XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
 					FileOutputStream outputStream = new FileOutputStream(fileName);
-					document.write(outputStream);
+					transmittedDocument.write(outputStream);
 					outputStream.close();
 					System.out.println("Document Saved successfully.");
 					client.sendToClient(message);
