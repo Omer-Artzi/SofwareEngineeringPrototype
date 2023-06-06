@@ -8,12 +8,10 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "Principals")
 @DiscriminatorValue("3")
-
 public class Principal extends Person {
 
     @ManyToMany(mappedBy = "principals")
     private List<ExtraTime> extraTimeRequests=new ArrayList<>();
-
     public void extraTimeRequest(ExtraTime data) {
         for(Principal principal:data.getPrincipals()) {
             if(principal.getFullName() == getFullName())
@@ -22,28 +20,25 @@ public class Principal extends Person {
             extraTimeRequests.add(data);
         }
     }
-
     public Principal(){}
-
     public Principal(String firstName, String lastName, HSTS_Enums.Gender gender, String email, String password) {
         super(firstName, lastName, gender, email, password);
     }
-
+    /*
+    public Principal(String principleFirstName, String principleLastName, HSTS_Enums.Gender male, String firstName, String lastName){
+        super(firstName,lastName);
+    }
+    */
 
     @Override
-    public void receiveExtraTime(ExtraTime data) {}
+    public void receiveExtraTime(ExtraTime data) {
+
+    }
 
     @Override
     public String toString() {
         return super.toString();
     }
-
-
-    public void addExtraTimeRequest(ExtraTime extraTime)
-    {
-        extraTimeRequests.add(extraTime);
-    }
-
     public List<ExtraTime> getExtraTimeRequests() {
         return extraTimeRequests;
     }

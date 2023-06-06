@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -6,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class PrincipalSidebarController implements SideBar{
+public class PrincipalSidebarController {
 
     @FXML
     private ResourceBundle resources;
@@ -42,49 +41,45 @@ public class PrincipalSidebarController implements SideBar{
     private Button viewTestFormsButton;
 
     @FXML
-    private Button viewRequestsButton;
+    void addQuestion(ActionEvent event) {
 
+    }
+
+    @FXML
+    void addTestForms(ActionEvent event) {
+
+    }
 
     @FXML
     void gradeExam(ActionEvent event) {
-        changeScene("TeacherExamGrade");
-    }
-
-    @FXML
-    void showStatistics(ActionEvent event)throws IOException {
 
     }
 
     @FXML
-    void viewClassExams(ActionEvent event)throws IOException {
-        changeScene("viewLiveExams");
-    }
+    void showStatistics(ActionEvent event) {
 
-
-    @FXML
-    void viewQuestion(ActionEvent event)throws IOException {
-        changeScene("TeacherViewQuestions");
     }
 
     @FXML
-    void viewTestForms(ActionEvent event)throws IOException {
-        changeScene("ViewTestForms");
+    void viewClassExams(ActionEvent event) {
+
+    }
+
+    @FXML
+    void viewQuestion(ActionEvent event) {
+
+    }
+
+    @FXML
+    void viewTestForms(ActionEvent event) {
+
     }
 
     @FXML
     void initialize() {
-        InitializationAsserts();
-        userTypeLabel.setText("Logged in as: Principal");
-    }
-    @FXML
-    void viewRequests(ActionEvent event) {
-        changeScene("ListExtraTimeRequest");
-
-    }
-    void InitializationAsserts(){
         assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
-        //assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
-       // assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
+        assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
+        assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert userTypeLabel != null : "fx:id=\"userTypeLabel\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
@@ -92,6 +87,7 @@ public class PrincipalSidebarController implements SideBar{
         assert viewQuestionButton != null : "fx:id=\"viewQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert viewTestFormsButton != null : "fx:id=\"viewTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
 
+        userTypeLabel.setText("Logged in as: Principal");
     }
 
 }

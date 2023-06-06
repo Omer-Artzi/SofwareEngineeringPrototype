@@ -1,41 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ListExtraTimeRequestController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ListExtraTimeRequestController">
    <children>
-      <TableView fx:id="ExtraTimeList" layoutX="211.0" layoutY="41.0" prefHeight="381.0" prefWidth="601.0">
-        <columns>
-          <TableColumn fx:id="IDColumn" prefWidth="121.59999084472656" text="ID" />
-          <TableColumn fx:id="InfoColumn" prefWidth="303.20001220703125" text="Info" />
-            <TableColumn fx:id="SentByColumn" prefWidth="178.39996337890625" text="Sent By" />
-        </columns>
-      </TableView>
-      <TextArea fx:id="PrincipalNote" layoutX="226.0" layoutY="546.0" prefHeight="104.0" prefWidth="586.0" />
-      <Label fx:id="DecisionLabel" layoutX="226.0" layoutY="502.0" prefHeight="31.0" prefWidth="74.0" text="Decision:">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <ChoiceBox fx:id="DecisionCoiceBox" layoutX="300.0" layoutY="505.0" prefHeight="26.0" prefWidth="49.0" />
-      <Label fx:id="ExtraTimeLabel" layoutX="358.0" layoutY="502.0" prefHeight="31.0" prefWidth="123.0" text="Extra time in min:">
+      <Button fx:id="SeeDetailsBT" layoutX="268.0" layoutY="343.0" mnemonicParsing="false" onAction="#SeeDetails" prefHeight="29.0" prefWidth="118.0" text="See Details">
          <font>
             <Font size="15.0" />
          </font>
-      </Label>
-      <TextField fx:id="NewTimeTextFiled" layoutX="481.0" layoutY="505.0" onAction="#NewTimeFunction" prefHeight="26.0" prefWidth="43.0" />
-      <Button fx:id="SendButton" layoutX="471.0" layoutY="666.0" mnemonicParsing="false" onAction="#SendDecision" prefHeight="31.0" prefWidth="74.0" text="Send">
-         <font>
-            <Font size="17.0" />
-         </font>
       </Button>
+      <TableView fx:id="ExtraTimeList" layoutX="158.0" layoutY="73.0" prefHeight="245.0" prefWidth="372.0">
+        <columns>
+          <TableColumn fx:id="IDColumn" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="CodeColumn" prefWidth="98.4000244140625" text="Code" />
+            <TableColumn fx:id="SentByColumn" prefWidth="197.5999755859375" text="Sent By" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

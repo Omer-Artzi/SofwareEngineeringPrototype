@@ -1,92 +1,75 @@
 import Entities.*;
-import Events.PrincipalDecisionEvent;
+import Events.NotificationEvent;
 import Events.SelectedClassExamEvent;
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 import org.controlsfx.control.ListSelectionView;
-import org.controlsfx.control.Notifications;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 //** A controller to fill details about the Request to Extra Time**//
 public class TeacherExtraTimeRequestController  {
     private ClassExam exam;
-    private List<Principal> principals_list;
+    private List<Principal> principals =new ArrayList<>();
+    private List<Principal> selectedPrincipals =new ArrayList<>();
     @FXML
-    private ListSelectionView<Principal> liad;
-
-    @FXML
-    private AnchorPane principalListSelectionView;
+    private ListSelectionView<Principal> Principles;
     @FXML
     private TextArea TeacherNoteTF;
     @FXML
     private Button sendBT;
 
+    //**get the principles list from the server**//
+    //@Subscribe
+   // public void updatePrinciples(PrinciplesMessageEvent event){
+    //    principles= event.getPrinciples();
+    //}
 
     @Subscribe
     public void updateExam(SelectedClassExamEvent event)
     {
         System.out.println("in @Subscribe");
-        principals_list =event.getPrinciple();
-        for(Principal item: principals_list)
-            System.out.println(item);
-        liad.getSourceItems().addAll(principals_list);
+        principals =event.getPrinciple();
+        Principles.getSourceItems().addAll(principals);
         exam=event.getExam();
     }
-
     @FXML
     void initialize() {
-
         EventBus.getDefault().register(this);
+
+        /*
+        selectedPrinciples=new ArrayList<>();
+        for (int i = 0; i < principles.size(); i++) {
+            // Create a CheckBox dynamically
+            CheckBox checkBox = new CheckBox(principles.get(i).getFullName());
+            CBvBox.getChildren().add(checkBox);
+            int finalI = i;
+            checkBox.setOnAction(event -> {
+                if (checkBox.isSelected())
+                    selectedPrinciples.add(principles.get(finalI));
+            });
+        }
+        */
+       // checkBox.setOnAction(event1 -> {
+         //   if (checkBox.isSelected())
+         //       selectedPrinciples.add(principles.get(finalI));
+        //});
+
     }
 
     /* Send a notification to the relevant Principles*/
     @FXML
     void sendExtraTimeRequest(ActionEvent event) throws IOException {
-
-        /* check if there is already ExtraTime request to this ClassExam */
-        if(exam.getExtraTime()!=null) {
-            JOptionPane.showMessageDialog(null, "you have already sent an ExtraTime Request for this ClassExam", "Error!", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        /* check if there is at least one selected principle */
-        ObservableList<Principal> observablePrincipal = liad.getTargetItems();
-        if (observablePrincipal.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please choose principal", "Error!", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        List<Principal>SelectedPrincipal=new ArrayList<>();
-
-        for (Principal item: observablePrincipal)
-        {
-            for(Principal item1: principals_list)
-                if(item.getFullName().equals(item1.getFullName()))
-                    SelectedPrincipal.add(item1);
-        }
-
+        selectedPrincipals =Principles.getTargetItems();
         String note=TeacherNoteTF.getText();
         Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
-
-        ExtraTime extraTime=new ExtraTime(exam, SelectedPrincipal,teacher,note);
-        teacher.getExtraTimeList().add(extraTime);
-        exam.setExtraTime(extraTime);
-        teacher.getExtraTimeList().add(extraTime);
-        Message message=new Message(1, "Extra time request",extraTime);
-
-        SimpleClient.getClient().sendToServer(message);
+        ExtraTime extraTime=new ExtraTime(exam, selectedPrincipals,teacher,note);
+        NotificationEvent NE=new NotificationEvent(extraTime);
+        EventBus.getDefault().post(NE);
     }
 }

@@ -10,10 +10,8 @@ import java.util.Optional;
 
 public class SaveBeforeExit {
 
-
     @Subscribe
     public void TriggerDataCheck(ChangeMainSceneEvent event) {
-        //EventBus.getDefault().register(this);
         boolean unsavedData =  CheckForUnsavedData();
         if (unsavedData) {
             boolean changeScreen =  PromptUserToSaveData(event.getSceneName());
@@ -38,7 +36,6 @@ public class SaveBeforeExit {
             }
         }
     }
-
 
     @FXML
     public boolean PromptUserToSaveData(String sceneName) {

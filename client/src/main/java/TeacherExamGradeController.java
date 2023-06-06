@@ -1,6 +1,5 @@
 import Entities.*;
 import Events.ClassExamGradeEvent;
-import Events.PrincipalApproveEvent;
 import Events.StudentExamEvent;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,12 +10,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import javafx.beans.property.SimpleStringProperty;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TeacherExamGradeController extends SaveBeforeExit{
+public class TeacherExamGradeController {
 
 
 
@@ -62,7 +60,6 @@ public class TeacherExamGradeController extends SaveBeforeExit{
     String chosenExamStr;
     String chosenSubjectStr;
     ClassExam chosenExam;
-
 
     @FXML
     void EditExamBtnAct(ActionEvent event) throws IOException {

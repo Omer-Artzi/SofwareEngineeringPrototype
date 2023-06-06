@@ -10,8 +10,14 @@ import Entities.Person;
 import Entities.Question;
 import Entities.Subject;
 import Entities.Teacher;
-import Events.*;
-import javafx.application.Platform;
+import Events.ChangePreviewEvent;
+import Events.ChooseQuestionsEvent;
+import Events.CourseQuestionsListEvent;
+import Events.FinishEditExistingQuestionEvent;
+import Events.SendChosenQuestionsEvent;
+import Events.StartEditExistingQuestionEvent;
+import Events.SubjectMessageEvent;
+import Events.SubjectsOfTeacherMessageEvent;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,8 +30,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import javax.swing.*;
 
 public class TeacherViewQuestionsController extends SaveBeforeExit {
 
@@ -76,6 +80,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
     }
 
     private Question selectedQuestion;
+
+
 
     @FXML
     void initialize() {

@@ -36,10 +36,6 @@ public abstract class Person implements Serializable{
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    @Override
-    public String toString() {
-        return firstName + ' ' + lastName;
-    }
 
     public long getID() {
         return ID;
@@ -96,7 +92,6 @@ public abstract class Person implements Serializable{
     public abstract void extraTimeRequest(ExtraTime data);
 
     public abstract void receiveExtraTime(ExtraTime data);
-
 
     @Override
     public boolean equals(Object o) {
