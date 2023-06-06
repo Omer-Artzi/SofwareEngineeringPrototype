@@ -15,7 +15,6 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="628.0" spacing="50.0">
                <children>
-                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToHomePage" text="Back" />
                   <ComboBox fx:id="subjectsCB" onAction="#onSubjectSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Subject" />
                   <ComboBox fx:id="CoursesCB" onAction="#onCourseSelection" prefHeight="25.0" prefWidth="234.0" promptText="Choose Course" />
                </children>

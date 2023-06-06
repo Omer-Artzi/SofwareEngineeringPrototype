@@ -72,10 +72,6 @@ public class StudentChooseExamController {
         IDTF.setDisable(true);
     }
     @FXML
-    void backToHomePage() throws IOException {
-        SimpleChatClient.setRoot("HomePage");
-    }
-    @FXML
     void onSubjectSelection() throws IOException {
         List<ClassExam> classExams = ((Student)(SimpleClient.getUser())).getClassExams();
         ExamsTV.getItems().clear();
