@@ -67,6 +67,7 @@ public class SimpleChatClient extends Application {
 
 
     public static void setRoot(String fxml) throws IOException {
+        System.out.println("setRoot");
         mainWindowController.LoadSceneToMainWindow(fxml);
     }
 

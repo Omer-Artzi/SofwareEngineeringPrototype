@@ -5,16 +5,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class PrincipalSidebarController {
+public class PrincipalSidebarController extends SideBar {
 
     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
-
-    @FXML
-    private Label Menu;
 
     @FXML
     private Button addQuestionButton;
@@ -77,7 +74,6 @@ public class PrincipalSidebarController {
 
     @FXML
     void initialize() {
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
