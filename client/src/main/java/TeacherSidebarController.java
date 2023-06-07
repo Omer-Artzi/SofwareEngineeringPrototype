@@ -1,4 +1,3 @@
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -6,10 +5,7 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 
-public class TeacherSidebarController implements SideBar {
-
-    @FXML
-    private Label Menu;
+public class TeacherSidebarController extends SideBar {
 
     @FXML
     private Button addQuestionButton;
@@ -29,10 +25,6 @@ public class TeacherSidebarController implements SideBar {
     @FXML
     private Button viewTestFormsButton;
 
-    @FXML
-    private Button viewClassExamsButton;
-    @FXML
-    private Button createExamButton;
 
     @FXML
     private Label userTypeLabel;
@@ -40,7 +32,7 @@ public class TeacherSidebarController implements SideBar {
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
-        changeScene("TeacherAddQuestion");
+        ChangeScene("AddQuestion");
 
 
     }
@@ -48,44 +40,38 @@ public class TeacherSidebarController implements SideBar {
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
-        changeScene("AddExam");
+        ChangeScene("AddExam");
     }
 
     @FXML
     void gradeExam(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
-        changeScene("TeacherExamGrade");
+        ChangeScene("TeacherExamGrade");
     }
+
 
     @FXML
     void showStatistics(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
-        changeScene("ShowStatistics");
-
-        // Temporarily trying to access principal's stats screen via teacher, remember to replace with above line.
-        //changeScene("ShowStatsAndReports");
+        ChangeScene("ShowStatistics");
     }
 
     @FXML
     void viewQuestion(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
-        changeScene("TeacherViewQuestions");
+        ChangeScene("TeacherViewQuestions");
     }
 
     @FXML
     void viewClassExams(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
-        changeScene("viewLiveExams");
+        ChangeScene("ViewClassExams");
     }
 
     @FXML
     void viewTestForms(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
-        changeScene("ViewTestForms");
-    }
-    @FXML
-    void createExam(ActionEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherCreateClassExam");
+        ChangeScene("ViewTestForms");
     }
 
     @FXML
@@ -95,7 +81,6 @@ public class TeacherSidebarController implements SideBar {
     }
 
     void InitializationAsserts(){
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";

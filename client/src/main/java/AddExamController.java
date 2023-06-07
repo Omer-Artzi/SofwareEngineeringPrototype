@@ -29,7 +29,7 @@ import java.util.*;
 
 import static javafx.scene.control.cell.TextFieldTableCell.*;
 
-public class AddExamController {
+public class AddExamController extends SaveBeforeExit {
     private int examID;
     private int examTime = 0;
     private Teacher teacher;

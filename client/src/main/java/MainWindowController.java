@@ -1,13 +1,11 @@
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-
-import Entities.Principal;
-import Entities.Student;
-import Entities.Teacher;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
 
 public class MainWindowController {
 
@@ -28,7 +26,7 @@ public class MainWindowController {
     @FXML
     private void initialize() throws IOException {
         InitializationAsserts();
-        //System.out.println("Liad and Ilan in MainWindow");
+
         SimpleChatClient.setMainWindowController(this);
 
         SimpleChatClient.getScene().getWindow().setHeight(768);
@@ -37,12 +35,10 @@ public class MainWindowController {
         // Load the sidebar
         Parent sideBarParent = null;
         String userType = SimpleClient.getUser().getClass().getSimpleName();
-        //String userType="Principle";
-       // System.out.println("User type: " + userType);
-       String sideBarName = userType + "Sidebar";
+        //System.out.println("User type: " + userType);
+        String sideBarName = userType + "Sidebar";
         // load correct sidebar according to user type
         sideBarParent = SimpleChatClient.loadFXML(sideBarName);
-        //sideBarParent = SimpleChatClient.loadFXML("PrincipalSidebar");
         //sideBarParent = SimpleChatClient.loadFXML("TeacherSidebar");
         sidePane.getChildren().clear();
         sidePane.getChildren().add(sideBarParent);
@@ -52,7 +48,6 @@ public class MainWindowController {
         String mainScreenName = userType + "MainScreen";
         // load correct window according to user type
         mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
-        //mainWindowParent = SimpleChatClient.loadFXML("PrincipalMainScreen");
         //mainWindowParent = SimpleChatClient.loadFXML("ViewQuestions");
         mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
@@ -68,6 +63,7 @@ public class MainWindowController {
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
         Parent mainWindowParent;
 
+        System.out.println("Main window loading scene: " + sceneName);
         // scene reuse code, currently creates problems
         /*if (loadedScenes.containsKey(sceneName)) {
             mainWindowParent = loadedScenes.get(sceneName);

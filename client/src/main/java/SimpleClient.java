@@ -10,16 +10,16 @@ import java.util.List;
 
 
 public class SimpleClient extends AbstractClient {
-	private static Person user;
-	private static SimpleClient client = null;
-	private static  String IP;
-	private static int port;
-	private List<Student> students;
+    private static Person user;
+    private static SimpleClient client = null;
+    private static String IP;
+    private static int port;
+    private List<Student> students;
 
-	private SimpleClient(String host, int port) {
-		super(host, port);
-		SimpleChatClient.setClient(this);
-	}
+    private SimpleClient(String host, int port) {
+        super(host, port);
+        SimpleChatClient.setClient(this);
+    }
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
@@ -92,20 +92,18 @@ public class SimpleClient extends AbstractClient {
 				String warning = "The student's grades could not be found(or there aren't any)";
 				JOptionPane.showMessageDialog(null, warning, "Database Error", JOptionPane.WARNING_MESSAGE);
 
-			} else {
-				stMsg.setGrades(grades);
+            } else {
+                stMsg.setGrades(grades);
 
-			}
-			EventBus.getDefault().post(stMsg);
+            }
+            EventBus.getDefault().post(stMsg);
 
-		} else if (message.getMessage().equals("client added successfully")) {
-			EventBus.getDefault().post(new NewSubscriberEvent(message));
-		} else if (message.getMessage().startsWith("Extra time approved"))
-		{
-			user.receiveExtraTime((ExtraTime)message.getData());
-		}
-		else if (message.getMessage().startsWith("Extra Time Requested")) {
-			user.extraTimeRequest((ExtraTime)message.getData());
+        } else if (message.getMessage().equals("client added successfully")) {
+            EventBus.getDefault().post(new NewSubscriberEvent(message));
+        } else if (message.getMessage().startsWith("Extra time approved")) {
+            user.receiveExtraTime((ExtraTime) message.getData());
+        } else if (message.getMessage().startsWith("Extra Time Requested")) {
+            user.extraTimeRequest((ExtraTime) message.getData());
 
 		} else if(message.getMessage().startsWith("Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
@@ -153,28 +151,28 @@ public class SimpleClient extends AbstractClient {
 		}
 	}
 
-	public static SimpleClient getClient() throws IOException {
-		if (client == null) {
-			client = new SimpleClient(IP, port);
-		}
-		return client;
-	}
+    public static SimpleClient getClient() throws IOException {
+        if (client == null) {
+            client = new SimpleClient(IP, port);
+        }
+        return client;
+    }
 
-	public List<Student> getStudents() {
-		return students;
-	}
+    public List<Student> getStudents() {
+        return students;
+    }
 
-	public void setStudents(List<Student> students) {
-		this.students = students;
-	}
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
-	public static String getIP() {
-		return IP;
-	}
+    public static String getIP() {
+        return IP;
+    }
 
-	public static void setIP(String IP) {
-		SimpleClient.IP = IP;
-	}
+    public static void setIP(String IP) {
+        SimpleClient.IP = IP;
+    }
 
 	public void openClientConnect() throws IOException {
 		try {
@@ -193,15 +191,15 @@ public class SimpleClient extends AbstractClient {
 		}
 	}
 
-	public static void setPortNum(int port) {
-		SimpleClient.port = port;
-	}
+    public static void setPortNum(int port) {
+        SimpleClient.port = port;
+    }
 
-	public void setUser(Person user) {
-		this.user = user;
-	}
+    public void setUser(Person user) {
+        this.user = user;
+    }
 
-	public static Person getUser() {
-		return user;
-	}
+    public static Person getUser() {
+        return user;
+    }
 }

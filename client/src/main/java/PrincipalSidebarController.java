@@ -4,18 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import java.io.IOException;
 
-public class PrincipalSidebarController implements SideBar {
+public class PrincipalSidebarController extends SideBar {
 
     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
-
-    @FXML
-    private Label Menu;
 
     @FXML
     private Button addQuestionButton;
@@ -57,10 +53,8 @@ public class PrincipalSidebarController implements SideBar {
     }
 
     @FXML
-    void showStatistics(ActionEvent event) throws IOException {
-        // The principal's statistics button should lead it to the new, principal-oriented stats window.
-        System.out.println("In principal sidebar, trying to go to ShowStatAndReports.");
-        changeScene("ShowStatsAndReports");
+    void showStatistics(ActionEvent event) {
+
     }
 
     @FXML
@@ -69,18 +63,17 @@ public class PrincipalSidebarController implements SideBar {
     }
 
     @FXML
-    void viewQuestion(ActionEvent event) throws IOException {
-        changeScene("TeacherViewQuestions");
+    void viewQuestion(ActionEvent event) {
+
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) throws IOException {
-        changeScene("viewLiveExams");
+    void viewTestForms(ActionEvent event) {
+
     }
 
     @FXML
     void initialize() {
-        assert Menu != null : "fx:id=\"Menu\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";

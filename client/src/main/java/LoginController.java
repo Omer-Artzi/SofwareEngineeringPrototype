@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.Thread.sleep;
 
@@ -95,10 +96,11 @@ public class LoginController {
     @Subscribe
     public void logIn(UserMessageEvent event) throws IOException {
         System.out.println("Logging in");
-        if(event.getStatus() == "Success")
+        if(Objects.equals(event.getStatus(), "Success"))
         {
             SimpleClient.getClient().setUser(event.getUser());
             //SimpleChatClient.setRoot("TeacherMainScreen");
+            EventBus.getDefault().unregister(this);
             SimpleChatClient.NewSetRoot("MainWindow");
 
         }
