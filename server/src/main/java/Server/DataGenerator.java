@@ -39,6 +39,7 @@ public class DataGenerator {
         System.out.println("Generating Class Exams");
         List<ClassExam> classExams = generateClassExams(examFormList,students);
         System.out.println("Generating Student Exams");
+        List<StudentExam> studentExams = generateStudentExams(classExams,students);
         assert classExams != null;
         System.out.println("Generating Principals");
         generatePrincipals();
