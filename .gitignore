@@ -11,6 +11,7 @@ entities/target/classes/Entities/
 /server/target/classes/
 */target/*
 *.txt
+*.DS_Store
 server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml
 .idea/misc.xml
 hibernate.properties

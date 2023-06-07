@@ -1,16 +1,33 @@
 import Entities.*;
+import Entities.ClassExam;
+import Events.ClassExamGradeEvent;
+import Events.GeneralEvent;
+import Events.RefreshPerson;
+import Events.StudentExamEvent;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-//TODO : make adjusments for the changed type for answers in StudentExam (from int to String)
-public class StudentExamGradeController
+
+public class StudentExamGradeController extends SaveBeforeExit
 {
     @FXML
     private VBox AnswersVBOX;
@@ -49,6 +66,10 @@ public class StudentExamGradeController
     private Label StudentNameLabel;
 
 
+
+    int hboxWidth = 650;
+
+
     private StudentExam solvedExam;
 
     void SetStudentScore(int newScore)
@@ -61,7 +82,6 @@ public class StudentExamGradeController
             GradeText.setFill(Color.RED);
     }
 
-    //@Subscribe
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
         solvedExam.setStatus(HSTS_Enums.submissionStatus.Approved);
@@ -71,7 +91,7 @@ public class StudentExamGradeController
         SimpleClient.getClient().sendToServer(studentExamMessage);
 
     }
-/*
+
     @FXML
     void ApproveBtnHover(MouseEvent event)
     {
@@ -199,8 +219,9 @@ public class StudentExamGradeController
                     SimpleChatClient.setRoot("TeacherExamGrade");
                     String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
                     String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
-                    String classExamID = Integer.toString(solvedExam.getClassExam().getID());
-                    EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, classExamID));
+                    String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
+                    int ExamExamSqlID = solvedExam.getClassExam().getExamForm().getID();
+                    EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, ExamExamID, ExamExamSqlID));
                 }
             }
             catch (Exception e)
@@ -210,7 +231,7 @@ public class StudentExamGradeController
         }
         else if (msg.startsWith("Failure"))
         {
-            solvedExam.setStatus(HSTS_Enums.StatusEnum.ToEvaluate);
+            solvedExam.setStatus(HSTS_Enums.submissionStatus.ToEvaluate);
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Student grading failed to save");
             alert.setHeaderText("Error: Saving Failed");
@@ -220,12 +241,36 @@ public class StudentExamGradeController
         });
     }
 
+
+    private TextFlow GenerateText(String Bold, String content)
+    {
+        Text text1 = new Text(Bold);
+        text1.setStyle("-fx-font-weight: bold;");
+        Text text2 = new Text(content);
+        TextFlow headerFlow = new TextFlow();
+        headerFlow.getChildren().addAll(text1, text2);
+        headerFlow.setMaxWidth(hboxWidth);
+        headerFlow.setPrefHeight(Control.USE_COMPUTED_SIZE);
+        headerFlow.setTextAlignment(TextAlignment.LEFT);
+        headerFlow.setPadding(new Insets(20, 20, 20 ,20));
+        return headerFlow;
+    }
+
+
     @Subscribe
     public void getStarterData(StudentExamEvent event) throws IOException, InterruptedException {
         solvedExam = event.getStudentExam();
         Platform.runLater(() -> {
             try {
                 GetQuestions(AnswersVBOX);
+
+                if(solvedExam.getTeacherNote() != null)
+                {
+                    FeedbackTextArea.setText(solvedExam.getTeacherNote());
+                }
+                if(solvedExam.getScoreChangeReason() != null)
+                    ChangeScoreTextArea.setText(solvedExam.getScoreChangeReason());
+
                 // set the scroll to top after estimated time of scene rendering
                 PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
                 pause.setOnFinished(timedEvent -> {ScrollPane.setVvalue(0);});
@@ -248,6 +293,7 @@ public class StudentExamGradeController
         FeedbackHbox.setPrefHeight(0);
         ChangeScoreHbox.setVisible(false);
         ChangeScoreHbox.setPrefHeight(0);
+
     }
 
     VBox GetQuestions(VBox AnswersVBOX_t) throws IOException, InterruptedException {
@@ -256,22 +302,65 @@ public class StudentExamGradeController
             System.out.println("solvedExam is null");
             TimeUnit.SECONDS.sleep(1);
         }
+
+        int questionIndexPlace = 4;
+        String headerStr = solvedExam.getClassExam().getExamForm().getHeaderText();
+        headerStr = "blalbl al lfbl llb slfdbklj k jh a;lo lakfjh opfgir [dklm klj fpaekf aho e kldjh ijf oklsekfj kjfkl jfj kdl dlskfj lksdj flkmdslkfm sflsdkj lkdjf  lkds lkf klgj lkfjl fl;kd jg";
+        if(headerStr != null)
+        {
+            // TODO: change "header" string
+            AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 6, GenerateText("Header: ", headerStr));
+        }
+
+        if(SimpleClient.getUser() instanceof Teacher || SimpleClient.getUser() instanceof Principal)
+        {
+            String teachersNote = solvedExam.getClassExam().getExamForm().getExamNotesForTeacher();
+            teachersNote = headerStr;
+            if(headerStr != null)
+            {
+                AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 6, GenerateText("Teacher Notes: ", teachersNote));
+            }
+        }
+
+
+
+        String studentsNotes = solvedExam.getClassExam().getExamForm().getExamNotesForStudent();
+        studentsNotes = headerStr;
+        if(headerStr != null)
+        {
+            // TODO: change "header" string
+            AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 6, GenerateText("Student Notes: ", studentsNotes));
+        }
+
+
+        String footerStr = solvedExam.getClassExam().getExamForm().getFooterText();
+        footerStr = headerStr;
+        if(headerStr != null)
+        {
+            questionIndexPlace++;
+            // TODO: change "footer" string
+            AnswersVBOX_t.getChildren().add( AnswersVBOX_t.getChildren().size() - 4, GenerateText("Footer: ", footerStr));
+        }
         List<Question> questions = solvedExam.getClassExam().getExamForm().getQuestionList();
         int studentScore = 0;
-        for (int questionNumber = 0; questionNumber < questions.size(); questionNumber++)
+
+        List<String> studentAnswers = solvedExam.getStudentAnswers();
+        for (int questionNumber = 0; studentAnswers != null && questionNumber < questions.size(); questionNumber++)
         {
+
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            //int studentAnswerInt = solvedExam.getStudentAnswers().get(questionNumber); // TODO
+            String studentAnswerStr = studentAnswers.get(questionNumber);
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
-            qustionHbox.prefWidth(557);
+            double rowWidth = AnswersVBOX.getWidth();
+            qustionHbox.prefWidth(rowWidth);
 
             // Set question number
             BorderPane bord1 = new BorderPane();
             bord1.setPrefHeight(68);
-            bord1.setPrefWidth(55);
+            bord1.setPrefWidth(rowWidth / 10);
             bord1.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
 
             Label questionNumberLbl = new Label(Integer.toString(questionNumber));
@@ -284,14 +373,14 @@ public class StudentExamGradeController
 
             // insert the question text
 
-            Text porblemtext=new Text("problem " + Integer.toString(questionNumber) + ": ");
+            Text porblemtext = new Text("problem " + Integer.toString(questionNumber + 1) + ": ");
             porblemtext.setStyle("-fx-font-weight: bold");
 
-            Text contenttext=new Text(question.getQuestionData());
+            Text contenttext = new Text(question.getQuestionData());
             contenttext.setStyle("-fx-font-weight: regular");
 
             TextFlow questionText = new TextFlow();
-            questionText.setPrefWidth(250);
+            //questionText.setPrefWidth(250);
             questionText.getChildren().addAll(porblemtext, contenttext);
             questionText.setStyle("-fx-background-color: #7CB9E8; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
             answersVbox.getChildren().add(questionText);
@@ -338,7 +427,7 @@ public class StudentExamGradeController
                 answerHbox.getChildren().add(bordLoop2);
                 answerHbox.setAlignment(Pos.CENTER_LEFT);
                 answerHbox.setPrefHeight(Control.USE_COMPUTED_SIZE);
-                answerHbox.setPrefWidth(200);
+                //answerHbox.setPrefWidth(AnswersVBOX.getPrefWidth()*6 / 10);
 
                 answersVbox.getChildren().add(answerHbox);
 
@@ -352,15 +441,14 @@ public class StudentExamGradeController
             bord2.setPrefWidth(400);
             bord2.setStyle("-fx-border-color: black;");
 
-
             // Set student answer
             BorderPane bord3 = new BorderPane();
-            Label studentAnswer = new Label(Integer.toString(studentAnswerInt));
+            Label studentAnswer = new Label(Integer.toString(question.getAnswers().indexOf(studentAnswerStr)+1));
             studentAnswer.setAlignment(Pos.CENTER);
             bord3.setCenter(studentAnswer);
             bord3.setPrefWidth(50);
 
-            if (studentAnswerInt == correctAnswerInt)
+            if (question.getAnswers().indexOf(studentAnswerStr) == correctAnswerInt)
             {
                 studentScore += questionScoreInt;
                 bord3.setStyle("-fx-background-color: #66BB6A; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
@@ -375,19 +463,19 @@ public class StudentExamGradeController
             questionScore.setAlignment(Pos.CENTER);
             bord4.setCenter(questionScore);
             qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
-            AnswersVBOX_t.getChildren().add(questionNumber + 2, qustionHbox);
+            AnswersVBOX_t.getChildren().add(questionIndexPlace++, qustionHbox);
         }
 
         SetStudentScore(studentScore);
 
-        StudentIDLabel.setText(Long.toString(solvedExam.getStudent().getID()));
-        StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
+        StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         StudentNameLabel.setText(solvedExam.getStudent().getFullName());
         StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
         return AnswersVBOX_t;
     }
-*/
+
 
 
 }

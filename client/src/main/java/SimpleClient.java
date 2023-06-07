@@ -23,6 +23,7 @@ public class SimpleClient extends AbstractClient {
 
 	@Override
 	protected void handleMessageFromServer(Object msg) {
+		System.out.println("Converting message...");
 		Message message = (Message) msg;
 		System.out.println("Message Received: " + message.getMessage());
 		if (message.getMessage().startsWith("Students")) {
@@ -71,6 +72,13 @@ public class SimpleClient extends AbstractClient {
 			System.out.println("Live exams in client");
 			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
+		}
+		// TODO maybe change from LiveExamsEvent to something more appropriate
+		else if (message.getMessage().startsWith("Success: Retrieved ALL class exams")) {
+			System.out.println("All class exams in client");
+			LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
+			EventBus.getDefault().post(stMsg);
+		}else if (message.getMessage().startsWith("Grades")) {
 		} else if (message.getMessage().startsWith("Student Exams For Student")) {
 			StudentExamsMessageEvent stMsg = new StudentExamsMessageEvent((List<StudentExam>) message.getData());
 			EventBus.getDefault().post(stMsg);
@@ -124,6 +132,7 @@ public class SimpleClient extends AbstractClient {
 		else if(message.getMessage().startsWith("Success: User")){
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Success"));
 		} else if (message.getMessage().startsWith("Fail: User")){
+			System.out.println("Fail : User");
 			EventBus.getDefault().post(new UserMessageEvent((Person)message.getData(),"Fail"));
 		} else if (message.getMessage().startsWith("Success")) {
 		} else if (message.getMessage().startsWith("Failed to save grade")) {

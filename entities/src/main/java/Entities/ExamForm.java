@@ -51,7 +51,7 @@ public class ExamForm implements Serializable {
     public ExamForm(){this.used = false;}
     public ExamForm(Course course, Teacher teacher, Subject subject, List<Question> questionList){
         this.course=course;
-        this.creator =teacher;
+        this.creator = teacher;
         this.subject=subject;
         this.questionList=questionList;
         this.used = false;
@@ -78,7 +78,7 @@ public class ExamForm implements Serializable {
         return ID;
     }
 
-    public void setID(int examFormID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 
@@ -94,7 +94,7 @@ public class ExamForm implements Serializable {
         Faker faker= new Faker();
         if(code == null)
         {
-            code = subject.getCode() + course.getCode() + faker.bothify("##");
+            code = course.getSubject().getCode() + course.getCode() + faker.bothify("##");
         }
         return code;
     }
@@ -169,6 +169,19 @@ public class ExamForm implements Serializable {
 
     public boolean getUsedStatus() {return used;}
     public void setUsedStatus(boolean used) {this.used = used;}
+
+    public void setFooterText(String footerText){this.footerText = footerText;}
+    public String getFooterText(){return this.footerText;}
+    public void setHeaderText(String headerText){this.headerText = headerText;}
+    public String getHeaderText(){return this.headerText;}
+
+    public void setExamNotesForTeacher(String examNotesForTeacher){this.examNotesForTeacher = examNotesForTeacher;}
+    public String getExamNotesForTeacher(){return this.examNotesForTeacher;}
+
+    public void setExamNotesForStudent(String examNotesForStudent){this.examNotesForStudent = examNotesForStudent;}
+    public String getExamNotesForStudent(){return this.examNotesForStudent;}
+
+
 
 }
 

@@ -91,7 +91,7 @@ public class Course implements Serializable, Comparable<Course> {
             students.add(student);
     }
     //public List<Question> getQuestions(){return questions;}
-    public void setQuestions(List<Question> students){this.questions =questions;}
+    public void setQuestions(List<Question> questions){this.questions = questions;}
 
     public void addQuestion(Question question)
     {

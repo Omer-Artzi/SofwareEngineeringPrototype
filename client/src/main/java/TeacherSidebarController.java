@@ -61,6 +61,9 @@ public class TeacherSidebarController implements SideBar {
     void showStatistics(ActionEvent event) throws IOException {
         //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
         changeScene("ShowStatistics");
+
+        // Temporarily trying to access principal's stats screen via teacher, remember to replace with above line.
+        //changeScene("ShowStatsAndReports");
     }
 
     @FXML

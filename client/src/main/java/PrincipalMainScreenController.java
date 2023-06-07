@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-public class PrincipalMainScreenController {
+public class PrincipalMainScreenController extends SaveBeforeExit {
 
     @FXML
     private Button seeCurrentTestsBT;
