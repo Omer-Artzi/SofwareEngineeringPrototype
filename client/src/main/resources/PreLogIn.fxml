@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="217.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PreLogInController">
    <children>
       <TextField fx:id="IPTF" layoutX="120.0" layoutY="61.0" promptText="Enter IP" />
@@ -21,6 +20,6 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <Button fx:id="EnterButton" layoutX="172.0" layoutY="154.0" mnemonicParsing="false" onAction="#onEnter" text="Enter" />
+      <Button fx:id="EnterButton" defaultButton="true" layoutX="172.0" layoutY="154.0" mnemonicParsing="false" onAction="#onEnter" text="Enter" />
    </children>
 </AnchorPane>

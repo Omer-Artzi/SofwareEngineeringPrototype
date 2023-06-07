@@ -177,13 +177,24 @@ public class SimpleServer extends AbstractServer {
 					{
 						LoggedInUsers.add(user);
 						System.out.println("User " + user.getFullName() + " logged in");
-						response = "Success: User found";
+						response = "Success: User logged in";
 						message.setData(user);
 					}
 				}
 				else
 				{
-					response = "Fail: User not found";
+					response = "Fail: User not found, user not logged in";
+				}
+				message.setMessage(response);
+				client.sendToClient(message);
+			}
+			else if (request.startsWith("Logout")) {
+				Boolean loggedout = LogUserOut((Person) message.getData());
+				if (loggedout) {
+					response = "Success: User logged out";
+				}
+				else {
+					response = "Fail: User not logged in";
 				}
 				message.setMessage(response);
 				client.sendToClient(message);
@@ -199,7 +210,8 @@ public class SimpleServer extends AbstractServer {
 				message.setData(getSubjects(iTeacherID));
 				System.out.println("Subjects: " + teacher.getSubjectList()); /////
 				client.sendToClient(message);
-			} else if(request.startsWith("1Get Courses of Teacher")) {  // Added by Ilan 30.5
+			}
+			else if(request.startsWith("1Get Courses of Teacher")) {  // Added by Ilan 30.5
 				String teacherID = request.substring(25);
 				System.out.println("Teacher ID: " + teacherID); /////
 				int iTeacherID = Integer.parseInt(teacherID);
@@ -236,7 +248,8 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
 				sendToAllClients(message);
-			}else if (message.getMessage().startsWith("Manual Exam"))
+			}
+			else if (message.getMessage().startsWith("Manual Exam"))
 			{
 				try {
 					response = "Manual Exam Received";
@@ -293,12 +306,14 @@ public class SimpleServer extends AbstractServer {
 				message.setMessage(response);
 				message.setData(getExamsForSubjects((Subject)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Exams For Course")){
+			}
+			else if(request.startsWith("Get Exams For Course")){
 				response ="Exams in Course " + ((Course)(message.getData())).getName();
 				message.setMessage(response);
 				message.setData(getExamsForCourse((Course)(message.getData())));
 				client.sendToClient(message);
-			}else if(request.startsWith("Get Questions for Course")){
+			}
+			else if(request.startsWith("Get Questions for Course")){
 				response ="Questions in Course " + ((Course)(message.getData())).getName();
 				System.out.println(response);
 				message.setMessage(response);
@@ -347,13 +362,11 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 				EventBus.getDefault().post(new ClientUpdateEvent(SubscribersList.size()));
 			}
-			else if(request.startsWith("Client Closed")){
-				response ="";
-				boolean userRemoved =  LoggedInUsers.remove((Person)message.getData());
-				System.out.println("user: " + ((Person)message.getData()).getFullName() + " removed: " + userRemoved);
-				for(SubscribedClient subscriber: SubscribersList)
-				{
-					if(subscriber.getClient().equals(client)) {
+			else if (request.startsWith("Client Closed")) {
+				Boolean loggedout = LogUserOut((Person) message.getData());
+				response = "";
+				for (SubscribedClient subscriber : SubscribersList) {
+					if (subscriber.getClient().equals(client)) {
 						SubscribersList.remove(subscriber);
 						break;
 					}
@@ -395,7 +408,8 @@ public class SimpleServer extends AbstractServer {
 					response = (newGrade.getStudent().getFullName() + "'s new grade could not be added to the database");
 					System.out.println(response);
 				}
-			}else if(request.startsWith("Save Question")){
+			}
+			else if(request.startsWith("Save Question")){
 				Question newQuestion = ((Question)(message.getData()));
 				try {
 					session.save(newQuestion);
@@ -501,6 +515,12 @@ public class SimpleServer extends AbstractServer {
 		// Check if there were new changes in the database before commit
 		if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
 			session.getTransaction().commit();
+	}
+
+	private Boolean LogUserOut(Person user) {
+		boolean userRemoved = LoggedInUsers.remove(user);
+		System.out.println("user: " + (user.getFullName() + " removed: " + userRemoved));
+		return userRemoved;
 	}
 
 	private Person retrieveUser(String email) {

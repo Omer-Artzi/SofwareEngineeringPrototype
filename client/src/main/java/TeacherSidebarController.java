@@ -49,6 +49,10 @@ public class TeacherSidebarController extends SideBar {
         ChangeScene("TeacherExamGrade");
     }
 
+    @FXML
+    void createExam(ActionEvent event) {
+        ChangeScene("TeacherExamGrade");
+    }
 
     @FXML
     void showStatistics(ActionEvent event) throws IOException {

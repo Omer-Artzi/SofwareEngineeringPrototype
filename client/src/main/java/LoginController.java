@@ -86,6 +86,7 @@ public class LoginController {
     @FXML
     void initialize() {
         EventBus.getDefault().register(this);
+        System.out.println("LoginController registered");
         assert loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'login.fxml'.";
         assert passwordTF != null : "fx:id=\"passwordTF\" was not injected: check your FXML file 'login.fxml'.";
         assert usernameTF != null : "fx:id=\"usernameTF\" was not injected: check your FXML file 'login.fxml'.";

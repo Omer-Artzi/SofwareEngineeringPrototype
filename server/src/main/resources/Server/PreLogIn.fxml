@@ -14,7 +14,7 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <Button fx:id="EnterButton" layoutX="370.0" layoutY="187.0" mnemonicParsing="false" onAction="#onEnter" text="Enter" />
+      <Button fx:id="EnterButton" defaultButton="true" layoutX="370.0" layoutY="187.0" mnemonicParsing="false" onAction="#onEnter" text="Enter" />
       <Label fx:id="loadingLabel" layoutX="313.0" layoutY="101.0" prefHeight="26.0" prefWidth="160.0" />
    </children>
 </AnchorPane>
