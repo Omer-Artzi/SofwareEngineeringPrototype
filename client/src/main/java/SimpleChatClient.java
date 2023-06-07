@@ -69,7 +69,14 @@ public class SimpleChatClient extends Application {
     }
 
     public static void NewSetRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        Platform.runLater(() -> {
+            try {
+                scene.setRoot(loadFXML(fxml));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     public static Parent loadFXML(String fxml) throws IOException {

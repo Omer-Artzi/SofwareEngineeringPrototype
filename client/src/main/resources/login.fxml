@@ -47,7 +47,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
-            <Label fx:id="wrongLoginLabel" layoutX="224.0" layoutY="270.0" prefHeight="17.0" prefWidth="131.0" textFill="#dc0a0a" />
+            <Label fx:id="wrongLoginLabel" layoutX="195.0" layoutY="262.0" prefHeight="17.0" prefWidth="189.0" textFill="#dc0a0a" />
          </children>
       </AnchorPane>
    </right>

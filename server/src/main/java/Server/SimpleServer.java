@@ -223,7 +223,7 @@ public class SimpleServer extends AbstractServer {
                     }
                 }
                 else {
-                    response = "Fail: User not found, user not logged in";
+                    response = "Fail : User not found, user not logged in";
                 }
                 message.setMessage(response);
 				client.sendToClient(message);

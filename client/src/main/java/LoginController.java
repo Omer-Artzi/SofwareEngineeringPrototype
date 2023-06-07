@@ -4,8 +4,10 @@ import Events.UserMessageEvent;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
@@ -91,6 +93,7 @@ public class LoginController {
         assert passwordTF != null : "fx:id=\"passwordTF\" was not injected: check your FXML file 'login.fxml'.";
         assert usernameTF != null : "fx:id=\"usernameTF\" was not injected: check your FXML file 'login.fxml'.";
         assert wrongLoginLabel != null : "fx:id=\"wrongLoginLabel\" was not injected: check your FXML file 'login.fxml'.";
+        wrongLoginLabel.setAlignment(Pos.CENTER);
 
 
     }
@@ -106,8 +109,15 @@ public class LoginController {
 
         }
         else {
+            Platform.runLater(() -> {
+                try {
+                    wiggle();
+                    wrongLoginLabel.setText("E-mail address or password is wrong");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
 
-            wrongLoginLabel.setText("E-mail address or password is wrong");
         }
     }
     private void wiggle() throws InterruptedException {
