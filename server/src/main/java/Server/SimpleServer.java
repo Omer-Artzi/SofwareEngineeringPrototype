@@ -243,13 +243,40 @@ public class SimpleServer extends AbstractServer {
 				message.setData(getExamsForStudent(studentID));
 				client.sendToClient(message);
 			}
-			else if (message.getMessage().startsWith("Extra time request")) {
-				response = "Extra Time Requested";
+			else if(request.startsWith("Get ExtraTimeRequest data")){
+				response ="ExtraTimeRequest data";
 				message.setMessage(response);
 				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
 				sendToAllClients(message);
 			}
 			else if (message.getMessage().startsWith("Manual Exam"))
+				List<Object>data=new ArrayList<>();
+				data.add(message.getData());
+				data.add(getPrinciples());
+				message.setData(data);
+				client.sendToClient(message);
+			}
+			else if (message.getMessage().startsWith("Extra time request")) {		////LIAD/////
+				ExtraTime extraTime=(ExtraTime)(message.getData());
+				try {
+					session.save(extraTime);
+
+					session.flush();
+
+					response = ("Extra Time Requested");
+					message.setMessage(response);
+					//client.sendToClient(message);
+					sendToAllClients(message);
+				}
+				catch (Exception e)
+				{
+					response = (" could not be added to the database");
+				}
+				//response = "Extra Time Requested";
+				//message.setMessage(response);
+				//message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
+				//sendToAllClients(message);
+			}else if (message.getMessage().startsWith("Manual Exam"))
 			{
 				try {
 					response = "Manual Exam Received";
@@ -273,6 +300,12 @@ public class SimpleServer extends AbstractServer {
 			}
 			else if (message.getMessage().startsWith("Extra time approved")) {
 				response = "Extra time approved";
+				message.setMessage(response);
+				sendToAllClients(message);
+
+			}
+			else if (message.getMessage().startsWith("Extra time rejected")) {
+				response = "Extra time rejected";
 				message.setMessage(response);
 				sendToAllClients(message);
 
@@ -325,6 +358,17 @@ public class SimpleServer extends AbstractServer {
 				response ="Students";
 				message.setMessage(response);
 				message.setData(retrieveStudents());
+				client.sendToClient(message);
+			}
+			else if(request.startsWith("Get Live Exams")){
+				response ="Live Exams";
+				message.setMessage(response);
+				message.setData(retrieveClassExam());
+				client.sendToClient(message);
+			}else if(request.startsWith("Get Extra Time Requests")){ /////
+				response ="Extra Time Requests";
+				message.setMessage(response);
+				message.setData(getExtraTime());
 				client.sendToClient(message);
 			}
 			//Client asked for the grades list of a certain student, we will pull it from the SQL server and send it over
@@ -631,6 +675,13 @@ public class SimpleServer extends AbstractServer {
 		return exams;
 	}
 
+	private List<ExtraTime> getExtraTime() {
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
+		query.from(ExtraTime.class);
+		List<ExtraTime> extraTime = session.createQuery(query).getResultList();
+		return extraTime;
+	}
 
 	private List<Principal> getPrinciples() {
 		CriteriaBuilder builder = session.getCriteriaBuilder();

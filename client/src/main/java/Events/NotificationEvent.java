@@ -1,59 +1,49 @@
 package Events;
 import Entities.*;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
 
 public class NotificationEvent {
+    Notifications notification;
     ExtraTime extraTime;
    // private List<Teacher>teacherList; TODO: check how to get the teacher who sent the request
     public NotificationEvent(){}
     public NotificationEvent(ExtraTime ex)
     {
-        extraTime=ex;
+        this.extraTime=ex;
+        createNotification(extraTime);
+
     }
 
-    //** check if the principle who get the event is selected when teacher selected the principles she wants to request from them**//
-    public boolean IsFound(Person user){
-        for (Principal item: extraTime.getPrincipals())
-        {
-            if (item.getID()==user.getID())
-                return true;
-        }
-        return false;
+    public void createNotification(ExtraTime extraTime){
+        System.out.println("In createNotification in NotificationEvent");
+        notification=Notifications.create();
+        notification.title("New time request");
+        notification.text("From: "+ extraTime.getTeacher().getFullName());
+        notification.position(Pos.BOTTOM_RIGHT);
+        notification.hideAfter(Duration.seconds(60));
     }
 
     //**show the notification with the details about the request time **//
     public void show()
     {
-        Notifications notification=Notifications.create();
-        notification.title("New Request Time");
-        notification.text("From: "+ extraTime.getTeacher().getFullName());
-        notification.position(Pos.BOTTOM_RIGHT);
-         notification.onAction(event -> openController());
-         notification.show();
-    }
-
-    //** click on the notification will jump the principle to see more details about the request**//
-    public void openController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ApproveOfPrinciple.fxml"));
-            Parent root = loader.load();
-
-            // Create a new stage and set the loaded controller as its controller
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-
-            // Show the stage
-            stage.show();
-        } catch (IOException e) {
+            Platform.runLater(() -> {
+                System.out.println("In show() in NotificationEvent");
+                notification.show();
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

@@ -77,6 +77,7 @@ public class ClassExam implements Serializable
         this.course =course;
         this.subject = subject;
         this.examType = examType;
+        this.extraTime=null;
     }
 
     public int getID() {return ID;}
@@ -97,7 +98,7 @@ public class ClassExam implements Serializable
     }
 
     public List<Student> getStudents(){return students;}
-    public void setSStudents(List<Student> students){this.students= new ArrayList<>(students);}
+    public void setStudents(List<Student> students){this.students= new ArrayList<>(students);}
     public void addStudent(Student student)
     {
         if(!students.contains(student))
@@ -140,6 +141,10 @@ public class ClassExam implements Serializable
         return code;
     }
 
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     public Date getFinalSubmissionDate() {
         return finalSubmissionDate;
     }
@@ -156,14 +161,6 @@ public class ClassExam implements Serializable
         this.tester = tester;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
 
     public Subject getSubject() {
         return subject;
@@ -204,4 +201,10 @@ public class ClassExam implements Serializable
     public void setExamStatus(HSTS_Enums.examStatus examStatus) {
         this.examStatus = examStatus;
     }
+
+
+
+
+
+
 }

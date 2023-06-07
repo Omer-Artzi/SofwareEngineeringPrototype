@@ -37,6 +37,10 @@ public abstract class Person implements Serializable{
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    @Override
+    public String toString() {
+        return firstName + ' ' + lastName;
+    }
 
     public int getID() {
         return ID;
@@ -94,6 +98,7 @@ public abstract class Person implements Serializable{
 
     public abstract void receiveExtraTime(ExtraTime data);
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,13 +107,6 @@ public abstract class Person implements Serializable{
         return Objects.equals(getEmail(), person.getEmail()) && Objects.equals(getPassword(), person.getPassword());
     }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 
     @Override
     public int hashCode() {

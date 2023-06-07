@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -38,44 +39,49 @@ public class PrincipalSidebarController extends SideBar {
     private Button viewTestFormsButton;
 
     @FXML
-    void addQuestion(ActionEvent event) {
-
-    }
-
-    @FXML
-    void addTestForms(ActionEvent event) {
+    private Button viewRequestsButton;
 
     }
 
     @FXML
     void gradeExam(ActionEvent event) {
+        changeScene("TeacherExamGrade");
+    }
+
+    @FXML
+    void showStatistics(ActionEvent event)throws IOException {
 
     }
 
     @FXML
-    void showStatistics(ActionEvent event) {
+    void viewClassExams(ActionEvent event)throws IOException {
+        changeScene("viewLiveExams");
+    }
 
+
+    @FXML
+    void viewQuestion(ActionEvent event)throws IOException {
+        changeScene("TeacherViewQuestions");
     }
 
     @FXML
-    void viewClassExams(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewQuestion(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewTestForms(ActionEvent event) {
-
+    void viewTestForms(ActionEvent event)throws IOException {
+        changeScene("ViewTestForms");
     }
 
     @FXML
     void initialize() {
-        assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
-        assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
+        InitializationAsserts();
+        userTypeLabel.setText("Logged in as: Principal");
+    }
+    @FXML
+    void viewRequests(ActionEvent event) {
+        changeScene("ListExtraTimeRequest");
+
+    }
+    void InitializationAsserts(){
+        //assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
+       // assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert userTypeLabel != null : "fx:id=\"userTypeLabel\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";

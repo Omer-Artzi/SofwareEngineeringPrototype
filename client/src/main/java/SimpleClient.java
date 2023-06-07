@@ -136,6 +136,18 @@ public class SimpleClient extends AbstractClient {
             }
             EventBus.getDefault().post(stMsg);
 
+		}
+		else if (message.getMessage().equals("client added successfully")) {
+			EventBus.getDefault().post(new NewSubscriberEvent(message));
+		}
+		else if (message.getMessage().startsWith("Extra time approved"))
+		{
+			System.out.println("In Client: approved");
+			ExtraTime extraTime=(ExtraTime) message.getData();
+			PrincipalApproveEvent approveEvent =new PrincipalApproveEvent((ExtraTime) message.getData());
+			if(relevantUser(extraTime,"approve")) {
+				approveEvent.show();
+			}
         }
         else if (message.getMessage().equals("client added successfully")) {
             EventBus.getDefault().post(new NewSubscriberEvent(message));
@@ -146,6 +158,29 @@ public class SimpleClient extends AbstractClient {
         else if (message.getMessage().startsWith("Extra Time Requested")) {
             user.extraTimeRequest((ExtraTime) message.getData());
 
+		}else if (message.getMessage().startsWith("Extra time rejected"))
+		{
+			ExtraTime extraTime=(ExtraTime) message.getData();
+			PrincipalRejectEvent rejectEvent =new PrincipalRejectEvent((ExtraTime) message.getData());
+			if(relevantUser(extraTime,"reject")) {
+				rejectEvent.show();
+			}
+		}
+		else if (message.getMessage().startsWith("Extra Time Requested")) {			//////////LIAD////////
+			//user.extraTimeRequest((ExtraTime) message.getData());
+			System.out.println("IN Client Extra Time Requested");
+			ExtraTime extraTime=(ExtraTime) message.getData();
+			NotificationEvent notification =new NotificationEvent((ExtraTime) message.getData());
+			if(relevantUser(extraTime,"request")) {
+				notification.show();
+			}
+		}
+		 else if(message.getMessage().startsWith("Exams in ")){
+			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
+		}
+		else if(message.getMessage().startsWith("Success: new ExamForm")){
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+		}
         }
         else if (message.getMessage().startsWith("Exams in ")) {
             EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>) message.getData()));
@@ -196,9 +231,65 @@ public class SimpleClient extends AbstractClient {
         }
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
+	public boolean relevantUser(ExtraTime extraTime,String type) throws IOException {
+
+		System.out.println("In relevantUser " +type);
+		System.out.println(("name: "+user.getFullName()));
+
+		/* get the current user */
+		Person user=SimpleClient.getClient().getUser();
+
+		if(type.equals("request")) {
+			if (user instanceof Principal) {
+				List<Principal> principals = extraTime.getPrincipals();
+				for (Principal item : principals) {
+					if (user.equals(item))
+						return true;
+				}
+			}
+		}
+
+		/*if the user is a teacher , anyway a notification will be sent */
+		if(type.equals("reject")) {
+			if (user instanceof Teacher) {
+				Teacher teacher = extraTime.getTeacher();
+				if (teacher.equals(user))
+					return true;
+			}
+		}
+
+
+		/* only if the event is reject, we check if the student exist in class exam list */
+		 if(type.equals("approve")) {
+				System.out.println("In relevantUser: approve");
+				System.out.println(("name: "+user.getFullName()));
+				if (user instanceof Student) {
+					List<Student> students = extraTime.getExam().getStudents();
+					for (Student item : students) {
+						if (user.equals(item))
+							return true;
+					}
+				}
+				else if (user instanceof Teacher) {
+					System.out.println("In relevantUser: approve: Teacher");
+					Teacher teacher = extraTime.getTeacher();
+					if (teacher.equals(user))
+						return true;
+				}
+			}
+		return false;
+	}
+
+	public static SimpleClient getClient() throws IOException {
+		if (client == null) {
+			client = new SimpleClient(IP, port);
+		}
+		return client;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
 
     public void setStudents(List<Student> students) {
         this.students = students;
