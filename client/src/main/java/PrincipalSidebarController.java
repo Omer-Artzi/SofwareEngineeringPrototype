@@ -41,32 +41,45 @@ public class PrincipalSidebarController extends SideBar {
     @FXML
     private Button viewRequestsButton;
 
+    @FXML
+    void addQuestion(ActionEvent event) throws IOException {
+        ChangeScene("TeacherAddQuestion");
+    }
+
+    @FXML
+    void addTestForms(ActionEvent event) throws IOException {
+        ChangeScene("AddExam");
     }
 
     @FXML
     void gradeExam(ActionEvent event) {
-        changeScene("TeacherExamGrade");
+        ChangeScene("TeacherExamGrade");
     }
 
     @FXML
-    void showStatistics(ActionEvent event)throws IOException {
+    void createExam(ActionEvent event) {
 
+        ChangeScene("TeacherCreateClassExam");
     }
 
     @FXML
-    void viewClassExams(ActionEvent event)throws IOException {
-        changeScene("viewLiveExams");
-    }
-
-
-    @FXML
-    void viewQuestion(ActionEvent event)throws IOException {
-        changeScene("TeacherViewQuestions");
+    void showStatistics(ActionEvent event)  {
+        ChangeScene("ShowStatistics");
     }
 
     @FXML
-    void viewTestForms(ActionEvent event)throws IOException {
-        changeScene("ViewTestForms");
+    void viewQuestion(ActionEvent event) {
+        ChangeScene("TeacherViewQuestions");
+    }
+
+    @FXML
+    void viewClassExams(ActionEvent event) {
+        ChangeScene("TeacherViewLiveExams");
+    }
+
+    @FXML
+    void viewTestForms(ActionEvent event) {
+        ChangeScene("TeacherViewLiveExams"/*"ViewTestForms"*/);
     }
 
     @FXML
@@ -76,7 +89,7 @@ public class PrincipalSidebarController extends SideBar {
     }
     @FXML
     void viewRequests(ActionEvent event) {
-        changeScene("ListExtraTimeRequest");
+        ChangeScene("ListExtraTimeRequest");
 
     }
     void InitializationAsserts(){

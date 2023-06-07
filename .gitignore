@@ -15,3 +15,4 @@ entities/target/classes/Entities/
 server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml
 .idea/misc.xml
 hibernate.properties
+server/src/main/resources/hibernate.properties

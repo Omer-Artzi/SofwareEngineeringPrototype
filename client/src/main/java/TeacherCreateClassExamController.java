@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 
-public class TeacherCreateClassExamController {
+public class TeacherCreateClassExamController extends SaveBeforeExit {
 
     @FXML
     private ResourceBundle resources;

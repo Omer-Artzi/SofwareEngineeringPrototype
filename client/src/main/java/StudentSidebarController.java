@@ -27,13 +27,12 @@ public class StudentSidebarController extends SideBar {
 
     @FXML
     void OnMainPageButtonPressed(ActionEvent event) {
-
         ChangeScene("StudentMainScreen");
     }
 
     @FXML
     void OnTakeExamsButtonPressed(ActionEvent event) {
-        ChangeScene("StudentTakeExam");
+        ChangeScene("StudentViewExam");
     }
 
     @FXML

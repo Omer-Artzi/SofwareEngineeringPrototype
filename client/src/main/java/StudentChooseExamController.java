@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 
-public class StudentChooseExamController {
+public class StudentChooseExamController extends SaveBeforeExit {
     @FXML
     private ComboBox<Course> CoursesCB;
 

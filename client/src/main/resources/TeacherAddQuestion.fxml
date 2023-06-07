@@ -20,12 +20,12 @@
                 <TableColumn fx:id="AnswerColumn" prefWidth="359.2" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButtom" layoutX="267.0" layoutY="658.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
+        <Button fx:id="addQuestionButton" layoutX="267.0" layoutY="658.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <Button fx:id="previewButtom" layoutX="172.0" layoutY="659.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
+        <Button fx:id="previewButton" layoutX="172.0" layoutY="659.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
             <font>
                 <Font size="14.0" />
             </font>
@@ -48,13 +48,13 @@
                 <Font size="15.0" />
             </font>
         </Label>
-      <ChoiceBox fx:id="CorrectAnswerCB" layoutX="301.0" layoutY="620.0" prefHeight="26.0" prefWidth="30.0" />
-      <Label layoutX="147.0" layoutY="623.0" prefHeight="20.0" prefWidth="154.0" text="Choose Correct Answer">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <ListSelectionView fx:id="Courses" layoutX="67.0" layoutY="61.0" />
-      <Pane fx:id="previewWindow" layoutX="530.0" layoutY="99.0" prefHeight="288.0" prefWidth="307.0" />
+        <ChoiceBox fx:id="CorrectAnswerCB" layoutX="301.0" layoutY="620.0" prefHeight="26.0" prefWidth="30.0" />
+        <Label layoutX="147.0" layoutY="623.0" prefHeight="20.0" prefWidth="154.0" text="Choose Correct Answer">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <ListSelectionView fx:id="Courses" layoutX="67.0" layoutY="61.0" />
+        <Pane fx:id="previewWindow" layoutX="530.0" layoutY="99.0" prefHeight="288.0" prefWidth="307.0" />
     </children>
 </AnchorPane>

@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.persistence.criteria.CriteriaBuilder;
 
-public class StudentViewExamController {
+public class StudentViewExamController extends SaveBeforeExit {
 
     @FXML
     private ResourceBundle resources;

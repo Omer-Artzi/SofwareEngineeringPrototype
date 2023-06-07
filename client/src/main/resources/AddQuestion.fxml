@@ -19,12 +19,12 @@
                 <TableColumn fx:id="AnswerColumn" prefWidth="266.4" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButtom" layoutX="267.0" layoutY="658.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
+        <Button fx:id="addQuestionButton" layoutX="267.0" layoutY="658.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" text="save">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <Button fx:id="previewButtom" layoutX="172.0" layoutY="659.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
+        <Button fx:id="previewButton" layoutX="172.0" layoutY="659.0" mnemonicParsing="false" onAction="#seePreview" text="preview">
             <font>
                 <Font size="14.0" />
             </font>

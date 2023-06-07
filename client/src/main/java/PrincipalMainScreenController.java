@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 
-public class PrincipalMainScreenController {
+public class PrincipalMainScreenController extends SaveBeforeExit {
 
     @FXML
     private Button extraTimeListButton;

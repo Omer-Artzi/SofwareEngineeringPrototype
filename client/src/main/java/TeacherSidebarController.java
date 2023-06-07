@@ -31,51 +31,43 @@ public class TeacherSidebarController extends SideBar {
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddQuestion");
-        ChangeScene("AddQuestion");
-
-
+        ChangeScene("TeacherAddQuestion");
     }
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
         ChangeScene("AddExam");
     }
 
     @FXML
-    void gradeExam(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherExamGrade");
+    void gradeExam(ActionEvent event) {
         ChangeScene("TeacherExamGrade");
     }
 
     @FXML
     void createExam(ActionEvent event) {
-        ChangeScene("TeacherExamGrade");
+
+        ChangeScene("TeacherCreateClassExam");
     }
 
     @FXML
-    void showStatistics(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ShowStatistics");
+    void showStatistics(ActionEvent event)  {
         ChangeScene("ShowStatistics");
     }
 
     @FXML
-    void viewQuestion(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
+    void viewQuestion(ActionEvent event) {
         ChangeScene("TeacherViewQuestions");
     }
 
     @FXML
-    void viewClassExams(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewClassExams");
-        ChangeScene("ViewClassExams");
+    void viewClassExams(ActionEvent event) {
+        ChangeScene("TeacherViewLiveExams");
     }
 
     @FXML
-    void viewTestForms(ActionEvent event) throws IOException {
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ViewTestForms");
-        ChangeScene("ViewTestForms");
+    void viewTestForms(ActionEvent event) {
+        ChangeScene("TeacherViewLiveExams"/*"ViewTestForms"*/);
     }
 
     @FXML
@@ -91,7 +83,6 @@ public class TeacherSidebarController extends SideBar {
         assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert viewQuestionButton != null : "fx:id=\"viewQuestionButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert viewTestFormsButton != null : "fx:id=\"viewTestFormsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
-
     }
 
 }

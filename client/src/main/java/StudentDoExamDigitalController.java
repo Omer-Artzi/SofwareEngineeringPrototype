@@ -24,7 +24,7 @@ import java.util.Timer;
 
 //import static sun.swing.SwingUtilities2.submit;
 
-public class StudentDoExamDigitalController {
+public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
     private FlowPane progressPane;
 

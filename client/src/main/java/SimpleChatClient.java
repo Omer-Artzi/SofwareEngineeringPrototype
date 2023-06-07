@@ -51,6 +51,17 @@ public class SimpleChatClient extends Application {
         }
     }
 
+    @Override
+    public void stop() throws Exception {
+        Message message = new Message(1, "Client Closed");
+        System.out.println("Client stop");
+        message.setData(SimpleClient.getUser());
+        client.sendToServer(message);
+        EventBus.getDefault().unregister(this);
+        super.stop();
+        Platform.exit();
+        System.exit(0);
+    }
 
     public static void setRoot(String fxml) throws IOException {
         System.out.println("setRoot");
@@ -65,16 +76,7 @@ public class SimpleChatClient extends Application {
         return FXMLLoader.load(SimpleChatClient.class.getResource(fxml + ".fxml"));
     }
 
-    @Override
-	public void stop() throws Exception {
-            Message message = new Message(1, "Client Closed");
-            System.out.println("Client stop");
-            message.setData(SimpleClient.getUser());
-            client.sendToServer(message);
-            EventBus.getDefault().unregister(this);
-            super.stop();
-            Platform.exit();
-	}
+
 
 
     @Subscribe

@@ -1,6 +1,7 @@
 import Entities.*;
-import Events.*;
-import javafx.application.Platform;
+import Events.ChangePreviewEvent;
+import Events.FinishEditExistingQuestionEvent;
+import Events.StartEditExistingQuestionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,21 +14,25 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.ListSelectionView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherAddQuestionController extends SaveBeforeExit{
-    private Course courseOfEditQuestion=null;
+public class TeacherAddQuestionController extends SaveBeforeExit {
+    private Course courseOfEditQuestion = null;
     private List<Course> courseOfTeacher;
     private List<Subject> subjectOfTeacher;
-    private List<String>notes;
+    private List<String> notes;
     private int counter;
+
     @FXML
     private Pane previewWindow;
+
     @FXML
     private ListSelectionView<Course> Courses;
+
     @FXML
     private TableColumn<Answer, String> AnswerColumn;
     @FXML
@@ -41,66 +46,60 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
     @FXML
     private TextArea TeacherNote;
     @FXML
-    private Button addQuestionButtom;
+    private Button addQuestionButton;
     @FXML
     private ChoiceBox<String> addSubjectChoiceBox;
     @FXML
     private ChoiceBox<String> CorrectAnswerCB;
     @FXML
-    private Button previewButtom;
+    private Button previewButton;
     private ContextualState state = ContextualState.ADD;
-    private enum ContextualState {
-        ADD, EDIT
-    }
 
     @Subscribe
-    public void editQuestion(StartEditExistingQuestionEvent event)
-    {
-        state=ContextualState.EDIT;
-        String correct_answer="";
-        Question question=event.getQuestion();
+    public void editQuestion(StartEditExistingQuestionEvent event) {
+        state = ContextualState.EDIT;
+        String correct_answer = "";
+        Question question = event.getQuestion();
         TeacherNote.setText(question.getTeacherNote());
         StudentNote.setText(question.getStudentNote());
         QuestionDataTF.setText(question.getQuestionData());
         addSubjectChoiceBox.setValue(question.getSubject().getName());
-        ObservableList<Course> coursesOfQuestion=FXCollections.observableArrayList(question.getCourses());
+        ObservableList<Course> coursesOfQuestion = FXCollections.observableArrayList(question.getCourses());
         Courses.setTargetItems(coursesOfQuestion);
-        List<String>answers=question.getAnswers();
-        List<Answer>a=new ArrayList<>();
-        for(int i=1;i<5;i++)
-        {
-            Answer answer=new Answer(String.valueOf(i),answers.get(i-1));
-            if(answer.getAnswer().equals(question.getCorrectAnswer()))
-                correct_answer=answer.getNumber();
+        List<String> answers = question.getAnswers();
+        List<Answer> a = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            Answer answer = new Answer(String.valueOf(i), answers.get(i - 1));
+            if (answer.getAnswer().equals(question.getCorrectAnswer()))
+                correct_answer = answer.getNumber();
             a.add(answer);
         }
         CorrectAnswerCB.setValue(correct_answer);
-        AnswerTable.setItems( FXCollections.observableArrayList(a));
+        AnswerTable.setItems(FXCollections.observableArrayList(a));
     }
 
-    public void Elements(boolean b)
-    {
+    public void Elements(boolean b) {
         StudentNote.setDisable(b);
         TeacherNote.setDisable(b);
         QuestionDataTF.setDisable(b);
-        previewButtom.setDisable(b);
+        previewButton.setDisable(b);
         CorrectAnswerCB.setDisable(b);
-        addQuestionButtom.setDisable(b);
+        addQuestionButton.setDisable(b);
     }
 
     @FXML
     void initialize() throws IOException {
 
         EventBus.getDefault().register(this);
-        Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
+        Teacher teacher = ((Teacher) (SimpleClient.getClient().getUser()));
         Courses.setDisable(true);
         StudentNote.setDisable(true);
         Elements(true);
         courseOfTeacher = teacher.getCourses();
-        subjectOfTeacher=teacher.getSubjects();
+        subjectOfTeacher = teacher.getSubjects();
 
-        List<String>subject_name=new ArrayList<>();
-        for(Subject item: subjectOfTeacher)
+        List<String> subject_name = new ArrayList<>();
+        for (Subject item : subjectOfTeacher)
             subject_name.add(item.getName());
         addSubjectChoiceBox.setItems(FXCollections.observableArrayList(subject_name));
 
@@ -113,7 +112,8 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
         //** choose Subject in ChoiceBox **//
         addSubjectChoiceBox.setOnAction(event -> {
             if (addSubjectChoiceBox.getSelectionModel().isEmpty() || addSubjectChoiceBox.getSelectionModel() == null) {
-            } else {
+            }
+            else {
                 Courses.setDisable(false);
                 Courses.getSourceItems().clear();
                 List<Course> SelectedCourse = new ArrayList<>();
@@ -122,9 +122,9 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
                         SelectedCourse.add(item);
                     }
                 }
-                    Courses.getSourceItems().addAll(SelectedCourse);
-                    Elements(false);
-                String [] str={"1","2","3","4"};
+                Courses.getSourceItems().addAll(SelectedCourse);
+                Elements(false);
+                String[] str = {"1", "2", "3", "4"};
                 Elements(false);
                 List<Answer> a = new ArrayList<>();
                 Answer ans1 = new Answer("");
@@ -161,7 +161,8 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
             previewWindow.getChildren().clear();
             previewWindow.getChildren().add(previewParent);
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -170,100 +171,103 @@ public class TeacherAddQuestionController extends SaveBeforeExit{
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
 
-        Question question=CollectData();
+        Question question = CollectData();
 
         /* check if the input is valid */
-        String errorMSG="";
+        String errorMSG = "";
         if (question.getCourses().isEmpty())
-            errorMSG="Error: Please choose course";
-        else if(question.getQuestionData()=="")
-            errorMSG="Error: Please fiil question's information";
-        else if(counter!=4)
-            errorMSG="Error: Please fiil question's answers";
-        else if(question.getCorrectAnswer()=="")
-            errorMSG="Error: Please choose correct answer";
-        if(errorMSG!=""){
-            JOptionPane.showMessageDialog(null,errorMSG,"Invalid Input",JOptionPane.ERROR_MESSAGE);
+            errorMSG = "Error: Please choose course";
+        else if (question.getQuestionData() == "")
+            errorMSG = "Error: Please fiil question's information";
+        else if (counter != 4)
+            errorMSG = "Error: Please fiil question's answers";
+        else if (question.getCorrectAnswer() == "")
+            errorMSG = "Error: Please choose correct answer";
+        if (errorMSG != "") {
+            JOptionPane.showMessageDialog(null, errorMSG, "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Message message=new Message(1,"Save Question");
+        Message message = new Message(1, "Save Question");
         message.setData(question);
         SimpleClient.getClient().sendToServer(message);
-        if(state.equals(ContextualState.EDIT))
+        if (state.equals(ContextualState.EDIT))
             SaveQuestionButtonPressed(question);
         //SimpleChatClient.setRoot("QuestionSaved");
     }
 
-    private Question CollectData(){
-        counter=0;
+    private Question CollectData() {
+        counter = 0;
         /*get the data of question from TextFile*/
-        String data=QuestionDataTF.getText();
+        String data = QuestionDataTF.getText();
 
         /*get the number of correct answer from ChoiceBox*/
-        String correctAnswer=CorrectAnswerCB.getValue();
+        String correctAnswer = CorrectAnswerCB.getValue();
 
         /* get list of answers of question from table */
-        String correct="";
-        List<String> answers= new ArrayList<>();
+        String correct = "";
+        List<String> answers = new ArrayList<>();
         List<Answer> dataList = AnswerTable.getItems();
-        int i=0;
+        int i = 0;
         for (Answer answer : dataList) {
-            if(String.valueOf(i+1).equals(correctAnswer)) {
+            if (String.valueOf(i + 1).equals(correctAnswer)) {
                 correct = answer.getAnswer();
             }
             else
                 answers.add(answer.getAnswer());
             i++;
-            if(!answer.getAnswer().equals(""))
+            if (!answer.getAnswer().equals(""))
                 counter++;
         }
         answers.add(correct);
-        System.out.println("counter is "+counter);
+        System.out.println("counter is " + counter);
 
         /* get the subject from the ChoiceBox */
-        String selectedSubject=addSubjectChoiceBox.getValue();
+        String selectedSubject = addSubjectChoiceBox.getValue();
         Subject subject = null;
-        for(Subject item: subjectOfTeacher)
-        {
+        for (Subject item : subjectOfTeacher) {
             if (item.getName().equals(selectedSubject))
-                subject=item;
+                subject = item;
         }
 
         /* get the list of courses from the element */
         ObservableList<Course> observableCourses = Courses.getTargetItems();
-        List<Course>SelectedCourses=new ArrayList<>();
-        for (Course item: observableCourses)
-        {
-            for (Course item1: courseOfTeacher)
-                if(item.getName().equals(item1.getName()))
+        List<Course> SelectedCourses = new ArrayList<>();
+        for (Course item : observableCourses) {
+            for (Course item1 : courseOfTeacher)
+                if (item.getName().equals(item1.getName()))
                     SelectedCourses.add(item1);
         }
 
         /* get the notes */
-        String studentNote=StudentNote.getText();
-        String teacherNote= TeacherNote.getText();
+        String studentNote = StudentNote.getText();
+        String teacherNote = TeacherNote.getText();
 
-        Question question=new Question(SelectedCourses, data,answers,correct,teacherNote,studentNote);
+        Question question = new Question(SelectedCourses, data, answers, correct, teacherNote, studentNote);
         return question;
     }
 
-    private void SaveQuestionButtonPressed(Question question){
+    private void SaveQuestionButtonPressed(Question question) {
         try {
             SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
             FinishEditExistingQuestionEvent editQuestionEvent = new FinishEditExistingQuestionEvent(question, courseOfEditQuestion);
             EventBus.getDefault().post(editQuestionEvent);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @FXML
     void seePreview(ActionEvent event) throws IOException {
-        Question question=CollectData();
+        Question question = CollectData();
         System.out.println("Updating preview");
         ChangePreviewEvent event1 = new ChangePreviewEvent();
         event1.setQuestion(question);
         EventBus.getDefault().post(event1);
+    }
+
+    private enum ContextualState {
+        ADD, EDIT
     }
 }
