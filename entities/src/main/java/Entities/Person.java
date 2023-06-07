@@ -107,13 +107,6 @@ public abstract class Person implements Serializable{
         return Objects.equals(getEmail(), person.getEmail()) && Objects.equals(getPassword(), person.getPassword());
     }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
 
     @Override
     public int hashCode() {

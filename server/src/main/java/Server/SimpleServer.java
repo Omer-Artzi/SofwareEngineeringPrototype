@@ -254,18 +254,19 @@ public class SimpleServer extends AbstractServer {
 
 					session.flush();
 
-					response = ("Success: was successfully added to the database");
+					response = ("Extra Time Requested");
 					message.setMessage(response);
-					client.sendToClient(message);
+					//client.sendToClient(message);
+					sendToAllClients(message);
 				}
 				catch (Exception e)
 				{
 					response = (" could not be added to the database");
 				}
-				response = "Extra Time Requested";
-				message.setMessage(response);
-				message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
-				sendToAllClients(message);
+				//response = "Extra Time Requested";
+				//message.setMessage(response);
+				//message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
+				//sendToAllClients(message);
 			}else if (message.getMessage().startsWith("Manual Exam"))
 			{
 				try {

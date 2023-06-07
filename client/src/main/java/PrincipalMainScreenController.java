@@ -62,6 +62,7 @@ public class PrincipalMainScreenController {
 
     @FXML
     void extraTimeList(ActionEvent event) throws IOException {
+        System.out.println("In Clicking on extra time list button");
         SimpleChatClient.NewSetRoot("ListExtraTimeRequest");
     }
 

@@ -73,6 +73,7 @@ public class ListExtraTimeRequestController extends SaveBeforeExit{
     /* get the Extra Time request from the data base */
     @Subscribe
     public void update(ExtraTimeRequestsEvent event) {
+        System.out.println("in listExtraTime");
         extraTimeList = event.getExtraTimeList();
         data.addAll(extraTimeList);
     }

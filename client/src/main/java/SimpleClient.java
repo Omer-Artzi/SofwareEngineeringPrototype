@@ -117,7 +117,7 @@ public class SimpleClient extends AbstractClient {
 		}
 		else if (message.getMessage().startsWith("Extra Time Requested")) {			//////////LIAD////////
 			//user.extraTimeRequest((ExtraTime) message.getData());
-			System.out.println("IN Client");
+			System.out.println("IN Client Extra Time Requested");
 			ExtraTime extraTime=(ExtraTime) message.getData();
 			NotificationEvent notification =new NotificationEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"request")) {

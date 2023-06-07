@@ -24,6 +24,7 @@ public class NotificationEvent {
     }
 
     public void createNotification(ExtraTime extraTime){
+        System.out.println("In createNotification in NotificationEvent");
         notification=Notifications.create();
         notification.title("New time request");
         notification.text("From: "+ extraTime.getTeacher().getFullName());
