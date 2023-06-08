@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="232.0" prefWidth="263.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StudentViews.StudentDoExamManualController">
+   <children>
+      <Label fx:id="timeLeftLabel" layoutX="14.0" layoutY="23.0" prefHeight="29.0" prefWidth="230.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="dragAndDropImg" fitHeight="126.0" fitWidth="128.0" layoutX="70.0" layoutY="92.0" onDragDropped="#fileDropped" onDragEntered="#fileDetected" onDragExited="#fileExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Images/drag-and-drop.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="fileRecievedLabel" layoutX="33.0" layoutY="52.0" prefHeight="29.0" prefWidth="200.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

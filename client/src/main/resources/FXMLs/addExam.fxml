@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.AddExamController">
+   <children>
+      <Text layoutX="116.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subject:">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Text>
+      <Text layoutX="382.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Course:">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font></Text>
+      <TableView fx:id="questionTable" layoutX="118.0" layoutY="188.0" onMouseClicked="#rowClicked" prefHeight="353.0" prefWidth="752.0">
+        <columns>
+          <TableColumn fx:id="questionIdColumn" prefWidth="99.5" text="Question ID" />
+          <TableColumn fx:id="questionTextColumn" prefWidth="546.0" text="Question Text" />
+            <TableColumn fx:id="gradePercentageColumn" minWidth="0.0" prefWidth="105.5" text="Grade %" />
+        </columns>
+      </TableView>
+      <Text layoutX="116.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Header Text:" />
+      <Text layoutX="118.0" layoutY="592.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Footer Text:" />
+      <Button fx:id="addNotesForTeacherButton" alignment="CENTER_RIGHT" layoutX="442.0" layoutY="640.0" mnemonicParsing="false" onAction="#addNotesForTeacher" prefHeight="25.0" prefWidth="141.0" text="Add Notes For Teacher" />
+      <Button fx:id="addQuestionButton" alignment="CENTER" contentDisplay="CENTER" layoutX="606.0" layoutY="640.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="25.0" prefWidth="141.0" text="Add Questions" />
+      <Button fx:id="previewTestButton" layoutX="606.0" layoutY="699.0" mnemonicParsing="false" onAction="#previewTest" prefHeight="25.0" prefWidth="141.0" text="Preview Test" />
+      <Button fx:id="saveTestButton" layoutX="441.0" layoutY="699.0" mnemonicParsing="false" onAction="#saveTest" prefHeight="25.0" prefWidth="141.0" text="Save Test" />
+      <TextArea fx:id="headerTextTF" layoutX="192.0" layoutY="115.0" prefHeight="55.0" prefWidth="679.0" />
+      <TextArea fx:id="footerTextTF" layoutX="191.0" layoutY="560.0" prefHeight="55.0" prefWidth="679.0" />
+      <ComboBox fx:id="SubjectCB" layoutX="170.0" layoutY="67.0" onAction="#onSubjectSelection" prefWidth="150.0" />
+      <ComboBox fx:id="CourseCB" layoutX="437.0" layoutY="67.0" onAction="#onCourseSelection" prefWidth="150.0" />
+      <Button fx:id="addNotesForStudentButton" alignment="CENTER_RIGHT" layoutX="278.0" layoutY="640.0" mnemonicParsing="false" onAction="#addNotesForStudent" prefHeight="25.0" prefWidth="141.0" text="Add Notes For Student" />
+      <Button fx:id="resetButton" layoutX="788.0" layoutY="66.0" mnemonicParsing="false" onAction="#resetForm" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: #E8695F;" text="Reset Form">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </Button>
+      <Button fx:id="setTimeButton" layoutX="279.0" layoutY="699.0" mnemonicParsing="false" onAction="#setTime" prefHeight="25.0" prefWidth="141.0" text="Set Time" />
+   </children>
+</AnchorPane>

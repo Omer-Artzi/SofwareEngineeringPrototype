@@ -36,7 +36,7 @@
 		  "id" : "",
       "name": "Business Administration",
       "courses" : [
-        {"id":"","name":"Principles of Management","teachers":[],"subject":"Business Administration"},
+        {"id":"","name":"Principals of Management","teachers":[],"subject":"Business Administration"},
         {"id":"","name":"Marketing Management","teachers":[],"subject":"Business Administration"},
         {"id":"","name":"Financial Accounting","teachers":[],"subject":"Business Administration"},
         {"id":"","name":"Managerial Economics","teachers":[],"subject":"Business Administration"},

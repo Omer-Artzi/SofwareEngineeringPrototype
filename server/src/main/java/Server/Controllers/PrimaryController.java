@@ -1,12 +1,15 @@
 package Server.Controllers;
 
-import Entities.Transmission;
+import Entities.Communication.Transmission;
 import Server.Events.ClientUpdateEvent;
-import Entities.TerminationEvent;
+import Server.Events.TerminationEvent;
 import Server.Events.TransmissionEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;

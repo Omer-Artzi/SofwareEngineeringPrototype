@@ -1,7 +1,7 @@
 package Server;
-import Entities.ClassExam;
-import Entities.HSTS_Enums;
-import Entities.StudentExam;
+import Entities.SchoolOwned.ClassExam;
+import Entities.Enums;
+import Entities.StudentOwned.StudentExam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ public class OperationUtils {
 
         // Extract exam's grades which were approved by the teacher
         List<StudentExam> studentExams = classExam.getStudentExams().stream().
-                filter(studentExam -> studentExam.getStatus() == HSTS_Enums.submissionStatus.Approved).collect(Collectors.toList());
+                filter(studentExam -> studentExam.getStatus() == Enums.submissionStatus.Approved).collect(Collectors.toList());
         List<Integer> grades = studentExams.stream().map(StudentExam::getGrade).collect(Collectors.toList());
         int approvedExamsNum = grades.size();
 

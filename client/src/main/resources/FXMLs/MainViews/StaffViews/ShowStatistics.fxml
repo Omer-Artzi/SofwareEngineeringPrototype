@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="controllerRoot" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.ShowStatisticsController">
+   <children>
+      <TableView fx:id="ClassExamStatsTv" layoutX="21.0" layoutY="124.0" prefHeight="520.0" prefWidth="760.0">
+        <columns>
+            <TableColumn fx:id="ExamIDCol" prefWidth="100.0" text="Exam ID" />
+            <TableColumn fx:id="TesterCol" prefWidth="100.0" text="Tester" />
+            <TableColumn fx:id="DateCol" prefWidth="170.0" text="Date" />
+            <TableColumn fx:id="ExamineeCol" prefWidth="110.0" text="Examinee Number" />
+            <TableColumn fx:id="PassedCol" prefWidth="60.0" text="Passed" />
+            <TableColumn fx:id="MeanCol" prefWidth="60.0" text="Mean" />
+            <TableColumn fx:id="StandardDeviationCol" minWidth="0.0" prefWidth="60.0" text="SD" />
+            <TableColumn fx:id="HistogramCol" prefWidth="100.0" text="Histogram" />
+        </columns>
+      </TableView>
+      <Label layoutX="326.0" layoutY="66.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Exams Statistics" />
+   </children>
+</AnchorPane>

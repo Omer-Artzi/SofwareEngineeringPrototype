@@ -1,7 +1,7 @@
 package Server.Events;
 
 
-import Entities.Transmission;
+import Entities.Communication.Transmission;
 
 public class TransmissionEvent {
     private Transmission transmission;

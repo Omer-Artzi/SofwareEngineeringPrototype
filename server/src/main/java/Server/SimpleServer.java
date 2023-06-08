@@ -1,8 +1,24 @@
 package Server;
 
-import Entities.*;
+import Entities.SchoolOwned.ClassExam;
+import Entities.Communication.Message;
+import Entities.Communication.Transmission;
+import Entities.SchoolOwned.ExamForm;
+import Entities.Communication.ExtraTime;
+import Entities.Enums;
+import Entities.SchoolOwned.Course;
+import Entities.SchoolOwned.Question;
+import Entities.SchoolOwned.Subject;
+import Entities.StudentOwned.Grade;
+import Entities.StudentOwned.ManualStudentExam;
+import Entities.StudentOwned.StudentExam;
+import Entities.Users.Person;
+import Entities.Users.Principal;
+import Entities.Users.Student;
+import Entities.Users.Teacher;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.ExtraTimeRequestEvent;
+import Server.Events.TerminationEvent;
 import Server.Events.TransmissionEvent;
 import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
@@ -58,8 +74,8 @@ public class SimpleServer extends AbstractServer {
                 public void run() {
                     List<ClassExam> classExams = retrieveClassExam();
                     for (ClassExam classExam : classExams) {
-                        if (classExam.getExamStatus() == HSTS_Enums.examStatus.Active && classExam.getFinalSubmissionDate().before(Date.valueOf(LocalDateTime.now().toLocalDate()))) {
-                            classExam.setExamStatus(HSTS_Enums.examStatus.Inactive);
+                        if (classExam.getExamStatus() == Enums.examStatus.Active && classExam.getFinalSubmissionDate().before(Date.valueOf(LocalDateTime.now().toLocalDate()))) {
+                            classExam.setExamStatus(Enums.examStatus.Inactive);
                             Message message = new Message(1, "The exam " + classExam.getID() + " has run out of time, it is now closed");
                             message.setData(classExam);
                             sendToAllClients(message);
@@ -706,7 +722,7 @@ public class SimpleServer extends AbstractServer {
         return extraTime;
     }
 
-    private List<Principal> getPrinciples() {
+    private List<Principal> getPrincipals() {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Principal> query = builder.createQuery(Principal.class);
         query.from(Principal.class);

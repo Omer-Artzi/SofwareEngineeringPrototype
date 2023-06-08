@@ -1,12 +1,24 @@
 package Server;
 
-import Entities.*;
+import Entities.SchoolOwned.ClassExam;
+import Entities.SchoolOwned.ExamForm;
+import Entities.Enums;
+import Entities.SchoolOwned.Course;
+import Entities.SchoolOwned.Question;
+import Entities.SchoolOwned.School;
+import Entities.SchoolOwned.Subject;
+import Entities.StudentOwned.StudentExam;
+import Entities.Wrappers.SubjectWrapper;
+import Entities.Users.Principal;
+import Entities.Users.Student;
+import Entities.Users.Teacher;
 import Server.Events.ApiResponse;
 import Server.Events.ResponseQuestion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.google.gson.Gson;
 import org.mindrot.jbcrypt.BCrypt;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +51,7 @@ public class DataGenerator {
         System.out.println("Generating Class Exams");
         List<ClassExam> classExams = generateClassExams(examFormList,students);
         System.out.println("Generating Student Exams");
-        List<StudentExam> studentExams = generateStudentExams(classExams,students);
+        List<StudentExam> studentExams = generateStudentExams(classExams, students);
         assert classExams != null;
         System.out.println("Generating Principals");
         generatePrincipals();
@@ -234,12 +246,12 @@ public class DataGenerator {
                         coursesList.add(subject.getCourses().get(randomCourse));
                     }
                 }
-                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, HSTS_Enums.Gender.Male, teacherEmail, password, coursesList, subjectsList);
+                Teacher teacher = new Teacher(teacherFirstName, teacherLastName, Enums.Gender.Male, teacherEmail, password, coursesList, subjectsList);
                 if(i == 0)
                 {
                     teacher.setEmail("admin");
                     teacher.setPassword(BCrypt.hashpw("1234", salt));
-                    teacher.setGender(HSTS_Enums.Gender.Female);
+                    teacher.setGender(Enums.Gender.Female);
                     teacher.setFirstName("super");
                     teacher.setLastName("user");
                     admin = teacher;
@@ -273,7 +285,7 @@ public class DataGenerator {
             admin.setSubjects(allSubjects);
             admin.setCourses(allCourses);
             SimpleServer.session.saveOrUpdate(admin);
-            //SimpleServer.session.saveOrUpdate(principle);
+            //SimpleServer.session.saveOrUpdate(principal);
             SimpleServer.session.flush();
         }
         catch (Exception e)
@@ -286,29 +298,29 @@ public class DataGenerator {
         try {
             List<Principal> principals = new ArrayList<>();
             String salt = BCrypt.gensalt(); // TODO
-            Principal admin = new Principal("PrincipleFirstName", "PrincipleLastName", HSTS_Enums.Gender.Male, "admin1","admin2");
+            Principal admin = new Principal("PrincipalFirstName", "PrincipalLastName", Enums.Gender.Male, "admin1", "admin2");
             admin.setEmail("adminP");
             admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
             //admin.setPassword("1234");
-            admin.setGender(HSTS_Enums.Gender.Female);
+            admin.setGender(Enums.Gender.Female);
             SimpleServer.session.save(admin);
             principals.add(admin);
             SimpleServer.session.flush();
             for (int i = 0; i < 5; i++) {
-                String PrincipleFirstName = faker.name().firstName();
-                String PrincipleLastName = faker.name().lastName();
-                String PrincipleEmail = PrincipleFirstName + "_" + PrincipleLastName + "@gmail.com";
+                String PrincipalFirstName = faker.name().firstName();
+                String PrincipalLastName = faker.name().lastName();
+                String PrincipalEmail = PrincipalFirstName + "_" + PrincipalLastName + "@gmail.com";
                 String password = BCrypt.hashpw(faker.internet().password(), salt); // TODO
                 //String password = "1234";
-                Principal principal = new Principal(PrincipleFirstName, PrincipleLastName, HSTS_Enums.Gender.Male, PrincipleEmail, password);
+                Principal principal = new Principal(PrincipalFirstName, PrincipalLastName, Enums.Gender.Male, PrincipalEmail, password);
                 /*
                 if(i == 0)
                 {
-                    principle.setEmail("p");
-                    principle.setPassword(BCrypt.hashpw("1234", salt));
-                    principle.setGender(Gender.Female);
-                    principle.setFirstName("superUser");
-                    principle.setLastName("Principle");
+                    principal.setEmail("p");
+                    principal.setPassword(BCrypt.hashpw("1234", salt));
+                    principal.setGender(Gender.Female);
+                    principal.setFirstName("superUser");
+                    principal.setLastName("Principal");
                 }
                 */
                 principals.add(principal);
@@ -338,10 +350,10 @@ public class DataGenerator {
             IDList.add(personID);
             Student student;
             if (i == 0)
-                student = new Student("Super","Student", HSTS_Enums.Gender.Female, "student",
-                        BCrypt.hashpw("1234", salt), "123456789");
+                student = new Student("Super", "Student", Enums.Gender.Female, "student",
+                                      BCrypt.hashpw("1234", salt), "123456789");
             else
-                student = new Student(firstName,lastName, HSTS_Enums.Gender.Female, studentEmail, password, personID);
+                student = new Student(firstName, lastName, Enums.Gender.Female, studentEmail, password, personID);
             for (int  j = 0; j < 2;j++)
             {
                 int courseNum = faker.number().numberBetween(0, courses.size());
@@ -386,7 +398,7 @@ public class DataGenerator {
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 String code = Long.toString(faker.number().randomNumber(5, false));
-                HSTS_Enums.ExamType examType = HSTS_Enums.ExamType.values()[rand.nextInt(2)];
+                Enums.ExamType examType = Enums.ExamType.values()[rand.nextInt(2)];
                 ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
                 examForm.addClassExam(classExam);
@@ -420,12 +432,12 @@ public class DataGenerator {
             for(Student student:students)
             {
                 int randGrade = rand.nextInt(100);
-                HSTS_Enums.submissionStatus status = (HSTS_Enums.submissionStatus.values()[rand.nextInt(4)]);
+                Enums.submissionStatus status = (Enums.submissionStatus.values()[rand.nextInt(4)]);
 
-                if (status != HSTS_Enums.submissionStatus.Approved)
+                if (status != Enums.submissionStatus.Approved)
                     randGrade = -1;
 
-                if (status == HSTS_Enums.submissionStatus.Approved || status == HSTS_Enums.submissionStatus.ToEvaluate) {
+                if (status == Enums.submissionStatus.Approved || status == Enums.submissionStatus.ToEvaluate) {
                     List<String> studentAnswers = new ArrayList<>();
                     List<Question> questions = classExam.getExamForm().getQuestionList();
                     for (Question question:questions) {
@@ -441,7 +453,7 @@ public class DataGenerator {
                 }
                 classExam = OperationUtils.UpdateClassExamStats(classExam);
                 classExam.setExamToEvaluate(classExam.getStudentExams().stream().filter(studentExam ->
-                                studentExam.getStatus().equals(HSTS_Enums.submissionStatus.ToEvaluate)).collect(Collectors.toList())
+                                studentExam.getStatus().equals(Enums.submissionStatus.ToEvaluate)).collect(Collectors.toList())
                         .size());
                 i++;
             }

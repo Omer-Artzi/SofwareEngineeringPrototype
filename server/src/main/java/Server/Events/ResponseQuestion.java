@@ -1,5 +1,5 @@
 package Server.Events;
-import Entities.Question;
+import Entities.SchoolOwned.Question;
 
 import java.util.List;
 

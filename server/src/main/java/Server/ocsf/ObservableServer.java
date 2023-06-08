@@ -4,8 +4,8 @@
 
 package Server.ocsf;
 
-import java.util.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.Observable;
 
 /**
  * This class acts as a subclass of <code>AbstractServer</code>

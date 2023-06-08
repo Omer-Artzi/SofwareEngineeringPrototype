@@ -1,12 +1,8 @@
 package Server.Controllers;
-import java.awt.event.KeyEvent;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-import Entities.TerminationEvent;
 import Server.Events.ServerConnectionEvent;
+import Server.Events.TerminationEvent;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +11,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class PreLogInController {
 

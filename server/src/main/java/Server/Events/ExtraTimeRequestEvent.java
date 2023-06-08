@@ -1,6 +1,6 @@
 package Server.Events;
 
-import Entities.ExtraTime;
+import Entities.Communication.ExtraTime;
 
 public class ExtraTimeRequestEvent {
     private ExtraTime request;
