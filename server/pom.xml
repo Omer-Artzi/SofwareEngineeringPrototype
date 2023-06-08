@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>il.cshaifasweng.OCSFMediatorExample</groupId>
+	<groupId>il.cshaifasweng</groupId>
 	<artifactId>server</artifactId>
 	<packaging>jar</packaging>
 
