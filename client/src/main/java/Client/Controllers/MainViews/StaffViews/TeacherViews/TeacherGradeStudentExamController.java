@@ -382,7 +382,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
             // insert the question text
 
-            Text porblemtext = new Text("problem " + Integer.toString(questionNumber + 1) + ": ");
+            Text porblemtext = new Text("problem " + (questionNumber + 1) + ": ");
             porblemtext.setStyle("-fx-font-weight: bold");
 
             Text contenttext = new Text(question.getQuestionData());

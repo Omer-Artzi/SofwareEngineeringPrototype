@@ -156,14 +156,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
         ClassExam selectedExam = ExamsTV.getSelectionModel().getSelectedItem();
         if( selectedExam != null )
         {
-            if( selectedExam.getExamType() == Enums.ExamType.Automatic)
-            {
-                IDTF.setDisable(false);
-            }
-            else
-            {
-                IDTF.setDisable(true);
-            }
+            IDTF.setDisable(selectedExam.getExamType() != Enums.ExamType.Automatic);
         }
 
     }

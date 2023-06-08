@@ -21,7 +21,7 @@ class AdaptableServer extends AbstractServer
   /**
    * The adapter used to simulate multiple class inheritance.
    */
-  private ObservableServer server;
+  private final ObservableServer server;
 
 // CONSTRUCTORS *****************************************************
 

@@ -67,7 +67,7 @@ public class ConnectionToClient extends Thread
   /**
   * A reference to the Server that created this instance.
   */
-  private AbstractServer server;
+  private final AbstractServer server;
 
   /**
   * Sockets are used in the operating system as channels
@@ -99,7 +99,7 @@ public class ConnectionToClient extends Thread
    * information about each client. Used by the setInfo and getInfo
    * methods.
    */
-  private HashMap savedInfo = new HashMap(10);
+  private final HashMap savedInfo = new HashMap(10);
 
 
 // CONSTRUCTORS *****************************************************

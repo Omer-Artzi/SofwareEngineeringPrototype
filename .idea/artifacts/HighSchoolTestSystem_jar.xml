@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="helloocsf-meatturtle:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/helloocsf_meatturtle_jar</output-path>
+  <artifact type="jar" name="HighSchoolTestSystem.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HighSchoolTestSystem_jar</output-path>
     <root id="archive" name="helloocsf-meatturtle.jar">
       <element id="module-output" name="client" />
       <element id="module-output" name="entities" />

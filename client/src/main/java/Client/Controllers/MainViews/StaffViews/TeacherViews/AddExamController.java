@@ -40,7 +40,7 @@ public class AddExamController extends SaveBeforeExit {
     private String examNotesForTeacher;
     private String examName; // necessary?
     private List<QuestionObject> questionObjectsList;
-    private List<Question> addedQuestions = new ArrayList<>();
+    private final List<Question> addedQuestions = new ArrayList<>();
 
     private List<Subject> teacherSubjects;
     @FXML
@@ -274,7 +274,8 @@ public class AddExamController extends SaveBeforeExit {
             Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
             SimpleClient.getClient().sendToServer(message);
         }
-        else return;
+        else {
+        }
     }
 
     @Subscribe
@@ -310,7 +311,6 @@ public class AddExamController extends SaveBeforeExit {
     @FXML // activated when user selects a Subject
     public void onSubjectSelection(ActionEvent event){
         if (SubjectCB.getSelectionModel().getSelectedItem() == null){
-            return;
         }
         else{
             List<Course> courses = SubjectCB.getSelectionModel().getSelectedItem().getCourses();
@@ -331,7 +331,6 @@ public class AddExamController extends SaveBeforeExit {
     @FXML // activated when user selects a Course
     public void onCourseSelection(ActionEvent event) throws IOException {
         if (CourseCB.getSelectionModel().getSelectedItem() == null){
-            return;
         }
         else{
             chosenCourse = CourseCB.getSelectionModel().getSelectedItem(); // save the chosen course
@@ -345,7 +344,6 @@ public class AddExamController extends SaveBeforeExit {
     @FXML // activated when user clicks on a row in the table of questions, opens a dialog to edit the grade percentage
     void rowClicked(MouseEvent event) {
         if (questionTable.getSelectionModel().getSelectedItem() == null){
-            return;
         }
         else{
             QuestionObject questionObject = questionTable.getSelectionModel().getSelectedItem();
@@ -360,7 +358,6 @@ public class AddExamController extends SaveBeforeExit {
                     int newGradePercentage = Integer.parseInt(result.get());
                     if (newGradePercentage < 0 || newGradePercentage > 100){
                         JOptionPane.showMessageDialog(null, "Grade Percentage must be between 0 and 100", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                        return;
                     }
                     else{
                         questionObject.setPercentage(newGradePercentage);
@@ -372,7 +369,6 @@ public class AddExamController extends SaveBeforeExit {
                 }
                 catch (NumberFormatException e){
                     JOptionPane.showMessageDialog(null, "Grade Percentage must be a number", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    return;
                 }
             }
         }

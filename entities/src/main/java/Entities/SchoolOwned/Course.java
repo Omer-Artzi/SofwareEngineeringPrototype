@@ -39,7 +39,7 @@ public class Course implements Serializable, Comparable<Course> {
     @OneToMany(mappedBy = "course")
     private List<ExamForm> examForms = new ArrayList<>();
     @OneToMany(mappedBy = "course")
-    private List<ClassExam> classExams = new ArrayList<>();
+    private final List<ClassExam> classExams = new ArrayList<>();
 
 
 
@@ -57,7 +57,7 @@ public class Course implements Serializable, Comparable<Course> {
     {
         this.name=Name;
         this.teachers = TeacherList;
-        code = Integer.toString(++codeNum);;
+        code = Integer.toString(++codeNum);
         examFormsNumber = 0;
     }
 

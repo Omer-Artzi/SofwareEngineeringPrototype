@@ -32,7 +32,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.3</version>
         <configuration>
-          <mainClass>Server.Client.Main</mainClass>
+          <mainClass>Server.Main</mainClass>
         </configuration>
       </plugin>
       <plugin>
@@ -40,7 +40,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.6.0</version>
         <configuration>
-          <mainClass>Server.Client.Main</mainClass>
+          <mainClass>Server.Main</mainClass>
           <cleanupDaemonThreads>false</cleanupDaemonThreads>
         </configuration>
       </plugin>
@@ -56,7 +56,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>Server.Client.Main</mainClass>
+                  <mainClass>Server.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>

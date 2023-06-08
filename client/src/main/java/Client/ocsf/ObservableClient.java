@@ -37,7 +37,7 @@ public class ObservableClient extends Observable
   /**
    * The service instance used to simulate multiple class inheritance.
    */
-  private AdaptableClient service;
+  private final AdaptableClient service;
 
   //Constructor *****************************************************
 

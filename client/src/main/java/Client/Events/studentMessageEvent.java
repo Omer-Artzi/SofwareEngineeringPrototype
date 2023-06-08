@@ -6,7 +6,7 @@ import Entities.Users.Student;
 import java.util.List;
 
 public class studentMessageEvent {
-    private Message message;
+    private final Message message;
     private List<Student> students;
 
     public Message getMessage() {

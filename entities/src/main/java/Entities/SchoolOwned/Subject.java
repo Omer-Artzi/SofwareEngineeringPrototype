@@ -22,7 +22,7 @@ public class Subject implements Serializable, Comparable<Subject> {
     @JoinTable(
             joinColumns = @JoinColumn(name = "Subject_ID"),
             inverseJoinColumns = @JoinColumn(name ="Student_ID" ))
-    private List<Student> students = new ArrayList<>();
+    private final List<Student> students = new ArrayList<>();
 
     @OneToMany(mappedBy = "subject")
     private List<ExamForm> examForms = new ArrayList<>();
@@ -41,7 +41,7 @@ public class Subject implements Serializable, Comparable<Subject> {
     @OneToMany(mappedBy = "subject")
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "subject")
-    private List<ClassExam> classExams = new ArrayList<>();
+    private final List<ClassExam> classExams = new ArrayList<>();
 
     public Subject()
     {

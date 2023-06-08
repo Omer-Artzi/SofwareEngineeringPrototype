@@ -391,7 +391,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         // Define class Exams table columns
         ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(Long.toString(param.getValue().getExamForm().getID())));
         TesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTeacher().getFullName()));
-        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate()).toString()));
+        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate())));
         ExamineeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().getStudentExams().size())));
         PassedCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
                 getStudentExams().stream().filter(item->item.getGrade() >= 50).
@@ -416,7 +416,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         StExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().
                 getClassExam().getExamForm().getExamFormID()));
         StTesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getClassExam().getTeacher().getFullName()));
-        StDateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getClassExam().getStartDate()).toString()));
+        StDateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getClassExam().getStartDate())));
         StPassedCol.setCellValueFactory(param -> new SimpleStringProperty(Boolean.toString(param.getValue().
                 getGrade() >=50 )));
         StGradeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
@@ -467,7 +467,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         // define column insertion mechanics
         ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(Long.toString(param.getValue().getExamForm().getID())));
         TesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTeacher().getFullName()));
-        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate()).toString()));
+        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate())));
         ExamineeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().getStudentExams().size())));
         PassedCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
                 getStudentExams().stream().filter(item->item.getGrade() >= 50).

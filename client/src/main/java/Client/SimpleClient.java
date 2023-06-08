@@ -52,7 +52,7 @@ public class SimpleClient extends AbstractClient {
     }
 
     public void setUser(Person user) {
-        this.user = user;
+        SimpleClient.user = user;
     }
 
     @Override
@@ -264,8 +264,7 @@ public class SimpleClient extends AbstractClient {
 				else if (user instanceof Teacher) {
 					System.out.println("In relevantUser: approve: Teacher");
 					Teacher teacher = extraTime.getTeacher();
-					if (teacher.equals(user))
-						return true;
+                    return teacher.equals(user);
 				}
 			}
 		return false;

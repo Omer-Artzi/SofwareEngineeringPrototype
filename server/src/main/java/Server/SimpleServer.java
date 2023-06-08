@@ -53,11 +53,11 @@ import java.util.*;
 
 public class SimpleServer extends AbstractServer {
     public static Session session;
-    private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
+    private static final ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
     private static int transmissionID = 0;
     private static SessionFactory sessionFactory;
 
-    private static List<Person> LoggedInUsers = new ArrayList<>();
+    private static final List<Person> LoggedInUsers = new ArrayList<>();
 
 
     public SimpleServer(int port) {
@@ -359,7 +359,7 @@ public class SimpleServer extends AbstractServer {
             }
             else if (message.getMessage().startsWith("Exam approved")) {
                 try {
-                    session.save((ClassExam) message.getData());
+                    session.save(message.getData());
                     response = "Exam saved successfully";
                 }
                 catch (Exception e) {
@@ -674,7 +674,6 @@ public class SimpleServer extends AbstractServer {
         Root<Question> root = query.from(Question.class);
         //query.where(builder.equal(root.get("course"), course));
         query.where(builder.isMember(course, root.get("courses")));
-        ;
         List<Question> questions = session.createQuery(query).getResultList();
         return questions;
     }

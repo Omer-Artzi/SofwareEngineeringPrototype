@@ -3,7 +3,7 @@ package Entities.Communication;
 import Entities.Communication.Message;
 
 public class NewSubscriberEvent {
-    private Message message;
+    private final Message message;
 
     public Message getMessage() {
         return message;

@@ -66,7 +66,7 @@ public class ObservableServer extends Observable
   /**
    * The service used to simulate multiple class inheritance.
    */
-  private AdaptableServer service;
+  private final AdaptableServer service;
 
 
   //Constructor *****************************************************

@@ -3,7 +3,7 @@ package Client.Events;
 import Entities.Communication.Message;
 
 public class MessageEvent {
-    private Message message;
+    private final Message message;
 
     public Message getMessage() {
         return message;

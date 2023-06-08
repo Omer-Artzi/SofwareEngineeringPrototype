@@ -63,7 +63,7 @@ public class DataGenerator {
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
         SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
-        school.setSubjects(subjects.getSubjects());
+        School.setSubjects(subjects.getSubjects());
         try {
             for (Subject subject : subjects.getSubjects()) {
                 for(Course course:subject.getCourses())

@@ -88,13 +88,13 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         endDateTF.setDisable(true);
         codeTF.setDisable(true);
         examTimeTF.setDisable(true);
-        Message subjectMessage = new Message(1, "1Get Subjects of Teacher: " + ((Teacher)(SimpleClient.getUser())).getID());
-        Message courseMessage = new Message(1, "1Get Courses of Teacher: " + ((Teacher)(SimpleClient.getUser())).getID());
+        Message subjectMessage = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getUser().getID());
+        Message courseMessage = new Message(1, "1Get Courses of Teacher: " + SimpleClient.getUser().getID());
         subjectMessage.setData(SimpleClient.getUser());
         courseMessage.setData(SimpleClient.getUser());
          SimpleClient.getClient().sendToServer(subjectMessage);
         SimpleClient.getClient().sendToServer(courseMessage);
-        classExam = new ClassExam();;
+        classExam = new ClassExam();
     }
 
     @FXML

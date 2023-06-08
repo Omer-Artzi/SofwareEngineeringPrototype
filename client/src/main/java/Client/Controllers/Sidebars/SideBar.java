@@ -31,9 +31,9 @@ public class SideBar {
     @FXML
     private VBox sidebarVBox;
 
-    private int vBoxExpandedWidth = 180;
+    private final int vBoxExpandedWidth = 180;
 
-    private int vBoxCollapsedWidth = 40;
+    private final int vBoxCollapsedWidth = 40;
 
     final Animation ExpandAnimation = new Transition() {
         {
