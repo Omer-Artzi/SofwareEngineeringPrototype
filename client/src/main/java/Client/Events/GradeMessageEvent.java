@@ -7,7 +7,7 @@ import Entities.Users.Student;
 import java.util.List;
 
 public class GradeMessageEvent {
-    private Message message;
+    private final Message message;
     private List<Grade> grades;
     private Student student;
 

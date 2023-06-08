@@ -173,7 +173,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
         // define column insertion mechanics
         ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getExamForm().getExamFormID()));
         TesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTeacher().getFullName()));
-        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate()).toString()));
+        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate())));
         ExamineeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().getStudentExams().size())));
         PassedCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
                 getStudentExams().stream().filter(item->item.getGrade() >= 50).

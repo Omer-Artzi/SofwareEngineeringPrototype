@@ -50,7 +50,7 @@ public class StudentDoExamManualController {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private StudentExam studentExam = new StudentExam();
+    private final StudentExam studentExam = new StudentExam();
 
     @FXML
     void fileDropped(DragEvent event) {

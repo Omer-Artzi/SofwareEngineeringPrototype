@@ -31,7 +31,7 @@ public class ObservableSWRClient extends ObservableClient
   /**
    * The service instance used to simulate multiple class inheritance.
    */
-  private ArrayList expected = new ArrayList(3);
+  private final ArrayList expected = new ArrayList(3);
   private boolean cancelled = false;
   private int waitTime = 30000;
   private Exception exception;
@@ -86,10 +86,7 @@ public class ObservableSWRClient extends ObservableClient
       throw exception;
     }
 
-    if (cancelled)
-      return false;
-    else
-      return true;
+      return !cancelled;
   }
 
   /**

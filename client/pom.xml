@@ -10,6 +10,7 @@
 	</parent>
 	<groupId>il.cshaifasweng.OCSFMediatorExample</groupId>
 	<artifactId>client</artifactId>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.controlsfx</groupId>
@@ -42,18 +43,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>entities</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>il.cshaifasweng.OCSFMediatorExample</groupId>
-			<artifactId>server</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-base</artifactId>
-			<version>14</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -72,34 +61,6 @@
 			<artifactId>jfoenix</artifactId>
 			<version>9.0.1</version>
 		</dependency>
-		<dependency>
-		<groupId>org.openjfx</groupId>
-		<artifactId>javafx-controls</artifactId>
-		<version>14</version>
-	</dependency>
-	<dependency>
-		<groupId>org.openjfx</groupId>
-		<artifactId>javafx-fxml</artifactId>
-		<version>14</version>
-	</dependency>
-<dependency>
-<groupId>org.openjfx</groupId>
-<artifactId>javafx-graphics</artifactId>
-<version>14</version>
-<classifier>win</classifier>
-</dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>16</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>20</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
@@ -112,7 +73,7 @@
 			<plugin>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
-				<version>0.0.6</version>
+				<version>0.0.8</version>
 				<configuration>
 					<mainClass>Client.Main</mainClass>
 				</configuration>

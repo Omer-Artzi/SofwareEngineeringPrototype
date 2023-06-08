@@ -92,7 +92,7 @@ public class ExamScreenController {
     //NON FXML FIELDS
     //private ExamForm examForm;
     private ClassExam mainClassExam;
-    private StudentExam studentExam = new StudentExam();
+    private final StudentExam studentExam = new StudentExam();
     private List<Question> questionList;
     private List<String> rightAnswers;
     private List<String> studentAnswers;
@@ -101,7 +101,7 @@ public class ExamScreenController {
     int currentIndex = 0;
     private QuestionsObservable questionsObservable;
     //private Map<Question, String> studentAnswers = new HashMap<>();
-    private Integer numberOfRightAnswers = 0;
+    private final Integer numberOfRightAnswers = 0;
     private int timeInSeconds;
     //private Student student;
 
@@ -291,16 +291,16 @@ public class ExamScreenController {
 
     private String format(long value) {
         if (value < 10) {
-            return 0 + "" + value;
+            return 0 + String.valueOf(value);
         }
-        return value + "";
+        return String.valueOf(value);
     }
 
     public void convertTime() {
         TimeUnit TimeUnit = null;
-        min = TimeUnit.SECONDS.toMinutes(totalSec);
+        min = java.util.concurrent.TimeUnit.SECONDS.toMinutes(totalSec);
         sec = totalSec - (min * 60);
-        hr = TimeUnit.MINUTES.toHours(min);
+        hr = java.util.concurrent.TimeUnit.MINUTES.toHours(min);
         min = min - (hr * 60);
         timing.setText(format(hr) + ":" + format(min) + ":" + format(sec));
 

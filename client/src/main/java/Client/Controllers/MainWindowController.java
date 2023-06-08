@@ -25,7 +25,7 @@ public class MainWindowController {
     @FXML
     private AnchorPane sidePane;
 
-    private Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
+    private final Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
 
     @FXML
     private void initialize() throws IOException {

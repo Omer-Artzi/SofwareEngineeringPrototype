@@ -69,7 +69,7 @@ public class PrimaryController {
     @Subscribe
     public void updateClientNum(ClientUpdateEvent event)
     {
-        connectedClientsTF.setText("Number of connected clients: " + event.getNumOfConnectedClients());
+        connectedClientsTF.setText("Number of connected clients: " + ClientUpdateEvent.getNumOfConnectedClients());
     }
 
 }

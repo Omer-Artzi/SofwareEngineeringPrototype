@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="G1_Prototype_Client.jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/G1_Prototype_Client_jar</output-path>
+  <artifact type="jar" build-on-make="true" name="Client.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Client_jar</output-path>
     <root id="archive" name="G1_Prototype_Client.jar">
       <element id="module-output" name="client" />
       <element id="module-output" name="entities" />

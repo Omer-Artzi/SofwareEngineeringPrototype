@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.swing.*;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 
 public class SimpleChatClient extends Application {
@@ -80,7 +81,7 @@ public class SimpleChatClient extends Application {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        return FXMLLoader.load(SimpleChatClient.class.getResource(fxml + ".fxml"));
+        return FXMLLoader.load(Objects.requireNonNull(SimpleChatClient.class.getResource(fxml + ".fxml")));
     }
 
 

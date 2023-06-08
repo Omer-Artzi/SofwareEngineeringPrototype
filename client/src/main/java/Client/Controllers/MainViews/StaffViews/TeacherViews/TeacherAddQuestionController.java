@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherAddQuestionController extends SaveBeforeExit {
-    private Course courseOfEditQuestion = null;
+    private final Course courseOfEditQuestion = null;
     private List<Course> courseOfTeacher;
     private List<Subject> subjectOfTeacher;
     private List<String> notes;

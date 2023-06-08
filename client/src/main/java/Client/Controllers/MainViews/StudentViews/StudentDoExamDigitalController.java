@@ -66,16 +66,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     //NON FXML FIELDS
     private Person user;
     private ClassExam mainClassExam;
-    private StudentExam studentExam = new StudentExam();
+    private final StudentExam studentExam = new StudentExam();
     private ExamForm selectedForm;
     private List<Question> questionList;
-    private List<String> rightAnswers = new ArrayList<>();
+    private final List<String> rightAnswers = new ArrayList<>();
     private List<String> studentAnswers;
-    private List<JFXButton> progressButtons = new ArrayList<>();
+    private final List<JFXButton> progressButtons = new ArrayList<>();
     private Question currentQuestion;
     int numberOfQuestions;
     int currentIndex = 0;
-    private Map<Question, String> studentQuestionsAnswers = new HashMap<>();
+    private final Map<Question, String> studentQuestionsAnswers = new HashMap<>();
     private int numberOfRightAnswers = 0;
     private int numberOfQuestionsAnswered = 0;
     private int timeInSeconds;
@@ -298,7 +298,6 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 }
             } else {
                 // ... user chose CANCEL or closed the dialog
-                return;
             }
         }
         else {
@@ -314,7 +313,6 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 }
             } else {
                 // ... user chose CANCEL or closed the dialog
-                return;
             }
         }
 

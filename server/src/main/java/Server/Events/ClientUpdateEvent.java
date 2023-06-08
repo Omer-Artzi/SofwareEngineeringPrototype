@@ -4,7 +4,7 @@ public class ClientUpdateEvent {
     private static int numOfConnectedClients;
 
     public ClientUpdateEvent(int connectedClients) {
-        this.numOfConnectedClients = connectedClients;
+        numOfConnectedClients = connectedClients;
     }
 
     public static int getNumOfConnectedClients() {

@@ -5,7 +5,7 @@ import Entities.SchoolOwned.ExamForm;
 public class LoadExamEvent {
 
     private ExamForm examForm;
-    private String screen;
+    private final String screen;
 
     public LoadExamEvent(ExamForm examForm, String screen) {
         this.examForm = examForm;
