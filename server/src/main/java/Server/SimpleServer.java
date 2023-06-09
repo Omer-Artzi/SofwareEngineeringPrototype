@@ -64,7 +64,7 @@ public class SimpleServer extends AbstractServer {
         super(port);
         try {
             EventBus.getDefault().register(this);
-            SessionFactory sessionFactory = getSessionFactory();
+            SessionFactory sessionFactory = getSessionFactory(null);
             session = sessionFactory.openSession();
             session.beginTransaction();
             DataGenerator.generateData();
@@ -95,7 +95,7 @@ public class SimpleServer extends AbstractServer {
         }
     }
 
-    public static SessionFactory getSessionFactory() throws HibernateException, InterruptedException {
+    public static SessionFactory getSessionFactory(Map<String, String> properties) throws HibernateException, InterruptedException {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(Student.class);
@@ -110,6 +110,12 @@ public class SimpleServer extends AbstractServer {
             configuration.addAnnotatedClass(Person.class);
             configuration.addAnnotatedClass(ExtraTime.class);
             configuration.addAnnotatedClass(Principal.class);
+            if(properties != null)
+            {
+                for (Map.Entry<String, String> entry : properties.entrySet()) {
+                    configuration.setProperty(entry.getKey(), entry.getValue());
+                }
+            }
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties())
