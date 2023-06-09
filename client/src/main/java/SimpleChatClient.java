@@ -1,4 +1,5 @@
 import Entities.Message;
+import Events.GeneralEvent;
 import Events.MessageEvent;
 import Entities.TerminationEvent;
 import javafx.application.Application;
@@ -43,6 +44,10 @@ public class SimpleChatClient extends Application {
             scene = new Scene(loadFXML("PreLogIn"));
             stage.setScene(scene);
             stage.setTitle("High School Test System Prototype - Version " + version);
+            // To preform cleanup tasks in controllers
+            stage.setOnCloseRequest(event -> {
+                EventBus.getDefault().post(new GeneralEvent(new Message(0, "Exit")));
+            });
             stage.show();
         }
         catch (Exception e)

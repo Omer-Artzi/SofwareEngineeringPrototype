@@ -354,8 +354,8 @@ public class StudentExamGradeController extends SaveBeforeExit
             String studentAnswerStr = studentAnswers.get(questionNumber);
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
-            double rowWidth = AnswersVBOX.getWidth();
-            qustionHbox.prefWidth(rowWidth);
+            double rowWidth = 750;
+            qustionHbox.setPrefWidth(rowWidth);
 
             // Set question number
             BorderPane bord1 = new BorderPane();
@@ -427,9 +427,9 @@ public class StudentExamGradeController extends SaveBeforeExit
                 answerHbox.getChildren().add(bordLoop2);
                 answerHbox.setAlignment(Pos.CENTER_LEFT);
                 answerHbox.setPrefHeight(Control.USE_COMPUTED_SIZE);
-                //answerHbox.setPrefWidth(AnswersVBOX.getPrefWidth()*6 / 10);
 
                 answersVbox.getChildren().add(answerHbox);
+                answersVbox.setPrefWidth(rowWidth*6 / 10);
 
             }
 
@@ -438,7 +438,7 @@ public class StudentExamGradeController extends SaveBeforeExit
 
             bord2.setCenter(answersVbox);
             bord2.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord2.setPrefWidth(400);
+            //bord2.setPrefWidth(400);
             bord2.setStyle("-fx-border-color: black;");
 
             // Set student answer
@@ -446,7 +446,7 @@ public class StudentExamGradeController extends SaveBeforeExit
             Label studentAnswer = new Label(Integer.toString(question.getAnswers().indexOf(studentAnswerStr)+1));
             studentAnswer.setAlignment(Pos.CENTER);
             bord3.setCenter(studentAnswer);
-            bord3.setPrefWidth(50);
+            bord3.setPrefWidth(rowWidth / 10);
 
             if (question.getAnswers().indexOf(studentAnswerStr) == correctAnswerInt)
             {
@@ -458,7 +458,7 @@ public class StudentExamGradeController extends SaveBeforeExit
 
             BorderPane bord4 = new BorderPane();
             Label questionScore = new Label(Integer.toString(questionScoreInt));
-            bord4.setPrefWidth(60);
+            bord4.setPrefWidth(rowWidth / 10);
             bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
             questionScore.setAlignment(Pos.CENTER);
             bord4.setCenter(questionScore);

@@ -10,6 +10,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
@@ -21,10 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShowStatsAndReportsController extends SaveBeforeExit {
@@ -96,6 +94,8 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
     @FXML
     private Label MedianLabel;
 
+    @FXML
+    private VBox TablesVBOX;
 
 
     Teacher clientTeacher;
@@ -176,7 +176,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         Date currentTime = ConvertToDate(LocalDateTime.now());
 
         allClassExams = allClassExams.stream().filter(classExam ->
-                classExam.getFinalDate().after(currentTime)).collect(Collectors.toList());
+                classExam.getFinalDate().after(currentTime) && classExam.getGradesMean() != -1).collect(Collectors.toList());
 
         //allClassExams = allClassExams.stream().filter(classExam ->
         //        currentTime.after(classExam.getFinalDate())).collect(Collectors.toList());
@@ -194,7 +194,8 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             // For this... I'm REALLY sorry :(
             for (StudentExam tempStudentExam : allClassExams.get(i).getStudentExams())
             {
-                if (!(allStudents.contains(tempStudentExam.getStudent())))
+                if (!(allStudents.contains(tempStudentExam.getStudent()))
+                        && tempStudentExam.getStatus() == HSTS_Enums.submissionStatus.Approved)
                     allStudents.add(tempStudentExam.getStudent());
             }
         }
@@ -210,6 +211,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         chosenCriteriaType = chooseReportTypeCombo.getValue();
         // With this we should now initialize the second combo box appropriately.
         initializeSecondComboBox(chosenCriteriaType);
+        ShowStatisticsController.SetVisibleAllNodes(SummaryRoot, false);
 
     }
 
@@ -227,16 +229,19 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             case "Filter by Teacher":
                 chooseStatsForCombo.getItems().addAll(allTeachers.stream().map(teacher ->
                         teacher.getFullName()).collect(Collectors.toList()));
+                chooseStatsForCombo.setPromptText("Choose teacher");
                 break;
 
             case "Filter by Course":
                 chooseStatsForCombo.getItems().addAll(allCourses.stream().map(course ->
                         course.getName()).collect(Collectors.toList()));
+                chooseStatsForCombo.setPromptText("Choose Course");
                 break;
 
             case "Filter by Student":
                 chooseStatsForCombo.getItems().addAll(allStudents.stream().map(student ->
                         student.getFullName()).collect(Collectors.toList()));
+                chooseStatsForCombo.setPromptText("Choose Student");
                 break;
         }
         // Enable the combo box, the choice can now be made.
@@ -247,11 +252,18 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
     @FXML
     // The selected string should represent the name of the filter, be it Teacher, Course or Student.
     void reportNameChosen(ActionEvent event) {
+        chosenReport = chooseStatsForCombo.getValue();
+        if (chosenReport != null)
+            setSecondCombo();
+    }
+
+    void setSecondCombo()
+    {
         // Clear tables before refill
         StExamStatsTv.getItems().clear();
         ClassExamStatsTv.getItems().clear();
 
-        chosenReport = chooseStatsForCombo.getValue();
+
 
         List<ClassExam> classExams;
         List<Double> allGrades = new ArrayList<>();
@@ -264,6 +276,13 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
                 ClassExamStatsTv.sort();
                 allGrades = allClassExams.stream().map(classExam ->
                         classExam.getGradesMean()).collect(Collectors.toList());
+                ClassExamStatsTv.setVisible(true);
+                ClassExamStatsTv.setPrefHeight(300);
+                StExamStatsTv.setVisible(false);
+                StExamStatsTv.setPrefHeight(0);
+                TablesVBOX.getChildren().remove(ClassExamStatsTv);
+                TablesVBOX.getChildren().add(0, ClassExamStatsTv);
+
                 break;
 
             case "Filter by Course":
@@ -273,6 +292,12 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
                 ClassExamStatsTv.sort();
                 allGrades = allClassExams.stream().map(classExam ->
                         classExam.getGradesMean()).collect(Collectors.toList());
+                ClassExamStatsTv.setVisible(true);
+                ClassExamStatsTv.setPrefHeight(300);
+                StExamStatsTv.setVisible(false);
+                StExamStatsTv.setPrefHeight(0);
+                TablesVBOX.getChildren().remove(ClassExamStatsTv);
+                TablesVBOX.getChildren().add(0, ClassExamStatsTv);
 
                 break;
 
@@ -283,7 +308,8 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
                 {
                     for(StudentExam studentExam : classExam.getStudentExams())
                     {
-                        if(studentExam.getStudent().getFullName().startsWith(chosenReport))
+                        if(studentExam.getStudent().getFullName().startsWith(chosenReport)
+                        && studentExam.getStatus() == HSTS_Enums.submissionStatus.Approved)
                         {
                             studentExams.add(studentExam);
                         }
@@ -294,23 +320,36 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
 
                 allGrades = studentExams.stream().map(studentExam ->
                         (double)studentExam.getGrade()).collect(Collectors.toList());
+
+                //allGrades = studentExams.stream().mapToDouble(studentExam ->
+                //                (double)studentExam.getGrade()).sorted(Comparator.comparing(o -> o.))
+                //        .boxed().collect(Collectors.toList());
+
+                StExamStatsTv.setVisible(true);
+                StExamStatsTv.setPrefHeight(300);
+                ClassExamStatsTv.setVisible(false);
+                ClassExamStatsTv.setPrefHeight(0);
+                TablesVBOX.getChildren().remove(StExamStatsTv);
+                TablesVBOX.getChildren().add(0, StExamStatsTv);
+
+
         }
 
         // Calculate mean and variance from the list of grades
         double[] ExamStats = CalculateStats(allGrades);
 
         // Set labels according to the new stats
-        MeanLabel.setText(Double.toString(ExamStats[0]));
-        SDLabel.setText(Double.toString(ExamStats[1]));
-        MedianLabel.setText(Double.toString(FindMedian(allGrades)));
+        MeanLabel.setText(ShowStatisticsController.FormatDouble(ExamStats[0]));
+        SDLabel.setText(ShowStatisticsController.FormatDouble(Math.sqrt(ExamStats[1])));
+        MedianLabel.setText(ShowStatisticsController.FormatDouble(FindMedian(allGrades)));
 
-        BarChart barChart = GetHistogram(allGrades);
-        barChart.setPrefHeight(300);
-        barChart.setPrefWidth(300);
-        BarScrollPane.setContent(GetHistogram(allGrades));
+        BarChart barChart = GetHistogram(allGrades, 0, 0);
+        barChart.setMaxHeight(300);
+        barChart.setMaxWidth(600);
+        BarScrollPane.setContent(barChart);
 
-
-        // TODO Code that, according to first comboBox's choice, chooses the correct filter and then initialized the stats table.
+        ShowStatisticsController.SetVisibleAllNodes(SummaryRoot, true);
+        ShowStatisticsController.DisableAllNodes(SummaryRoot, false);
     }
 
     private String FormatDate(Date date)
@@ -319,7 +358,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         return formatter.format(date);
     }
 
-    private BarChart GetHistogram(List<Double> grades)
+    private BarChart GetHistogram(List<Double> grades, int width, int height)
     {
         // Create a CategoryAxis for the X-axis
         CategoryAxis xAxis = new CategoryAxis();
@@ -328,12 +367,17 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         NumberAxis yAxis = new NumberAxis();
 
         BarChart<String, Number> gradeHistogramChart = new BarChart<>(xAxis, yAxis);
+        if (height != 0)
+            gradeHistogramChart.setMaxHeight(300);
+        if (width != 0)
+            gradeHistogramChart.setMaxWidth(600);
 
         // Create a Series for the grade histogram data
         XYChart.Series<String, Number> series = new XYChart.Series<>();
 
         // Iterate through the grade buckets (0 to 100 with a range of 10)
         for (int i = 0; i < 100; i += 10) {
+        //for (int i = 0; i < grades.size(); i++) {
             int bucketStart = i;
             int bucketEnd = i + 10;
             // Create a data point for the bucket
@@ -352,6 +396,9 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(
                     bucketStart + "-" + bucketEnd, bucketSize);
 
+            //XYChart.Data<String, Number> dataPoint = new XYChart.Data<>(
+            //        bucketStart + "-" + bucketEnd, grades.get(i));
+
             // Add the data point to the series
             series.getData().add(dataPoint);
         }
@@ -364,6 +411,8 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
+        // Don't want to show the report in initialization
+        ShowStatisticsController.SetVisibleAllNodes(SummaryRoot, false);
         System.out.println("Attempting to initialize ShowStatsAndReports.");
         // Until we get all the class exams from the server, disable even the first combo box.
         chooseReportTypeCombo.setDisable(true);
@@ -378,17 +427,16 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
 
         // TODO Have the table populate according to the chosen criteria from the combo boxes.
         // populateTable();
-
         // Define class Exams table columns
-        ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(Long.toString(param.getValue().getExamForm().getID())));
+        ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getExamForm().getExamFormID()));
         TesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTeacher().getFullName()));
         DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate()).toString()));
         ExamineeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().getStudentExams().size())));
         PassedCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
                 getStudentExams().stream().filter(item->item.getGrade() >= 50).
                 collect(Collectors.toList()).size())));
-        MeanCol.setCellValueFactory(param -> new SimpleStringProperty(Double.toString(param.getValue().getGradesMean())));
-        StandardDeviationCol.setCellValueFactory(param -> new SimpleStringProperty(Double.toString(Math.sqrt(param.getValue().
+        MeanCol.setCellValueFactory(param -> new SimpleStringProperty(ShowStatisticsController.FormatDouble(param.getValue().getGradesMean())));
+        StandardDeviationCol.setCellValueFactory(param -> new SimpleStringProperty(ShowStatisticsController.FormatDouble(Math.sqrt(param.getValue().
                 getGradesVariance()))));
         HistogramCol.setCellFactory(generateButtonCellFactory());
         ClassExamStatsTv.getSortOrder().add(ExamIDCol);
@@ -421,6 +469,11 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         StPassedCol.setStyle( "-fx-alignment: CENTER;");
         StGradeCol.setStyle( "-fx-alignment: CENTER;");
         StExamStatsTv.setStyle( "-fx-alignment: CENTER;");
+
+        ClassExamStatsTv.setVisible(false);
+        ClassExamStatsTv.setPrefHeight(0);
+        StExamStatsTv.setVisible(false);
+        StExamStatsTv.setPrefHeight(0);
 
 
 
@@ -496,7 +549,6 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             public TableCell<ClassExam, String> call(final TableColumn<ClassExam, String> param) {
                 final TableCell<ClassExam, String> cell = new TableCell<>() {
                     private final Button button = new Button("Click");
-
                     {
                         button.setOnAction(event ->
                         {
@@ -505,7 +557,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
                             Scene histScene = new Scene(root, 400, 400);
                             List<StudentExam> exams = getTableView().getItems().get(getIndex()).getStudentExams();
                             List<Double> grades = exams.stream().map(exam -> (double)exam.getGrade()).collect(Collectors.toList());
-                            root.getChildren().add(GetHistogram(grades));
+                            root.getChildren().add(GetHistogram(grades, 0, 0));
                             histStage.setScene(histScene);
 
                             histStage.showAndWait();
@@ -527,5 +579,8 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             }
         };
     }
+
+
+
 
 }

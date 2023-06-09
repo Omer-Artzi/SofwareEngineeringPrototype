@@ -1,5 +1,7 @@
 import Entities.*;
+import Events.ChangeMainSceneEvent;
 import Events.ClassExamGradeEvent;
+import Events.GeneralEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -60,9 +62,11 @@ public class ShowStatisticsController extends SaveBeforeExit {
     private TableColumn<ClassExam, String> HistogramCol;
 
     Teacher clientTeacher;
+    Stage histStage;
 
     @Subscribe
     public void stub(ClassExamGradeEvent event) {
+
     }
 
 
@@ -74,6 +78,16 @@ public class ShowStatisticsController extends SaveBeforeExit {
             Parent parent = (Parent) node;
             for (Node child : parent.getChildrenUnmodifiable()) {
                 DisableAllNodes(child, toDisable);
+            }
+        }
+    }
+
+    public static void SetVisibleAllNodes(Node node, boolean toSetVisible) {
+        node.setVisible(toSetVisible);
+        if (node instanceof Parent) {
+            Parent parent = (Parent) node;
+            for (Node child : parent.getChildrenUnmodifiable()) {
+                DisableAllNodes(child, toSetVisible);
             }
         }
     }
@@ -194,10 +208,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
         ClassExamStatsTv.getSortOrder().add(ExamIDCol);
 
         ClassExamStatsTv.sort();
-
-
     }
-
 
     // Generate buttons for histogram column
     private Callback<TableColumn<ClassExam, String>, TableCell<ClassExam, String>> generateButtonCellFactory() {
@@ -210,7 +221,15 @@ public class ShowStatisticsController extends SaveBeforeExit {
                     {
                         button.setOnAction(event ->
                         {
-                            Stage histStage = new Stage();
+                            histStage = new Stage();
+
+                            histStage.setOnCloseRequest(closeEvent -> {
+                                // Close the other stage if it exists
+                                if (histStage != null) {
+                                    histStage.close();
+                                }
+                            });
+
                             AnchorPane root = new AnchorPane();
                             Scene histScene = new Scene(root, 500, 400);
                             List<StudentExam> exams = getTableView().getItems().get(getIndex()).getStudentExams();
@@ -237,5 +256,34 @@ public class ShowStatisticsController extends SaveBeforeExit {
             }
         };
     }
+
+    @Subscribe
+    public void CleanUp(GeneralEvent event) {
+        if (event.getMessage().getMessage().startsWith("Exit") &&
+                histStage != null)
+            histStage.close();
+    }
+
+    @Override
+    @Subscribe
+    public void TriggerDataCheck(ChangeMainSceneEvent event) {
+        if (histStage != null)
+            histStage.close();
+
+        boolean unsavedData = CheckForUnsavedData();
+        if (unsavedData) {
+            boolean changeScreen = PromptUserToSaveData(event.getSceneName());
+        }
+        try {
+            EventBus.getDefault().unregister(this);
+            SimpleChatClient.setRoot(event.getSceneName());
+            System.out.println("TriggerDataCheck changing scene");
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 }
