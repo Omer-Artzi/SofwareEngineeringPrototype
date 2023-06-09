@@ -2,6 +2,8 @@ package Client.Controllers.MainViews.StaffViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Events.ClassExamGradeEvent;
+import Client.Events.ChangeMainSceneEvent;
+import Client.Events.GeneralEvent;
 import Client.SimpleClient;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
@@ -28,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Formatter;
@@ -66,9 +69,11 @@ public class ShowStatisticsController extends SaveBeforeExit {
     private TableColumn<ClassExam, String> HistogramCol;
 
     Teacher clientTeacher;
+    Stage histStage;
 
     @Subscribe
     public void stub(ClassExamGradeEvent event) {
+
     }
 
 
@@ -80,6 +85,16 @@ public class ShowStatisticsController extends SaveBeforeExit {
             Parent parent = (Parent) node;
             for (Node child : parent.getChildrenUnmodifiable()) {
                 DisableAllNodes(child, toDisable);
+            }
+        }
+    }
+
+    public static void SetVisibleAllNodes(Node node, boolean toSetVisible) {
+        node.setVisible(toSetVisible);
+        if (node instanceof Parent) {
+            Parent parent = (Parent) node;
+            for (Node child : parent.getChildrenUnmodifiable()) {
+                DisableAllNodes(child, toSetVisible);
             }
         }
     }
@@ -143,7 +158,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
         EventBus.getDefault().register(this);
 
         // Extract teacher entity to controller
-        clientTeacher = (Teacher) SimpleClient.getClient().getUser();
+        clientTeacher = (Teacher)SimpleClient.getClient().getUser();
 
         List<ExamForm> examFormList = clientTeacher.getExamForm();
         List<ClassExam> classExamList = new ArrayList<>();
@@ -172,7 +187,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
         // define column insertion mechanics
         ExamIDCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getExamForm().getExamFormID()));
         TesterCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getTeacher().getFullName()));
-        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate())));
+        DateCol.setCellValueFactory(param -> new SimpleStringProperty(FormatDate(param.getValue().getStartDate()).toString()));
         ExamineeCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().getStudentExams().size())));
         PassedCol.setCellValueFactory(param -> new SimpleStringProperty(Integer.toString(param.getValue().
                 getStudentExams().stream().filter(item->item.getGrade() >= 50).
@@ -216,7 +231,15 @@ public class ShowStatisticsController extends SaveBeforeExit {
                     {
                         button.setOnAction(event ->
                         {
-                            Stage histStage = new Stage();
+                            histStage = new Stage();
+
+                            histStage.setOnCloseRequest(closeEvent -> {
+                                // Close the other stage if it exists
+                                if (histStage != null) {
+                                    histStage.close();
+                                }
+                            });
+
                             AnchorPane root = new AnchorPane();
                             Scene histScene = new Scene(root, 500, 400);
                             List<StudentExam> exams = getTableView().getItems().get(getIndex()).getStudentExams();
@@ -243,5 +266,34 @@ public class ShowStatisticsController extends SaveBeforeExit {
             }
         };
     }
+
+    @Subscribe
+    public void CleanUp(GeneralEvent event) {
+        if (event.getMessage().getMessage().startsWith("Exit") &&
+                histStage != null)
+            histStage.close();
+    }
+
+    @Override
+    @Subscribe
+    public void TriggerDataCheck(ChangeMainSceneEvent event) {
+        if (histStage != null)
+            histStage.close();
+
+        boolean unsavedData = CheckForUnsavedData();
+        if (unsavedData) {
+            boolean changeScreen = PromptUserToSaveData(event.getSceneName());
+        }
+        try {
+            EventBus.getDefault().unregister(this);
+            SimpleChatClient.setRoot(event.getSceneName());
+            System.out.println("TriggerDataCheck changing scene");
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 }
