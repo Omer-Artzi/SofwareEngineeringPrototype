@@ -4,6 +4,7 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Events.ClassExamGradeEvent;
 import Client.Events.ChangeMainSceneEvent;
 import Client.Events.GeneralEvent;
+import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
@@ -90,13 +91,21 @@ public class ShowStatisticsController extends SaveBeforeExit {
     }
 
     public static void SetVisibleAllNodes(Node node, boolean toSetVisible) {
-        node.setVisible(toSetVisible);
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
-            for (Node child : parent.getChildrenUnmodifiable()) {
-                DisableAllNodes(child, toSetVisible);
+        try {
+            node.setVisible(toSetVisible);
+            if (node instanceof Parent) {
+                Parent parent = (Parent) node;
+                for (Node child : parent.getChildrenUnmodifiable()) {
+                    SetVisibleAllNodes(child, toSetVisible);
+                }
             }
+
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 

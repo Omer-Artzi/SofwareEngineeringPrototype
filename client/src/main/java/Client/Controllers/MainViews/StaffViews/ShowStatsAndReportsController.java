@@ -3,6 +3,7 @@ package Client.Controllers.MainViews.StaffViews;
 import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Events.LiveExamsEvent;
 import Client.SimpleClient;
+import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.SchoolOwned.ExamForm;
@@ -204,7 +205,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
             for (StudentExam tempStudentExam : allClassExams.get(i).getStudentExams())
             {
                 if (!(allStudents.contains(tempStudentExam.getStudent()))
-                        && tempStudentExam.getStatus() == HSTS_Enums.submissionStatus.Approved)
+                        && tempStudentExam.getStatus() == Enums.submissionStatus.Approved)
                     allStudents.add(tempStudentExam.getStudent());
             }
         }
@@ -318,7 +319,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
                     for(StudentExam studentExam : classExam.getStudentExams())
                     {
                         if(studentExam.getStudent().getFullName().startsWith(chosenReport)
-                        && studentExam.getStatus() == HSTS_Enums.submissionStatus.Approved)
+                        && studentExam.getStatus() == Enums.submissionStatus.Approved)
                         {
                             studentExams.add(studentExam);
                         }

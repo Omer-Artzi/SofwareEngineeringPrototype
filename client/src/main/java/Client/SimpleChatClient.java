@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Controllers.MainWindowController;
+import Client.Events.GeneralEvent;
 import Client.Events.MessageEvent;
 import Entities.Communication.Message;
 import javafx.application.Application;

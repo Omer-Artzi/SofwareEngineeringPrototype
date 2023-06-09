@@ -85,8 +85,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         if(event.getClickCount() == 2)
         {
             if(ClassExamTv.getSelectionModel().getSelectedItem() != null) {
-                SimpleChatClient.setRoot("StudentExamGrade");
-                TeacherGradeStudentExamController controller = (TeacherGradeStudentExamController) SimpleChatClient.getScene().getProperties().get("controller");
+                SimpleChatClient.setRoot("TeacherGradeStudentExam");
                 EventBus.getDefault().post(new StudentExamEvent(ClassExamTv.getSelectionModel().getSelectedItem()));
                 EventBus.getDefault().unregister(this);
             }

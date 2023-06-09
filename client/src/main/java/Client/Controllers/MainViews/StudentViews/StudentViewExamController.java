@@ -1,24 +1,28 @@
 package Client.Controllers.MainViews.StudentViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
+import Client.Events.StudentExamEvent;
 import Client.Events.StudentExamsMessageEvent;
+import Client.SimpleChatClient;
 import Client.SimpleClient;
+import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.StudentOwned.StudentExam;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class StudentViewExamController extends SaveBeforeExit {
 
@@ -43,6 +47,30 @@ public class StudentViewExamController extends SaveBeforeExit {
     @FXML
     private TableColumn<StudentExam, ClassExam> subjectColumn;
 
+    int rowNumber = 0;
+
+
+    @FXML
+    void OnClickEvent(MouseEvent event) throws IOException {
+        if (event.getClickCount() == 2) {
+
+            if(ExamTV.getSelectionModel().getSelectedItem() != null) {
+                SimpleChatClient.setRoot("TeacherGradeStudentExam");
+                EventBus.getDefault().post(new StudentExamEvent(ExamTV.getSelectionModel().getSelectedItem()));
+                EventBus.getDefault().unregister(this);
+            }
+            else
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("Error: No Student Was Chosen");
+                alert.show();
+            }
+
+        }
+    }
+
+
     @FXML
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
@@ -58,7 +86,8 @@ public class StudentViewExamController extends SaveBeforeExit {
     @Subscribe
     public void displayStudentExams(StudentExamsMessageEvent event)
     {
-        List<StudentExam> studentExams = event.getStudentExams();
+        List<StudentExam> studentExams = event.getStudentExams().stream().filter(studentExam ->
+                studentExam.getStatus() == Enums.submissionStatus.Approved).collect(Collectors.toList());
         if(studentExams != null)
         {
             ExamTV.getItems().addAll(studentExams);
@@ -106,21 +135,44 @@ public class StudentViewExamController extends SaveBeforeExit {
             }
         });
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
-        ExamTV.setRowFactory(tv -> new TableRow<StudentExam>() {
-            @Override
-            protected void updateItem(StudentExam exam, boolean empty) {
-                super.updateItem(exam, empty);
-                if (exam == null || empty) {
-                    setStyle("");
-                } else {
-                    if (exam.getGrade() > 50) {
-                        setStyle("-fx-background-color: green;");
-                    } else {
-                        setStyle("-fx-background-color: red;");
+
+
+        //ExamTV.setRowFactory(tv -> {
+        //    TableRow<StudentExam> row = new TableRow<>();
+        //
+        //    //row.setStyle("-fx-background-color: #E6E6FA;");
+        //
+        //    return row;
+        //});
+
+        Callback<TableColumn<StudentExam, Integer>, TableCell<StudentExam, Integer>> cellFactory =
+                column -> new TableCell<StudentExam, Integer>() {
+                    @Override
+                    protected void updateItem(Integer item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty) {
+                            setText(String.valueOf(item));
+
+                            if (item >= 50) {
+                                setStyle("-fx-background-color: #65A873; -fx-alignment: CENTER;");
+                            } else {
+                                setStyle("-fx-background-color: #DC6F6F; -fx-alignment: CENTER;");
+                            }
+                        } else {
+                            setText(null);
+                            setStyle(null);
+                        }
                     }
-                }
-            }
-        });
+                };
+        gradeColumn.setCellFactory(cellFactory);
+
+
+        gradeColumn.setStyle( "-fx-alignment: CENTER;");
+        examCodeColumn.setStyle( "-fx-alignment: CENTER;");
+        examCodeColumn.setStyle( "-fx-alignment: CENTER;");
+        courseColumn.setStyle( "-fx-alignment: CENTER;");
+        subjectColumn.setStyle( "-fx-alignment: CENTER;");
+
     }
 
 }
