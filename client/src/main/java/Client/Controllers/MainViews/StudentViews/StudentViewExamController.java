@@ -52,7 +52,7 @@ public class StudentViewExamController extends SaveBeforeExit {
         assert gradeColumn != null : "fx:id=\"gradeColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert subjectColumn != null : "fx:id=\"subjectColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         setTable();
-        Message message = new Message(1, "Get Student Exams For Student ID: " + Client.SimpleClient.getUser().getID());
+        Message message = new Message(1, "Get Student Exams For Student ID: " + SimpleClient.getUser().getID());
         SimpleClient.getClient().sendToServer(message);
     }
     @Subscribe

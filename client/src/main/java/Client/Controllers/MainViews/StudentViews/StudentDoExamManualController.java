@@ -85,7 +85,7 @@ public class StudentDoExamManualController {
                 XWPFDocument document = new XWPFDocument(fis);
                 System.out.println(document.getDocument().getBody());
                 ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializeXWPFDocument(document));
-                Message message = new Message(1, "Manual Exam for student ID: " + Client.SimpleClient.getUser().getID());
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                 message.setData(manualStudentExam);
                 SimpleClient.getClient().sendToServer(message);
                 fileRecievedLabel.setText("File Uploaded!");

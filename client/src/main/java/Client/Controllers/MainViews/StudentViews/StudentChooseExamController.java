@@ -82,7 +82,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
             }
         });
 
-        Message message = new Message(1, "Get class exams for student ID: " + Client.SimpleClient.getUser().getID());
+        Message message = new Message(1, "Get class exams for student ID: " + SimpleClient.getUser().getID());
         SimpleClient.getClient().sendToServer(message);
         IDTF.setDisable(true);
     }
