@@ -6,9 +6,9 @@ import Client.Events.ManualExamEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
-import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.Enums;
+import Entities.SchoolOwned.ClassExam;
 import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
@@ -26,18 +26,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class StudentDoExamManualController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private ImageView dragAndDropImg;
@@ -126,9 +118,7 @@ public class StudentDoExamManualController {
             public void run() {
                 if (timeInSeconds > 0) {
                     timeInSeconds--;
-                    Platform.runLater(() -> {
-                        timeLeftLabel.setText("Time Left: " + String.format("%02d:%02d:%02d", timeInSeconds / 3600, (timeInSeconds%3600)/60, timeInSeconds % 60));
-                    });
+                    Platform.runLater(() -> timeLeftLabel.setText("Time Left: " + String.format("%02d:%02d:%02d", timeInSeconds / 3600, (timeInSeconds%3600)/60, timeInSeconds % 60)));
 
                 } else {
                     try {
@@ -177,6 +167,14 @@ public class StudentDoExamManualController {
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
+//    @Subscribe
+//    public void addExtraTime(ExtraTimeMessageEvent event) {
+//        if(event.getClassExam().getID()  == mainClassExam.getID())
+//        {
+//            timeInSeconds += event.getExtraTime();
+//            JOptionPane.showMessageDialog(null, "Teacher has added " + event.getExtraTime() + " minutes to the exam", "Submission Exam", JOptionPane.WARNING_MESSAGE);
+//        }
+//    }
 
 }
 

@@ -3,6 +3,7 @@ package Client.Controllers.MainViews.StaffViews.TeacherViews;
 import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Events.CoursesOfTeacherEvent;
 import Client.Events.ExamMessageEvent;
+import Client.Events.LoadExamEvent;
 import Client.Events.SubjectsOfTeacherMessageEvent;
 import Client.SimpleClient;
 import Entities.SchoolOwned.ClassExam;
@@ -18,6 +19,8 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -139,9 +142,23 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         examTimeTF.setDisable(false);
     }
     @FXML
-    public void onSaveExam()
-    {
-        JOptionPane.showMessageDialog(null,startDateTF.getChronology(),"Test", JOptionPane.WARNING_MESSAGE);
+    public void onSaveExam() throws IOException {
+        double time = Double.parseDouble(examTimeTF.getText());
+        String code = codeTF.getText();
+        if(time >= 0 && code.length() == 4)
+        {
+            Date startDate = (Date.valueOf(startDateTF.getValue()));
+            startDate.setTime(Long.parseLong(startTimeTF.getText()));
+            Date endDate = (Date.valueOf(endDateTF.getValue()));
+            endDate.setTime(Long.parseLong(endTimeTF.getText()));
+            classExam.setStartDate(startDate);
+            classExam.setFinalDate(endDate);
+            classExam.setCode(codeTF.getText());
+            classExam.setExamTime(Double.parseDouble(examTimeTF.getText()));
+            Message message = new Message(1, "Add New Class Exam");
+            message.setData(classExam);
+            SimpleClient.getClient().sendToServer(message);
+        }
     }
 
     @Subscribe
@@ -181,12 +198,18 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String pattern = "^(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d$";
         return Pattern.matches(pattern, input);
     }
-    public static boolean isValidDate(String input) {
-        return true;
 
+    @Subscribe
+    public void loadExam(LoadExamEvent event)
+    {
+        classExam = event.getClassExam();
+        startDateTF.setValue(classExam.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        startTimeTF.setText(String.valueOf(classExam.getStartDate().getTime()));
+        endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        endTimeTF.setText(String.valueOf(classExam.getFinalDate().getTime()));
+        codeTF.setText(classExam.getCode());
+        examTimeTF.setText(String.valueOf(classExam.getExamTime()));
+        classExam = new ClassExam();
     }
-
-
-
-
 }
+
