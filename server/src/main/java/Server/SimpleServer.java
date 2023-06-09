@@ -300,10 +300,19 @@ public class SimpleServer extends AbstractServer {
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get ExtraTimeRequest data")) {
+                /*
                 response = "ExtraTimeRequest data";
                 message.setMessage(response);
                 message.setData(new ExtraTimeRequestEvent((ExtraTime) message.getData()));
                 sendToAllClients(message);
+                */
+                response ="ExtraTimeRequest data";
+                message.setMessage(response);
+                List<Object>data=new ArrayList<>();
+                data.add(message.getData());
+                data.add(getPrincipals());
+                message.setData(data);
+                client.sendToClient(message);
             }
             else if (message.getMessage().startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());

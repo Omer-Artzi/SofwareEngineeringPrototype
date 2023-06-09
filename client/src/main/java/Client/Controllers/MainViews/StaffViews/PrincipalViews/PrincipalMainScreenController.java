@@ -41,7 +41,7 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
                 Principal user=((Principal)(SimpleClient.getClient().getUser()));
                 //if(event.IsFound(user)) {
                     //event.show();
-                    JOptionPane.showMessageDialog(null, "HI", "ExtraTimerRequest", JOptionPane.INFORMATION_MESSAGE);
+                    //JOptionPane.showMessageDialog(null, "HI", "ExtraTimerRequest", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (Exception e) {
                 e.printStackTrace();
