@@ -17,6 +17,8 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.swing.*;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -81,7 +83,35 @@ public class SimpleChatClient extends Application {
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
-        return FXMLLoader.load(Objects.requireNonNull(SimpleChatClient.class.getResource(fxml + ".fxml")));
+        System.out.println("loadFXML: " + fxml);
+        List<String> possiblePaths = new ArrayList<>();
+        possiblePaths.add("IlansFuckingBullshitResources/");
+        possiblePaths.add("MainViews/");
+        possiblePaths.add("StaffViews/");
+        possiblePaths.add("PrincipalViews/");
+        possiblePaths.add("TeacherViews/");
+        possiblePaths.add("StudentViews/");
+        possiblePaths.add("Sidebars/");
+        possiblePaths.add("SubViews/");
+        possiblePaths.add("");
+
+        // recursively search for the fxml file url in the resource folder:
+// https://stackoverflow.com/questions/20389255/what-is-the-difference-between-getclass-getclassloader-getresource-and-getcl
+
+        for(String path1 : possiblePaths){
+            for(String path2 : possiblePaths) {
+                for (String path3 : possiblePaths) {
+                    try {
+                        return FXMLLoader.load(Objects.requireNonNull(SimpleChatClient.class.getClassLoader().getResource("FXMLs/" + path1 +  path2 +  path3 + fxml + ".fxml")));
+                    }
+                    catch (Exception e){
+                        continue;
+                    }
+                }
+            }
+        }
+        return null;
+        //return FXMLLoader.load(Objects.requireNonNull(SimpleChatClient.class.getClassLoader().getResource("FXMLs/" + fxml + ".fxml")));
     }
 
 

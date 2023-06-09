@@ -11,5 +11,8 @@
         <module name="client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="OCSFMediatorExample" target="15" />
+    </bytecodeTargetLevel>
   </component>
 </project>
