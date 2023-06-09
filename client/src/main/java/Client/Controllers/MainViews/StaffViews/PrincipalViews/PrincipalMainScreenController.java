@@ -26,7 +26,6 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
     private Button seeCurrentTestsBT;
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
 
@@ -48,8 +47,6 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
             }
         });
 }
-
-
 
     @FXML
     void initialize() {
