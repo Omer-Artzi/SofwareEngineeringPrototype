@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.ListSelectionView?>
+
+<AnchorPane fx:id="principalListSelectionView" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherExtraTimeRequestController">
+    <children>
+        <TextArea fx:id="TeacherNoteTF" layoutX="64.0" layoutY="336.0" prefHeight="95.0" prefWidth="342.0" />
+        <Label layoutX="64.0" layoutY="310.0" prefHeight="20.0" prefWidth="74.0" text="Add note:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Button fx:id="sendBT" layoutX="344.0" layoutY="442.0" mnemonicParsing="false" onAction="#sendExtraTimeRequest" text="send">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+        <ListSelectionView fx:id="liad" layoutX="25.0" layoutY="55.0" />
+    </children>
+</AnchorPane>
