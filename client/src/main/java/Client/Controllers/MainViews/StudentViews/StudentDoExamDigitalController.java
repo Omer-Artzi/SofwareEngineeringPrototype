@@ -91,7 +91,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         submitButton.setVisible(false);
         AssertFXMLComponents();
 
-        CreateListeners();
+        //CreateListeners();
 
         CreatePreviewScene();
         currentIndex = 0;
@@ -125,12 +125,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
         questionList = selectedForm.getQuestionList();
         numberOfQuestions = selectedForm.getQuestionList().size();
+        System.out.println("Number of questions: " + numberOfQuestions);
         renderProgress();
         timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
         setTimer();
         currentQuestion = questionList.get(currentIndex);
         studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
-        for (Question question : selectedForm.getQuestionList()) {
+        for (Question question : questionList){ // shuffle the answers of each question
+            List<String> sortedAnswers = question.getAnswers();
+            Collections.shuffle(sortedAnswers);
+            question.setAnswers(sortedAnswers);
             rightAnswers.add(question.getCorrectAnswer());
             //studentQuestionsAnswers.put(question, "0");
         }
@@ -145,7 +149,17 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @Subscribe  // get the answer of the student from the preview window
     public void getAnswer(StudentAnswerToQuestion event){
         System.out.println("Answer received: " +event.getSelectedAnswer());
-        if (event.getSelectedAnswer() == null){ // if the student didn't answer the question
+        int flag = 0;
+        for (String answer : currentQuestion.getAnswers()) {
+            if (answer.equals(event.getSelectedAnswer())) {
+                flag = 1;
+            }
+        }
+        if (flag == 0) {
+            System.out.println("Answer not found");
+            return;
+        }
+        if (event.getSelectedAnswer() == null || event.getSelectedAnswer().equals("0")) { // if the student didn't answer the question
             System.out.println("Question " + currentQuestion.getID() + " not answered");
             return;
         }
@@ -189,9 +203,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         timer.schedule(task,0, 1000);
     }
 
-        private void CreateListeners() // create listeners for the buttons
+        /*private void CreateListeners() // create listeners for the buttons
         {
-
             //create a listener for the next Question button
             nextButton.setOnAction(e -> {
                 if (currentIndex < numberOfQuestions - 1) {
@@ -223,19 +236,33 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                     submitButton.setVisible(false);
                 }
             });
-        }
+        }*/
 
         @Subscribe
         private void UpdateQuestion() { // TODO: work with Edan on solution to Randomize question answers
             currentQuestion = questionList.get(currentIndex);
-            System.out.println("Updating preview");
-            System.out.println("currentQuestion: " + currentQuestion);
-            System.out.println(currentQuestion.getCorrectAnswer());
+            System.out.println("//////// Updating preview ////////");
+            System.out.println("currentQuestion: " + currentQuestion + " currentIndex: " + currentIndex + "Correct answer: " + currentQuestion.getCorrectAnswer());
             RequestStudentAnswerToQuestion request = new RequestStudentAnswerToQuestion();
             EventBus.getDefault().post(request);
             ChangePreviewEvent event = new ChangePreviewEvent();
             event.setQuestion(currentQuestion);
+            System.out.println("currentQuestion: " + currentQuestion);
+            System.out.println("studentQuestionsAnswers: " + studentQuestionsAnswers.get(currentQuestion));
+            printMapHelper(studentQuestionsAnswers);
+            if (studentQuestionsAnswers.get(currentQuestion) != null) {
+                event.setSelectedAnswer(studentQuestionsAnswers.get(currentQuestion));
+            }
+            else {
+                event.setSelectedAnswer("0");
+            }
             EventBus.getDefault().post(event);
+        }
+
+        public void printMapHelper(Map<Question, String> map) {
+            for (Map.Entry<Question, String> entry : map.entrySet()) {
+                System.out.println("Question: " + entry.getKey().getID() + " Answer: " + entry.getValue());
+            }
         }
 
     /*
@@ -267,9 +294,41 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
 
 
     @FXML
-    void previousQuestion(ActionEvent event) {}
+    void previousQuestion(ActionEvent event) {
+        if (currentIndex > 0) {
+            currentIndex--;
+            nextButton.setVisible(true);
+            submitButton.setVisible(false);
+            if (currentIndex == 0) {
+                previousButton.setVisible(false);
+            }
+            UpdateQuestion();
+        }
+        else {
+            nextButton.setVisible(true);
+            submitButton.setVisible(false);
+        }
+    }
     @FXML
-    void nextQuestion(ActionEvent event){}
+    void nextQuestion(ActionEvent event){
+        if (currentIndex < numberOfQuestions - 1) {
+            System.out.println("currentIndex - before: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
+            currentIndex++;
+            System.out.println("currentIndex - after: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
+            if (currentIndex > 0) {
+                previousButton.setVisible(true);
+            }
+            UpdateQuestion();
+            if (currentIndex == numberOfQuestions - 1) {
+                nextButton.setVisible(false);
+                submitButton.setVisible(true);
+            }
+        }
+        else {
+            nextButton.setVisible(false);
+            submitButton.setVisible(true);
+        }
+    }
 
     @FXML
     void submitExam(ActionEvent event) {
@@ -337,34 +396,6 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
 
 
 
-
-    private void setNextQuestion() {
-        if (!(currentIndex >= studentExam.getClassExam().getExamForm().getQuestionList().size())) {
-            {
-                // changing the color
-                Node circleNode = this.progressPane.getChildren().get(currentIndex);
-                ProgressCircleController controller = (ProgressCircleController) circleNode.getUserData();
-                controller.setCurrentQuestionColor();
-            }
-
-            this.currentQuestion = this.studentExam.getClassExam().getExamForm().getQuestionList().get(currentIndex);
-            List<String> options = new ArrayList<>();
-            options.add(this.currentQuestion.getAnswers().get(0));
-            options.add(this.currentQuestion.getAnswers().get(1));
-            options.add(this.currentQuestion.getAnswers().get(2));
-            options.add(this.currentQuestion.getCorrectAnswer());
-            Collections.shuffle(options);
-
-            this.currentQuestion.setAnswers(options);
-
-            //this.questionsObservable.setQuestion(this.currentQuestion);
-            currentIndex++;
-        } else {
-            nextButton.setVisible(false);
-            submitButton.setVisible(true);
-        }
-    }
-
     private void renderProgress() {
         System.out.println("rendering progress: questionList.size() = " + questionList.size());
         for (int i = 0; i < questionList.size(); i++) {
@@ -375,9 +406,24 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             button.setStyle("-fx-background-color:  #669bbc; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold; ");
             button.setUserData(i);
             button.setOnAction(e -> {
+                System.out.println("button " + button.getText() + " pressed");
                 int index = (int) button.getUserData();
-                this.currentIndex = index-1;
+                this.currentIndex = index;
                 this.UpdateQuestion();
+                if (index == 0) {
+                    previousButton.setVisible(false);
+                }
+                else {
+                    previousButton.setVisible(true);
+                }
+                if (index == questionList.size()-1) {
+                    nextButton.setVisible(false);
+                    submitButton.setVisible(true);
+                }
+                else {
+                    nextButton.setVisible(true);
+                    submitButton.setVisible(false);
+                }
             });
             progressButtons.add(button);
             this.progressPane.getChildren().add(button);
