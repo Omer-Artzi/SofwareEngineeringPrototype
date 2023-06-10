@@ -6,6 +6,7 @@ import Client.Events.ClassExamGradeEvent;
 import Client.Events.StudentExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
+import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Course;
@@ -144,7 +145,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         // Loading the data to the table
         if(chosenExam != null)
         {
-            ClassExamTv.getItems().addAll(chosenExam.getStudentExams());
+            ClassExamTv.getItems().addAll(chosenExam.getStudentExams().stream().filter(studentExam ->
+                    studentExam.getStatus() != Enums.submissionStatus.NotTaken).collect(Collectors.toList()));
             ClassExamTv.sort();
         }
     }

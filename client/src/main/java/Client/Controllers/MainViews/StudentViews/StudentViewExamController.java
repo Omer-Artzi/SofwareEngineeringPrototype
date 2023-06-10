@@ -86,6 +86,7 @@ public class StudentViewExamController extends SaveBeforeExit {
     @Subscribe
     public void displayStudentExams(StudentExamsMessageEvent event)
     {
+        ExamTV.getItems().clear();
         List<StudentExam> studentExams = event.getStudentExams().stream().filter(studentExam ->
                 studentExam.getStatus() == Enums.submissionStatus.Approved).collect(Collectors.toList());
         if(studentExams != null)

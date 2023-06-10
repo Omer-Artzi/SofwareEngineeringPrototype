@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <AnchorPane prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.ShowStatsAndReportsController">
    <children>
       <Label layoutX="305.0" layoutY="14.0" prefHeight="35.0" prefWidth="206.0" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Stats and Reports" />
@@ -36,7 +43,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ScrollPane fx:id="BarScrollPane" layoutX="69.0" layoutY="71.0" prefHeight="313.0" prefWidth="503.0" style="-fx-background-color: transparent;" />
+            <ScrollPane fx:id="BarScrollPane" layoutX="123.0" layoutY="62.0" prefHeight="313.0" prefWidth="503.0" style="-fx-background-color: transparent;" />
             <Label layoutX="255.0" layoutY="39.0" text="Median:">
                <font>
                   <Font size="14.0" />
@@ -47,6 +54,13 @@
                   <Font size="14.0" />
                </font>
             </Label>
+            <RadioButton layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#ChangeHistType" selected="true" text="Chronological">
+               <toggleGroup>
+                  <ToggleGroup fx:id="HistGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton layoutX="14.0" layoutY="139.0" mnemonicParsing="false" onAction="#ChangeHistType" text="Score Bins" toggleGroup="$HistGroup" />
+            <Label layoutX="11.0" layoutY="72.0" text="HistogramType:" />
          </children>
       </AnchorPane>
       <VBox fx:id="TablesVBOX" layoutX="40.0" layoutY="87.0" maxHeight="220.0" prefWidth="720.0">

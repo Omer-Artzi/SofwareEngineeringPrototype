@@ -102,12 +102,12 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     int hboxWidth = 650;
     double rowWidth = 700;
 
-
+    int studentScore;
     private StudentExam solvedExam;
 
     void SetStudentScore(int newScore)
     {
-        solvedExam.setGrade(newScore);
+        studentScore = newScore;
         GradeText.setText(Integer.toString(newScore));
         if (newScore > 50)
             GradeText.setFill(Color.GREEN);
@@ -117,6 +117,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
+        solvedExam.setGrade(studentScore);
         solvedExam.setStatus(Enums.submissionStatus.Approved);
         // send to server to set student Exam
         Message studentExamMessage = new Message(0, "Change Student Exam");
@@ -521,7 +522,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             bord3.setPrefHeight(Control.USE_COMPUTED_SIZE);
             bord3.setPrefWidth(rowWidth / 10);
 
-            if (question.getAnswers().indexOf(studentAnswerStr) == correctAnswerInt)
+            if (question.getAnswers().indexOf(studentAnswerStr)+1 == correctAnswerInt)
             {
                 studentScore += questionScoreInt;
                 bord3.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
@@ -542,8 +543,10 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
             AnswersVBOX_t.getChildren().add(QuestionIndexPlace++, qustionHbox);
         }
-
-        SetStudentScore(studentScore);
+        if (solvedExam.getStatus() == Enums.submissionStatus.ToEvaluate)
+            SetStudentScore(studentScore);
+        else
+            SetStudentScore(solvedExam.getGrade());
 
         StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
         StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
