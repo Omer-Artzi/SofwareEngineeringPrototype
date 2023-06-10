@@ -142,20 +142,27 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         System.out.println("5. after sending first question to preview");
     }
 
-    @Subscribe
+    @Subscribe  // get the answer of the student from the preview window
     public void getAnswer(StudentAnswerToQuestion event){
         System.out.println("Answer received: " +event.getSelectedAnswer());
-        if (studentQuestionsAnswers.put(currentQuestion, event.getSelectedAnswer()) == null) {
+        if (event.getSelectedAnswer() == null){ // if the student didn't answer the question
+            System.out.println("Question " + currentQuestion.getID() + " not answered");
+            return;
+        }
+        if (studentQuestionsAnswers.put(currentQuestion, event.getSelectedAnswer()) == null) { // if the question wasn't answered before
             System.out.println("Answer to question " + currentQuestion.getID() + " was added");
             numberOfQuestionsAnswered++;
-        } else {
+        }
+        else // if the question was answered before
+        {
             System.out.println("Answer to question " + currentQuestion.getID() + " was updated");
         }
         System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
         progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
     }
 
-    private void setTimer() {
+    private void setTimer() // set the timer for the exam
+    {
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -182,7 +189,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         timer.schedule(task,0, 1000);
     }
 
-        private void CreateListeners() {
+        private void CreateListeners() // create listeners for the buttons
+        {
 
             //create a listener for the next Question button
             nextButton.setOnAction(e -> {
