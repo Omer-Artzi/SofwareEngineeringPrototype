@@ -6,9 +6,10 @@ import Client.Events.ExamMessageEvent;
 import Client.Events.LoadExamEvent;
 import Client.Events.SubjectsOfTeacherMessageEvent;
 import Client.SimpleClient;
-import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
+import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.Course;
+import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,26 +18,17 @@ import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Date;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class TeacherCreateClassExamController extends SaveBeforeExit {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
     @FXML
     private DatePicker endDateTF;
 
     @FXML
-    private TableView<ClassExam> ExamFormsTV;
+    private TableView<ExamForm> ExamFormsTV;
 
     @FXML
     private TextField codeTF;
@@ -142,10 +134,23 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     }
     @FXML
     public void onSaveExam() throws IOException {
-        double time = Double.parseDouble(examTimeTF.getText());
+        String time =examTimeTF.getText();
+        String startTime =examTimeTF.getText();
+        String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if(time >= 0 && code.length() == 4)
+        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime))
         {
+            String[] timeParts = time.split(":");
+
+            if (timeParts.length != 3) {
+                throw new IllegalArgumentException("Invalid time format: " + time);
+            }
+
+            int hours = Integer.parseInt(timeParts[0]);
+            int minutes = Integer.parseInt(timeParts[1]);
+            int seconds = Integer.parseInt(timeParts[2]);
+
+            int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
             Date startDate = (Date.valueOf(startDateTF.getValue()));
             startDate.setTime(Long.parseLong(startTimeTF.getText()));
             Date endDate = (Date.valueOf(endDateTF.getValue()));
@@ -154,16 +159,22 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             classExam.setFinalDate(endDate);
             classExam.setCode(codeTF.getText());
             classExam.setExamTime(Double.parseDouble(examTimeTF.getText()));
+            classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
+            classExam.setExamTime(totalSeconds);
             Message message = new Message(1, "Add New Class Exam");
             message.setData(classExam);
             SimpleClient.getClient().sendToServer(message);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Please make sure all field are filled properly", "Invalid Input", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     @Subscribe
     public void displayExamForms(ExamMessageEvent event)
     {
-        List<ClassExam> exams = event.getClassExams();
+        List<ExamForm> exams = event.getExamForms();
         if(exams != null && exams.isEmpty())
         {
             ExamFormsTV.getItems().addAll(exams);
@@ -175,7 +186,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
     }
     @Subscribe
-    public void displaySubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
+    public void displaySubjects(SubjectsOfTeacherMessageEvent event){
         List<Subject> subjects = event.getSubjects();
         if(subjects != null && !subjects.isEmpty())
         {
@@ -188,9 +199,13 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
     }
     @Subscribe
-    public void displayCourses(CoursesOfTeacherEvent event) throws IOException {
+    public void displayCourses(CoursesOfTeacherEvent event){
        courses = event.getCourses();
-        System.out.println("Courses: " + courses);
+       if(courses != null && !courses.isEmpty())
+        {
+            courseCB.getItems().addAll(courses);
+            System.out.println("Courses: " + courses);
+        }
 
     }
     public static boolean isValidTimeFormat(String input) {
@@ -207,7 +222,12 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         endTimeTF.setText(String.valueOf(classExam.getFinalDate().getTime()));
         codeTF.setText(classExam.getCode());
-        examTimeTF.setText(String.valueOf(classExam.getExamTime()));
+        double timeInSeconds = classExam.getExamTime();
+        int hours = (int) (timeInSeconds / 3600);
+        int minutes = (int) ((timeInSeconds % 3600) / 60);
+        int seconds = (int) (timeInSeconds % 60);
+        examTimeTF.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        ExamFormsTV.getSelectionModel().select(classExam.getExamForm());
         classExam = new ClassExam();
     }
 }

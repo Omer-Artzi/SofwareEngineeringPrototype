@@ -1,32 +1,20 @@
 package Server.Controllers;
 
 import Server.Events.ServerConnectionEvent;
-import Server.Events.TerminationEvent;
 import Server.SimpleServer;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 public class PreLogInController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private Button EnterButton;
@@ -49,11 +37,14 @@ public class PreLogInController {
     @FXML
     private TextField usernameTF;
 
+    @FXML
+    private TextField schemaTF;
+
 
 
     @FXML
     void initialize() {
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
         assert EnterButton != null : "fx:id=\"EnterButton\" was not injected: check your FXML file 'PreLogIn.fxml'.";
         assert PortTF != null : "fx:id=\"PortTF\" was not injected: check your FXML file 'PreLogIn.fxml'.";
         showSQLCB.getItems().addAll("false","true");
@@ -78,6 +69,9 @@ public class PreLogInController {
                             }
                             if (passwordTF.getText() != null && !passwordTF.getText().isBlank()) {
                                 properties.put("hibernate.connection.password", passwordTF.getText());
+                            }
+                            if (schemaTF.getText() != null && !schemaTF.getText().isBlank()) {
+                                properties.put("hibernate.connection.url", schemaTF.getText());
                             }
                             properties.put("hibernate.hbm2ddl.auto", cfgCB.getSelectionModel().getSelectedItem());
                             properties.put("hibernate.show_sql", showSQLCB.getSelectionModel().getSelectedItem());
@@ -124,11 +118,4 @@ public class PreLogInController {
         }
 
     }
-    @Subscribe
-    public  void none(TerminationEvent event)
-    {
-        System.out.println("Termination event received");
-        System.exit(0);
-    }
-
 }
