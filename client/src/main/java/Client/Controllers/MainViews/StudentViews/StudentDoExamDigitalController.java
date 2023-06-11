@@ -149,8 +149,9 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @Subscribe  // get the answer of the student from the preview window
     public void getAnswer(StudentAnswerToQuestion event){
         System.out.println("Answer received: " +event.getSelectedAnswer());
+        Question question = event.getQuestion();
         int flag = 0;
-        for (String answer : currentQuestion.getAnswers()) {
+        for (String answer : question.getAnswers()) {
             if (answer.equals(event.getSelectedAnswer())) {
                 flag = 1;
             }
@@ -160,19 +161,19 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             return;
         }
         if (event.getSelectedAnswer() == null || event.getSelectedAnswer().equals("0")) { // if the student didn't answer the question
-            System.out.println("Question " + currentQuestion.getID() + " not answered");
+            System.out.println("Question " + question.getID() + " not answered");
             return;
         }
-        if (studentQuestionsAnswers.put(currentQuestion, event.getSelectedAnswer()) == null) { // if the question wasn't answered before
-            System.out.println("Answer to question " + currentQuestion.getID() + " was added");
+        if (studentQuestionsAnswers.put(question, event.getSelectedAnswer()) == null) { // if the question wasn't answered before
+            System.out.println("Answer to question " + question.getID() + " was added");
             numberOfQuestionsAnswered++;
         }
         else // if the question was answered before
         {
-            System.out.println("Answer to question " + currentQuestion.getID() + " was updated");
+            System.out.println("Answer to question " + question.getID() + " was updated");
         }
         System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
-        progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
+        //progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
     }
 
     private void setTimer() // set the timer for the exam
