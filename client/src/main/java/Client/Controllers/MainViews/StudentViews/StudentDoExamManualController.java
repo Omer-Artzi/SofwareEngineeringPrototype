@@ -134,7 +134,6 @@ public class StudentDoExamManualController {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
         };
         timer.schedule(task, 0, 1000);

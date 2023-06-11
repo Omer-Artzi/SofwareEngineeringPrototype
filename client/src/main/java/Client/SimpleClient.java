@@ -2,13 +2,10 @@ package Client;
 
 import Client.Events.*;
 import Client.ocsf.AbstractClient;
-import Entities.SchoolOwned.ClassExam;
+import Entities.SchoolOwned.*;
 import Entities.Communication.Message;
 import Entities.Communication.ExtraTime;
 import Entities.Communication.NewSubscriberEvent;
-import Entities.SchoolOwned.Course;
-import Entities.SchoolOwned.Question;
-import Entities.SchoolOwned.Subject;
 import Entities.StudentOwned.Grade;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Person;
@@ -168,8 +165,13 @@ public class SimpleClient extends AbstractClient {
 			if(relevantUser(extraTime,"request")) {
 				notification.show();
 			}
-		}
-        else if (messageText.startsWith("Exams in ")){
+		}else if (messageText.startsWith("Exam Forms in ")){
+            System.out.println("IN Client Exam Forms number: " + ((List<ExamForm>)message.getData()).size());
+            ExamMessageEvent event = new ExamMessageEvent();
+            event.setExamForms((List<ExamForm>)message.getData());
+            EventBus.getDefault().post(event);
+        }
+        else if (messageText.startsWith("Class Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
 		else if (messageText.startsWith("Success: new ExamForm")){

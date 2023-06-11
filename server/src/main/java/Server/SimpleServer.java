@@ -222,7 +222,9 @@ public class SimpleServer extends AbstractServer {
         System.out.println("Message Received: " + request);
 
         // Todo: find better solution to start and commit transaction
-        session.beginTransaction();
+        if (!session.getTransaction().isActive()) {
+            session.beginTransaction();
+        }
         try {
             //we got an empty message, so we will send back an error message with the error details.
             if (request.isBlank()) {
@@ -399,15 +401,16 @@ public class SimpleServer extends AbstractServer {
                 message.setData(getExamsForCourse((Course) (message.getData())));
                 client.sendToClient(message);
             }
-            else if (request.startsWith("Get Exam Forms for Subject")) {
-                response = "Exams in Subject " + ((Subject) (message.getData())).getName();
+            else if (request.startsWith("Get Exam Forms For Subject")) {
+                response = "Exam Forms in Subject " + ((Subject) (message.getData())).getName();
                 message.setMessage(response);
-                message.setData(getExamsForSubjects((Subject) (message.getData())));
+                message.setData(getExamFormForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
-            }else if (request.startsWith("Get Exam Forms for Course")) {
-                response = "Exams in Subject " + ((Subject) (message.getData())).getName();
+            }else if (request.startsWith("Get Exam Forms For Course")) {
+                response = "Exam Forms in Course " + ((Course) (message.getData())).getName();
+                System.out.println("Get Exam Forms for Course");
                 message.setMessage(response);
-                message.setData(getExamsForSubjects((Subject) (message.getData())));
+                message.setData(getExamFormForCourse((Course) (message.getData())));
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get Exams for Subject")) {
@@ -622,8 +625,10 @@ public class SimpleServer extends AbstractServer {
             e1.printStackTrace();
         }
         // Check if there were new changes in the database before commit
-        if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+        if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE)) {
             session.getTransaction().commit();
+        }
+        //session.close();
     }
 
 
@@ -749,8 +754,8 @@ public class SimpleServer extends AbstractServer {
         CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
         Root<Teacher> root = query.from(Teacher.class);
         query.where(builder.equal(root.get("ID"), iTeacherid));
-        List<Course> courses = session.createQuery(query).getSingleResult().getCourses();
-        return courses;
+        Teacher teacher = session.createQuery(query).getSingleResult();
+        return teacher.getCourses();
     }
 
     private List<ClassExam> retrieveClassExam() {

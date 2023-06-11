@@ -12,6 +12,9 @@ public class ExamMessageEvent {
         this.classExams = data;
     }
 
+    public ExamMessageEvent() {
+    }
+
     public List<ClassExam> getClassExams() {
         return classExams;
     }

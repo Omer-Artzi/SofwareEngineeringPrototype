@@ -13,6 +13,7 @@ import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -28,7 +29,21 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     private DatePicker endDateTF;
 
     @FXML
+    private ComboBox<String> typeCB;
+
+    @FXML
     private TableView<ExamForm> ExamFormsTV;
+    @FXML
+    private TableColumn<?, ?> dateCreatedColumn;
+    @FXML
+    private TableColumn<?, ?> lastUsedColumn;
+    @FXML
+    private TableColumn<?, ?> teacherNotesColumn;
+    @FXML
+    private TableColumn<?, ?> IDColumn;
+
+    @FXML
+    private TableColumn<?, ?> codeColumn;
 
     @FXML
     private TextField codeTF;
@@ -57,6 +72,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
 
     private List<Course> courses;
     private ClassExam classExam;
+    private List<Subject> subjects;
 
 
 
@@ -74,6 +90,12 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         assert subjectCB != null : "fx:id=\"subjectCB\" was not injected: check your FXML file 'TeacherCreateClassExam.fxml'.";
         EventBus.getDefault().register(this);
         ExamFormsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+        lastUsedColumn.setCellValueFactory(new PropertyValueFactory<>("lastUsed"));
+        teacherNotesColumn.setCellValueFactory(new PropertyValueFactory<>("examNotesForTeacher"));
+        dateCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
+        typeCB.getItems().addAll("Digital", "Manual");
         courseCB.setDisable(true);
         ExamFormsTV.setDisable(true);
         startDateTF.setDisable(true);
@@ -82,6 +104,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         endDateTF.setDisable(true);
         codeTF.setDisable(true);
         examTimeTF.setDisable(true);
+        typeCB.setDisable(true);
         Message subjectMessage = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getUser().getID());
         Message courseMessage = new Message(1, "1Get Courses of Teacher: " + SimpleClient.getUser().getID());
         subjectMessage.setData(SimpleClient.getUser());
@@ -96,7 +119,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     {
         System.out.println("Subject Selected");
         Subject selectedSubject = subjectCB.getSelectionModel().getSelectedItem();
-        if(courses != null /*&& !courses.isEmpty()*/)
+        if(courses != null && !courses.isEmpty())
         {
             for(Course course: courses) {
                 if(course.getSubject() == selectedSubject) {
@@ -116,21 +139,30 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
 
     @FXML
     public void onCourseSelection() throws IOException {
-        Message message = new Message(1, "Get Exams For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
+        Message message = new Message(1, "Get Exam Forms For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
         message.setData(courseCB.getSelectionModel().getSelectedItem());
         SimpleClient.getClient().sendToServer(message);
-
-        classExam.setCourse(courseCB.getSelectionModel().getSelectedItem());
     }
     @FXML
     public void onExamFormChosen()
     {
-        startDateTF.setDisable(false);
-        startTimeTF.setDisable(false);
-        endTimeTF.setDisable(false);
-        endDateTF.setDisable(false);
-        codeTF.setDisable(false);
-        examTimeTF.setDisable(false);
+        try {
+            ExamForm examForm = ExamFormsTV.getSelectionModel().getSelectedItem();
+            classExam.setSubject(examForm.getSubject());
+            classExam.setCourse(examForm.getCourse());
+            startDateTF.setDisable(false);
+            startTimeTF.setDisable(false);
+            endTimeTF.setDisable(false);
+            endDateTF.setDisable(false);
+            codeTF.setDisable(false);
+            examTimeTF.setDisable(false);
+            typeCB.setDisable(false);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "You did not choose an exam form", "Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
     @FXML
     public void onSaveExam() throws IOException {
@@ -138,7 +170,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime))
+        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null)
         {
             String[] timeParts = time.split(":");
 
@@ -175,7 +207,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     public void displayExamForms(ExamMessageEvent event)
     {
         List<ExamForm> exams = event.getExamForms();
-        if(exams != null && exams.isEmpty())
+        System.out.println("Num of exams: " + exams.size() + " " + exams);
+        if(exams != null && !exams.isEmpty())
         {
             ExamFormsTV.getItems().addAll(exams);
             ExamFormsTV.setDisable(false);
@@ -187,7 +220,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     }
     @Subscribe
     public void displaySubjects(SubjectsOfTeacherMessageEvent event){
-        List<Subject> subjects = event.getSubjects();
+         subjects = event.getSubjects();
         if(subjects != null && !subjects.isEmpty())
         {
             subjectCB.getItems().addAll(subjects);
@@ -222,6 +255,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         endTimeTF.setText(String.valueOf(classExam.getFinalDate().getTime()));
         codeTF.setText(classExam.getCode());
+        typeCB.getSelectionModel().select(classExam.getExamType().toString());
         double timeInSeconds = classExam.getExamTime();
         int hours = (int) (timeInSeconds / 3600);
         int minutes = (int) ((timeInSeconds % 3600) / 60);
