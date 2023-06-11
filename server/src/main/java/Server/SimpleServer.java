@@ -349,7 +349,7 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
-                    session.saveOrUpdate( (message.getData()));
+                    session.save(message.getData());
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);
                 }

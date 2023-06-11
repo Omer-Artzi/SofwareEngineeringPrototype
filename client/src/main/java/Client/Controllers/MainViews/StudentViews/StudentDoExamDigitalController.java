@@ -338,6 +338,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         //System.out.println(this.studentAnswers);
         //System.out.println(this.studentExam.getStudent());
         System.out.println("///// Submitting exam /////");
+        RequestStudentAnswerToQuestion request = new RequestStudentAnswerToQuestion();
+        EventBus.getDefault().post(request);
         // TODO - examForm grade percentage is missing!
         int num_answered = 0;
         int num_correct = 0;
