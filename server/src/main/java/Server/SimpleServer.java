@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -355,18 +356,50 @@ public class SimpleServer extends AbstractServer {
                 }
             }
             else if (message.getMessage().startsWith("Extra time approved")) {
-                response = "Extra time approved";
+                try {
+                    ExtraTime extraTime=(ExtraTime) message.getData();
+
+                    Session session2 = getSessionFactory().openSession();
+                    Transaction tx2 = session2.beginTransaction();
+
+                    session2.saveOrUpdate(extraTime);
+
+                    tx2.commit();
+                    session2.close();
+                    session.merge(extraTime);
+                   // session.flush();
+                    response = "Extra time approved";
+                }
+                catch (Exception e) {
+                    response = (" Extra time request - approve could not be added to the database");
+                    e.printStackTrace();
+                }
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
             else if (message.getMessage().startsWith("Extra time rejected")) {
-                response = "Extra time rejected";
+                try {
+                    ExtraTime extraTime=(ExtraTime) message.getData();
+                    Session session2 = getSessionFactory().openSession();
+                    Transaction tx2 = session2.beginTransaction();
+
+                    session2.saveOrUpdate(extraTime);
+
+                    tx2.commit();
+                    //session.flush();
+                    response = "Extra time rejected";
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    response = (" Extra time request- Reject could not be added to the database");
+
+                }
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Exam approved")) {
+            else if (message.getMessage().startsWith("Exam approved")) { //Lior
                 try {
                     session.save(message.getData());
                     response = "Exam saved successfully";

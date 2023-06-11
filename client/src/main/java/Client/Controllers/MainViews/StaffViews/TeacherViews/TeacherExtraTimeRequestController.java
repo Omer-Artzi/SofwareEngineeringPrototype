@@ -12,7 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.ListSelectionView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,13 +31,16 @@ public class TeacherExtraTimeRequestController  {
     private List<Principal> principals_list;
     @FXML
     private ListSelectionView<Principal> liad;
-
+    @FXML
+    private TextField NewTimeTextFiled;
     @FXML
     private AnchorPane principalListSelectionView;
     @FXML
     private TextArea TeacherNoteTF;
     @FXML
     private Button sendBT;
+    @FXML
+    private javafx.scene.layout.VBox VBox;
 
 
     @Subscribe
@@ -55,6 +60,11 @@ public class TeacherExtraTimeRequestController  {
         EventBus.getDefault().register(this);
     }
 
+    @FXML
+    void NewTimeFunction(ActionEvent event) {
+
+    }
+
     /* Send a notification to the relevant Principals*/
     @FXML
     void sendExtraTimeRequest(ActionEvent event) throws IOException {
@@ -72,6 +82,19 @@ public class TeacherExtraTimeRequestController  {
             return;
         }
 
+        /* check if the teacher fill the extra time */
+        String delta = (NewTimeTextFiled.getText());
+        if (delta.equals("")||delta.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please fill the extra time filled", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        /* check if the the teacher fill a legal time */
+        if (!delta.matches("-?\\d+")){
+            JOptionPane.showMessageDialog(null, "please enter a legal time", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         List<Principal>SelectedPrincipal=new ArrayList<>();
 
         for (Principal item: observablePrincipal)
@@ -85,6 +108,7 @@ public class TeacherExtraTimeRequestController  {
         Teacher teacher=((Teacher)(SimpleClient.getClient().getUser()));
 
         ExtraTime extraTime=new ExtraTime(exam, SelectedPrincipal,teacher,note);
+        extraTime.setDelta(Integer.parseInt(delta));
         teacher.getExtraTimeList().add(extraTime);
         exam.setExtraTime(extraTime);
         teacher.getExtraTimeList().add(extraTime);

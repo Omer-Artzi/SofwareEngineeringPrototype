@@ -90,7 +90,12 @@ public class SimpleClient extends AbstractClient {
             SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
-        else if (messageText.startsWith("ExtraTimeRequest data")) {////
+        else if (message.getMessage().startsWith("Extra Time Requests")) {    //Added by Liad 10/06
+            System.out.println("Extra Time Requests");
+            ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
+            EventBus.getDefault().post(stMsg);
+        }
+        else if (messageText.startsWith("ExtraTimeRequest data")) { //Added by liad
             System.out.println("SelectedClassExamEvent in client");
             List<Object> data = (List<Object>) message.getData();
             if (data == null) {
@@ -151,7 +156,10 @@ public class SimpleClient extends AbstractClient {
 			ExtraTime extraTime=(ExtraTime) message.getData();
 			PrincipalApproveEvent approveEvent =new PrincipalApproveEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"approve")) {
+                EventBus.getDefault().post(approveEvent);
+                System.out.println("Approve in client by liadddddddd");
 				approveEvent.show();
+                //EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
         }
         else if (messageText.startsWith("Extra time rejected")) {
@@ -159,6 +167,7 @@ public class SimpleClient extends AbstractClient {
 			PrincipalRejectEvent rejectEvent =new PrincipalRejectEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"reject")) {
 				rejectEvent.show();
+                EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
 		}
 		else if (messageText.startsWith("Extra Time Requested")) {

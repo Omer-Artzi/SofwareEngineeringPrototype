@@ -25,6 +25,8 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     private ObservableList<ExtraTime> data;
     @FXML
     private TableColumn<ExtraTime, String> InfoColumn;
+    @FXML
+    private TableColumn<ExtraTime, String> ExtraTimeColumn;
 
     @FXML
     private ChoiceBox<String> DecisionCoiceBox;
@@ -35,8 +37,6 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     @FXML
     private TableColumn<ExtraTime, String> IDColumn;
 
-    @FXML
-    private TextField NewTimeTextFiled;
 
     @FXML
     private TextArea PrincipalNote;
@@ -50,8 +50,6 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     @FXML
     private Label DecisionLabel;
 
-    @FXML
-    private Label ExtraTimeLabel;
 
     /* get the request from a teacher */
     /*
@@ -60,7 +58,7 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
         Platform.runLater(()-> {
             try {
                 System.out.println("In pricipal MainScreen");
-                Principal user=((Principal)(Client.SimpleClient.getClient().getUser())); //TODO: Notification
+                Principal user=((Principal)(Client.SimpleClient.getClient().getUser())); //
                 if(event.IsFound(user)) {
                     event.show();
                     //JOptionPane.showMessageDialog(null, "HI", "ExtraTimerRequest", JOptionPane.INFORMATION_MESSAGE);
@@ -74,17 +72,15 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     /* get the Extra Time request from the data base */
     @Subscribe
     public void update(ExtraTimeRequestsEvent event) {
-        System.out.println("in listExtraTime");
         extraTimeList = event.getExtraTimeList();
         data.addAll(extraTimeList);
+        ExtraTimeList.refresh();
     }
 
     public void elementStatus(boolean b) {
-        ExtraTimeLabel.setVisible(b);
         DecisionLabel.setVisible(b);
         SendButton.setVisible(b);
         PrincipalNote.setDisable(b);
-        NewTimeTextFiled.setVisible(b);
         DecisionCoiceBox.setVisible(b);
         PrincipalNote.setVisible(b);
     }
@@ -102,8 +98,9 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
         InfoColumn.setCellValueFactory(new PropertyValueFactory<>("teacherNote"));
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         SentByColumn.setCellValueFactory(new PropertyValueFactory<>("teacher"));
+        ExtraTimeColumn.setCellValueFactory(new PropertyValueFactory<>("delta"));
 
-        String [] str={"YES", "NO"};
+        String [] str={"Approve", "Reject"};
         DecisionCoiceBox.setItems(FXCollections.observableArrayList(str));
 
         /* select a request from the table */
@@ -120,54 +117,31 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
             if (!DecisionCoiceBox.getSelectionModel().isEmpty() || DecisionCoiceBox.getSelectionModel() != null) {
                     SendButton.setVisible(true);
                     PrincipalNote.setVisible(true);
-                if (DecisionCoiceBox.getValue().equals("YES")) {
-                    ExtraTimeLabel.setVisible(true);
-                    NewTimeTextFiled.setVisible(true);
-                }
-                else if(DecisionCoiceBox.getValue().equals("NO")){
-                    ExtraTimeLabel.setVisible(false);
-                    NewTimeTextFiled.setVisible(false);
-                }
             }
         });
     }
 
     @FXML
-    void NewTimeFunction(ActionEvent event) {
-
-    }
-
-    @FXML
     void SendDecision(ActionEvent event) throws IOException {
 
+        if(!extraTimeSelected.getDecision().equals("")){
+            JOptionPane.showMessageDialog(null, "you already sent your decision", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         String decision = DecisionCoiceBox.getValue();
-        String delta = (NewTimeTextFiled.getText());
         String principalNote = PrincipalNote.getText();
 
-        if (decision.equals("YES")) {
+        extraTimeSelected.setDecision(decision);
+        extraTimeSelected.setPrincipalNote(principalNote);
+        if (decision.equals("Approve")) {
 
-            if (delta.equals("")||delta.isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please fill the extra time filled", "Error!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!delta.matches("-?\\d+")){
-                JOptionPane.showMessageDialog(null, "Illegal Input", "Error!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            extraTimeSelected.setDelta(Integer.parseInt(delta));
-            extraTimeSelected.setDecision(decision);
-            extraTimeSelected.setPrincipalNote(principalNote);
             Message message = new Message(1, "Extra time approved", extraTimeSelected);
             SimpleClient.getClient().sendToServer(message);
 
         } else {
-
-            extraTimeSelected.setDecision(decision);
-            extraTimeSelected.setPrincipalNote(principalNote);
             Message message = new Message(1, "Extra time rejected",extraTimeSelected );
             SimpleClient.getClient().sendToServer(message);
-
         }
     }
 }

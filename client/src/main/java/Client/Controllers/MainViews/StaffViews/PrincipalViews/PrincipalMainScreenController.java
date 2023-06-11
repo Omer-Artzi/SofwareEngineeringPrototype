@@ -21,14 +21,11 @@ import java.util.ResourceBundle;
 public class PrincipalMainScreenController extends SaveBeforeExit {
 
     @FXML
-    private Button extraTimeListButton;
-    @FXML
     private Button seeCurrentTestsBT;
     @FXML
     private ResourceBundle resources;
     @FXML
     private URL location;
-
     @FXML
     private Label MainMessageLabel;
 
@@ -53,12 +50,6 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
         EventBus.getDefault().register(this);
         assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'PrincipalMainScreen.fxml'.";
 
-    }
-
-    @FXML
-    void extraTimeList(ActionEvent event) throws IOException {
-        System.out.println("In Clicking on extra time list button");
-        SimpleChatClient.NewSetRoot("ListExtraTimeRequest");
     }
 
     public void seeCurrentTests(ActionEvent actionEvent) {
