@@ -12,6 +12,7 @@ import Entities.Users.Person;
 import Entities.Users.Principal;
 import Entities.Users.Student;
 import Entities.Users.Teacher;
+import Events.ExamSavedEvent;
 import javafx.scene.Scene;
 import org.greenrobot.eventbus.EventBus;
 
@@ -199,6 +200,12 @@ public class SimpleClient extends AbstractClient {
             EventBus.getDefault().post(new UserMessageEvent((Person) message.getData(), "Fail"));
         }
         else if (messageText.startsWith("Success")) {
+        }
+        else if(message.getMessage().startsWith("Exam Saved Successfully"))
+        {
+            ExamSavedEvent event = new ExamSavedEvent();
+            EventBus.getDefault().post(event);
+
         }
         else if (messageText.startsWith("Failed to save grade")) {
             String warning = "The grade could not be saved";
