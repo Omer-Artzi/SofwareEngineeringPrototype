@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -349,6 +350,10 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
+                    /*Session session3 = sessionFactory.openSession();
+                    Transaction tx = session3.beginTransaction();
+                    session3.saveOrUpdate(message.getData());
+                    tx.commit();*/
                     session.save(message.getData());
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);
