@@ -4,10 +4,10 @@ import Entities.SchoolOwned.Subject;
 
 import java.util.List;
 
-public class ManualExamEvent {
+public class ExamEndedEvent {
     private List<Subject> subjects;
 
-    public ManualExamEvent() {
+    public ExamEndedEvent() {
     }
 
 }

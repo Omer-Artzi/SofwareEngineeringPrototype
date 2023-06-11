@@ -28,6 +28,7 @@ public class StudentExam implements Serializable {
     @ElementCollection
     private List<String> studentAnswers = new ArrayList<>();
     private int grade;
+
     private Enums.submissionStatus status;
 
     private String teacherNote;
