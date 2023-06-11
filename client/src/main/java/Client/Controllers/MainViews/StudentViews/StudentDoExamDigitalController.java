@@ -413,10 +413,10 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         studentExam.setClassExam(mainClassExam);
         studentExam.setStudent((Student) user);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
-        Message msg= new Message(1, "Digital Exam");
+        Message msg= new Message(1, "Digital Exam for student ID: " + SimpleClient.getUser().getID());
         msg.setData(studentExam);
         SimpleClient.getClient().sendToServer(msg);
-        SimpleChatClient.setRoot("ChooseExam");
+        //SimpleChatClient.setRoot("ChooseExam");
         JOptionPane.showMessageDialog(null, "Exam submitted successfully", "Submission Exam", JOptionPane.INFORMATION_MESSAGE);
 
 
@@ -471,14 +471,12 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
-    // TODO - Edan fix it
     @Subscribe
-    public void examEnded(ExamEndedMessageEvent event) throws IOException {
-        if(event.getClassExam().getID()  == mainClassExam.getID())
-        {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
-            JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
-        }
+    public void endExam(ExamEndedEvent event) throws IOException {
+        //SimpleChatClient.setRoot("StudentChooseExam");
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
+        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     @FXML
