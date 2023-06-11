@@ -350,11 +350,13 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
+                    StudentExam studentExam = ((StudentExam) message.getData());
                     /*Session session3 = sessionFactory.openSession();
                     Transaction tx = session3.beginTransaction();
                     session3.saveOrUpdate(message.getData());
                     tx.commit();*/
-                    session.saveOrUpdate(message.getData());
+                    session.saveOrUpdate(studentExam);
+                    //session.saveOrUpdate(studentExam.getClassExam());
                     //session.flush();
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);

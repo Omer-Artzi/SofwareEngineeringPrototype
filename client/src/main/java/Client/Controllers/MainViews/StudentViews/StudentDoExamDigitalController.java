@@ -473,8 +473,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
 
     @Subscribe
     public void endExam(ExamEndedEvent event) throws IOException {
-        //SimpleChatClient.setRoot("StudentChooseExam");
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
+        SimpleChatClient.setRoot("StudentChooseExam");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
         JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
 
     }
