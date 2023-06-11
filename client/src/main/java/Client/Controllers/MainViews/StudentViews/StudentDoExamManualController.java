@@ -2,7 +2,7 @@ package Client.Controllers.MainViews.StudentViews;
 
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.ExamEndedMessageEvent;
-import Client.Events.ManualExamEvent;
+import Client.Events.ExamEndedEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
@@ -141,7 +141,7 @@ public class StudentDoExamManualController {
     }
 
     @Subscribe
-    public void endExam(ManualExamEvent event) throws IOException {
+    public void endExam(ExamEndedEvent event) throws IOException {
         SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
         JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -162,7 +162,7 @@ public class StudentDoExamManualController {
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
         if(event.getClassExam().getID()  == mainClassExam.getID())
         {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }

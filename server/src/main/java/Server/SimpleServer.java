@@ -366,6 +366,19 @@ public class SimpleServer extends AbstractServer {
                     e.printStackTrace();
                 }
             }
+            else if (message.getMessage().startsWith("Digital Exam")) {
+                try {
+                    response = "Digital Exam Received";
+                    message.setMessage(response);
+                    session.save(message.getData());
+                    System.out.println("DigitalExam Saved successfully.");
+                    client.sendToClient(message);
+                }
+                catch (Exception e) {
+                    response = "Digital Exam could not be saved";
+                    e.printStackTrace();
+                }
+            }
             else if (message.getMessage().startsWith("Extra time approved")) {
                 response = "Extra time approved";
                 message.setMessage(response);

@@ -73,10 +73,12 @@ public class SimpleClient extends AbstractClient {
             EventBus.getDefault().post(stMsg);
         }
         else if (messageText.startsWith("Manual Exam")) { //Added by Omer 3.6
-            ManualExamEvent stMsg = new ManualExamEvent();
+            ExamEndedEvent stMsg = new ExamEndedEvent();
             EventBus.getDefault().post(stMsg);
-        }
-        else if (messageText.startsWith("1Subjects of")) { //Added by Ilan 30.5
+        } else if (messageText.startsWith("Digital Exam")) {
+            ExamEndedEvent stMsg = new ExamEndedEvent();
+            EventBus.getDefault().post(stMsg);
+        } else if (messageText.startsWith("1Subjects of")) { //Added by Ilan 30.5
             SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
