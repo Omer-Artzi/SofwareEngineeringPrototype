@@ -47,7 +47,7 @@ public class PreviewQuestionController {
 
     private ToggleGroup answersToggleGroup;
 
-    private String selectedAnswer = null;
+    private String selectedAnswer = "";
 
     @FXML
     void initialize() {
