@@ -352,7 +352,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
         int IndexPlace = 0;
         String headerStr = solvedExam.getClassExam().getExamForm().getHeaderText();
-        headerStr = "blalbl al lfbl llb slfdbklj k jh a;lo lakfjh opfgir [dklm klj fpaekf aho e kldjh ijf oklsekfj kjfkl jfj kdl dlskfj lksdj flkmdslkfm sflsdkj lkdjf  lkds lkf klgj lkfjl fl;kd jg";
         if(headerStr != null)
         {
             // TODO: change "header" string
@@ -362,7 +361,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         if(client instanceof Teacher || client instanceof Principal)
         {
             String teachersNote = solvedExam.getClassExam().getExamForm().getExamNotesForTeacher();
-            teachersNote = headerStr;
             if(teachersNote != null)
             {
 
@@ -374,7 +372,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
 
         String studentsNotes = solvedExam.getClassExam().getExamForm().getExamNotesForStudent();
-        studentsNotes = headerStr;
         if(studentsNotes != null)
         {
             AnswersVBOX_t.getChildren().add( IndexPlace++,
@@ -384,7 +381,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         int QuestionIndexPlace = IndexPlace;
 
         String footerStr = solvedExam.getClassExam().getExamForm().getFooterText();
-        footerStr = headerStr;
         if(footerStr != null)
         {
             // TODO: change "footer" string
@@ -395,7 +391,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         if(client instanceof Student)
         {
             String feedback = solvedExam.getTeacherNote();
-            feedback = headerStr;
             if(feedback != null)
             {
                 AnswersVBOX_t.getChildren().add( IndexPlace++,
@@ -403,7 +398,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             }
 
             String scoreChangeREASON = solvedExam.getScoreChangeReason();
-            scoreChangeREASON = headerStr;
             if(scoreChangeREASON != null)
             {
                 AnswersVBOX_t.getChildren().add( IndexPlace++,

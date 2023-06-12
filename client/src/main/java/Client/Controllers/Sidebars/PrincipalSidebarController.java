@@ -67,7 +67,7 @@ public class PrincipalSidebarController extends SideBar {
 
     @FXML
     void showStatistics(ActionEvent event)  {
-        ChangeScene("ShowStatsAndReports");
+        ChangeScene("ShowStatistics");
     }
 
     @FXML
