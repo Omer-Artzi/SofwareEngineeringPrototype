@@ -447,6 +447,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
+    // TODO: check if this method works in real time (when the principal approves the extra time)
     // add extra time to exam in case that the principal approved it
     @Subscribe
     public void getExtraTime(PrincipalApproveEvent event) {
