@@ -63,7 +63,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     //NON FXML FIELDS
     private Person user;
     private ClassExam mainClassExam;
-    private final StudentExam studentExam = new StudentExam();
+    private StudentExam studentExam = new StudentExam();
     private ExamForm selectedForm;
     private List<Question> questionList;
     private final List<String> rightAnswers = new ArrayList<>();
