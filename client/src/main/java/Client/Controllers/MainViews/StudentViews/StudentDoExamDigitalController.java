@@ -36,8 +36,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
     private FlowPane progressPane;
 
-    @FXML
-    private Label question;
+    //@FXML
+    //private Label question;
 
     @FXML
     private Button nextButton;
