@@ -60,21 +60,23 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     //NON FXML FIELDS
     private Person user;
     private ClassExam mainClassExam;
-    private StudentExam studentExam = new StudentExam();
+    private final StudentExam studentExam = new StudentExam();
     private ExamForm selectedForm;
     private List<Question> questionList;
     private final List<String> rightAnswers = new ArrayList<>();
-    private List<String> studentAnswers;
     private final List<JFXButton> progressButtons = new ArrayList<>();
-    private Question currentQuestion;
-    int numberOfQuestions;
-    int currentIndex = 0;
     private final Map<Question, String> studentQuestionsAnswers = new HashMap<>();
+
+    //private List<String> studentAnswers;
+    private Question currentQuestion;
     private int numberOfRightAnswers = 0;
     private int numberOfQuestionsAnswered = 0;
     private int timeInSeconds;
+    int numberOfQuestions;
+    int currentIndex = 0;
 
     // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
+    // TODO: maybe- add feature that shows the current question number (out of the total number of questions). maybe buy adding a label to the progressPane, or maybe by changing the color of the button of the current question
 
     // initialize the StudentDoExamDigital Screen
     @FXML
@@ -130,7 +132,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
         setTimer();
         currentQuestion = questionList.get(currentIndex);
-        studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
+        //studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
         for (Question question : questionList){ // shuffle the answers of each question
             List<String> sortedAnswers = question.getAnswers();
             Collections.shuffle(sortedAnswers);
@@ -156,6 +158,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         for (String answer : question.getAnswers()) {
             if (answer.equals(event.getSelectedAnswer())) {
                 flag = 1;
+                break;
             }
         }
         if (flag == 0) {
@@ -427,12 +430,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 int index = (int) button.getUserData();
                 this.currentIndex = index;
                 this.UpdateQuestion();
-                if (index == 0) {
-                    previousButton.setVisible(false);
-                }
-                else {
-                    previousButton.setVisible(true);
-                }
+                previousButton.setVisible(index != 0);
                 if (index == questionList.size()-1) {
                     nextButton.setVisible(false);
                     submitButton.setVisible(true);
