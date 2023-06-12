@@ -46,7 +46,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
     @FXML
     private Button ApproveBtn;
-
+    @FXML
+    private Button BackBtn;
     @FXML
     private HBox ChangeScoreHbox;
     @FXML
@@ -115,6 +116,21 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             GradeText.setFill(Color.RED);
     }
 
+
+
+
+
+    @FXML
+    void BackBtnAct(ActionEvent event) throws IOException {
+        SimpleChatClient.setRoot("TeacherExamGrade");
+        String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
+        String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
+        String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
+        int ExamExamSqlID = solvedExam.getClassExam().getExamForm().getID();
+        EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, ExamExamID, ExamExamSqlID));
+        EventBus.getDefault().unregister(this);
+    }
+
     @FXML
     void ApproveBtnAct(ActionEvent event) throws IOException {
         solvedExam.setGrade(studentScore);
@@ -123,7 +139,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         Message studentExamMessage = new Message(0, "Change Student Exam");
         studentExamMessage.setData(solvedExam);
         SimpleClient.getClient().sendToServer(studentExamMessage);
-
     }
 
     @FXML
@@ -149,6 +164,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     {
         ApproveBtn.setStyle("-fx-background-color: #6495ED; -fx-text-fill: white;");
     }
+
+
 
 
     @FXML
@@ -328,7 +345,12 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         ChangeScoreHbox.setPrefHeight(0);
         client = SimpleClient.getUser();
         if (client instanceof Student)
+        {
             ShowStatisticsController.SetVisibleAllNodes(ButtonsHbox,false);
+            BackBtn.setDisable(true);
+            BackBtn.setVisible(false);
+        }
+
 
     }
 

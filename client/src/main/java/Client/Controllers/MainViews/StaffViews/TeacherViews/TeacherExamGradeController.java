@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TeacherExamGradeController extends SaveBeforeExit {
@@ -79,6 +80,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
     String chosenExamFormIDStr;
     String chosenSubjectStr;
     ClassExam chosenExam;
+    boolean initDone = false;
 
 
     @FXML
@@ -215,10 +217,17 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
 
     @Subscribe
-    public void ReturnFromStudentGrade(ClassExamGradeEvent event)
-    {
+    public void ReturnFromStudentGrade(ClassExamGradeEvent event) {
         // reselect previous items
         Platform.runLater(() -> {
+            // wait until the window is initialized
+            while (!initDone){
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             SubjectCombo.getSelectionModel().select(event.getSubjectStr());
             CourseCombo.getSelectionModel().select(event.getCourseStr());
             ExamIDCombo.getSelectionModel().select(event.getExamIDStr());
@@ -298,7 +307,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         ClassExamTv.getSortOrder().add(StatusColumn);
         ExamFormTv.getSortOrder().add(StartDateColumn);
 
-
+        initDone = true;
     }
 
 }

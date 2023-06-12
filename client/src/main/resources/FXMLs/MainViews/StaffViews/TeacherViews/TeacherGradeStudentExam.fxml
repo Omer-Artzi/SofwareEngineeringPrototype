@@ -155,5 +155,6 @@
       <Label layoutX="269.0" layoutY="76.0" text="Student ID:" />
       <Label fx:id="StudentIDLabel" layoutX="376.0" layoutY="76.0" prefHeight="17.0" prefWidth="0.0" />
       <Label fx:id="StudentNameLabel" layoutX="376.0" layoutY="51.0" prefHeight="17.0" prefWidth="0.0" />
+      <Button fx:id="BackBtn" layoutX="71.0" layoutY="47.0" mnemonicParsing="false" onAction="#BackBtnAct" prefHeight="25.0" prefWidth="59.0" text="Back" />
    </children>
 </AnchorPane>
