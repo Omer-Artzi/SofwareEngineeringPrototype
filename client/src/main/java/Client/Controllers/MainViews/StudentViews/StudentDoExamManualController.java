@@ -20,6 +20,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,6 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.swing.*;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,7 +71,7 @@ public class StudentDoExamManualController {
         }
     }
 
-    @FXML
+    /*@FXML
     void fileExited(DragEvent event) {
         File file = null;
         try {
@@ -97,7 +99,7 @@ public class StudentDoExamManualController {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
     @FXML
     void initialize() {
@@ -158,7 +160,7 @@ public class StudentDoExamManualController {
 
     }
 
-    public static byte[] serializeXWPFDocument(XWPFDocument document) throws IOException {
+    /*public static byte[] serializeXWPFDocument(XWPFDocument document) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(document);
@@ -167,7 +169,81 @@ public class StudentDoExamManualController {
         oos.close();
         bos.close();
         return serializedDocument;
+    }*/
+
+    //Edan
+    @FXML
+    void fileExited(DragEvent event) {
+        File file = null;
+        try {
+            System.out.println("File Dropped");
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(0);
+            dragAndDropImg.setEffect(colorAdjust);
+            dragAndDropImg.setImage(new Image("/Images/accept.png"));
+
+            file = event.getDragboard().getFiles().get(0);
+            try {
+                byte[] serializedDocument = Files.readAllBytes(file.toPath());
+
+                /*FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                String docInStringForm =  oos.toString();
+                XWPFDocument document = new XWPFDocument(OPCPackage.create(oos));
+
+                FileInputStream fis = new FileInputStream(file);
+                XWPFDocument document = new XWPFDocument(fis);
+                System.out.println(document.getDocument().getBody());
+                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializeXWPFDocument(document));*/
+
+                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializedDocument);
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                message.setData(manualStudentExam);
+                SimpleClient.getClient().sendToServer(message);
+                fileRecievedLabel.setText("File Uploaded!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("File gotten: " + file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
+    //Edan
+    public static byte[] serializeXWPFDocument(XWPFDocument document) {
+        try {
+            File file = new File("ManualExam.docx");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            document.write(oos);
+            oos.flush();
+            oos.close();
+            fos.close();
+            byte[] serializedDocument = Files.readAllBytes(file.toPath());
+            Boolean fileDeleted = file.delete();
+            System.out.println("File deleted: " + fileDeleted);
+            return serializedDocument;
+        }
+        catch (IOException e) {
+            System.out.println("Error in serializeXWPFDocument: could not write to ByteArrayOutputStream");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    //Edan
+    /*public static ObjectOutputStream serializeFile(File file) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream("ManualExam.docx");
+        ObjectOutputStream oos = new ObjectOutputStream(fileOut);
+        oos.writeObject(file);
+        oos.close();
+        fileOut.close();
+
+        return oos;
+    }*/
 
     @Subscribe
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {

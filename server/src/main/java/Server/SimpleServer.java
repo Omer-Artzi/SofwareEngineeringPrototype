@@ -24,6 +24,8 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,10 +43,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -152,12 +152,27 @@ public class SimpleServer extends AbstractServer {
         return exams;
     }
 
-    public static XWPFDocument deserializeXWPFDocument(byte[] serializedDocument) throws IOException, ClassNotFoundException {
+    /*public static XWPFDocument deserializeXWPFDocument(byte[] serializedDocument) throws IOException, ClassNotFoundException {
         ByteArrayInputStream bis = new ByteArrayInputStream(serializedDocument);
         ObjectInputStream ois = new ObjectInputStream(bis);
         XWPFDocument document = (XWPFDocument) ois.readObject();
         ois.close();
         bis.close();
+        return document;
+    }*/
+
+    //Edan
+    public static XWPFDocument deserializeXWPFDocument(byte[] serializedDocument) throws IOException, ClassNotFoundException {
+
+        File file = new File("ManualExam.docx");
+        Files.write(file.toPath(), serializedDocument);
+
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+
+        XWPFDocument document = (XWPFDocument) ois.readObject();
+        ois.close();
+        fis.close();
         return document;
     }
 
@@ -329,13 +344,16 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Manual Exam Received";
                     message.setMessage(response);
-                    session.saveOrUpdate(((ManualStudentExam) (message.getData())).getStudentExam());
+                    /*ManualStudentExam manualStudentExam = new ManualStudentExam ((ManualStudentExam) message.getData());
+                    session.saveOrUpdate(manualStudentExam);*/
                     ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
                     String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
                     byte[] document = ((ManualStudentExam) (message.getData())).getExamFile();
-                    XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
+                    //XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
+                    File file = new File(fileName);
                     FileOutputStream outputStream = new FileOutputStream(fileName);
-                    transmittedDocument.write(outputStream);
+                    //transmittedDocument.write(outputStream);
+                    outputStream.write(document);
                     outputStream.close();
                     System.out.println("Document Saved successfully.");
                     client.sendToClient(message);

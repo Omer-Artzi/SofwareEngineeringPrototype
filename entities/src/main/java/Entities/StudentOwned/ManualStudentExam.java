@@ -12,6 +12,12 @@ public class ManualStudentExam implements Serializable {
         this.examFile = examFile;
     }
 
+    // copy constructor
+    public ManualStudentExam(ManualStudentExam other) {
+        this.studentExam = other.studentExam;
+        this.examFile = other.examFile;
+    }
+
     public StudentExam getStudentExam() {
         return studentExam;
     }
