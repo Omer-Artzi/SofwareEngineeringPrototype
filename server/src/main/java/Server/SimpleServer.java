@@ -350,11 +350,25 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
-                    /*Session session3 = sessionFactory.openSession();
-                    Transaction tx = session3.beginTransaction();
-                    session3.saveOrUpdate(message.getData());
-                    tx.commit();*/
-                    session.save(message.getData());
+
+                    StudentExam studentExam = (StudentExam) message.getData();
+                    StudentExam examToSave = new StudentExam();
+
+                    // Student Link
+                    Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
+                    examToSave.setStudent(student);
+                    student.addStudentExam(examToSave);
+
+                    // ClassExam Link
+                    ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
+                    examToSave.setClassExam(classExam);
+                    classExam.addStudentExam(examToSave);
+
+                    // no entities attributes set
+                    examToSave.update(studentExam);
+
+                    session.saveOrUpdate(examToSave);
+
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);
                 }
@@ -730,6 +744,16 @@ public class SimpleServer extends AbstractServer {
         System.out.println("Checking for dead exams");
         return exams;
     }
+
+    private ClassExam retrieveClassExam(int classExamID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), classExamID));
+        ClassExam exam = session.createQuery(query).getSingleResult();
+        return exam;
+    }
+
 
     private List<ExtraTime> getExtraTime() {
         CriteriaBuilder builder = session.getCriteriaBuilder();
