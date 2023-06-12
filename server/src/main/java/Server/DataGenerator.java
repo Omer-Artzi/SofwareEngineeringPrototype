@@ -397,9 +397,10 @@ public class DataGenerator {
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                String code = Long.toString(faker.number().randomNumber(5, false));
+                //String code = Long.toString(faker.number().randomNumber(5, false));
+                String accessCode = "11aa";
                 Enums.ExamType examType = Enums.ExamType.values()[rand.nextInt(2)];
-                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, code,examForm.getCourse(),examForm.getSubject(),examType);
+                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, accessCode,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
                 examForm.addClassExam(classExam);
 
