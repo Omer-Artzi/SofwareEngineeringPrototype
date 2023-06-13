@@ -156,15 +156,6 @@ public class SimpleServer extends AbstractServer {
         return exams;
     }
 
-    /*public static XWPFDocument deserializeXWPFDocument(byte[] serializedDocument) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bis = new ByteArrayInputStream(serializedDocument);
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        XWPFDocument document = (XWPFDocument) ois.readObject();
-        ois.close();
-        bis.close();
-        return document;
-    }*/
-
     public static ExamForm getExamForm(int iExamFormID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
@@ -348,16 +339,32 @@ public class SimpleServer extends AbstractServer {
                     //TODO: handle saving to DB
                     response = "Manual Exam Received";
                     message.setMessage(response);
-                    ManualStudentExam manualStudentExam = new ManualStudentExam((ManualStudentExam) message.getData());
+                    //ManualStudentExam manualStudentExam = new ManualStudentExam((ManualStudentExam) message.getData());
 
 
-                    StudentExam studentExam = manualStudentExam.getStudentExam();
-                    studentExam.setManualExam(manualStudentExam);
-                    //session.saveOrUpdate(studentExam);
-                    manualStudentExam.SaveManualExamFileLocally();
+                    StudentExam studentExam = (StudentExam) message.getData();
+                    StudentExam examToSave = new StudentExam();
+
+                    // Student Link
+                    Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
+                    examToSave.setStudent(student);
+                    student.addStudentExam(examToSave);
+
+                    // ClassExam Link
+                    ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
+                    examToSave.setClassExam(classExam);
+                    classExam.addStudentExam(examToSave);
+
+                    // no entities attributes set
+                    examToSave.update(studentExam);
+
+                    session.saveOrUpdate(examToSave);
+
+                    studentExam.SaveManualExamFileLocally();
 
                     System.out.println("Document Saved successfully.");
                     client.sendToClient(message);
+
                 }
                 catch (Exception e) {
                     response = "Manual Exam could not be saved";

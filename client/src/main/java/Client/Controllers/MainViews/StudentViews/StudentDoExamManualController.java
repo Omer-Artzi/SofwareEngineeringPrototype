@@ -57,7 +57,8 @@ public class StudentDoExamManualController {
             colorAdjust.setBrightness(0.5);
             dragAndDropImg.setEffect(colorAdjust);
             System.out.println("Changing Brightness");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -133,16 +134,19 @@ public class StudentDoExamManualController {
             file = event.getDragboard().getFiles().get(0);
             try {
                 byte[] serializedDocument = Files.readAllBytes(file.toPath());
-                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializedDocument);
+                //ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializedDocument);
+                studentExam.setExamFileByteArray(serializedDocument);
                 Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
-                message.setData(manualStudentExam);
+                message.setData(studentExam);
                 SimpleClient.getClient().sendToServer(message);
                 fileRecievedLabel.setText("File Uploaded!");
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
             System.out.println("File gotten: " + file);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

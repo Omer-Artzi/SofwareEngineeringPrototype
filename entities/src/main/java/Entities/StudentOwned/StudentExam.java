@@ -2,9 +2,13 @@ package Entities.StudentOwned;
 
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
+import Entities.SchoolOwned.ExamForm;
 import Entities.Users.Student;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +37,7 @@ public class StudentExam implements Serializable {
 
     private String teacherNote;
     private String scoreChangeReason;
-
-    private ManualStudentExam manualExam;
+    private byte[] ManualExamByteArray;
 
     public StudentExam() {
     }
@@ -58,6 +61,7 @@ public class StudentExam implements Serializable {
         this.status = other.status;
         this.teacherNote = other.teacherNote;
         this.scoreChangeReason = other.scoreChangeReason;
+        this.ManualExamByteArray = other.ManualExamByteArray;
     }
 
     public void update(StudentExam other) {
@@ -66,6 +70,7 @@ public class StudentExam implements Serializable {
         this.status = other.status;
         this.teacherNote = other.teacherNote;
         this.scoreChangeReason = other.scoreChangeReason;
+        this.ManualExamByteArray = other.ManualExamByteArray;
     }
 
     public int getID() {
@@ -146,11 +151,26 @@ public class StudentExam implements Serializable {
         this.scoreChangeReason = scoreChangeReason;
     }
 
-    public ManualStudentExam getManualExam() {
-        return manualExam;
+    public byte[] getExamFileByteArray() {
+        return ManualExamByteArray;
     }
 
-    public void setManualExam(ManualStudentExam manualExam) {
-        this.manualExam = manualExam;
+    public void setExamFileByteArray(byte[] examFile) {
+        this.ManualExamByteArray = examFile;
+    }
+
+    public void SaveManualExamFileLocally()
+    {
+        try {
+            ExamForm selectedForm = getClassExam().getExamForm();
+            String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
+            File file = new File(fileName);
+            FileOutputStream outputStream = new FileOutputStream(fileName);
+            outputStream.write(ManualExamByteArray);
+            outputStream.close();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
