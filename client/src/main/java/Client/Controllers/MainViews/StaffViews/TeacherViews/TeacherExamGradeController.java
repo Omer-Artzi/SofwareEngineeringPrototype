@@ -6,6 +6,7 @@ import Client.Events.ClassExamGradeEvent;
 import Client.Events.StudentExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
+import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Course;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TeacherExamGradeController extends SaveBeforeExit {
@@ -78,6 +80,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
     String chosenExamFormIDStr;
     String chosenSubjectStr;
     ClassExam chosenExam;
+    boolean initDone = false;
 
 
     @FXML
@@ -85,8 +88,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         if(event.getClickCount() == 2)
         {
             if(ClassExamTv.getSelectionModel().getSelectedItem() != null) {
-                SimpleChatClient.setRoot("StudentExamGrade");
-                TeacherGradeStudentExamController controller = (TeacherGradeStudentExamController) SimpleChatClient.getScene().getProperties().get("controller");
+                SimpleChatClient.setRoot("TeacherGradeStudentExam");
                 EventBus.getDefault().post(new StudentExamEvent(ClassExamTv.getSelectionModel().getSelectedItem()));
                 EventBus.getDefault().unregister(this);
             }
@@ -145,7 +147,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         // Loading the data to the table
         if(chosenExam != null)
         {
-            ClassExamTv.getItems().addAll(chosenExam.getStudentExams());
+            ClassExamTv.getItems().addAll(chosenExam.getStudentExams().stream().filter(studentExam ->
+                    studentExam.getStatus() != Enums.submissionStatus.NotTaken).collect(Collectors.toList()));
             ClassExamTv.sort();
         }
     }
@@ -214,10 +217,17 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
 
     @Subscribe
-    public void ReturnFromStudentGrade(ClassExamGradeEvent event)
-    {
+    public void ReturnFromStudentGrade(ClassExamGradeEvent event) {
         // reselect previous items
         Platform.runLater(() -> {
+            // wait until the window is initialized
+            while (!initDone){
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             SubjectCombo.getSelectionModel().select(event.getSubjectStr());
             CourseCombo.getSelectionModel().select(event.getCourseStr());
             ExamIDCombo.getSelectionModel().select(event.getExamIDStr());
@@ -297,7 +307,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         ClassExamTv.getSortOrder().add(StatusColumn);
         ExamFormTv.getSortOrder().add(StartDateColumn);
 
-
+        initDone = true;
     }
 
 }
