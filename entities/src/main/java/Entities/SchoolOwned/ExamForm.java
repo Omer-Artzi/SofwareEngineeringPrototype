@@ -61,8 +61,8 @@ public class ExamForm implements Serializable {
     public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList,
                     List<Integer> questionsScores, Date dateCreated, String headerText, String footerText,
                     String examNotesForTeacher, String examNotesForStudent, int examTime) {
-        this.course = course;
         this.creator = creator;
+        this.course = course;
         this.subject = subject;
         this.questionList = questionList;
         this.questionsScores = questionsScores;
@@ -73,6 +73,22 @@ public class ExamForm implements Serializable {
         this.examNotesForStudent = examNotesForStudent;
         this.used = false;
         this.examTime = examTime;
+    }
+
+    public ExamForm(Teacher creator, Subject subject, Course course, List<Question> questionList, Date dateCreated, String headerText, String footerText,
+                    String examNotesForTeacher, String examNotesForStudent) {
+        this.creator = creator;
+        this.course = course;
+        this.subject = subject;
+        this.questionList = questionList;
+        this.questionsScores = null;
+        this.dateCreated = dateCreated;
+        this.headerText = headerText;
+        this.footerText = footerText;
+        this.examNotesForTeacher = examNotesForTeacher;
+        this.examNotesForStudent = examNotesForStudent;
+        this.used = false;
+        this.examTime = 0;
     }
 
     public int getID() {

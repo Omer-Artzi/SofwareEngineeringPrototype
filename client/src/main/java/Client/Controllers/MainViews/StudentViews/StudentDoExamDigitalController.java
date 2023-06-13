@@ -17,10 +17,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
@@ -37,7 +34,13 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     private FlowPane progressPane;
 
     @FXML
-    private Label question;
+    private Label timeLeft;
+
+    @FXML
+    private Label title;
+
+    @FXML
+    private Label questionNumber;
 
     @FXML
     private Button nextButton;
@@ -49,30 +52,25 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     private Button submitButton;
 
     @FXML
-    private Label timeLeft;
-
-    @FXML
-    private Label title;
-
-    @FXML
     private Pane previewWindow;
 
     //NON FXML FIELDS
     private Person user;
     private ClassExam mainClassExam;
-    private StudentExam studentExam = new StudentExam();
+    private final StudentExam studentExam = new StudentExam();
     private ExamForm selectedForm;
     private List<Question> questionList;
     private final List<String> rightAnswers = new ArrayList<>();
-    private List<String> studentAnswers;
     private final List<JFXButton> progressButtons = new ArrayList<>();
-    private Question currentQuestion;
-    int numberOfQuestions;
-    int currentIndex = 0;
     private final Map<Question, String> studentQuestionsAnswers = new HashMap<>();
+
+    //private List<String> studentAnswers;
+    private Question currentQuestion;
     private int numberOfRightAnswers = 0;
     private int numberOfQuestionsAnswered = 0;
     private int timeInSeconds;
+    int numberOfQuestions;
+    int currentIndex = 0;
 
     // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
 
@@ -90,8 +88,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         //CreateListeners();
 
         CreatePreviewScene();
-        currentIndex = 0;
 
+        currentIndex = 0;
     }
 
     // Create the preview scene, which is the scene that shows the question and the answers
@@ -130,7 +128,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
         setTimer();
         currentQuestion = questionList.get(currentIndex);
-        studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
+        //studentAnswers = new ArrayList<>(Collections.nCopies(numberOfQuestions, "0"));
         for (Question question : questionList){ // shuffle the answers of each question
             List<String> sortedAnswers = question.getAnswers();
             Collections.shuffle(sortedAnswers);
@@ -140,6 +138,11 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
         //System.out.println("4. in getExam- currentQuestion: " + currentQuestion);
         setTimer();
+        //progressButtons.get(currentIndex).setStyle("-fx-border-color: #000000; -fx-border-width: 5px;");
+        //String style = progressButtons.get(currentIndex).getStyle();
+        //progressButtons.get(currentIndex).setStyle(style.substring(0,style.length()-1)+";-fx-border-color: #000000; -fx-border-width: 5px;");
+        questionNumber.setText("Question " + (currentIndex+1) + " out of " + numberOfQuestions + ":");
+        changeNextProgressButton();
         ChangePreviewEvent newEvent = new ChangePreviewEvent();
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
@@ -156,6 +159,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         for (String answer : question.getAnswers()) {
             if (answer.equals(event.getSelectedAnswer())) {
                 flag = 1;
+                break;
             }
         }
         if (flag == 0) {
@@ -176,7 +180,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             System.out.println("Answer to question " + question.getID() + " was updated");
         }
         System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
-        progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
+        //progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780;");
+        progressButtons.get(currentIndex-1).setStyle("-fx-background-color:  #80d780; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold;");
         System.out.println("///// End of getAnswer /////");
     }
 
@@ -247,10 +252,11 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
 
         // method to update the question preview
         @Subscribe
-        private void UpdateQuestion() { // TODO: work with Edan on solution to Randomize question answers
+        private void UpdateQuestion() {
             currentQuestion = questionList.get(currentIndex);
             System.out.println("//////// Updating preview ////////");
             System.out.println("currentQuestion: " + currentQuestion + " currentIndex: " + currentIndex + "Correct answer: " + currentQuestion.getCorrectAnswer());
+            questionNumber.setText("Question " + (currentIndex+1) + " out of " + numberOfQuestions + ":");
             RequestStudentAnswerToQuestion request = new RequestStudentAnswerToQuestion();
             EventBus.getDefault().post(request);
             ChangePreviewEvent event = new ChangePreviewEvent();
@@ -279,7 +285,13 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
     void previousQuestion(ActionEvent event) {
         if (currentIndex > 0) {
+            //String style= progressButtons.get(currentIndex).getStyle();
+            //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
+            changePreviousProgressButton();
             currentIndex--;
+            //style= progressButtons.get(currentIndex).getStyle();
+            //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
+            changeNextProgressButton();
             nextButton.setVisible(true);
             submitButton.setVisible(false);
             if (currentIndex == 0) {
@@ -297,9 +309,14 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
     void nextQuestion(ActionEvent event){
         if (currentIndex < numberOfQuestions - 1) {
-            System.out.println("currentIndex - before: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
+            //System.out.println("currentIndex - before: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
+            //String style= progressButtons.get(currentIndex).getStyle();
+            //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
+            changePreviousProgressButton();
             currentIndex++;
-            System.out.println("currentIndex - after: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
+            //style= progressButtons.get(currentIndex).getStyle();
+            //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
+            changeNextProgressButton();
             if (currentIndex > 0) {
                 previousButton.setVisible(true);
             }
@@ -345,14 +362,15 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         System.out.println("numberOfQuestionsAnswered: " + numberOfQuestionsAnswered + ". numberOfQuestions: " + numberOfQuestions);
         System.out.println("numberOfRightAnswers: " + numberOfRightAnswers);
         System.out.println("num_answered: " + num_answered + ". num_correct: " + num_correct);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType submit = new ButtonType("Submit", ButtonBar.ButtonData.YES);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", submit, ButtonType.CANCEL);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Are you sure you want to submit the exam?");
         if (timeInSeconds > 0){
         if ( num_answered < numberOfQuestions) {
-            alert.setHeaderText("You have not answered all the questions");}
+            alert.setHeaderText("You have not answered all the questions. Are you sure you would like to submit anyway?");}
         else {
-            alert.setHeaderText("You answered all the questions");}
+            alert.setHeaderText("You answered all the questions. Would you like to submit the exam?");}
             Optional<ButtonType> result = alert.showAndWait();
             /*if (result.get() == ButtonType.OK){
                 try {
@@ -420,19 +438,22 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             button.setText(String.valueOf(i + 1));
             button.setPrefWidth(50);
             button.setPrefHeight(50);
-            button.setStyle("-fx-background-color:  #669bbc; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold; ");
+            button.setStyle("-fx-background-color:  #669bbc; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold;");
             button.setUserData(i);
             button.setOnAction(e -> {
                 System.out.println("button " + button.getText() + " pressed");
                 int index = (int) button.getUserData();
+                //String style= progressButtons.get(currentIndex).getStyle();
+                //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
+                System.out.println("/////////////// index before= " + currentIndex + " ///////////////");
+                changePreviousProgressButton();
                 this.currentIndex = index;
+                //style= progressButtons.get(currentIndex).getStyle();
+                //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
+                System.out.println("/////////////// index after= " + currentIndex + " ///////////////");
+                changeNextProgressButton();
                 this.UpdateQuestion();
-                if (index == 0) {
-                    previousButton.setVisible(false);
-                }
-                else {
-                    previousButton.setVisible(true);
-                }
+                previousButton.setVisible(index != 0);
                 if (index == questionList.size()-1) {
                     nextButton.setVisible(false);
                     submitButton.setVisible(true);
@@ -445,6 +466,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             progressButtons.add(button);
             this.progressPane.getChildren().add(button);
         }
+    }
+
+    private void changePreviousProgressButton() {
+        String style= progressButtons.get(currentIndex).getStyle();
+        progressButtons.get(currentIndex).setStyle(style.substring(0,128) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
+    }
+
+    private void changeNextProgressButton() {
+        String style= progressButtons.get(currentIndex).getStyle();
+        progressButtons.get(currentIndex).setStyle(style.substring(0,128) + " -fx-border-color: rgba(0,0,0,0.37); -fx-border-width: 3px; -fx-border-radius: 47px;");
     }
 
     // TODO: check if this method works in real time (when the principal approves the extra time)

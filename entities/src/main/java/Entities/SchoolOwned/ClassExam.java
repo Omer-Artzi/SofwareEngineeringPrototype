@@ -86,6 +86,10 @@ public class ClassExam implements Serializable
         this.extraTime=null;
     }
 
+    public ClassExam(ExamForm examForm){
+        this.examForm = examForm;
+    }
+
     public int getID() {return ID;}
 
     public List<StudentExam> getStudentExams(){return studentExams;}

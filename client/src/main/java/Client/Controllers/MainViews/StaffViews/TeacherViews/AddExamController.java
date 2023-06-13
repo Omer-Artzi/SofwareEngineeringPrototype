@@ -1,14 +1,13 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
+import Client.Controllers.MainViews.StudentViews.StudentDoExamManualController;
+import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
-import Entities.SchoolOwned.ExamForm;
-import Entities.SchoolOwned.Course;
-import Entities.SchoolOwned.Question;
-import Entities.SchoolOwned.Subject;
+import Entities.SchoolOwned.*;
 import Entities.Users.Teacher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -189,8 +188,9 @@ public class AddExamController extends SaveBeforeExit {
         });}
 
     @FXML
-    void previewTest(ActionEvent event) {
-
+    void previewTest(ActionEvent event) throws IOException {
+        // open new word document with the test
+        prepareExamFormForPreview();
     }
 
     @FXML
@@ -236,6 +236,16 @@ public class AddExamController extends SaveBeforeExit {
         Message message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
         message.setData(examForm);
         SimpleClient.getClient().sendToServer(message);
+    }
+
+    void prepareExamFormForPreview() throws IOException {
+        teacher = ((Teacher)(SimpleClient.getClient().getUser()));
+        headerText= headerTextTF.getText();
+        footerText= footerTextTF.getText();
+        Date createdDate = new Date();
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher);
+        ClassExam classExam = new ClassExam(examForm);
+        ViewExamController.createManualExam(classExam);
     }
 
     @Subscribe
