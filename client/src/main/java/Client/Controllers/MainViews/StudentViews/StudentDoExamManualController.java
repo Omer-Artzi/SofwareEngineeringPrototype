@@ -2,13 +2,13 @@ package Client.Controllers.MainViews.StudentViews;
 
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.ExamEndedMessageEvent;
-import Client.Events.ManualExamEvent;
+import Client.Events.ExamEndedEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
-import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.Enums;
+import Entities.SchoolOwned.ClassExam;
 import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
@@ -20,7 +20,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,12 +33,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class StudentDoExamManualController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private ImageView dragAndDropImg;
@@ -146,7 +139,6 @@ public class StudentDoExamManualController {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
         };
         timer.schedule(task, 0, 1000);
@@ -154,8 +146,8 @@ public class StudentDoExamManualController {
     }
 
     @Subscribe
-    public void endExam(ManualExamEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+    public void endExam(ExamEndedEvent event) throws IOException {
+        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
         JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
 
     }
@@ -249,10 +241,18 @@ public class StudentDoExamManualController {
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
         if(event.getClassExam().getID()  == mainClassExam.getID())
         {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
+//    @Subscribe
+//    public void addExtraTime(ExtraTimeMessageEvent event) {
+//        if(event.getClassExam().getID()  == mainClassExam.getID())
+//        {
+//            timeInSeconds += event.getExtraTime();
+//            JOptionPane.showMessageDialog(null, "Teacher has added " + event.getExtraTime() + " minutes to the exam", "Submission Exam", JOptionPane.WARNING_MESSAGE);
+//        }
+//    }
 
 }
 

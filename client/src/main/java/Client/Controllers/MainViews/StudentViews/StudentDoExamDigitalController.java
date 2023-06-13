@@ -1,11 +1,7 @@
 package Client.Controllers.MainViews.StudentViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Controllers.SubViews.ProgressCircleController;
-import Client.Events.ChangePreviewEvent;
-import Client.Events.RequestStudentAnswerToQuestion;
-import Client.Events.StartExamEvent;
-import Client.Events.StudentAnswerToQuestion;
+import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.SchoolOwned.ClassExam;
@@ -20,7 +16,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,7 +31,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.*;
 
-//import static sun.swing.SwingUtilities2.submit;
 
 public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
@@ -66,7 +60,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     //NON FXML FIELDS
     private Person user;
     private ClassExam mainClassExam;
-    private final StudentExam studentExam = new StudentExam();
+    private StudentExam studentExam = new StudentExam();
     private ExamForm selectedForm;
     private List<Question> questionList;
     private final List<String> rightAnswers = new ArrayList<>();
@@ -80,7 +74,9 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     private int numberOfQuestionsAnswered = 0;
     private int timeInSeconds;
 
+    // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
 
+    // initialize the StudentDoExamDigital Screen
     @FXML
     void initialize() {
         System.out.println("Initializing Client.Controllers.MainPanelScreens.TeacherViewQuestionsController");
@@ -98,6 +94,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
 
     }
 
+    // Create the preview scene, which is the scene that shows the question and the answers
     private void CreatePreviewScene() {
         try {
             Parent previewParent = SimpleChatClient.loadFXML("PreviewQuestion");
@@ -109,23 +106,26 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
+    // This method is from the ChooseExam Screen, when the student clicks on the "Start Exam" button
+    // It gets the exam from the server and sets the exam form and the class exam
     @Subscribe
     public void getExam(StartExamEvent event) {
         mainClassExam = event.getClassExam();
-        System.out.println("1. in getExam- mainClassExam: " + mainClassExam);
-        System.out.println("2. in getExam- Exam Course: " + mainClassExam.getCourse());
+        user = SimpleClient.getUser();
+        //System.out.println("1. in getExam- mainClassExam: " + mainClassExam);
+        //System.out.println("2. in getExam- Exam Course: " + mainClassExam.getCourse());
         //selectedForm = SimpleServer.getExamForm(mainClassExam.getExamForm().getID());
         selectedForm = mainClassExam.getExamForm();
-        System.out.println("3. in getExam- selectedForm: " + selectedForm);
-        System.out.println(selectedForm);
-        System.out.println(selectedForm.getQuestionList());
+        //System.out.println("3. in getExam- selectedForm: " + selectedForm);
+        //System.out.println(selectedForm);
+        //System.out.println(selectedForm.getQuestionList());
         title.setText("Exam in " + selectedForm.getSubject().getName() + " - " + selectedForm.getCourse().getName());
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
         questionList = selectedForm.getQuestionList();
         numberOfQuestions = selectedForm.getQuestionList().size();
-        System.out.println("Number of questions: " + numberOfQuestions);
+        //System.out.println("Number of questions: " + numberOfQuestions);
         renderProgress();
         timeInSeconds = (int) (mainClassExam.getExamTime() * 60);
         setTimer();
@@ -138,16 +138,18 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             rightAnswers.add(question.getCorrectAnswer());
             //studentQuestionsAnswers.put(question, "0");
         }
-        System.out.println("4. in getExam- currentQuestion: " + currentQuestion);
+        //System.out.println("4. in getExam- currentQuestion: " + currentQuestion);
         setTimer();
         ChangePreviewEvent newEvent = new ChangePreviewEvent();
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
-        System.out.println("5. after sending first question to preview");
+        //System.out.println("5. after sending first question to preview");
     }
 
-    @Subscribe  // get the answer of the student from the preview window
+    // get the answer of the student from the preview window
+    @Subscribe
     public void getAnswer(StudentAnswerToQuestion event){
+        System.out.println("///// In getAnswer /////");
         System.out.println("Answer received: " +event.getSelectedAnswer());
         Question question = event.getQuestion();
         int flag = 0;
@@ -164,6 +166,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             System.out.println("Question " + question.getID() + " not answered");
             return;
         }
+        System.out.println("Map Return Value: " + studentQuestionsAnswers.put(question, event.getSelectedAnswer()));
         if (studentQuestionsAnswers.put(question, event.getSelectedAnswer()) == null) { // if the question wasn't answered before
             System.out.println("Answer to question " + question.getID() + " was added");
             numberOfQuestionsAnswered++;
@@ -173,9 +176,11 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             System.out.println("Answer to question " + question.getID() + " was updated");
         }
         System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
-        //progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
+        progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780");
+        System.out.println("///// End of getAnswer /////");
     }
 
+    // set the timer for the exam
     private void setTimer() // set the timer for the exam
     {
         Timer timer = new Timer();
@@ -204,6 +209,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         timer.schedule(task,0, 1000);
     }
 
+        // method to create listeners for the buttons in the exam (Right now it's not in use - replaced by separate listeners for each button)
         /*private void CreateListeners() // create listeners for the buttons
         {
             //create a listener for the next Question button
@@ -239,6 +245,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             });
         }*/
 
+        // method to update the question preview
         @Subscribe
         private void UpdateQuestion() { // TODO: work with Edan on solution to Randomize question answers
             currentQuestion = questionList.get(currentIndex);
@@ -258,42 +265,17 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 event.setSelectedAnswer("0");
             }
             EventBus.getDefault().post(event);
+            System.out.println("//////// End of Updating preview ////////");
         }
 
+        // method to print the map of questions and answers (for debugging)
         public void printMapHelper(Map<Question, String> map) {
             for (Map.Entry<Question, String> entry : map.entrySet()) {
-                System.out.println("Question: " + entry.getKey().getID() + " Answer: " + entry.getValue());
+                System.out.println("Question: " + entry.getKey().getID() + ", " + entry.getKey().getQuestionData() + ". Answer: " + entry.getValue());
             }
         }
 
-    /*
-    @FXML
-    void nextQuestion(ActionEvent event) {
-        boolean isRight = false;
-        {
-            // checking answer
-            RadioButton selectedButton = (RadioButton) options.getSelectedToggle();
-            String userAnswer = selectedButton.getText();
-            String rightAnswer = this.currentQuestion.getCorrectAnswer();
-            if (userAnswer.trim().equalsIgnoreCase(rightAnswer.trim())) {
-                isRight = true;
-                this.numberOfRightAnswers++;
-            }
-
-            // saving Answer to hashMap
-            //studentAnswers.put(this.currentQuestion, userAnswer);
-        }
-        Node circleNode = this.progressPane.getChildren().get(currentIndex - 1);
-        Client.Controllers.SubViews.ProgressCircleController controller = (Client.Controllers.SubViews.ProgressCircleController) circleNode.getUserData();
-        if (isRight) {
-            controller.setRightAnswerColor();
-        } else {
-            controller.setWrongAnswerColor();
-        }
-        this.setNextQuestion();
-    }*/
-
-
+    // method to handle the transition to the previous question
     @FXML
     void previousQuestion(ActionEvent event) {
         if (currentIndex > 0) {
@@ -310,6 +292,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             submitButton.setVisible(false);
         }
     }
+
+    // method to handle the transition to the next question
     @FXML
     void nextQuestion(ActionEvent event){
         if (currentIndex < numberOfQuestions - 1) {
@@ -331,32 +315,46 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
+    // method to handle the submission of the exam
     @FXML
-    void submitExam(ActionEvent event) {
+    void submitExam(ActionEvent event) throws IOException {
         //System.out.println(this.studentAnswers);
         //System.out.println(this.studentExam.getStudent());
+        System.out.println("///// Submitting exam /////");
+        RequestStudentAnswerToQuestion request = new RequestStudentAnswerToQuestion();
+        EventBus.getDefault().post(request);
         // TODO - examForm grade percentage is missing!
+        int num_answered = 0;
+        int num_correct = 0;
+        int grade = 0;
+        int i= 0;
         for (Question q : questionList){
+            int percentage = selectedForm.getQuestionsScores().get(i);
+            i++;
             String studentAnswer = studentQuestionsAnswers.get(q);
             if (studentAnswer != null){
                 numberOfQuestionsAnswered++;
+                num_answered++;
                 if (studentAnswer.equals(q.getCorrectAnswer())){
                     numberOfRightAnswers++;
+                    num_correct++;
+                    grade += percentage;
                 }
             }
         }
-        System.out.println("numberOfQuestionsAnswered: " + numberOfQuestionsAnswered);
+        System.out.println("numberOfQuestionsAnswered: " + numberOfQuestionsAnswered + ". numberOfQuestions: " + numberOfQuestions);
         System.out.println("numberOfRightAnswers: " + numberOfRightAnswers);
+        System.out.println("num_answered: " + num_answered + ". num_correct: " + num_correct);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Are you sure you want to submit the exam?");
         if (timeInSeconds > 0){
-        if ( numberOfQuestionsAnswered < numberOfQuestions) {
+        if ( num_answered < numberOfQuestions) {
             alert.setHeaderText("You have not answered all the questions");}
         else {
             alert.setHeaderText("You answered all the questions");}
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
+            /*if (result.get() == ButtonType.OK){
                 try {
                     SimpleClient.getClient().sendToServer(new Message(1, "Exam Submitted"));
                     SimpleChatClient.setRoot("ChooseExam");
@@ -366,12 +364,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 }
             } else {
                 // ... user chose CANCEL or closed the dialog
+                return;
+            }*/
+            if (result.get() == ButtonType.CANCEL){
+                return;
             }
         }
         else {
             alert.setHeaderText("Time is up!");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
+            /*if (result.get() == ButtonType.OK){
                 try {
                     SimpleClient.getClient().sendToServer(new Message(1, "Exam Submitted"));
                     SimpleChatClient.setRoot("ChooseExam");
@@ -381,9 +383,24 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 }
             } else {
                 // ... user chose CANCEL or closed the dialog
-            }
+                return;
+            }*/
         }
-
+        System.out.println("Grade : " + grade);
+        studentExam.setGrade(grade);
+        List<String> studentAnswers = new ArrayList<>();
+        for (Question q : questionList){
+            studentAnswers.add(studentQuestionsAnswers.get(q));
+        }
+        studentExam.setStudentAnswers(studentAnswers);
+        studentExam.setClassExam(mainClassExam);
+        studentExam.setStudent((Student) user);
+        studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
+        Message msg= new Message(1, "Digital Exam for student ID: " + SimpleClient.getUser().getID());
+        msg.setData(studentExam);
+        SimpleClient.getClient().sendToServer(msg);
+        //SimpleChatClient.setRoot("ChooseExam");
+        JOptionPane.showMessageDialog(null, "Exam submitted successfully", "Submission Exam", JOptionPane.INFORMATION_MESSAGE);
         //boolean result = StudentExam.save(this.studentAnswers);
         /*if (result) {
             // show success notification
@@ -392,11 +409,10 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         } else {
             // show error notification
         }*/
+
     }
 
-
-
-
+    // method to initialize the buttons on the right side of the screen
     private void renderProgress() {
         System.out.println("rendering progress: questionList.size() = " + questionList.size());
         for (int i = 0; i < questionList.size(); i++) {
@@ -431,26 +447,23 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
+    // TODO: check if this method works in real time (when the principal approves the extra time)
+    // add extra time to exam in case that the principal approved it
+    @Subscribe
+    public void getExtraTime(PrincipalApproveEvent event) {
+        int addedTime = event.getExtraTime().getDelta();
+        System.out.println("addedTime: " + addedTime);
+        timeInSeconds += addedTime*60;
+    }
 
+    // method to end the exam in case that the time is up in the server
+    @Subscribe
+    public void endExam(ExamEndedEvent event) throws IOException {
+        SimpleChatClient.setRoot("StudentChooseExam");
+        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
+        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-
-    /*
-    private void renderProgress() {
-        for (int i = 0; i < questionList.size(); i++) {
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass()
-                            .getResource("ProgressCircle.fxml"));
-            try {
-                Node node = fxmlLoader.load();
-                Client.Controllers.SubViews.ProgressCircleController progressCircleFXMLController = fxmlLoader.getController();
-                progressCircleFXMLController.setNumber((Integer)(i + 1));
-                progressCircleFXMLController.setDefaultColor();
-                progressPane.getChildren().add(node);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
+    }
 
     @FXML
     void AssertFXMLComponents() {
@@ -461,6 +474,5 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         assert submitButton != null : "fx:id=\"submitButton\" was not injected: check your FXML file 'StudentDoExamDigital.fxml'.";
         assert timeLeft != null : "fx:id=\"timeLeft\" was not injected: check your FXML file 'StudentDoExamDigital.fxml'.";
         assert title != null : "fx:id=\"title\" was not injected: check your FXML file 'StudentDoExamDigital.fxml'.";
-
     }
 }

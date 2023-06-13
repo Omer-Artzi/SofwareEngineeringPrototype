@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -64,10 +65,13 @@ public class SimpleServer extends AbstractServer {
         super(port);
         try {
             EventBus.getDefault().register(this);
-            SessionFactory sessionFactory = getSessionFactory();
+            SessionFactory sessionFactory = getSessionFactory(null);
             session = sessionFactory.openSession();
             session.beginTransaction();
-            DataGenerator.generateData();
+            String cfg = sessionFactory.getProperties().get("hibernate.hbm2ddl.auto").toString();
+            if (cfg.equals("create") || cfg.equals("create-drop") ||  cfg.equals("create-only")){
+                DataGenerator.generateData();
+            }
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -95,7 +99,7 @@ public class SimpleServer extends AbstractServer {
         }
     }
 
-    public static SessionFactory getSessionFactory() throws HibernateException, InterruptedException {
+    public static SessionFactory getSessionFactory(Map<String, String> properties) throws HibernateException, InterruptedException {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(Student.class);
@@ -110,6 +114,12 @@ public class SimpleServer extends AbstractServer {
             configuration.addAnnotatedClass(Person.class);
             configuration.addAnnotatedClass(ExtraTime.class);
             configuration.addAnnotatedClass(Principal.class);
+            if(properties != null)
+            {
+                for (Map.Entry<String, String> entry : properties.entrySet()) {
+                    configuration.setProperty(entry.getKey(), entry.getValue());
+                }
+            }
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties())
@@ -181,8 +191,7 @@ public class SimpleServer extends AbstractServer {
         CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
         Root<ExamForm> root = query.from(ExamForm.class);
         query.where(builder.equal(root.get("ID"), iExamFormID));
-        ExamForm examForm = session.createQuery(query).getSingleResult();
-        return examForm;
+        return session.createQuery(query).getSingleResult();
     }
 
     @Subscribe
@@ -229,7 +238,9 @@ public class SimpleServer extends AbstractServer {
         System.out.println("Message Received: " + request);
 
         // Todo: find better solution to start and commit transaction
-        session.beginTransaction();
+        if (!session.getTransaction().isActive()) {
+            session.beginTransaction();
+        }
         try {
             //we got an empty message, so we will send back an error message with the error details.
             if (request.isBlank()) {
@@ -300,14 +311,26 @@ public class SimpleServer extends AbstractServer {
                 message.setData(getSubjects());
                 client.sendToClient(message);
             }
-            else if (message.getMessage().startsWith("Get Student Exams For Student ID:")) {
+            else if (request.startsWith("Add New Class Exam")) {
+                try {
+                    response = "Exam Saved Successfully";
+                    message.setMessage(response);
+                   session.saveOrUpdate((ClassExam)(message.getData()));
+                   session.flush();
+                    client.sendToClient(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    response = "Failed to save exam";
+                }
+            }
+            else if (request.startsWith("Get Student Exams For Student ID:")) {
                 response = request.substring(4);
                 int studentID = Integer.parseInt(request.substring(34));
                 message.setMessage(response);
                 message.setData(retrieveStudentExams(studentID));
                 client.sendToClient(message);
             }
-            else if (message.getMessage().startsWith("Get class exams for student ID")) {
+            else if (request.startsWith("Get class exams for student ID")) {
                 response = request.substring(4);
                 int studentID = Integer.parseInt(request.substring(32));
                 message.setMessage(response);
@@ -320,7 +343,7 @@ public class SimpleServer extends AbstractServer {
                 message.setData(new ExtraTimeRequestEvent((ExtraTime) message.getData()));
                 sendToAllClients(message);
             }
-            else if (message.getMessage().startsWith("Extra time request")) {
+            else if (request.startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());
                 try {
                     session.save(extraTime);
@@ -340,7 +363,7 @@ public class SimpleServer extends AbstractServer {
                 //message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
                 //sendToAllClients(message);
             }
-            else if (message.getMessage().startsWith("Manual Exam")) {
+            else if (request.startsWith("Manual Exam")) {
                 try {
                     response = "Manual Exam Received";
                     message.setMessage(response);
@@ -370,19 +393,50 @@ public class SimpleServer extends AbstractServer {
                     e.printStackTrace();
                 }
             }
-            else if (message.getMessage().startsWith("Extra time approved")) {
+            else if (request.startsWith("Digital Exam")) {
+                try {
+                    response = "Digital Exam Received";
+                    message.setMessage(response);
+
+                    StudentExam studentExam = (StudentExam) message.getData();
+                    StudentExam examToSave = new StudentExam();
+
+                    // Student Link
+                    Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
+                    examToSave.setStudent(student);
+                    student.addStudentExam(examToSave);
+
+                    // ClassExam Link
+                    ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
+                    examToSave.setClassExam(classExam);
+                    classExam.addStudentExam(examToSave);
+
+                    // no entities attributes set
+                    examToSave.update(studentExam);
+
+                    session.saveOrUpdate(examToSave);
+
+                    System.out.println("DigitalExam Saved successfully.");
+                    client.sendToClient(message);
+                }
+                catch (Exception e) {
+                    response = "Digital Exam could not be saved";
+                    e.printStackTrace();
+                }
+            }
+            else if (request.startsWith("Extra time approved")) {
                 response = "Extra time approved";
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Extra time rejected")) {
+            else if (request.startsWith("Extra time rejected")) {
                 response = "Extra time rejected";
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Exam approved")) {
+            else if (request.startsWith("Exam approved")) {
                 try {
                     session.save(message.getData());
                     response = "Exam saved successfully";
@@ -393,16 +447,29 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 client.sendToClient(message);
             }
-            else if (request.startsWith("Get Exams Forms for Subject")) {
+            else if (request.startsWith("Get Class Exams for Subject")) {
                 response = "Exams in Subject " + ((Subject) (message.getData())).getName();
                 message.setMessage(response);
                 message.setData(getExamsForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
             }
-            else if (request.startsWith("Get Exams Forms for Course")) {
+            else if (request.startsWith("Get Class Exams  for Course")) {
                 response = "Exams in Course " + ((Course) (message.getData())).getName();
                 message.setMessage(response);
                 message.setData(getExamsForCourse((Course) (message.getData())));
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Get Exam Forms For Subject")) {
+                response = "Exam Forms in Subject " + ((Subject) (message.getData())).getName();
+                message.setMessage(response);
+                message.setData(getExamFormForSubjects((Subject) (message.getData())));
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Get Exam Forms For Course")) {
+                response = "Exam Forms in Course " + ((Course) (message.getData())).getName();
+                System.out.println("Get Exam Forms for Course");
+                message.setMessage(response);
+                message.setData(getExamFormForCourse((Course) (message.getData())));
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get Exams for Subject")) {
@@ -617,9 +684,13 @@ public class SimpleServer extends AbstractServer {
             e1.printStackTrace();
         }
         // Check if there were new changes in the database before commit
-        if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE))
+        if (session.getTransaction().getStatus().equals(TransactionStatus.ACTIVE)) {
             session.getTransaction().commit();
+        }
+        //session.close();
     }
+
+
 
     private Boolean LogUserOut(Person user) {
         boolean userRemoved = LoggedInUsers.remove(user);
@@ -665,6 +736,14 @@ public class SimpleServer extends AbstractServer {
         }
 
     }
+    private List<ClassExam> getExamsForStudent(int studentID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Student> query = builder.createQuery(Student.class);
+        Root<Student> root = query.from(Student.class);
+        query.where(builder.equal(root.get("ID"), studentID));
+        Student student = session.createQuery(query).getSingleResult();
+        return student.getClassExams();
+    }
 
     private List<ClassExam> getExamsForCourse(Course course) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -684,13 +763,22 @@ public class SimpleServer extends AbstractServer {
         return classExams;
     }
 
-    private List<ClassExam> getExamsForStudent(int studentID) {
+    private List<ExamForm> getExamFormForSubjects(Subject subject) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Student> query = builder.createQuery(Student.class);
-        Root<Student> root = query.from(Student.class);
-        query.where(builder.equal(root.get("ID"), studentID));
-        Student student = session.createQuery(query).getSingleResult();
-        return student.getClassExams();
+        CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+        Root<ExamForm> root = query.from(ExamForm.class);
+        query.where(builder.equal(root.get("subject"), subject));
+        List<ExamForm> classExams = session.createQuery(query).getResultList();
+        return classExams;
+    }
+
+    private List<ExamForm> getExamFormForCourse(Course course) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
+        Root<ExamForm> root = query.from(ExamForm.class);
+        query.where(builder.equal(root.get("course"), course));
+        List<ExamForm> examForms = session.createQuery(query).getResultList();
+        return examForms;
     }
 
     private List<Question> getQuestionsForCourse(Course course) {
@@ -725,8 +813,8 @@ public class SimpleServer extends AbstractServer {
         CriteriaQuery<Teacher> query = builder.createQuery(Teacher.class);
         Root<Teacher> root = query.from(Teacher.class);
         query.where(builder.equal(root.get("ID"), iTeacherid));
-        List<Course> courses = session.createQuery(query).getSingleResult().getCourses();
-        return courses;
+        Teacher teacher = session.createQuery(query).getSingleResult();
+        return teacher.getCourses();
     }
 
     private List<ClassExam> retrieveClassExam() {
@@ -737,6 +825,16 @@ public class SimpleServer extends AbstractServer {
         System.out.println("Checking for dead exams");
         return exams;
     }
+
+    private ClassExam retrieveClassExam(int classExamID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), classExamID));
+        ClassExam exam = session.createQuery(query).getSingleResult();
+        return exam;
+    }
+
 
     private List<ExtraTime> getExtraTime() {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -799,17 +897,6 @@ public class SimpleServer extends AbstractServer {
         }
         catch (IOException e1) {
             e1.printStackTrace();
-        }
-    }
-
-    public void generateStudents() {
-        Faker faker = new Faker();
-        for (int i = 0; i < 10; i++) {
-            String firstName = faker.name().firstName();
-            String lastName = faker.name().lastName();
-            Student student = new Student(firstName, lastName);
-            session.save(student);
-            session.flush();
         }
     }
 }

@@ -53,7 +53,7 @@ public class SimpleChatServer extends Application
             public void handle(WindowEvent event) {
                 try {
                     EventBus.getDefault().post(new TerminationEvent());
-                    SessionFactory sessionFactory = SimpleServer.getSessionFactory();
+                    SessionFactory sessionFactory = SimpleServer.getSessionFactory(null);
                     if (sessionFactory != null && !sessionFactory.isClosed()){
                         SimpleServer.session.close();
                         sessionFactory.close();

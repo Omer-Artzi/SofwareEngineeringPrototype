@@ -25,13 +25,14 @@ public class StudentExam implements Serializable {
     @JoinColumn(name = "Student")
     private Student student;
 
-    @ManyToOne(cascade =CascadeType.ALL)
+    @ManyToOne //(cascade =CascadeType.ALL)
     @JoinColumn(name = "ClassExam")
     private ClassExam classExam;
 
     @ElementCollection
     private List<String> studentAnswers = new ArrayList<>();
     private int grade;
+
     private Enums.submissionStatus status;
 
     private String teacherNote;
@@ -168,4 +169,15 @@ public class StudentExam implements Serializable {
     }
 
 
+    // copy constructor
+    public StudentExam(StudentExam other)
+    {
+        this.student = other.student;
+        this.classExam = other.classExam;
+        this.studentAnswers = new ArrayList<>(other.studentAnswers);
+        this.grade = other.grade;
+        this.status = other.status;
+        this.teacherNote = other.teacherNote;
+        this.scoreChangeReason = other.scoreChangeReason;
+    }
 }
