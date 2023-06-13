@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StudentViews.StudentViewExamController">
    <children>
       <Label layoutX="353.0" layoutY="36.0" text="Exam Grades">
@@ -10,12 +13,12 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <TableView fx:id="ExamTV" layoutX="52.0" layoutY="87.0" prefHeight="619.0" prefWidth="734.0">
+      <TableView fx:id="ExamTV" layoutX="52.0" layoutY="87.0" onMouseClicked="#OnClickEvent" prefHeight="619.0" prefWidth="730.0">
         <columns>
-          <TableColumn fx:id="subjectColumn" prefWidth="207.29132080078125" text="Subject" />
-          <TableColumn fx:id="courseColumn" minWidth="0.0" prefWidth="256.43035888671875" text="Course" />
-            <TableColumn fx:id="examCodeColumn" prefWidth="130.569580078125" text="Exam Code" />
-            <TableColumn fx:id="gradeColumn" minWidth="3.0" prefWidth="138.50006103515625" text="Grade" />
+          <TableColumn fx:id="subjectColumn" prefWidth="170.0" text="Subject" />
+          <TableColumn fx:id="courseColumn" minWidth="0.0" prefWidth="240.0" text="Course" />
+            <TableColumn fx:id="examCodeColumn" prefWidth="160.0" text="Exam Code" />
+            <TableColumn fx:id="gradeColumn" minWidth="3.0" prefWidth="145.0" text="Grade" />
         </columns>
       </TableView>
    </children>
