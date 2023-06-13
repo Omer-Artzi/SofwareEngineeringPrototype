@@ -38,6 +38,8 @@ public class OperationUtils {
 
         // set and return result
         classExam.setApprovedExamsNum(approvedExamsNum);
+        classExam.setExamToEvaluate(classExam.getStudentExams().stream().filter(studentExam ->
+                studentExam.getStatus() == Enums.submissionStatus.ToEvaluate).collect(Collectors.toList()).size());
         classExam.setGradesMean(mean);
         classExam.setGradesVariance(variance);
         return classExam;

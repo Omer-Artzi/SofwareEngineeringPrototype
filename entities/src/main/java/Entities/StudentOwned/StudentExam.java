@@ -173,4 +173,8 @@ public class StudentExam implements Serializable {
             throw new RuntimeException(e);
         }
     }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 }

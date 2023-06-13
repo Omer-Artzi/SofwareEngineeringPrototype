@@ -210,9 +210,4 @@ public class ClassExam implements Serializable
         this.examStatus = examStatus;
     }
 
-
-
-
-
-
 }

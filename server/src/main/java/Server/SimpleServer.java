@@ -395,22 +395,33 @@ public class SimpleServer extends AbstractServer {
                     message.setMessage(response);
 
                     StudentExam studentExam = (StudentExam) message.getData();
-                    StudentExam examToSave = new StudentExam();
+                    StudentExam oldStudentExam = getStudentExamFromClassExam(studentExam.getStudent().getID(), studentExam.getClassExam().getID());
+                    if (oldStudentExam == null) {
+                        System.out.println("oldStudentExam is null");
+                        return;
+                    }
+
+                        //studentExam.setID(oldStudentExam.getID());
+                        //session.delete(oldStudentExam);
+                        //session.flush();
+
+                    //StudentExam examToSave = new StudentExam();
 
                     // Student Link
                     Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
-                    examToSave.setStudent(student);
-                    student.addStudentExam(examToSave);
+                    oldStudentExam.setStudent(student);
+                    student.addStudentExam(oldStudentExam);
 
                     // ClassExam Link
                     ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
-                    examToSave.setClassExam(classExam);
-                    classExam.addStudentExam(examToSave);
+                    oldStudentExam.setClassExam(classExam);
+                    classExam.addStudentExam(oldStudentExam);
 
                     // no entities attributes set
-                    examToSave.update(studentExam);
+                    oldStudentExam.update(studentExam);
+                    //studentExam.update(oldStudentExam);
 
-                    session.saveOrUpdate(examToSave);
+                    session.saveOrUpdate(oldStudentExam);
 
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);
@@ -730,6 +741,14 @@ public class SimpleServer extends AbstractServer {
 
         }
 
+    }
+    private StudentExam getStudentExamFromClassExam(int studentID, int classExamID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<StudentExam> query = builder.createQuery(StudentExam.class);
+        Root<StudentExam> root = query.from(StudentExam.class);
+        query.where(builder.and(builder.equal(root.get("student"), studentID), builder.equal(root.get("classExam"), classExamID)));
+        StudentExam studentExam = session.createQuery(query).getSingleResult();
+        return studentExam;
     }
 
     private List<ClassExam> getExamsForStudent(int studentID) {
