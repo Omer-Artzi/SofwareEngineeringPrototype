@@ -1,5 +1,6 @@
 package Client.Controllers.MainViews.StudentViews;
 
+import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.ExamEndedEvent;
 import Client.Events.ExamEndedMessageEvent;
@@ -15,6 +16,8 @@ import Entities.Users.Student;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -28,10 +31,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class StudentDoExamManualController {
+public class StudentDoExamManualController extends SaveBeforeExit {
 
     @FXML
     private ImageView dragAndDropImg;
@@ -162,6 +166,39 @@ public class StudentDoExamManualController {
         }
 
     }
+
+    @Override @FXML
+    public boolean PromptUserToSaveData(String sceneName) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have yet to submit your exam. If you leave now you will fail the exam. Do you still wish to leave?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
+        alert.setTitle("Exam not submitted");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == ButtonType.YES) {
+                System.out.println("Prompt to leave manual exam: YES");
+                try {
+                    SimpleChatClient.setRoot(sceneName);
+                    EventBus.getDefault().unregister(this);
+                    System.out.println("PromptUserToSaveData changing scene 2");
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+            else if (result.get().equals(ButtonType.NO)) {
+                System.out.println("Prompt to leave manual exam: NO");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean CheckForUnsavedData() {
+        System.out.println("CheckForUnsavedData in StudentDoExamManualController");
+        return true;
+    }
+
 
 
     @Subscribe

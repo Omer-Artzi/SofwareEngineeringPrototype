@@ -2,6 +2,7 @@ package Client.Controllers.MainViews;
 
 import Client.Events.ChangeMainSceneEvent;
 import Client.SimpleChatClient;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -16,17 +17,21 @@ public class SaveBeforeExit {
     @Subscribe
     public void TriggerDataCheck(ChangeMainSceneEvent event) {
         boolean unsavedData = CheckForUnsavedData();
-        if (unsavedData) {
-            boolean changeScreen = PromptUserToSaveData(event.getSceneName());
-        }
-        try {
-            EventBus.getDefault().unregister(this);
-            SimpleChatClient.setRoot(event.getSceneName());
-            System.out.println("TriggerDataCheck changing scene");
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        System.out.println("TriggerDataCheck unsavedData: " + unsavedData);
+        Platform.runLater(() -> {
+            if (unsavedData) {
+                boolean changeScreen = PromptUserToSaveData(event.getSceneName());
+            } else {
+                try {
+                    EventBus.getDefault().unregister(this);
+                    SimpleChatClient.setRoot(event.getSceneName());
+                    System.out.println("TriggerDataCheck changing scene");
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     @FXML

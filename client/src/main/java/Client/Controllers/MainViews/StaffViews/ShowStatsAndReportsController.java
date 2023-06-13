@@ -185,7 +185,7 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         Date currentTime = ConvertToDate(LocalDateTime.now());
 
         allClassExams = allClassExams.stream().filter(classExam ->
-                classExam.getFinalDate().after(currentTime)).collect(Collectors.toList());
+                classExam.getFinalSubmissionDate().after(currentTime)).collect(Collectors.toList());
 
         //allClassExams = allClassExams.stream().filter(classExam ->
         //        currentTime.after(classExam.getFinalDate())).collect(Collectors.toList());
