@@ -64,7 +64,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+        codeColumn.setCellValueFactory(new PropertyValueFactory<>("accessCode"));
         timeColumm.setCellValueFactory(new PropertyValueFactory<>("examTime"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
@@ -128,7 +128,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
         if( selectedExam != null ) {
             if (selectedExam.getExamType() == Enums.ExamType.Manual) {
                 //TODO: change to "real" ID
-                if(selectedExam.getCode().equals(examCodeTF.getText()) ) {
+                if(selectedExam.getAccessCode().equals(examCodeTF.getText()) ) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
                 }
                 else {
@@ -136,7 +136,8 @@ public class StudentChooseExamController extends SaveBeforeExit {
                 }
             } else//Digital Exam
             {
-                if(selectedExam.getCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == (SimpleClient.getUser().getID())) {
+                //if(selectedExam.getAccessCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == (SimpleClient.getUser().getID())) {
+                if(selectedExam.getAccessCode().equals(examCodeTF.getText()) ) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
                 }
                 else {

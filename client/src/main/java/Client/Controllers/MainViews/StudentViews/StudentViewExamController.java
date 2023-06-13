@@ -131,7 +131,7 @@ public class StudentViewExamController extends SaveBeforeExit {
                     setText(null);
                 } else {
                     // replace with desired format
-                    setText(item.getCode());
+                    setText(item.getAccessCode());
                 }
             }
         });

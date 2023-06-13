@@ -78,7 +78,7 @@ public class ViewExamController {
 	private ComboBox<Subject> subjectsCB;
 
 	@FXML
-	private TableColumn<ClassExam, SimpleStringProperty> timeColumm;
+	private TableColumn<ClassExam, SimpleStringProperty> timeColumn;
 
 
 	@FXML
@@ -117,17 +117,17 @@ public class ViewExamController {
 		if(courses != null)
 		{
 			CoursesCB.getItems().addAll(courses);
-			Message message = new Message(++msgId, "Get Exams for Subject: "  + subjectsCB.getSelectionModel().getSelectedItem() );
+			Message message = new Message(++msgId, "Get Class Exams for Subject: "  + subjectsCB.getSelectionModel().getSelectedItem() );
 			message.setData(subjectsCB.getSelectionModel().getSelectedItem());
 			SimpleClient.getClient().sendToServer(message);
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "This subject does not contain any courses", "DataBase Erroe", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "This subject does not contain any courses", "DataBase Error", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	@FXML
 	public void onCourseSelection() throws IOException {
-		Message message = new Message(++msgId, "Get Exams for Course: "  + CoursesCB.getSelectionModel().getSelectedItem() );
+		Message message = new Message(++msgId, "Get Class Exams for Course: "  + CoursesCB.getSelectionModel().getSelectedItem() );
 		message.setData(CoursesCB.getSelectionModel().getSelectedItem());
 		SimpleClient.getClient().sendToServer(message);
 	}
