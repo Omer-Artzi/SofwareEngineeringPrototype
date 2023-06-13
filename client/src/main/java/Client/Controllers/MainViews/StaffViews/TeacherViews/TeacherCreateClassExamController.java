@@ -172,7 +172,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             endDate.setTime((long)timeToDouble(endTimeTF.getText()));
             classExam.setStartDate(startDate);
             classExam.setFinalDate(endDate);
-            classExam.setCode(codeTF.getText());
+            classExam.setAccessCode(codeTF.getText());
             classExam.setExamTime(timeToDouble(examTimeTF.getText()));
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
             Message message = new Message(1, "Add New Class Exam");
@@ -256,7 +256,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         startTimeTF.setText(String.valueOf(classExam.getStartDate().getTime()));
         endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         endTimeTF.setText(String.valueOf(classExam.getFinalDate().getTime()));
-        codeTF.setText(classExam.getCode());
+        codeTF.setText(classExam.getAccessCode());
         typeCB.getSelectionModel().select(classExam.getExamType().toString());
         double timeInSeconds = classExam.getExamTime();
         int hours = (int) (timeInSeconds / 3600);
