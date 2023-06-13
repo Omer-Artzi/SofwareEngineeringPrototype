@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,11 +24,6 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="seeAnswerButton" layoutX="500.0" layoutY="510.0" mnemonicParsing="false" onAction="#seeAnswer" prefHeight="30.0" prefWidth="110.0" text="see answer">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Button>
       <VBox fx:id="vBox" layoutX="161.0" layoutY="554.0" prefHeight="130.0" prefWidth="574.0">
          <children>
             <Label fx:id="AnswerLabel" prefHeight="15.0" prefWidth="574.0" text="Answer:">
@@ -42,5 +38,6 @@
             <Font size="14.0" />
          </font>
       </Button>
+      <TextArea fx:id="AnswerTextFlow" layoutX="204.0" layoutY="60.0" prefHeight="63.0" prefWidth="355.0" />
    </children>
 </AnchorPane>

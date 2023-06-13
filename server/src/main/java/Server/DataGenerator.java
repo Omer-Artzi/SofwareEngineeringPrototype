@@ -403,7 +403,9 @@ public class DataGenerator {
                 int examDays = faker.number().numberBetween(0, 3);
                 int examHours = faker.number().numberBetween((int)examTime, 23);
                 Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
-
+                if(filter%2==0) {
+                    testEndDate =ConvertToDate(currentDate.plusDays(examDays+1).atStartOfDay());////
+                }
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 //String code = Long.toString(faker.number().randomNumber(5, false));
                 String accessCode = "11aa";

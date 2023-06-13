@@ -160,7 +160,7 @@ public class SimpleClient extends AbstractClient {
                 EventBus.getDefault().post(approveEvent);
                 System.out.println("Approve in client by liadddddddd");
 				approveEvent.show();
-                //EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
+                EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
         }
         else if (messageText.startsWith("Extra time rejected")) {
@@ -187,6 +187,14 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Class Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
+        else if (messageText.startsWith("Question added successfully")){////////
+            System.out.println("Hi Omer!");
+            EndCreateQuestionEvent event=new EndCreateQuestionEvent("Question added successfully");
+            EventBus.getDefault().post(event);
+        }
+        else if (messageText.startsWith("new question could not be added to the database")){////////
+            EventBus.getDefault().post(new EndCreateQuestionEvent( "question could not be added"));
+        }
 		else if (messageText.startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
 		}

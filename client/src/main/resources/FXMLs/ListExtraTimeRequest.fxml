@@ -25,7 +25,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="DecisionCoiceBox" layoutX="300.0" layoutY="505.0" prefHeight="26.0" prefWidth="49.0" />
+      <ChoiceBox fx:id="DecisionCoiceBox" layoutX="300.0" layoutY="505.0" prefHeight="26.0" prefWidth="92.0" />
       <Button fx:id="SendButton" layoutX="471.0" layoutY="666.0" mnemonicParsing="false" onAction="#SendDecision" prefHeight="31.0" prefWidth="74.0" text="Send">
          <font>
             <Font size="17.0" />

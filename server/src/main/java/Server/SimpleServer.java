@@ -38,6 +38,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
+import java.awt.desktop.QuitResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class SimpleServer extends AbstractServer {
     private static final ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
     private static final List<Person> LoggedInUsers = new ArrayList<>();
     public static Session session;
+    public Session session2;
     private static int transmissionID = 0;
     private static SessionFactory sessionFactory;
     private static String IP;
@@ -444,7 +446,11 @@ public class SimpleServer extends AbstractServer {
                 try {
                     ExtraTime extraTime=(ExtraTime) message.getData();
 
-                    Session session2 = getSessionFactory().openSession();
+                    SessionFactory SessionFactory = getSessionFactory(null);
+                   // session2 = sessionFactory.openSession();
+                    //session2.beginTransaction();
+
+                     session2 = SessionFactory.openSession();
                     Transaction tx2 = session2.beginTransaction();
 
                     session2.saveOrUpdate(extraTime);
@@ -466,7 +472,8 @@ public class SimpleServer extends AbstractServer {
             else if (message.getMessage().startsWith("Extra time rejected")) {
                 try {
                     ExtraTime extraTime=(ExtraTime) message.getData();
-                    Session session2 = getSessionFactory().openSession();
+                    SessionFactory SessionFactory = getSessionFactory(null);
+                    Session session2 = SessionFactory.openSession();
                     Transaction tx2 = session2.beginTransaction();
 
                     session2.saveOrUpdate(extraTime);
@@ -651,12 +658,45 @@ public class SimpleServer extends AbstractServer {
             else if (request.startsWith("Save Question")) {
                 Question newQuestion = ((Question) (message.getData()));
                 try {
-                    session.save(newQuestion);
-                    //Course updateCourse=newQuestion.getCourse();
-                    //updateCourse.getQuestions().add(newQuestion);
-                    //session.merge(updateCourse);
+                    Question questionToSave=new Question();
+
+                    List<Course>courses=getCourses();
+                    List<Course>coursesToSave=new ArrayList<>();
+                    for(Course item: courses)
+                    {
+                        for (Course item1: newQuestion.getCourses()){
+                            if(item1.getId().equals(item.getId())){
+                                coursesToSave.add(item);
+                            }
+                        }
+                    }
+                    questionToSave.setCourses(coursesToSave);
+
+                    List<Subject>subjects=getSubjects();
+                    for(Subject item: subjects)
+                    {
+                        if(newQuestion.getCourses().get(0).getId().equals(item.getId()))
+                            questionToSave.setSubject(item);
+                    }
+
+                    questionToSave.setAnswers(newQuestion.getAnswers());
+
+                    questionToSave.setCorrectAnswer(newQuestion.getCorrectAnswer());
+
+                    questionToSave.setQuestionData(newQuestion.getQuestionData());
+
+                    questionToSave.setStudentNote(newQuestion.getStudentNote());
+
+                    questionToSave.setTeacherNote(newQuestion.getTeacherNote());
+
+                    List<ExamForm>examForms=new ArrayList<>();
+                    questionToSave.setExamForm(examForms);
+                    String codeToSave=createCodeOfQuestion(newQuestion.getSubject());
+                    questionToSave.setQuestionID(codeToSave);
+                    session.save(questionToSave);
                     session.flush();
-                    response = ("Question added succefully");
+
+                    response = ("Question added successfully");
                     message.setMessage(response);
                     client.sendToClient(message);
                     System.out.println(response);
@@ -802,6 +842,24 @@ public class SimpleServer extends AbstractServer {
         StudentExam studentExam = session.createQuery(query).getSingleResult();
         return studentExam;
     }
+    public String createCodeOfQuestion(Subject subject){
+        List<Question>questionsOfSubject=getQuestionsBySubject(subject.getId());
+        int size=questionsOfSubject.size();
+
+        String subCode= OperationUtils.IDZeroPadding(String.valueOf(subject.getId()),2);
+        String questionCode=OperationUtils.IDZeroPadding(String.valueOf(size),3);
+        return subCode+questionCode;
+    }
+
+    private List<Question> getQuestionsBySubject(long SubjectID)
+    {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
+        Root<Subject> root = query.from(Subject.class);
+        query.where(builder.equal(root.get("ID"), SubjectID));
+        Subject subject = session.createQuery(query).getSingleResult();
+        return subject.getQuestions();
+    }
 
     private List<ClassExam> getExamsForStudent(int studentID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -918,6 +976,14 @@ public class SimpleServer extends AbstractServer {
         query.from(ExtraTime.class);
         List<ExtraTime> extraTime = session.createQuery(query).getResultList();
         return extraTime;
+    }
+
+    private List<Course> getCourses() {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        query.from(Course.class);
+        List<Course> courses = session.createQuery(query).getResultList();
+        return courses;
     }
 
     private List<Principal> getPrincipals() {
