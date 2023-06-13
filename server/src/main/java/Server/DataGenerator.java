@@ -395,21 +395,23 @@ public class DataGenerator {
                 LocalDateTime randomDay = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
                 double examTime;
                 if(filter % 3 == 0) {
-                    testStartDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(4).toLocalDate(), currentDate));
                     examTime = faker.number().numberBetween(1, 4);
                     int examDays = faker.number().numberBetween(0, 3);
                     int examHours = faker.number().numberBetween((int)examTime, 23);
-                    testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
+                    testStartDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(4).toLocalDate(),
+                            currentDate));
+                    testEndDate = ConvertToDate(currentDate.atStartOfDay().plusHours(examHours).plusDays(examDays));
 
                 }
                 else if(filter % 3 == 1) {
-                    testStartDate = ConvertToDate(currentDate.atStartOfDay().minusDays(faker.number().numberBetween(4,14)));
-                    examTime = faker.number().numberBetween(1, 4);
-                    int examDays = faker.number().numberBetween(0, 3);
-                    int examHours = faker.number().numberBetween((int)examTime, 23);
-                    LocalDate startDateLocal = testStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-                    testEndDate = ConvertToDate(GenerateRandomDate(startDateLocal, currentDate));
+                    examTime = faker.number().numberBetween(1, 4);
+                    testStartDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(14).toLocalDate(),
+                            currentDate.atStartOfDay().minusDays(4).toLocalDate()));
+                    //testStartDate = ConvertToDate(currentDate.atStartOfDay().minusDays(faker.number().numberBetween(4,14)));
+                    testEndDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(3).toLocalDate(),
+                            currentDate.atStartOfDay().minusDays(0).toLocalDate()));
+                    //testEndDate = ConvertToDate(currentDate.atStartOfDay().minusDays(faker.number().numberBetween(0,3)));
                 }
                 else {
                     testStartDate = ConvertToDate(randomDay);
@@ -479,6 +481,14 @@ public class DataGenerator {
                     StudentExam currentExam = new StudentExam(student, classExam, studentAnswers, randGrade, status);
                     student.addClassExam(classExam);
                     studentExams.add(currentExam);
+
+                    if (status == Enums.submissionStatus.Approved)
+                    {
+                        if(randGrade >= 50)
+                            currentExam.setTeacherNote("Great job!!");
+                        else
+                            currentExam.setTeacherNote("Maybe next time");
+                    }
                 } else {
                     StudentExam currentExam = new StudentExam(student, classExam, null, randGrade, status);
                     studentExams.add(currentExam);

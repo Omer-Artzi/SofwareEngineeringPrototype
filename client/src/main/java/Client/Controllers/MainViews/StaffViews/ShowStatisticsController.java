@@ -329,7 +329,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
                         classExam.getExamForm().getCreator().getFullName().startsWith(chosenReport)).collect(Collectors.toList());
                 ClassExamStatsTv.getItems().addAll(classExams);
                 ClassExamStatsTv.sort();
-                allGrades = classExams.stream().map(ClassExam::getGradesMean).collect(Collectors.toList());
+                allGrades = classExams.stream().sorted(Comparator.comparing(classExam -> classExam.getStartDate()))
+                        .map(ClassExam::getGradesMean).collect(Collectors.toList());
                 allDates = classExams.stream().map(ClassExam::getStartDate).sorted().collect(Collectors.toList());
                 ClassExamStatsTv.setVisible(true);
                 ClassExamStatsTv.setPrefHeight(300);
@@ -346,7 +347,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
                         classExam.getExamForm().getCourse().getName().startsWith(chosenReport)).collect(Collectors.toList());
                 ClassExamStatsTv.getItems().addAll(classExams);
                 ClassExamStatsTv.sort();
-                allGrades = classExams.stream().map(ClassExam::getGradesMean).collect(Collectors.toList());
+                allGrades = classExams.stream().sorted(Comparator.comparing(classExam -> classExam.getStartDate()))
+                        .map(ClassExam::getGradesMean).collect(Collectors.toList());
                 allDates = classExams.stream().map(ClassExam::getStartDate).sorted().collect(Collectors.toList());
                 ClassExamStatsTv.setVisible(true);
                 ClassExamStatsTv.setPrefHeight(300);
@@ -472,7 +474,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
             else
             {
                 dataPoint = new XYChart.Data<>(
-                        FormatDate(dates.get(i), false), grades.get(i));
+                        FormatDate(dates.get(i), true), grades.get(i));
             }
 
             // Add the data point to the series
