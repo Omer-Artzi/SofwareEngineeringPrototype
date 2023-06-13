@@ -295,7 +295,8 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(getSubjects());
                 client.sendToClient(message);
-            } else if (request.startsWith("Add New Class Exam")) {
+            }
+            else if (request.startsWith("Add New Class Exam")) {
                 try {
                     response = "Exam Saved Successfully";
                     message.setMessage(response);
@@ -307,14 +308,14 @@ public class SimpleServer extends AbstractServer {
                     response = "Failed to save exam";
                 }
             }
-            else if (message.getMessage().startsWith("Get Student Exams For Student ID:")) {
+            else if (request.startsWith("Get Student Exams For Student ID:")) {
                 response = request.substring(4);
                 int studentID = Integer.parseInt(request.substring(34));
                 message.setMessage(response);
                 message.setData(retrieveStudentExams(studentID));
                 client.sendToClient(message);
             }
-            else if (message.getMessage().startsWith("Get class exams for student ID")) {
+            else if (request.startsWith("Get class exams for student ID")) {
                 response = request.substring(4);
                 int studentID = Integer.parseInt(request.substring(32));
                 message.setMessage(response);
@@ -327,7 +328,7 @@ public class SimpleServer extends AbstractServer {
                 message.setData(new ExtraTimeRequestEvent((ExtraTime) message.getData()));
                 sendToAllClients(message);
             }
-            else if (message.getMessage().startsWith("Extra time request")) {
+            else if (request.startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());
                 try {
                     session.save(extraTime);
@@ -347,7 +348,7 @@ public class SimpleServer extends AbstractServer {
                 //message.setData(new ExtraTimeRequestEvent((ExtraTime)message.getData()));
                 //sendToAllClients(message);
             }
-            else if (message.getMessage().startsWith("Manual Exam")) {
+            else if (request.startsWith("Manual Exam")) {
                 try {
                     response = "Manual Exam Received";
                     message.setMessage(response);
@@ -367,7 +368,7 @@ public class SimpleServer extends AbstractServer {
                     e.printStackTrace();
                 }
             }
-            else if (message.getMessage().startsWith("Digital Exam")) {
+            else if (request.startsWith("Digital Exam")) {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
@@ -398,19 +399,19 @@ public class SimpleServer extends AbstractServer {
                     e.printStackTrace();
                 }
             }
-            else if (message.getMessage().startsWith("Extra time approved")) {
+            else if (request.startsWith("Extra time approved")) {
                 response = "Extra time approved";
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Extra time rejected")) {
+            else if (request.startsWith("Extra time rejected")) {
                 response = "Extra time rejected";
                 message.setMessage(response);
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Exam approved")) {
+            else if (request.startsWith("Exam approved")) {
                 try {
                     session.save(message.getData());
                     response = "Exam saved successfully";
@@ -438,7 +439,8 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(getExamFormForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
-            }else if (request.startsWith("Get Exam Forms For Course")) {
+            }
+            else if (request.startsWith("Get Exam Forms For Course")) {
                 response = "Exam Forms in Course " + ((Course) (message.getData())).getName();
                 System.out.println("Get Exam Forms for Course");
                 message.setMessage(response);
