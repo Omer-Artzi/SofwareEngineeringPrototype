@@ -20,7 +20,7 @@ public class Teacher extends Person {
     @ManyToMany(mappedBy = "teachers")
     private List<Subject> subjects = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "teachers")
+    @ManyToMany(mappedBy = "teachers",fetch = FetchType.EAGER)
     private List<Course> courses = new ArrayList<>();
 
 

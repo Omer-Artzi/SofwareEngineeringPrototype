@@ -119,8 +119,6 @@ public class ClassExam implements Serializable
 
     public Date getStartDate(){return startDate;}
     public void setStartDate(Date newDate){this.startDate=newDate;}
-    public Date getFinalDate(){return finalSubmissionDate;}
-    public void setFinalDate(Date newDate){this.finalSubmissionDate=newDate;}
 
     public ExamForm getExamForm(){return examForm;}
     public void setExamForm(ExamForm examForm){this.examForm=examForm;}

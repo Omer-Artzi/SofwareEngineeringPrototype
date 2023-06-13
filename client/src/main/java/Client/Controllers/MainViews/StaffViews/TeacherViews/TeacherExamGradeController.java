@@ -262,7 +262,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         StartDateColumn.setCellValueFactory(exam ->
                 new SimpleStringProperty(ShowStatisticsController.FormatDate(exam.getValue().getStartDate())));
         EndDateColumn.setCellValueFactory(exam ->
-                new SimpleStringProperty(ShowStatisticsController.FormatDate(exam.getValue().getFinalDate())));
+                new SimpleStringProperty(ShowStatisticsController.FormatDate(exam.getValue().getFinalSubmissionDate())));
         ExamineeNumberColumn.setCellValueFactory(exam ->
                 new SimpleStringProperty(Integer.toString(exam.getValue().getStudentExams().size())));
         ToCheckColumn.setCellValueFactory(exam ->

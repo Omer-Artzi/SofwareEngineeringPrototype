@@ -3,6 +3,7 @@
 */target/*
 *.txt
 *.DS_Store
+*.docx
 server/target/surefire-reports/TEST-il.cshaifasweng.server.AppTest.xml
 */misc.xml
 */hibernate.properties

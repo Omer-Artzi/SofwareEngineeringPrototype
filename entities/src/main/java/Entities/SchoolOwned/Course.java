@@ -29,14 +29,14 @@ public class Course implements Serializable, Comparable<Course> {
     inverseJoinColumns = @JoinColumn(name = "StudentID"))
     private List<Student> students = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subjectID")
     private Subject subject = null;
 
     @ManyToMany(mappedBy = "courses")
     private List<Question> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course",fetch = FetchType.EAGER)
     private List<ExamForm> examForms = new ArrayList<>();
     @OneToMany(mappedBy = "course")
     private final List<ClassExam> classExams = new ArrayList<>();

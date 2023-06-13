@@ -6,6 +6,7 @@ import Entities.Communication.Message;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -46,6 +47,8 @@ public class SimpleChatClient extends Application {
             scene = new Scene(loadFXML("PreLogIn"));
             stage.setScene(scene);
             stage.setTitle("High School Test System - Version " + version);
+            Image image = new Image("file:/src/main/resources/Images/HSTSLogo.png");
+            stage.getIcons().add(image);
             stage.show();
         }
         catch (Exception e)
