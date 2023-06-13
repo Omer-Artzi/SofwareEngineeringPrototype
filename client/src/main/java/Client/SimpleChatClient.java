@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Controllers.MainWindowController;
+import Client.Events.GeneralEvent;
 import Client.Events.MessageEvent;
 import Entities.Communication.Message;
 import javafx.application.Application;
@@ -49,6 +50,10 @@ public class SimpleChatClient extends Application {
             stage.setTitle("High School Test System - Version " + version);
             Image image = new Image("file:/src/main/resources/Images/HSTSLogo.png");
             stage.getIcons().add(image);
+            // To preform cleanup tasks in controllers
+            stage.setOnCloseRequest(event -> {
+                EventBus.getDefault().post(new GeneralEvent(new Message(0, "Exit")));
+            });
             stage.show();
         }
         catch (Exception e)

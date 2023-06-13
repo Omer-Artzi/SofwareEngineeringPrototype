@@ -130,6 +130,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
                 //TODO: change to "real" ID
                 if(selectedExam.getAccessCode().equals(examCodeTF.getText()) ) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamManual");
+                    EventBus.getDefault().unregister(this);
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code or ID", "Error", JOptionPane.WARNING_MESSAGE);
@@ -139,6 +140,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
                 //if(selectedExam.getAccessCode().equals(examCodeTF.getText())&& Integer.parseInt(IDTF.getText()) == (SimpleClient.getUser().getID())) {
                 if(selectedExam.getAccessCode().equals(examCodeTF.getText()) ) {
                     SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentDoExamDigital");
+                    EventBus.getDefault().unregister(this);
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Incorrect Exam Code", "Error", JOptionPane.WARNING_MESSAGE);

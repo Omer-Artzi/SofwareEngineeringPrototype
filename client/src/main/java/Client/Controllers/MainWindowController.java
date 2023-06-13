@@ -66,7 +66,7 @@ public class MainWindowController {
 
     @FXML
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
-        Platform.runLater(() -> {
+        /*Platform.runLater(() -> {
             Parent mainWindowParent;
 
             System.out.println("Client.Main window loading scene: " + sceneName);
@@ -82,7 +82,23 @@ public class MainWindowController {
 
             mainPane.getChildren().clear();
             mainPane.getChildren().add(mainWindowParent);
-        });
+        });*/
+
+        Parent mainWindowParent;
+
+        System.out.println("Client.Main window loading scene: " + sceneName);
+
+        try {
+            mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        loadedScenes.put(sceneName, mainWindowParent);
+
+
+        mainPane.getChildren().clear();
+        mainPane.getChildren().add(mainWindowParent);
     }
 }
 
