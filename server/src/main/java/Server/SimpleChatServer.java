@@ -46,7 +46,7 @@ public class SimpleChatServer extends Application
         FXMLLoader fxmlLoader = new FXMLLoader(SimpleChatServer.class.getResource("PreLogIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 785, 390);
         stage.setScene(scene);
-        stage.setTitle("Server Management Tool - Version " + version);
+        stage.setTitle("Server Management Tool - Version " + version + " IP: " + SimpleServer.getIP() + ", Port: " + SimpleServer.getLocalPort());
         // Ensure the default "Close Button" terminates the server.
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

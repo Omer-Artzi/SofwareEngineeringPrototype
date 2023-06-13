@@ -54,6 +54,8 @@ public class SimpleServer extends AbstractServer {
     public static Session session;
     private static int transmissionID = 0;
     private static SessionFactory sessionFactory;
+    private static String IP;
+    private static int port;
 
 
     public SimpleServer(int port) {
@@ -122,6 +124,22 @@ public class SimpleServer extends AbstractServer {
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         }
         return sessionFactory;
+    }
+
+    public static String getIP() {
+        return IP;
+    }
+
+    public static void setIP(String IP) {
+        SimpleServer.IP = IP;
+    }
+
+    public static int getLocalPort() {
+        return port;
+    }
+
+    public static void setLocalPort(int port) {
+        SimpleServer.port = port;
     }
 
     public static List<Student> retrieveStudents() {
@@ -877,4 +895,5 @@ public class SimpleServer extends AbstractServer {
             e1.printStackTrace();
         }
     }
+
 }
