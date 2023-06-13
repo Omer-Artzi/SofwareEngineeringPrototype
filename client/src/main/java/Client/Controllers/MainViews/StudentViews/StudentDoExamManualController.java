@@ -4,6 +4,7 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.ExamEndedEvent;
 import Client.Events.ExamEndedMessageEvent;
+import Client.Events.PrincipalApproveEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
@@ -31,8 +32,10 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class StudentDoExamManualController extends SaveBeforeExit {
 
@@ -47,7 +50,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private final StudentExam studentExam = new StudentExam();
+    private StudentExam studentExam;
 
     @FXML
     void fileDropped(DragEvent event) {
@@ -214,6 +217,14 @@ public class StudentDoExamManualController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
+    @Subscribe
+    public void getExtraTime(PrincipalApproveEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
+        int addedTime = event.getExtraTime().getDelta();
+        System.out.println("addedTime: " + addedTime);
+        timeInSeconds += addedTime*60;
+    }
+
 }
 
 

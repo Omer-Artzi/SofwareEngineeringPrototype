@@ -1,9 +1,7 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Events.ChangePreviewEvent;
-import Client.Events.FinishEditExistingQuestionEvent;
-import Client.Events.StartEditExistingQuestionEvent;
+import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
@@ -11,6 +9,7 @@ import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.Question;
 import Entities.SchoolOwned.Subject;
 import Entities.Users.Teacher;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -85,6 +84,12 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         }
         CorrectAnswerCB.setValue(correct_answer);
         AnswerTable.setItems(FXCollections.observableArrayList(a));
+    }
+
+    @Subscribe
+    public void endCreateQuestion(EndCreateQuestionEvent event) throws IOException {
+        JOptionPane.showMessageDialog(null, event.getStatus(), "Question Status", JOptionPane.INFORMATION_MESSAGE);
+        SimpleChatClient.setRoot("TeacherMainScreen");
     }
 
     public void Elements(boolean b) {
@@ -196,12 +201,23 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, errorMSG, "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        System.out.println("The data of question is: "+question.getQuestionData());
+        System.out.println("The Answer is: "+question.getAnswers().get(0));
+        System.out.println("The Answer is: "+question.getAnswers().get(1));
+        System.out.println("The Answer is: "+question.getAnswers().get(2));
+        System.out.println("The Answer is: "+question.getAnswers().get(3));
+        System.out.println("The correct is: "+question.getCorrectAnswer());
+        System.out.println("The S note: "+question.getStudentNote());
+        System.out.println("The P note: "+question.getTeacherNote());
+        System.out.println("The subject is "+String.valueOf(question.getSubject()));
+        System.out.println("The course is "+question.getCourses().get(0));
 
         Message message = new Message(1, "Save Question");
         message.setData(question);
         SimpleClient.getClient().sendToServer(message);
         if (state.equals(ContextualState.EDIT))
             SaveQuestionButtonPressed(question);
+
         //Client.SimpleChatClient.setRoot("QuestionSaved");
     }
 
@@ -235,8 +251,10 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         String selectedSubject = addSubjectChoiceBox.getValue();
         Subject subject = null;
         for (Subject item : subjectOfTeacher) {
-            if (item.getName().equals(selectedSubject))
+            if (item.getName().equals(selectedSubject)) {
+                System.out.println("HELLOOOOO");
                 subject = item;
+            }
         }
 
         /* get the list of courses from the element */
@@ -253,6 +271,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         String teacherNote = TeacherNote.getText();
 
         Question question = new Question(SelectedCourses, data, answers, correct, teacherNote, studentNote);
+        question.setSubject(subject);
         return question;
     }
 

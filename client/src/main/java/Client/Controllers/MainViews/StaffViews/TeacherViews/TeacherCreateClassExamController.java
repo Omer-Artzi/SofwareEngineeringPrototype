@@ -307,7 +307,6 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         alert.setHeaderText("Exam Saved Successfully");
         alert.setContentText("Exam Saved Successfully");
         alert.showAndWait();
-        //JOptionPane.showMessageDialog(null, "Exam Saved Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         SimpleChatClient.setRoot("TeacherMainScreen");
 
     }
