@@ -232,7 +232,7 @@ public class AddExamController extends SaveBeforeExit {
                 }
             }
         }
-        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher, examTime);
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime);
         Message message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
         message.setData(examForm);
         SimpleClient.getClient().sendToServer(message);
@@ -243,7 +243,7 @@ public class AddExamController extends SaveBeforeExit {
         headerText= headerTextTF.getText();
         footerText= footerTextTF.getText();
         Date createdDate = new Date();
-        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher);
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent);
         ClassExam classExam = new ClassExam(examForm);
         ViewExamController.createManualExam(classExam);
     }
