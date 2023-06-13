@@ -32,10 +32,8 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class StudentDoExamManualController extends SaveBeforeExit {
 
@@ -91,7 +89,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
         studentExam.setStudent((Student) (SimpleClient.getUser()));
         studentExam.setClassExam(mainClassExam);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
-        List<String> studentAnswers = new ArrayList<>();
+        List<String> studentAnswers = new ArrayList<String>();
         studentExam.setStudentAnswers(studentAnswers);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
