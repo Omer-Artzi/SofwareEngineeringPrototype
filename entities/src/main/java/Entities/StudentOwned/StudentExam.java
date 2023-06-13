@@ -4,6 +4,7 @@ import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
 import Entities.Users.Student;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
@@ -37,6 +38,9 @@ public class StudentExam implements Serializable {
 
     private String teacherNote;
     private String scoreChangeReason;
+
+    @Type(type = "org.hibernate.type.BlobType")
+    @Lob
     private byte[] ManualExamByteArray;
 
     public StudentExam() {
@@ -66,7 +70,7 @@ public class StudentExam implements Serializable {
 
     public void update(StudentExam other) {
         this.grade = other.grade;
-        this.studentAnswers = new ArrayList<>(other.getStudentAnswers());
+        this.studentAnswers = other.getStudentAnswers();
         this.status = other.status;
         this.teacherNote = other.teacherNote;
         this.scoreChangeReason = other.scoreChangeReason;
@@ -94,6 +98,8 @@ public class StudentExam implements Serializable {
     }
 
     public List<String> getStudentAnswers() {
+        if (studentAnswers == null)
+            studentAnswers = new ArrayList<>();
         return studentAnswers;
     }
 

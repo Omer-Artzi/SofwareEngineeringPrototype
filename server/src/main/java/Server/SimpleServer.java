@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Timer;
@@ -323,7 +324,8 @@ public class SimpleServer extends AbstractServer {
                 response = request.substring(4);
                 int studentID = Integer.parseInt(request.substring(32));
                 message.setMessage(response);
-                message.setData(getExamsForStudent(studentID));
+                List<ClassExam> classExams = getExamsForStudent(studentID);
+                message.setData(classExams);
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get ExtraTimeRequest data")) {
@@ -354,29 +356,31 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("Manual Exam")) {
                 try {
-                    //TODO: handle saving to DB
                     response = "Manual Exam Received";
                     message.setMessage(response);
-                    //ManualStudentExam manualStudentExam = new ManualStudentExam((ManualStudentExam) message.getData());
-
 
                     StudentExam studentExam = (StudentExam) message.getData();
-                    StudentExam examToSave = new StudentExam();
+                    StudentExam oldStudentExam = getStudentExamFromClassExam(studentExam.getStudent().getID(), studentExam.getClassExam().getID());
+                    if (oldStudentExam == null) {
+                        System.out.println("oldStudentExam is null");
+                        return;
+                    }
 
                     // Student Link
                     Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
-                    examToSave.setStudent(student);
-                    student.addStudentExam(examToSave);
+                    oldStudentExam.setStudent(student);
+                    student.addStudentExam(oldStudentExam);
 
                     // ClassExam Link
                     ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
-                    examToSave.setClassExam(classExam);
-                    classExam.addStudentExam(examToSave);
+                    oldStudentExam.setClassExam(classExam);
+                    classExam.addStudentExam(oldStudentExam);
 
                     // no entities attributes set
-                    examToSave.update(studentExam);
+                    oldStudentExam.update(studentExam);
+                    //studentExam.update(oldStudentExam);
 
-                    session.saveOrUpdate(examToSave);
+                    session.saveOrUpdate(oldStudentExam);
 
                     studentExam.SaveManualExamFileLocally();
 
@@ -400,12 +404,6 @@ public class SimpleServer extends AbstractServer {
                         System.out.println("oldStudentExam is null");
                         return;
                     }
-
-                        //studentExam.setID(oldStudentExam.getID());
-                        //session.delete(oldStudentExam);
-                        //session.flush();
-
-                    //StudentExam examToSave = new StudentExam();
 
                     // Student Link
                     Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());

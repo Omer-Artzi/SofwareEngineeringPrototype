@@ -10,6 +10,7 @@ import Client.SimpleClient;
 import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
+import Entities.SchoolOwned.Question;
 import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
@@ -30,10 +31,8 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class StudentDoExamManualController extends SaveBeforeExit {
 
@@ -48,7 +47,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private StudentExam studentExam;
+    private final StudentExam studentExam = new StudentExam();
 
     @FXML
     void fileDropped(DragEvent event) {
@@ -86,16 +85,11 @@ public class StudentDoExamManualController extends SaveBeforeExit {
         mainClassExam = event.getClassExam();
         timeInSeconds = (int) (mainClassExam.getExamTime()) * 60;
         ViewExamController.createManualExam(mainClassExam);
-        List<StudentExam> studentExams =  mainClassExam.getStudentExams();
-        for (StudentExam studentExam : studentExams) {
-            if (studentExam.getStudent().getID() == SimpleClient.getUser().getID()) {
-                this.studentExam = studentExam;
-                break;
-            }
-        }
-        studentExam.setStudent(((Student) (SimpleClient.getUser())));
+        studentExam.setStudent((Student) (SimpleClient.getUser()));
         studentExam.setClassExam(mainClassExam);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
+        List<String> studentAnswers = new ArrayList<>();
+        studentExam.setStudentAnswers(studentAnswers);
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -110,6 +104,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
                     try {
                         Message message = new Message(1, "Exam Fail: Time Ended");
                         studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
+                        studentExam.setGrade(-1);
                         message.setData(studentExam);
                         SimpleClient.getClient().sendToServer(message);
                         timer.cancel();
@@ -128,10 +123,16 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     @Subscribe
     public void endExam(ExamEndedEvent event) throws IOException {
-        SimpleChatClient.setRoot("StudentChooseExam");
+        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
         Platform.runLater(() -> {
-            JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                SimpleChatClient.setRoot("StudentMainScreen");
+                EventBus.getDefault().unregister(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
+
 
 
     }
@@ -151,6 +152,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
                 byte[] serializedDocument = Files.readAllBytes(file.toPath());
                 //ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializedDocument);
                 studentExam.setExamFileByteArray(serializedDocument);
+                studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
                 Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                 message.setData(studentExam);
                 SimpleClient.getClient().sendToServer(message);
@@ -208,7 +210,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
         if(event.getClassExam().getID()  == mainClassExam.getID())
         {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
+            SimpleChatClient.setRoot("StudentChooseExam");
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
