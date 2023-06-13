@@ -17,10 +17,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import org.greenrobot.eventbus.EventBus;
@@ -345,14 +342,15 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         System.out.println("numberOfQuestionsAnswered: " + numberOfQuestionsAnswered + ". numberOfQuestions: " + numberOfQuestions);
         System.out.println("numberOfRightAnswers: " + numberOfRightAnswers);
         System.out.println("num_answered: " + num_answered + ". num_correct: " + num_correct);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType submit = new ButtonType("Submit", ButtonBar.ButtonData.YES);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", submit, ButtonType.CANCEL);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText("Are you sure you want to submit the exam?");
         if (timeInSeconds > 0){
         if ( num_answered < numberOfQuestions) {
-            alert.setHeaderText("You have not answered all the questions");}
+            alert.setHeaderText("You have not answered all the questions. Are you sure you would like to submit anyway?");}
         else {
-            alert.setHeaderText("You answered all the questions");}
+            alert.setHeaderText("You answered all the questions. Would you like to submit the exam?");}
             Optional<ButtonType> result = alert.showAndWait();
             /*if (result.get() == ButtonType.OK){
                 try {
