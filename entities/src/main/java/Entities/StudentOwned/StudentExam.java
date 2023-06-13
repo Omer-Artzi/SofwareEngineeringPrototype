@@ -2,9 +2,13 @@ package Entities.StudentOwned;
 
 import Entities.SchoolOwned.ClassExam;
 import Entities.Enums;
+import Entities.SchoolOwned.ExamForm;
 import Entities.Users.Student;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,8 @@ public class StudentExam implements Serializable {
 
     private String teacherNote;
     private String scoreChangeReason;
+
+    private ManualStudentExam manualExam;
 
     public StudentExam() {
     }
@@ -149,6 +155,16 @@ public class StudentExam implements Serializable {
     public void setScoreChangeReason(String scoreChangeReason)
     {
         this.scoreChangeReason = scoreChangeReason;
+    }
+
+    public ManualStudentExam getManualExam()
+    {
+        return manualExam;
+    }
+
+    public void setManualExam(ManualStudentExam manualExam)
+    {
+        this.manualExam = manualExam;
     }
 
 

@@ -344,17 +344,24 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Manual Exam Received";
                     message.setMessage(response);
-                    /*ManualStudentExam manualStudentExam = new ManualStudentExam ((ManualStudentExam) message.getData());
-                    session.saveOrUpdate(manualStudentExam);*/
-                    ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
+                    ManualStudentExam manualStudentExam = new ManualStudentExam ((ManualStudentExam) message.getData());
+                    //session.saveOrUpdate(manualStudentExam);
+                    /*ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
                     String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
                     byte[] document = ((ManualStudentExam) (message.getData())).getExamFile();
+
                     //XWPFDocument transmittedDocument = deserializeXWPFDocument(document);
                     File file = new File(fileName);
                     FileOutputStream outputStream = new FileOutputStream(fileName);
                     //transmittedDocument.write(outputStream);
                     outputStream.write(document);
-                    outputStream.close();
+                    outputStream.close();*/
+
+                    StudentExam studentExam = manualStudentExam.getStudentExam();
+                    studentExam.setManualExam(manualStudentExam);
+                    //session.saveOrUpdate(studentExam);
+                    manualStudentExam.SaveManualExamFileLocally();
+
                     System.out.println("Document Saved successfully.");
                     client.sendToClient(message);
                 }
