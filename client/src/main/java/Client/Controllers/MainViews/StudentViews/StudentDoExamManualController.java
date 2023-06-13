@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,7 +44,7 @@ public class StudentDoExamManualController {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private final StudentExam studentExam = new StudentExam();
+    private StudentExam studentExam;
 
     @FXML
     void fileDropped(DragEvent event) {
@@ -81,6 +82,13 @@ public class StudentDoExamManualController {
         mainClassExam = event.getClassExam();
         timeInSeconds = (int) (mainClassExam.getExamTime()) * 60;
         ViewExamController.createManualExam(mainClassExam);
+        List<StudentExam> studentExams =  mainClassExam.getStudentExams();
+        for (StudentExam studentExam : studentExams) {
+            if (studentExam.getStudent().getID() == SimpleClient.getUser().getID()) {
+                this.studentExam = studentExam;
+                break;
+            }
+        }
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
