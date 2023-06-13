@@ -2,6 +2,7 @@ package Client.Controllers;
 
 import Client.SimpleChatClient;
 import Client.SimpleClient;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -65,25 +66,23 @@ public class MainWindowController {
 
     @FXML
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
-        Parent mainWindowParent;
+        Platform.runLater(() -> {
+            Parent mainWindowParent;
 
-        System.out.println("Client.Main window loading scene: " + sceneName);
-        // scene reuse code, currently creates problems
-        /*if (loadedScenes.containsKey(sceneName)) {
-            mainWindowParent = loadedScenes.get(sceneName);
-        }
-        else {
-            mainWindowParent = Client.SimpleChatClient.loadFXML(sceneName);
+            System.out.println("Client.Main window loading scene: " + sceneName);
+
+            try {
+                mainWindowParent = SimpleChatClient.loadFXML(sceneName);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             loadedScenes.put(sceneName, mainWindowParent);
-        }*/
 
 
-        mainWindowParent = SimpleChatClient.loadFXML(sceneName);
-        loadedScenes.put(sceneName, mainWindowParent);
-
-
-        mainPane.getChildren().clear();
-        mainPane.getChildren().add(mainWindowParent);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(mainWindowParent);
+        });
     }
 }
 
