@@ -4,13 +4,13 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.ExamEndedEvent;
 import Client.Events.ExamEndedMessageEvent;
+import Client.Events.PrincipalApproveEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
-import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
 import javafx.application.Platform;
@@ -44,8 +44,6 @@ public class StudentDoExamManualController extends SaveBeforeExit {
     private Label timeLeftLabel;
     @FXML
     private Label fileRecievedLabel;
-
-
     private int timeInSeconds;
     private ClassExam mainClassExam;
     private StudentExam studentExam;
@@ -208,10 +206,18 @@ public class StudentDoExamManualController extends SaveBeforeExit {
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
         if(event.getClassExam().getID()  == mainClassExam.getID())
         {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
+            SimpleChatClient.setRoot("StudentChooseExam");
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
+    @Subscribe
+    public void getExtraTime(PrincipalApproveEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
+        int addedTime = event.getExtraTime().getDelta();
+        System.out.println("addedTime: " + addedTime);
+        timeInSeconds += addedTime*60;
+    }
+
 }
 
 
