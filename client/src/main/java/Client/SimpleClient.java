@@ -14,6 +14,7 @@ import Entities.Users.Student;
 import Entities.Users.Teacher;
 import Events.ExamSavedEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import org.greenrobot.eventbus.EventBus;
 
 import javax.swing.*;
@@ -308,6 +309,10 @@ public class SimpleClient extends AbstractClient {
         }
         catch (Exception e) {
             System.out.println("Could not connect to server");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Connection Error");
+            alert.setContentText("Could not connect to server, please check with your admin that it is up");
+            alert.showAndWait();
             //JOptionPane.showMessageDialog(null,"Could not Connect to Server", "Connection Error",JOptionPane.WARNING_MESSAGE);
         }
     }

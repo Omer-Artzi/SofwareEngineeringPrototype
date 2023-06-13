@@ -16,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -105,6 +104,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         codeTF.setDisable(true);
         examTimeTF.setDisable(true);
         typeCB.setDisable(true);
+        saveExamButton.setDisable(true);
         Message subjectMessage = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getUser().getID());
         Message courseMessage = new Message(1, "1Get Courses of Teacher: " + SimpleClient.getUser().getID());
         subjectMessage.setData(SimpleClient.getUser());
@@ -119,10 +119,14 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     {
         System.out.println("Subject Selected");
         Subject selectedSubject = subjectCB.getSelectionModel().getSelectedItem();
+        courseCB.getItems().clear();
         if(courses != null && !courses.isEmpty())
         {
+
             for(Course course: courses) {
-                if(course.getSubject() == selectedSubject) {
+                System.out.println("Course: " + course.getName() + " Subject: " + course.getSubject().getName() + " selectedSubject: " + selectedSubject.getName() + " equals: " + course.getSubject().getName().equals(selectedSubject.getName()));
+                if(course.getSubject().getName().equals(selectedSubject.getName())) {
+                    System.out.println("Course: " + course.getName() + " added to courseCB");
                     courseCB.getItems().add(course);
                 }
             }
@@ -131,7 +135,12 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "You do not teach in any subjects or the database could not retrieve the data", "Database Error", JOptionPane.WARNING_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Courses");
+            alert.setHeaderText("No Courses Found");
+            alert.setContentText("No Courses Found For Subject: " + selectedSubject.getName());
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "You do not teach in any subjects or the database could not retrieve the data", "Database Error", JOptionPane.WARNING_MESSAGE);
         }
         classExam.setSubject(subjectCB.getSelectionModel().getSelectedItem());
 
@@ -154,7 +163,12 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         catch (Exception e)
         {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "You did not choose an exam form", "Error", JOptionPane.WARNING_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Exam Form");
+            alert.setHeaderText("No Exam Form Selected");
+            alert.setContentText("No Exam Form Selected");
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "You did not choose an exam form", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
     @FXML
@@ -173,7 +187,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             classExam.setStartDate(startDate);
             classExam.setFinalDate(endDate);
             classExam.setAccessCode(codeTF.getText());
-            classExam.setExamTime(timeToDouble(examTimeTF.getText()));
+            classExam.setExamTime((timeToDouble(examTimeTF.getText()))/60);
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
             Message message = new Message(1, "Add New Class Exam");
             message.setData(classExam);
@@ -209,19 +223,19 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             ExamFormsTV.setDisable(false);
             startDateTF.setDisable(false);
             startTimeTF.setDisable(false);
-            endTimeTF.setDisable(false);
-            endDateTF.setDisable(false);
-            codeTF.setDisable(false);
-            examTimeTF.setDisable(false);
-            typeCB.setDisable(false);
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Exam Forms");
+            alert.setHeaderText("No Exam Forms Found");
+            alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
         }
     }
     @Subscribe
-    public void displaySubjects(SubjectsOfTeacherMessageEvent event){
+    public void displaySubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
          subjects = event.getSubjects();
         if(subjects != null && !subjects.isEmpty())
         {
@@ -230,7 +244,12 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "You do not teach in any subjects or the database could not retrieve the data", "Database Error", JOptionPane.WARNING_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Subjects");
+            alert.setHeaderText("No Subjects Found");
+            alert.setContentText("No Subjects Found For Teacher: " + SimpleClient.getClient().getUser().getFullName());
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "You do not teach in any subjects or the database could not retrieve the data", "Database Error", JOptionPane.WARNING_MESSAGE);
         }
     }
     @Subscribe
@@ -279,15 +298,78 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
 
         return (hours * 3600) + (minutes * 60) + seconds;
     }
-    private void examSaved(ExamSavedEvent event) throws IOException {
-        JOptionPane.showMessageDialog(null, "Exam Saved Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherMainScreen");
+    @Subscribe
+    public void examSaved(ExamSavedEvent event) throws IOException {
+        System.out.println("Exam Saved");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Exam Saved");
+        alert.setHeaderText("Exam Saved Successfully");
+        alert.setContentText("Exam Saved Successfully");
+        alert.showAndWait();
+        //JOptionPane.showMessageDialog(null, "Exam Saved Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+        SimpleChatClient.setRoot("TeacherMainScreen");
 
     }
     @FXML
-    private void requestExisting()
-    {
+    private void requestExisting() throws IOException {
         EventBus.getDefault().post(new ChooseExamEvent());
+        SimpleChatClient.setRoot("TeacherViewLiveExams");
+    }
+    @FXML
+    public void onStartDateSelection()
+    {
+        if(startDateTF.getValue().isAfter(LocalDate.now()))
+        {
+            endDateTF.setDisable(false);
+            endTimeTF.setDisable(false);
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("Please select a date after today");
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "Please select a date after today", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            startDateTF.setValue(null);
+        }
+    }
+
+    @FXML
+    public void onEndDateSelection()
+    {
+        if(endDateTF.getValue().isAfter(LocalDate.now()) && endDateTF.getValue().isAfter(startDateTF.getValue()))
+        {
+            codeTF.setDisable(false);
+            examTimeTF.setDisable(false);
+            typeCB.setDisable(false);
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("Please select a date after today and after the start date");
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "Please select a date after today and after the start date", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+            endDateTF.setValue(null);
+        }
+    }
+    @FXML
+    public void onTypeSelection()
+    {
+        if(typeCB.getSelectionModel().getSelectedItem() != null)
+        {
+            saveExamButton.setDisable(false);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText("Please select an exam type");
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null, "Please select an exam type", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
 

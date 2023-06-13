@@ -49,7 +49,7 @@ public class PreLogInController {
         assert PortTF != null : "fx:id=\"PortTF\" was not injected: check your FXML file 'PreLogIn.fxml'.";
         showSQLCB.getItems().addAll("false","true");
         showSQLCB.getSelectionModel().selectFirst();
-        cfgCB.getItems().addAll("create-drop","update","create","create-only","drop","validate","none");
+        cfgCB.getItems().addAll("none","create-drop","update","create","create-only","drop","validate");
         cfgCB.getSelectionModel().selectFirst();
         usernameTF.setPromptText("According to hibernate.properties");
         passwordTF.setPromptText("According to hibernate.properties");
