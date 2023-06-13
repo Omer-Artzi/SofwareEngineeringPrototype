@@ -1,10 +1,7 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Events.CoursesOfTeacherEvent;
-import Client.Events.ExamMessageEvent;
-import Client.Events.LoadExamEvent;
-import Client.Events.SubjectsOfTeacherMessageEvent;
+import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
@@ -286,6 +283,11 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         JOptionPane.showMessageDialog(null, "Exam Saved Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherMainScreen");
 
+    }
+    @FXML
+    private void requestExisting()
+    {
+        EventBus.getDefault().post(new ChooseExamEvent());
     }
 }
 

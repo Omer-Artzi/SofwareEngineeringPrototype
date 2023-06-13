@@ -55,7 +55,7 @@
             <HBox alignment="CENTER" prefHeight="116.0" prefWidth="600.0" spacing="100.0">
                <children>
                   <Button fx:id="saveExamButton" mnemonicParsing="false" onAction="#onSaveExam" text="Save Exam" />
-                  <Button mnemonicParsing="false" text="Button" />
+                  <Button fx:id="loadExamButton" mnemonicParsing="false" onAction="#requestExisting" text="Load Existing Exam" />
                </children>
             </HBox>
          </children>
