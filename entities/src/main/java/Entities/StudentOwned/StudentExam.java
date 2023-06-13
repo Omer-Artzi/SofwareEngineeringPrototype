@@ -21,7 +21,7 @@ public class StudentExam implements Serializable {
     @JoinColumn(name = "Student")
     private Student student;
 
-    @ManyToOne(cascade =CascadeType.ALL)
+    @ManyToOne //(cascade =CascadeType.ALL)
     @JoinColumn(name = "ClassExam")
     private ClassExam classExam;
 
@@ -152,5 +152,15 @@ public class StudentExam implements Serializable {
         this.scoreChangeReason = scoreChangeReason;
     }
 
-
+    // copy constructor
+    public StudentExam(StudentExam other)
+    {
+        this.student = other.student;
+        this.classExam = other.classExam;
+        this.studentAnswers = new ArrayList<>(other.studentAnswers);
+        this.grade = other.grade;
+        this.status = other.status;
+        this.teacherNote = other.teacherNote;
+        this.scoreChangeReason = other.scoreChangeReason;
+    }
 }

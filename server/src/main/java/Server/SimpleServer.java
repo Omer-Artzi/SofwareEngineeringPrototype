@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -370,7 +371,25 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
-                    session.save(message.getData());
+
+                    StudentExam studentExam = (StudentExam) message.getData();
+                    StudentExam examToSave = new StudentExam();
+
+                    // Student Link
+                    Student student = (Student) retrieveUser(studentExam.getStudent().getEmail());
+                    examToSave.setStudent(student);
+                    student.addStudentExam(examToSave);
+
+                    // ClassExam Link
+                    ClassExam classExam = retrieveClassExam(studentExam.getClassExam().getID());
+                    examToSave.setClassExam(classExam);
+                    classExam.addStudentExam(examToSave);
+
+                    // no entities attributes set
+                    examToSave.update(studentExam);
+
+                    session.saveOrUpdate(examToSave);
+
                     System.out.println("DigitalExam Saved successfully.");
                     client.sendToClient(message);
                 }
@@ -779,6 +798,16 @@ public class SimpleServer extends AbstractServer {
         System.out.println("Checking for dead exams");
         return exams;
     }
+
+    private ClassExam retrieveClassExam(int classExamID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), classExamID));
+        ClassExam exam = session.createQuery(query).getSingleResult();
+        return exam;
+    }
+
 
     private List<ExtraTime> getExtraTime() {
         CriteriaBuilder builder = session.getCriteriaBuilder();

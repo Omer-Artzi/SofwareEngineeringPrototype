@@ -60,14 +60,14 @@ public class ClassExam implements Serializable
     private double gradesVariance;
     // In Minutes
     private double examTime;
-    private String code;
+    private String accessCode; // code to enter exam, contains 4 characters (A-Z, a-z, 0-9)
 
     private Enums.ExamType examType;
 
     public ClassExam() {
     }
 
-    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String code, Course course, Subject subject, Enums.ExamType examType)
+    public ClassExam(ExamForm examForm, Date startDate, Date finalSubmissionDate, double examTime, Teacher tester, String accessCode, Course course, Subject subject, Enums.ExamType examType)
     {
         this.startDate=startDate;
         this.finalSubmissionDate=finalSubmissionDate;
@@ -79,7 +79,7 @@ public class ClassExam implements Serializable
         this.examToEvaluate=0;
         this.gradesMean=0;
         this.gradesVariance=0;
-        this.code = code;
+        this.accessCode = accessCode;
         this.course =course;
         this.subject = subject;
         this.examType = examType;
@@ -137,14 +137,14 @@ public class ClassExam implements Serializable
     public double getExamTime(){return examTime;}
     public void setExamTime(double examTime){this.examTime=examTime;}
 
-    public void setCode(String code)
+    public void setAccessCode(String code)
     {
-        this.code = code;
+        this.accessCode = code;
     }
 
-    public String getCode()
+    public String getAccessCode()
     {
-        return code;
+        return accessCode;
     }
 
     public void setID(int ID) {
