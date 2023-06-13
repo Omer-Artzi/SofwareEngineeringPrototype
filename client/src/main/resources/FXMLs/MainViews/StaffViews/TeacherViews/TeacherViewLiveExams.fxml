@@ -18,12 +18,12 @@
             <TableColumn fx:id="EndTimeColumn" prefWidth="220.79998779296875" text="End Time" />
         </columns>
       </TableView>
-      <Button fx:id="RequestExtraTimeBT" layoutX="223.0" layoutY="511.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
+      <Button fx:id="RequestExtraTimeBT" layoutX="335.0" layoutY="511.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="seeAnswerButton" layoutX="399.0" layoutY="509.0" mnemonicParsing="false" onAction="#seeAnswer" prefHeight="30.0" prefWidth="110.0" text="see answer">
+      <Button fx:id="seeAnswerButton" layoutX="500.0" layoutY="510.0" mnemonicParsing="false" onAction="#seeAnswer" prefHeight="30.0" prefWidth="110.0" text="see answer">
          <font>
             <Font size="15.0" />
          </font>
@@ -37,5 +37,10 @@
             </Label>
          </children>
       </VBox>
+      <Button fx:id="CreateNewExamButton" layoutX="178.0" layoutY="511.0" mnemonicParsing="false" onAction="#createNewExam" text="Create new exam">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

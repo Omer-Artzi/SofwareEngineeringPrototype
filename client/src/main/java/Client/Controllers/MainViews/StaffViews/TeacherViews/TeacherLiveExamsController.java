@@ -1,10 +1,7 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
-import Client.Events.ExtraTimeRequestsEvent;
+import Client.Events.*;
 import javafx.scene.paint.Color;
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Events.LiveExamsEvent;
-import Client.Events.PrincipalApproveEvent;
-import Client.Events.PrincipalDecisionEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.ExtraTime;
@@ -40,6 +37,9 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     ObservableList<ClassExam> data;
     private List<ClassExam> examList=new ArrayList<>();
     private ClassExam SelectedExam=null;
+    private ExtraTime SelectedExtraTime=null;
+    @FXML
+    private Button CreateNewExamButton;
     @FXML
     private Button seeAnswerButton;
     @FXML
@@ -59,6 +59,14 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     @FXML
     private TableColumn<ClassExam, String> SubjectColumn;
 
+    /*
+    @Subscribe
+    public void chooseExam(ChooseExamEvent event){
+        seeAnswerButton.setVisible(false);
+        RequestExtraTimeBT.setDisable(false);
+      /* Omer's function
+    }
+    */
 
     public List<ClassExam> SelectedExams(List<ClassExam> examList) throws IOException {
 
@@ -184,7 +192,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         SimpleClient.getClient().sendToServer(message);
 
         Person person =SimpleClient.getClient().getUser();
-        if(person instanceof Principal) {
+        if(person instanceof Principal||person instanceof Student) {
             seeAnswerButton.setVisible(false);
             RequestExtraTimeBT.setDisable(false);
         }
@@ -206,16 +214,33 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         ExamsTable.refresh();
     }
 
+    @Subscribe
+    public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event){
+        System.out.println("In @Subscribe");
+        SelectedExtraTime=event.getExtraTime();
+    }
     @FXML
-    public void seeAnswer(ActionEvent event) {
-        //Platform.runLater(() -> {
-            System.out.println("In see answer");
-            String str= SelectedExam.getExtraTime().getPrincipalNote();
-            if(str.isEmpty())
-                System.out.println("the note of principal is empty");
+    public void seeAnswer(ActionEvent event) throws IOException {
+        System.out.println("hi from seeAnswer");
+        Message message=new Message(1, "Get extra time of specific class exam", SelectedExam);
+        SimpleClient.getClient().sendToServer(message);
+
+        Platform.runLater(() -> {
+            if (SelectedExtraTime==null)
+                System.out.println("extraTime null in Live Exam");
             AnswerLabel.setVisible(true);
-            AnswerLabel.setText(AnswerLabel.getText() + " " + str);
-        //});
+            AnswerLabel.setText(AnswerLabel.getText() + " " + SelectedExtraTime.getDecision());
+        });
+    }
+
+    @FXML
+    void createNewExam(ActionEvent event) {
+        if(SelectedExam ==null){
+            JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+       // LoadExamEvent event1=new LoadExamEvent();
+       // EventBus.getDefault().post(event1);
     }
 
     @FXML

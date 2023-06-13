@@ -192,6 +192,9 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Success: StudentExam Approved")) {
             RefreshPerson event = new RefreshPerson("Success", (Person) message.getData());
             EventBus.getDefault().post(event);
+        }else if (messageText.startsWith("extra time of specific class exam")) {//////////!!!!!!!!!!
+            extraTimeOfSpecificClassExam event = new extraTimeOfSpecificClassExam((ExtraTime) message.getData());
+            EventBus.getDefault().post(event);
         }
         else if (messageText.startsWith("Failure: Failed to save StudentExam")) {
             RefreshPerson event = new RefreshPerson("Failure", null);

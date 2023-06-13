@@ -427,6 +427,17 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(getExamsForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
+            }else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
+                response = "extra time of specific class exam";
+                message.setMessage(response);
+                ClassExam classExam=(ClassExam) (message.getData());
+                ExtraTime extraTime=getExtraTimeForClassExam(classExam);
+                message.setData(extraTime);
+                if(extraTime==null)
+                {
+                    System.out.println("the extra time i get is null :(");
+                }
+                client.sendToClient(message);/////
             }
             else if (request.startsWith("Get Exams For Course")) {
                 response = "Exams in Course " + ((Course) (message.getData())).getName();
@@ -699,6 +710,15 @@ public class SimpleServer extends AbstractServer {
         query.where(builder.equal(root.get("subject"), subject));
         List<ClassExam> classExams = session.createQuery(query).getResultList();
         return classExams;
+    }
+    ///STILL Dont Know if work!!
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), exam));
+        ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
+        return extraTime;
     }
 
     private List<ClassExam> getExamsForStudent(int studentID) {
