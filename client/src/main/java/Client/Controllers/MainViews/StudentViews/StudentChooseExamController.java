@@ -9,6 +9,7 @@ import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.Course;
+import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
@@ -46,7 +47,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
     private Button backButton;
 
     @FXML
-    private TableColumn<ClassExam, SimpleStringProperty> codeColumn;
+    private TableColumn<ClassExam, ExamForm> codeColumn;
 
     @FXML
     private TextField examCodeTF;
@@ -64,7 +65,19 @@ public class StudentChooseExamController extends SaveBeforeExit {
     void initialize() throws IOException {
         EventBus.getDefault().register(this);
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        codeColumn.setCellValueFactory(new PropertyValueFactory<>("accessCode"));
+        codeColumn.setCellValueFactory(new PropertyValueFactory<>("examForm"));
+        codeColumn.setCellFactory(tc -> new TableCell<>(){
+            @Override
+            protected void updateItem(ExamForm item, boolean empty) {
+                super.updateItem(item, empty); // must be called
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    // replace with desired format
+                    setText(item.getCode());
+                }
+            }
+        });
         timeColumm.setCellValueFactory(new PropertyValueFactory<>("examTime"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
@@ -81,7 +94,6 @@ public class StudentChooseExamController extends SaveBeforeExit {
                 }
             }
         });
-
         Message message = new Message(1, "Get class exams for student ID: " + SimpleClient.getUser().getID());
         SimpleClient.getClient().sendToServer(message);
         IDTF.setDisable(true);
