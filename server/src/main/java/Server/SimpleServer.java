@@ -1,14 +1,10 @@
 package Server;
 
-import Entities.SchoolOwned.ClassExam;
+import Entities.Communication.ExtraTime;
 import Entities.Communication.Message;
 import Entities.Communication.Transmission;
-import Entities.SchoolOwned.ExamForm;
-import Entities.Communication.ExtraTime;
 import Entities.Enums;
-import Entities.SchoolOwned.Course;
-import Entities.SchoolOwned.Question;
-import Entities.SchoolOwned.Subject;
+import Entities.SchoolOwned.*;
 import Entities.StudentOwned.Grade;
 import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
@@ -24,15 +20,12 @@ import Server.ocsf.AbstractServer;
 import Server.ocsf.ConnectionToClient;
 import Server.ocsf.SubscribedClient;
 import com.github.javafaker.Faker;
-import org.apache.commons.io.FileUtils;
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -44,7 +37,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.swing.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -53,12 +49,11 @@ import java.util.Timer;
 import java.util.*;
 
 public class SimpleServer extends AbstractServer {
-    public static Session session;
     private static final ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
+    private static final List<Person> LoggedInUsers = new ArrayList<>();
+    public static Session session;
     private static int transmissionID = 0;
     private static SessionFactory sessionFactory;
-
-    private static final List<Person> LoggedInUsers = new ArrayList<>();
 
 
     public SimpleServer(int port) {
@@ -69,7 +64,7 @@ public class SimpleServer extends AbstractServer {
             session = sessionFactory.openSession();
             session.beginTransaction();
             String cfg = sessionFactory.getProperties().get("hibernate.hbm2ddl.auto").toString();
-            if (cfg.equals("create") || cfg.equals("create-drop") ||  cfg.equals("create-only")){
+            if (cfg.equals("create") || cfg.equals("create-drop") || cfg.equals("create-only")) {
                 DataGenerator.generateData();
             }
             Timer timer = new Timer();
@@ -114,8 +109,7 @@ public class SimpleServer extends AbstractServer {
             configuration.addAnnotatedClass(Person.class);
             configuration.addAnnotatedClass(ExtraTime.class);
             configuration.addAnnotatedClass(Principal.class);
-            if(properties != null)
-            {
+            if (properties != null) {
                 for (Map.Entry<String, String> entry : properties.entrySet()) {
                     configuration.setProperty(entry.getKey(), entry.getValue());
                 }
@@ -268,7 +262,7 @@ public class SimpleServer extends AbstractServer {
                     response = "Fail : User not found, user not logged in";
                 }
                 message.setMessage(response);
-				client.sendToClient(message);
+                client.sendToClient(message);
             }
             else if (request.startsWith("Logout")) {
                 Boolean loggedout = LogUserOut((Person) message.getData());
@@ -315,10 +309,11 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Exam Saved Successfully";
                     message.setMessage(response);
-                   session.saveOrUpdate((ClassExam)(message.getData()));
-                   session.flush();
+                    session.saveOrUpdate((ClassExam) (message.getData()));
+                    session.flush();
                     client.sendToClient(message);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                     response = "Failed to save exam";
                 }
@@ -367,7 +362,7 @@ public class SimpleServer extends AbstractServer {
                 try {
                     response = "Manual Exam Received";
                     message.setMessage(response);
-                    ManualStudentExam manualStudentExam = new ManualStudentExam ((ManualStudentExam) message.getData());
+                    ManualStudentExam manualStudentExam = new ManualStudentExam((ManualStudentExam) message.getData());
                     //session.saveOrUpdate(manualStudentExam);
                     /*ExamForm selectedForm = ((ManualStudentExam) (message.getData())).getStudentExam().getClassExam().getExamForm();
                     String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
@@ -691,7 +686,6 @@ public class SimpleServer extends AbstractServer {
     }
 
 
-
     private Boolean LogUserOut(Person user) {
         boolean userRemoved = LoggedInUsers.remove(user);
         System.out.println("user: " + (user.getFullName() + " removed: " + userRemoved));
@@ -736,6 +730,7 @@ public class SimpleServer extends AbstractServer {
         }
 
     }
+
     private List<ClassExam> getExamsForStudent(int studentID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Student> query = builder.createQuery(Student.class);
