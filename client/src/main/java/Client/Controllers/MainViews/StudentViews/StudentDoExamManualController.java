@@ -176,6 +176,9 @@ public class StudentDoExamManualController extends SaveBeforeExit {
             if (result.get() == ButtonType.YES) {
                 System.out.println("Prompt to leave manual exam: YES");
                 try {
+                    Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                    studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
+                    message.setData(studentExam);
                     SimpleChatClient.setRoot(sceneName);
                     EventBus.getDefault().unregister(this);
                     System.out.println("PromptUserToSaveData changing scene 2");
