@@ -47,7 +47,7 @@ public class PreviewQuestionController {
 
     private ToggleGroup answersToggleGroup;
 
-    private String selectedAnswer = null;
+    private String selectedAnswer = "";
 
     @FXML
     void initialize() {
@@ -64,6 +64,7 @@ public class PreviewQuestionController {
         }
         answersBox.getChildren().clear();
         this.question = event.getQuestion();
+        System.out.println("selectedAnswer: " + event.getSelectedAnswer());
         if(event.getSelectedAnswer() != null){
             this.selectedAnswer = event.getSelectedAnswer();
         }

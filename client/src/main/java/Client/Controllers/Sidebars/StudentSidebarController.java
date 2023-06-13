@@ -35,7 +35,7 @@ public class StudentSidebarController extends SideBar {
 
     @FXML
     void OnTakeExamsButtonPressed(ActionEvent event) {
-        ChangeScene("ChooseExam");
+        ChangeScene("StudentChooseExam");
     }
 
     @FXML

@@ -78,7 +78,7 @@ public class ViewExamController {
 	private ComboBox<Subject> subjectsCB;
 
 	@FXML
-	private TableColumn<ClassExam, SimpleStringProperty> timeColumm;
+	private TableColumn<ClassExam, SimpleStringProperty> timeColumn;
 
 
 	@FXML
@@ -117,17 +117,17 @@ public class ViewExamController {
 		if(courses != null)
 		{
 			CoursesCB.getItems().addAll(courses);
-			Message message = new Message(++msgId, "Get Exams for Subject: "  + subjectsCB.getSelectionModel().getSelectedItem() );
+			Message message = new Message(++msgId, "Get Class Exams for Subject: "  + subjectsCB.getSelectionModel().getSelectedItem() );
 			message.setData(subjectsCB.getSelectionModel().getSelectedItem());
 			SimpleClient.getClient().sendToServer(message);
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "This subject does not contain any courses", "DataBase Erroe", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "This subject does not contain any courses", "DataBase Error", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	@FXML
 	public void onCourseSelection() throws IOException {
-		Message message = new Message(++msgId, "Get Exams for Course: "  + CoursesCB.getSelectionModel().getSelectedItem() );
+		Message message = new Message(++msgId, "Get Class Exams for Course: "  + CoursesCB.getSelectionModel().getSelectedItem() );
 		message.setData(CoursesCB.getSelectionModel().getSelectedItem());
 		SimpleClient.getClient().sendToServer(message);
 	}
@@ -168,16 +168,16 @@ public class ViewExamController {
 			XWPFParagraph questionParagraph = document.createParagraph();
 			XWPFRun questionBody = questionParagraph.createRun();
 			List<String> answers = question.getAnswers();
-			questionBody.setText(questionID++ +". " + StringEscapeUtils.unescapeHtml4(question.getQuestionData()));
+			questionBody.setText(questionID++ +". " + question.getQuestionData());
 			questionBody.addBreak();
 			questionBody.addBreak();
-			questionBody.setText(" A." + StringEscapeUtils.unescapeHtml4(answers.get(0)),questionBody.getTextPosition());
+			questionBody.setText(" A." + answers.get(0),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" B." + StringEscapeUtils.unescapeHtml4(answers.get(1)),questionBody.getTextPosition());
+			questionBody.setText(" B." + answers.get(1),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" C." +StringEscapeUtils.unescapeHtml4(answers.get(2)),questionBody.getTextPosition());
+			questionBody.setText(" C." +answers.get(2),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" D." +StringEscapeUtils.unescapeHtml4(answers.get(3)),questionBody.getTextPosition());
+			questionBody.setText(" D." +answers.get(3),questionBody.getTextPosition());
 			questionBody.addBreak();
 			questionBody.addBreak();
 			if(question.getStudentNote() != null) {

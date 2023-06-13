@@ -1,14 +1,14 @@
 package Client.Controllers.MainViews.StudentViews;
 
 import Client.Controllers.MainViews.ViewExamController;
+import Client.Events.ExamEndedEvent;
 import Client.Events.ExamEndedMessageEvent;
-import Client.Events.ManualExamEvent;
 import Client.Events.StartExamEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
-import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
 import Entities.Enums;
+import Entities.SchoolOwned.ClassExam;
 import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
@@ -20,24 +20,18 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
-import java.io.*;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class StudentDoExamManualController {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private ImageView dragAndDropImg;
@@ -50,7 +44,7 @@ public class StudentDoExamManualController {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private final StudentExam studentExam = new StudentExam();
+    private StudentExam studentExam;
 
     @FXML
     void fileDropped(DragEvent event) {
@@ -64,39 +58,10 @@ public class StudentDoExamManualController {
             colorAdjust.setBrightness(0.5);
             dragAndDropImg.setEffect(colorAdjust);
             System.out.println("Changing Brightness");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    void fileExited(DragEvent event) {
-        File file = null;
-        try {
-            System.out.println("File Dropped");
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setBrightness(0);
-            dragAndDropImg.setEffect(colorAdjust);
-            dragAndDropImg.setImage(new Image("/Images/accept.png"));
-
-            file = event.getDragboard().getFiles().get(0);
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                XWPFDocument document = new XWPFDocument(fis);
-                System.out.println(document.getDocument().getBody());
-                ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializeXWPFDocument(document));
-                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
-                message.setData(manualStudentExam);
-                SimpleClient.getClient().sendToServer(message);
-                fileRecievedLabel.setText("File Uploaded!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("File gotten: " + file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @FXML
@@ -117,6 +82,13 @@ public class StudentDoExamManualController {
         mainClassExam = event.getClassExam();
         timeInSeconds = (int) (mainClassExam.getExamTime()) * 60;
         ViewExamController.createManualExam(mainClassExam);
+        List<StudentExam> studentExams =  mainClassExam.getStudentExams();
+        for (StudentExam studentExam : studentExams) {
+            if (studentExam.getStudent().getID() == SimpleClient.getUser().getID()) {
+                this.studentExam = studentExam;
+                break;
+            }
+        }
         studentExam.setStudent(((Student) (SimpleClient.getUser())));
         studentExam.setClassExam(mainClassExam);
         studentExam.setStatus(Enums.submissionStatus.ToEvaluate);
@@ -144,7 +116,6 @@ public class StudentDoExamManualController {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
         };
         timer.schedule(task, 0, 1000);
@@ -152,32 +123,55 @@ public class StudentDoExamManualController {
     }
 
     @Subscribe
-    public void endExam(ManualExamEvent event) throws IOException {
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
-        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+    public void endExam(ExamEndedEvent event) throws IOException {
+        SimpleChatClient.setRoot("StudentChooseExam");
+        Platform.runLater(() -> {
+            JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+        });
+
 
     }
 
-    public static byte[] serializeXWPFDocument(XWPFDocument document) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(document);
-        oos.flush();
-        byte[] serializedDocument = bos.toByteArray();
-        oos.close();
-        bos.close();
-        return serializedDocument;
+    @FXML
+    void fileExited(DragEvent event) {
+        File file = null;
+        try {
+            System.out.println("File Dropped");
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(0);
+            dragAndDropImg.setEffect(colorAdjust);
+            dragAndDropImg.setImage(new Image("/Images/accept.png"));
+
+            file = event.getDragboard().getFiles().get(0);
+            try {
+                byte[] serializedDocument = Files.readAllBytes(file.toPath());
+                //ManualStudentExam manualStudentExam = new ManualStudentExam(studentExam, serializedDocument);
+                studentExam.setExamFileByteArray(serializedDocument);
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                message.setData(studentExam);
+                SimpleClient.getClient().sendToServer(message);
+                fileRecievedLabel.setText("File Uploaded!");
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("File gotten: " + file);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
 
     @Subscribe
     public void examEndedExternally(ExamEndedMessageEvent event) throws IOException {
         if(event.getClassExam().getID()  == mainClassExam.getID())
         {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("ChooseExam");
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
             JOptionPane.showMessageDialog(null, "Exam was ended by teacher has ran out of time", "Submission Exam", JOptionPane.WARNING_MESSAGE);
         }
     }
-
 }
 
 
