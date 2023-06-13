@@ -249,16 +249,22 @@ public class AddExamController extends SaveBeforeExit {
     }
 
     @Subscribe
-    void examSaved(GeneralEvent event) throws IOException { // TODO: Error in this method, doesn't get called after exam is saved to DB
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Exam Saved");
-        alert.setHeaderText("Exam Saved");
-        alert.setContentText("Exam Saved");
-        alert.showAndWait();
-        //resetForm(null);
-        EventBus.getDefault().unregister(this);
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
-    }
+    public void examSaved(GeneralEvent event) throws IOException {
+        Platform.runLater(()-> {
+            try{
+                System.out.println("exam saved");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Exam Saved");
+                alert.setHeaderText("Exam Saved");
+                alert.setContentText("Exam Saved Successfully");
+                alert.showAndWait();
+                //resetForm(null);
+                EventBus.getDefault().unregister(this);
+                SimpleChatClient.setRoot("TeacherMainScreen");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });}
 
     @FXML
     void resetForm(ActionEvent event) throws IOException {
