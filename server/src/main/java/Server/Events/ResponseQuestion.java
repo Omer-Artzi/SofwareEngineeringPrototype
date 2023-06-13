@@ -1,5 +1,6 @@
 package Server.Events;
 import Entities.SchoolOwned.Question;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.List;
 
@@ -83,8 +84,12 @@ public class ResponseQuestion {
     {
         int randInt = (int)(Math.random() * 4);
         incorrect_answers.add(randInt,correct_answer);
+        for(String answer: incorrect_answers)
+        {
+            answer = StringEscapeUtils.unescapeHtml4(answer);
+        }
         question.setAnswers(incorrect_answers);
-        question.setQuestionData(getQuestion());
-        question.setCorrectAnswer(correct_answer);
+        question.setQuestionData(StringEscapeUtils.unescapeHtml4(getQuestion()));
+        question.setCorrectAnswer(StringEscapeUtils.unescapeHtml4(correct_answer));
     }
 }

@@ -168,16 +168,16 @@ public class ViewExamController {
 			XWPFParagraph questionParagraph = document.createParagraph();
 			XWPFRun questionBody = questionParagraph.createRun();
 			List<String> answers = question.getAnswers();
-			questionBody.setText(questionID++ +". " + StringEscapeUtils.unescapeHtml4(question.getQuestionData()));
+			questionBody.setText(questionID++ +". " + question.getQuestionData());
 			questionBody.addBreak();
 			questionBody.addBreak();
-			questionBody.setText(" A." + StringEscapeUtils.unescapeHtml4(answers.get(0)),questionBody.getTextPosition());
+			questionBody.setText(" A." + answers.get(0),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" B." + StringEscapeUtils.unescapeHtml4(answers.get(1)),questionBody.getTextPosition());
+			questionBody.setText(" B." + answers.get(1),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" C." +StringEscapeUtils.unescapeHtml4(answers.get(2)),questionBody.getTextPosition());
+			questionBody.setText(" C." +answers.get(2),questionBody.getTextPosition());
 			questionBody.addBreak();
-			questionBody.setText(" D." +StringEscapeUtils.unescapeHtml4(answers.get(3)),questionBody.getTextPosition());
+			questionBody.setText(" D." +answers.get(3),questionBody.getTextPosition());
 			questionBody.addBreak();
 			questionBody.addBreak();
 			if(question.getStudentNote() != null) {
