@@ -76,7 +76,6 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     int currentIndex = 0;
 
     // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
-    // TODO: maybe- add feature that shows the current question number (out of the total number of questions). maybe buy adding a label to the progressPane, or maybe by changing the color of the button of the current question
 
     // initialize the StudentDoExamDigital Screen
     @FXML
