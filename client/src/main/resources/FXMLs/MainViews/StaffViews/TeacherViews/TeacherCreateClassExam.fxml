@@ -45,7 +45,7 @@
                   <VBox alignment="TOP_CENTER" prefHeight="77.0" prefWidth="306.0" spacing="10.0">
                      <children>
                         <TextField fx:id="startTimeTF" promptText="Enter Starting Hour(HH:mm:ss)" />
-                        <TextField fx:id="endTimeTF" promptText="Enter Endig Hour(HH:mm:ss)" />
+                        <TextField fx:id="endTimeTF" promptText="Enter Ending Hour(HH:mm:ss)" />
                         <TextField fx:id="codeTF" promptText="Enter Code" />
                      </children>
                   </VBox>
