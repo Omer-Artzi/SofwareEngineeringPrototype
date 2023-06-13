@@ -1,7 +1,7 @@
 package Entities.StudentOwned;
 
-import Entities.SchoolOwned.ClassExam;
 import Entities.Enums;
+import Entities.SchoolOwned.ClassExam;
 import Entities.Users.Student;
 
 import javax.persistence.*;
@@ -34,11 +34,12 @@ public class StudentExam implements Serializable {
     private String teacherNote;
     private String scoreChangeReason;
 
+    private ManualStudentExam manualExam;
+
     public StudentExam() {
     }
 
-    public StudentExam(Student student, ClassExam classExam, List<String> studentAnswers, int grade, Enums.submissionStatus status)
-    {
+    public StudentExam(Student student, ClassExam classExam, List<String> studentAnswers, int grade, Enums.submissionStatus status) {
         this.student = student;
         this.student.addStudentExam(this);
         this.classExam = classExam;
@@ -48,8 +49,18 @@ public class StudentExam implements Serializable {
         this.status = status;
     }
 
-    public void update(StudentExam other)
-    {
+    // copy constructor
+    public StudentExam(StudentExam other) {
+        this.student = other.student;
+        this.classExam = other.classExam;
+        this.studentAnswers = new ArrayList<>(other.studentAnswers);
+        this.grade = other.grade;
+        this.status = other.status;
+        this.teacherNote = other.teacherNote;
+        this.scoreChangeReason = other.scoreChangeReason;
+    }
+
+    public void update(StudentExam other) {
         this.grade = other.grade;
         this.studentAnswers = new ArrayList<>(other.getStudentAnswers());
         this.status = other.status;
@@ -57,70 +68,58 @@ public class StudentExam implements Serializable {
         this.scoreChangeReason = other.scoreChangeReason;
     }
 
-    public int getID()
-    {
+    public int getID() {
         return this.ID;
     }
 
-    public Student getStudent()
-    {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(Student student)
-    {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
-    public ClassExam getClassExam()
-    {
+    public ClassExam getClassExam() {
         return classExam;
     }
 
-    public void setClassExam(ClassExam classExam)
-    {
+    public void setClassExam(ClassExam classExam) {
         this.classExam = classExam;
     }
 
-    public List<String> getStudentAnswers()
-    {
+    public List<String> getStudentAnswers() {
         return studentAnswers;
     }
 
-    public void setStudentAnswers(List<String> studentAnswers)
-    {
+    public void setStudentAnswers(List<String> studentAnswers) {
         this.studentAnswers = studentAnswers;
     }
 
-    public int getGrade()
-    {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade)
-    {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
-    public Enums.submissionStatus getStatus()
-    {
+    public Enums.submissionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Enums.submissionStatus status)
-    {
+    public void setStatus(Enums.submissionStatus status) {
         this.status = status;
     }
-    public String TranslateStatus()
-    {
-        switch (status)
-        {
+
+    public String TranslateStatus() {
+        switch (status) {
             case Approved -> {
-            return "Approved";
-        }
+                return "Approved";
+            }
             case ToEvaluate -> {
-            return "To Evaluate";
-        }
+                return "To Evaluate";
+            }
             case NotTaken -> {
                 return "Not Taken";
             }
@@ -131,36 +130,27 @@ public class StudentExam implements Serializable {
         return "";
     }
 
-
-    public String getTeacherNote()
-    {
+    public String getTeacherNote() {
         return teacherNote;
     }
 
-    public void setTeacherNote(String teacherNote)
-    {
+    public void setTeacherNote(String teacherNote) {
         this.teacherNote = teacherNote;
     }
 
-    public String getScoreChangeReason()
-    {
+    public String getScoreChangeReason() {
         return scoreChangeReason;
     }
 
-    public void setScoreChangeReason(String scoreChangeReason)
-    {
+    public void setScoreChangeReason(String scoreChangeReason) {
         this.scoreChangeReason = scoreChangeReason;
     }
 
-    // copy constructor
-    public StudentExam(StudentExam other)
-    {
-        this.student = other.student;
-        this.classExam = other.classExam;
-        this.studentAnswers = new ArrayList<>(other.studentAnswers);
-        this.grade = other.grade;
-        this.status = other.status;
-        this.teacherNote = other.teacherNote;
-        this.scoreChangeReason = other.scoreChangeReason;
+    public ManualStudentExam getManualExam() {
+        return manualExam;
+    }
+
+    public void setManualExam(ManualStudentExam manualExam) {
+        this.manualExam = manualExam;
     }
 }

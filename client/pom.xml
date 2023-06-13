@@ -67,7 +67,7 @@
             <version>20</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
