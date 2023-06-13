@@ -185,7 +185,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             Date endDate = (Date.valueOf(endDateTF.getValue()));
             endDate.setTime((long)timeToDouble(endTimeTF.getText()));
             classExam.setStartDate(startDate);
-            classExam.setFinalDate(endDate);
+            classExam.setFinalSubmissionDate(endDate);
             classExam.setAccessCode(codeTF.getText());
             classExam.setExamTime((timeToDouble(examTimeTF.getText()))/60);
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
@@ -274,7 +274,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         startDateTF.setValue(classExam.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         startTimeTF.setText(String.valueOf(classExam.getStartDate().getTime()));
         endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        endTimeTF.setText(String.valueOf(classExam.getFinalDate().getTime()));
+        endTimeTF.setText(String.valueOf(classExam.getFinalSubmissionDate().getTime()));
         codeTF.setText(classExam.getAccessCode());
         typeCB.getSelectionModel().select(classExam.getExamType().toString());
         double timeInSeconds = classExam.getExamTime();

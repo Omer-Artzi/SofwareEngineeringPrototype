@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import org.greenrobot.eventbus.EventBus;
 
 import javax.swing.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class PreLogInController {
     private ComboBox<String> cfgCB;
 
     @FXML
-    private Label loadingLabel;
+    private Label IPLabel;
 
     @FXML
     private TextField passwordTF;
@@ -43,7 +45,7 @@ public class PreLogInController {
 
 
     @FXML
-    void initialize() {
+    void initialize() throws UnknownHostException {
         //EventBus.getDefault().register(this);
         assert EnterButton != null : "fx:id=\"EnterButton\" was not injected: check your FXML file 'PreLogIn.fxml'.";
         assert PortTF != null : "fx:id=\"PortTF\" was not injected: check your FXML file 'PreLogIn.fxml'.";
@@ -53,6 +55,8 @@ public class PreLogInController {
         cfgCB.getSelectionModel().selectFirst();
         usernameTF.setPromptText("According to hibernate.properties");
         passwordTF.setPromptText("According to hibernate.properties");
+        IPLabel.setText(InetAddress.getLocalHost().getHostAddress());
+        SimpleServer.setIP(InetAddress.getLocalHost().getHostAddress());
     }
     @FXML
     public void onEnter() throws InterruptedException {
@@ -63,7 +67,7 @@ public class PreLogInController {
             try {
                  port = Integer.parseInt(PortTF.getText());
                         if(port >= 0 && port<= 65535) {
-
+                            SimpleServer.setLocalPort(port);
                             if (usernameTF.getText() != null && !usernameTF.getText().isBlank()) {
                                 properties.put("hibernate.connection.username", usernameTF.getText());
                             }
@@ -77,10 +81,6 @@ public class PreLogInController {
                             properties.put("hibernate.show_sql", showSQLCB.getSelectionModel().getSelectedItem());
                             System.out.println("Properties: " + properties);
                             SimpleServer.getSessionFactory(properties);
-                            Platform.runLater(() -> {
-                                loadingLabel.setText("Loading...");
-                                loadingLabel.setVisible(true);
-                            });
                             System.out.println("Setting up server at " + port);
                             ServerConnectionEvent event = new ServerConnectionEvent(port);
                             EventBus.getDefault().post(event);
@@ -97,7 +97,7 @@ public class PreLogInController {
 
         }
         else {
-            Platform.runLater(() -> loadingLabel.setText("Loading..."));
+            SimpleServer.setLocalPort(3000);
             if (usernameTF.getText() != null && !usernameTF.getText().isBlank()) {
                 properties.put("hibernate.connection.username", usernameTF.getText());
             }
@@ -108,10 +108,6 @@ public class PreLogInController {
             properties.put("hibernate.show_sql", showSQLCB.getSelectionModel().getSelectedItem());
             System.out.println("Properties: " + properties);
             SimpleServer.getSessionFactory(properties);
-            Platform.runLater(() -> {
-                loadingLabel.setText("Loading...");
-                loadingLabel.setVisible(true);
-            });
             System.out.println("Setting up server at " + port);
             ServerConnectionEvent event = new ServerConnectionEvent(port);
             EventBus.getDefault().post(event);
