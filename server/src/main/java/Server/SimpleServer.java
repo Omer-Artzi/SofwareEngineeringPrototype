@@ -246,7 +246,7 @@ public class SimpleServer extends AbstractServer {
                         response = "Fail: User already logged in";
                     }
                     else {
-                        LoggedInUsers.add(user);
+                        //LoggedInUsers.add(user);
                         System.out.println("User " + user.getFullName() + " logged in");
                         response = "Success: User logged in";
                         message.setData(user);

@@ -385,25 +385,46 @@ public class DataGenerator {
         if(examForms != null) {
             // generate list of Class Exam
             List<ClassExam> classExams = new ArrayList<>();
+            int filter = 0;
             for(ExamForm examForm: examForms) {
 
                 // generate random start and end time
+                Date testStartDate;
+                Date testEndDate;
                 LocalDate currentDate = LocalDate.now();
                 LocalDateTime randomDay = GenerateRandomDate(currentDate, currentDate.plusMonths(5));
-                Date testStartDate = ConvertToDate(randomDay);
-                double examTime = faker.number().numberBetween(1, 4);
-                int examDays = faker.number().numberBetween(0, 3);
-                int examHours = faker.number().numberBetween((int)examTime, 23);
-                Date testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
+                double examTime;
+                if(filter % 3 == 0) {
+                    testStartDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(4).toLocalDate(), currentDate));
+                    examTime = faker.number().numberBetween(1, 4);
+                    int examDays = faker.number().numberBetween(0, 3);
+                    int examHours = faker.number().numberBetween((int)examTime, 23);
+                    testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
+
+                }
+                else if(filter % 3 == 1) {
+                    testStartDate = ConvertToDate(currentDate.atStartOfDay().minusDays(faker.number().numberBetween(4,14)));
+                    examTime = faker.number().numberBetween(1, 4);
+                    int examDays = faker.number().numberBetween(0, 3);
+                    int examHours = faker.number().numberBetween((int)examTime, 23);
+                    LocalDate startDateLocal = testStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                    testEndDate = ConvertToDate(GenerateRandomDate(startDateLocal, currentDate));
+                }
+                else {
+                    testStartDate = ConvertToDate(randomDay);
+                    examTime = faker.number().numberBetween(1, 4);
+                    int examDays = faker.number().numberBetween(0, 3);
+                    int examHours = faker.number().numberBetween((int)examTime, 23);
+                    testEndDate = ConvertToDate(randomDay.plusHours(examHours).plusDays(examDays));
+                }
 
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
-                //String code = Long.toString(faker.number().randomNumber(5, false));
                 String accessCode = "11aa";
                 Enums.ExamType examType = Enums.ExamType.values()[rand.nextInt(2)];
                 ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, accessCode,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
                 examForm.addClassExam(classExam);
-
                 teacher.addClassExam(classExam);
                 for(Student student: students)
                 {
@@ -414,6 +435,7 @@ public class DataGenerator {
                 classExams.add(classExam);
                 SimpleServer.session.saveOrUpdate(classExam);
                 SimpleServer.session.flush();
+                filter++;
             }
             return classExams;
         }
@@ -425,15 +447,24 @@ public class DataGenerator {
     }
     public static List<StudentExam> generateStudentExams(List<ClassExam> classExams,List<Student> students)
     {
-
         List<StudentExam> studentExams = new ArrayList<>();
+        int currentStatus = 0;
         for(ClassExam classExam: classExams)
         {
             int i = 0;
             for(Student student:students)
             {
                 int randGrade = rand.nextInt(100);
-                Enums.submissionStatus status = (Enums.submissionStatus.values()[rand.nextInt(4)]);
+                Enums.submissionStatus status;
+                if (currentStatus % 3 == 1)
+                {
+                    status = (Enums.submissionStatus.values()[i % 5]);
+                    if (status == Enums.submissionStatus.NotTaken)
+                        status = Enums.submissionStatus.Approved;
+                }
+                else
+                    status = (Enums.submissionStatus.NotTaken);
+
 
                 if (status != Enums.submissionStatus.Approved)
                     randGrade = -1;
@@ -452,18 +483,22 @@ public class DataGenerator {
                     StudentExam currentExam = new StudentExam(student, classExam, null, randGrade, status);
                     studentExams.add(currentExam);
                 }
-                classExam = OperationUtils.UpdateClassExamStats(classExam);
-                classExam.setExamToEvaluate(classExam.getStudentExams().stream().filter(studentExam ->
-                                studentExam.getStatus().equals(Enums.submissionStatus.ToEvaluate)).collect(Collectors.toList())
-                        .size());
+                if (currentStatus % 3 == 1)
+                {
+                    classExam = OperationUtils.UpdateClassExamStats(classExam);
+                    classExam.setExamToEvaluate((int) classExam.getStudentExams().stream().filter(studentExam ->
+                            studentExam.getStatus().equals(Enums.submissionStatus.ToEvaluate)).count());
+                }
+
                 i++;
             }
+            currentStatus++;
         }
+
         for(StudentExam studentExam:studentExams) {
             SimpleServer.session.saveOrUpdate(studentExam);
             SimpleServer.session.flush();
         }
-
         return studentExams;
 
     }

@@ -228,10 +228,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
         allClassExams = event.getLiveExams();
         // This is the part where we try to filter out any exams that aren't over yet by now.
         Date currentTime = ConvertToDate(LocalDateTime.now());
-
         allClassExams = allClassExams.stream().filter(classExam ->
-                classExam.getStartDate().after(currentTime) && classExam.getGradesMean() != -1).collect(Collectors.toList());
-
+                currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
         // It's population time... via a loop.
         for (int i = 0; i < allClassExams.size(); i++)
         {
@@ -399,7 +397,6 @@ public class ShowStatisticsController extends SaveBeforeExit {
         MeanLabel.setText(FormatDouble(ExamStats[0]));
         SDLabel.setText(FormatDouble(Math.sqrt(ExamStats[1])));
         MedianLabel.setText(FormatDouble(FindMedian(new ArrayList<>(allGrades))));
-
         BarChart barChart = GetHistogram(allGrades, allDates, 0, 0);
         barChart.setMaxHeight(300);
         barChart.setMaxWidth(600);
@@ -557,11 +554,11 @@ public class ShowStatisticsController extends SaveBeforeExit {
             // gets all the class exam the teacher belongs to the exam forms the teacher created
             for (ExamForm examForm : examFormList)
             {
-                for (ClassExam classExam : examForm.getClassExam())
-                {
-                    classExamList.add(classExam);
-                }
+                classExamList.addAll(examForm.getClassExam());
             }
+            Date currentTime = ConvertToDate(LocalDateTime.now());
+            classExamList = classExamList.stream().filter(classExam ->
+                    currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
             
             if (examFormList.isEmpty())
             {
