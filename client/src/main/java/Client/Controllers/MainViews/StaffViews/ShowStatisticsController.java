@@ -561,6 +561,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
             Date currentTime = ConvertToDate(LocalDateTime.now());
             classExamList = classExamList.stream().filter(classExam ->
                     currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
+
+
             
             if (examFormList.isEmpty())
             {
@@ -574,7 +576,9 @@ public class ShowStatisticsController extends SaveBeforeExit {
             }
             
             initClassExamTable();
-            
+            ClassExamStatsTv.getItems().clear();
+
+
             ClassExamStatsTv.getItems().addAll(classExamList);
             ClassExamStatsTv.sort();
 
