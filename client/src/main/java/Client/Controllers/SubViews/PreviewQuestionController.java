@@ -74,10 +74,34 @@ public class PreviewQuestionController {
 
     private void PopulateQuestion() {
         questionText.setText(question.getQuestionData());
-        studentNotes.setText(question.getStudentNote());
-        if(Objects.equals(studentNotes.getText(), "")){
-            studentNotes.setVisible(false);
+        // set question font and size
+        questionText.setStyle("-fx-font-size: " + "Calibri" + "; -fx-font-size: " + "17" + ";" + "-fx-wrap-text: true" + ";" + "-fx-text-alignment: center_left" + ";");
+        if (question.getQuestionData().length() > 100) {
+            questionText.setWrapText(true);
         }
+        if (question.getQuestionData().length() > 200) {
+            questionText.setPrefHeight(100);
+        }
+        if (question.getQuestionData().length() > 300) {
+            questionText.setPrefHeight(150);
+        }
+        if (question.getQuestionData().length() > 400) {
+            questionText.setPrefHeight(200);
+        }
+        if (question.getStudentNote() != null || question.getStudentNote() != "" || question.getStudentNote() != " ") {
+            studentNotes.setText(question.getStudentNote());
+            if(Objects.equals(studentNotes.getText(), "")){
+                studentNotes.setVisible(false);
+            }
+        }
+        else {
+            studentNotes.setVisible(false);
+            studentNotes.setLineSpacing(0);
+        }
+        //studentNotes.setText(question.getStudentNote());
+        /*if(Objects.equals(studentNotes.getText(), "")){
+            studentNotes.setVisible(false);
+        }*/
         //verify that the logged-in user is a teacher
         if(SimpleClient.getUser() instanceof Teacher){
             teacherNotes.setText(question.getTeacherNote());
@@ -92,12 +116,17 @@ public class PreviewQuestionController {
         //answers.add(question.getCorrectAnswer());
         for (String questionAnswer : answers) {
             RadioButton answer = new RadioButton(questionAnswer);
+            answer.setStyle("-fx-font-size: " + "Calibri" + "; -fx-font-size: " + "15" + ";" + "-fx-alignment: CENTER_LEFT" + ";" + "-fx-wrap-text: true"  + ";");
+            //edit padding
+            answer.setPadding(new javafx.geometry.Insets(5, 5, 5, 5));
             if(answer.getText().equals(selectedAnswer)){
                 answer.setSelected(true);
             }
             answer.setToggleGroup(answersToggleGroup);
             //answers.add(questionAnswer);
             answersBox.getChildren().add(answer);
+            answersBox.setPrefHeight(200);
+            answersBox.setPrefWidth(100);
         }
 
     }
