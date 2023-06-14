@@ -184,11 +184,11 @@ public class ShowStatsAndReportsController extends SaveBeforeExit {
         // This is the part where we try to filter out any exams that aren't over yet by now.
         Date currentTime = ConvertToDate(LocalDateTime.now());
 
-        allClassExams = allClassExams.stream().filter(classExam ->
-                classExam.getFinalSubmissionDate().after(currentTime)).collect(Collectors.toList());
-
         //allClassExams = allClassExams.stream().filter(classExam ->
-        //        currentTime.after(classExam.getFinalDate())).collect(Collectors.toList());
+        //        classExam.getFinalSubmissionDate().after(currentTime)).collect(Collectors.toList());
+
+        allClassExams = allClassExams.stream().filter(classExam ->
+                currentTime.after(classExam.getFinalSubmissionDate())).collect(Collectors.toList());
 
         // It's population time... via a loop.
         for (int i = 0; i < allClassExams.size(); i++)
