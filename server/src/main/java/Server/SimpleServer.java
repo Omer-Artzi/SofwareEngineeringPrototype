@@ -787,7 +787,6 @@ public class SimpleServer extends AbstractServer {
         //session.close();
     }
 
-
     private Boolean LogUserOut(Person user) {
         boolean userRemoved = LoggedInUsers.remove(user);
         System.out.println("user: " + (user.getFullName() + " removed: " + userRemoved));
@@ -886,12 +885,22 @@ public class SimpleServer extends AbstractServer {
         return classExams;
     }
     ///STILL Dont Know if work!!
-    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+    /*private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
         Root<ClassExam> root = query.from(ClassExam.class);
         query.where(builder.equal(root.get("ID"), exam));
         ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
+        return extraTime;
+    }*/
+
+    // function to get the ExtraTime for a specific ClassExam
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
+        Root<ExtraTime> root = query.from(ExtraTime.class);
+        query.where(builder.equal(root.get("classExam"), exam));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult();
         return extraTime;
     }
 
