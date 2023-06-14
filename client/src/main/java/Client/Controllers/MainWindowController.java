@@ -96,9 +96,16 @@ public class MainWindowController {
         }
         loadedScenes.put(sceneName, mainWindowParent);
 
-
-        mainPane.getChildren().clear();
-        mainPane.getChildren().add(mainWindowParent);
+        if(Platform.isFxApplicationThread()){
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(mainWindowParent);
+        }
+        else{
+            Platform.runLater(() -> {
+                mainPane.getChildren().clear();
+                mainPane.getChildren().add(mainWindowParent);
+            });
+        }
     }
 }
 

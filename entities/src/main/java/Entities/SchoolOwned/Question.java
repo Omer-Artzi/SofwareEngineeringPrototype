@@ -15,7 +15,7 @@ public class Question implements Serializable {
 
     private String questionID;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)//,cascade = CascadeType.ALL
     @JoinTable(
     joinColumns = @JoinColumn(name = "QuestionID"),
     inverseJoinColumns = @JoinColumn(name ="CourseID"))
@@ -42,6 +42,7 @@ public class Question implements Serializable {
 
     public Question(List<Course> courses, String questionData, List<String> answers, String correctAnswer, String teacherNote, String studentNote)
     {
+        //this.subject=subject;
         this.courses=courses;
         this.questionData=questionData;
         this.answers = answers;
@@ -56,7 +57,6 @@ public class Question implements Serializable {
         this.teacherNote = teacherNote;
         this.studentNote = studentNote;
     }
-
 
     public void setQuestionID(String ID)
     {

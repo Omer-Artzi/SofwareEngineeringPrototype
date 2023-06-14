@@ -1,5 +1,6 @@
 package Client.Controllers.Sidebars;
 
+import Client.SimpleChatClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,7 +43,8 @@ public class PrincipalSidebarController extends SideBar {
     private Button viewTestFormsButton;
 
     @FXML
-    private Button viewRequestsButton;
+    private Button viewRequestsListButton;
+
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
@@ -55,15 +57,16 @@ public class PrincipalSidebarController extends SideBar {
     }
 
     @FXML
+    void extraTimeList(ActionEvent event) throws IOException {
+        //ChangeScene("ListExtraTimeRequest");
+        SimpleChatClient.NewSetRoot("ListExtraTimeRequest");
+    }
+
+    @FXML
     void gradeExam(ActionEvent event) {
         ChangeScene("TeacherExamGrade");
     }
 
-    @FXML
-    void createExam(ActionEvent event) {
-
-        ChangeScene("TeacherCreateClassExam");
-    }
 
     @FXML
     void showStatistics(ActionEvent event)  {
@@ -90,11 +93,7 @@ public class PrincipalSidebarController extends SideBar {
         InitializationAsserts();
         userTypeLabel.setText("Logged in as: Principal");
     }
-    @FXML
-    void viewRequests(ActionEvent event) {
-        ChangeScene("ListExtraTimeRequest");
 
-    }
     void InitializationAsserts(){
         //assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
        // assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";

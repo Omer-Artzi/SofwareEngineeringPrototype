@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -177,7 +178,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null && ExamFormsTV.getSelectionModel().getSelectedItem() != null && startDateTF.getValue() != null && endDateTF.getValue() != null && courseCB.getSelectionModel().getSelectedItem() != null && subjectCB.getSelectionModel().getSelectedItem() != null && startDateTF.getValue().isBefore(endDateTF.getValue()) && startDateTF.getValue().isAfter(LocalDate.now()) && endDateTF.getValue().isAfter(LocalDate.now()))
+        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null && ExamFormsTV.getSelectionModel().getSelectedItem() != null && startDateTF.getValue() != null && endDateTF.getValue() != null && courseCB.getSelectionModel().getSelectedItem() != null && subjectCB.getSelectionModel().getSelectedItem() != null && startDateTF.getValue().isBefore(endDateTF.getValue()) && startDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)) && endDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)))
         {
 
             Date startDate = (Date.valueOf(startDateTF.getValue()));
@@ -306,7 +307,6 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         alert.setHeaderText("Exam Saved Successfully");
         alert.setContentText("Exam Saved Successfully");
         alert.showAndWait();
-        //JOptionPane.showMessageDialog(null, "Exam Saved Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
         SimpleChatClient.setRoot("TeacherMainScreen");
 
     }

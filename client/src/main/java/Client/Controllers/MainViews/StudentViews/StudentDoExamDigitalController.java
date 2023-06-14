@@ -490,10 +490,21 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     // method to end the exam in case that the time is up in the server
     @Subscribe
     public void endExam(ExamEndedEvent event) throws IOException {
-        SimpleChatClient.setRoot("StudentChooseExam");
-        //SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("StudentChooseExam");
-        JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
-
+            Platform.runLater(() -> {
+                try {
+                    System.out.println("exam saved successfully in the server");
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Exam Saved");
+                    alert.setHeaderText("Exam Saved");
+                    alert.setContentText("Exam Saved Successfully");
+                    alert.showAndWait();
+                    EventBus.getDefault().unregister(this);
+                    SimpleChatClient.setRoot("StudentMainScreen");
+                    //JOptionPane.showMessageDialog(null, "Exam was successfully saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
     @FXML

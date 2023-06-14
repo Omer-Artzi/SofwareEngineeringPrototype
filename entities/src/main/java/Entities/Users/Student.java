@@ -27,7 +27,7 @@ public class Student extends Person implements Serializable, Comparable<Student>
     private List<Subject> subjects = new ArrayList<>();
     @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
-    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.ALL,fetch = FetchType.EAGER,targetEntity = ClassExam.class)
     private List<ClassExam> classExams = new ArrayList<>();
 
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)

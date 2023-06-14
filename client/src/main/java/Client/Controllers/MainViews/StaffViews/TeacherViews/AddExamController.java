@@ -232,7 +232,7 @@ public class AddExamController extends SaveBeforeExit {
                 }
             }
         }
-        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher, examTime);
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime);
         Message message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
         message.setData(examForm);
         SimpleClient.getClient().sendToServer(message);
@@ -243,22 +243,28 @@ public class AddExamController extends SaveBeforeExit {
         headerText= headerTextTF.getText();
         footerText= footerTextTF.getText();
         Date createdDate = new Date();
-        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForTeacher);
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent);
         ClassExam classExam = new ClassExam(examForm);
         ViewExamController.createManualExam(classExam);
     }
 
     @Subscribe
-    void examSaved(GeneralEvent event) throws IOException { // TODO: Error in this method, doesn't get called after exam is saved to DB
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Exam Saved");
-        alert.setHeaderText("Exam Saved");
-        alert.setContentText("Exam Saved");
-        alert.showAndWait();
-        //resetForm(null);
-        EventBus.getDefault().unregister(this);
-        SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
-    }
+    public void examSaved(GeneralEvent event) throws IOException {
+        Platform.runLater(()-> {
+            try{
+                System.out.println("exam saved");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Exam Saved");
+                alert.setHeaderText("Exam Saved");
+                alert.setContentText("Exam Saved Successfully");
+                alert.showAndWait();
+                //resetForm(null);
+                EventBus.getDefault().unregister(this);
+                SimpleChatClient.setRoot("TeacherMainScreen");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });}
 
     @FXML
     void resetForm(ActionEvent event) throws IOException {

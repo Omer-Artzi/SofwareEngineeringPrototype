@@ -147,6 +147,8 @@ public class DataGenerator {
                         SimpleServer.session.save(question);
                         SimpleServer.session.flush();
                     }
+
+
                 }
                 else
                 {
@@ -154,12 +156,14 @@ public class DataGenerator {
                     connection.disconnect();
                     //return null;
                 }
+
             }
             catch(IOException e)
             {
                 e.printStackTrace();
                 return null;
             }
+
         }
         return questionsList;
     }
@@ -205,10 +209,6 @@ public class DataGenerator {
 
                 examForm.setExamFormID(examFormID);
                 examForms.add(examForm);
-
-                // exam form notes
-                examForm.setExamNotesForStudent("This is a default Note intended to the students which made in the data generator");
-                examForm.setExamNotesForTeacher("This is a default Note intended to the teachers which made in the data generator");
 
                 SimpleServer.session.saveOrUpdate(examForm);
             }
@@ -344,7 +344,7 @@ public class DataGenerator {
                                       BCrypt.hashpw("1234", salt), "123456789");
             else
                 student = new Student(firstName, lastName, Enums.Gender.Female, studentEmail, password, personID);
-            for (int  j = 0; j < 2; j++)
+            for (int  j = 0; j < 2;j++)
             {
                 int courseNum = faker.number().numberBetween(0, courses.size());
                 student.addCourse(courses.get(courseNum));
@@ -410,18 +410,17 @@ public class DataGenerator {
                 }
                 // Link admin teacher
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
+                //String code = Long.toString(faker.number().randomNumber(5, false));
                 String accessCode = "11aa";
                 Enums.ExamType examType = Enums.ExamType.values()[rand.nextInt(2)];
-                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher,
-                        accessCode,examForm.getCourse(),examForm.getSubject(),examType);
-                // exam form - class exam link
+                ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, accessCode,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
                 examForm.addClassExam(classExam);
+
                 teacher.addClassExam(classExam);
                 for(Student student: students)
                 {
                     student.addClassExam(classExam);
-                    classExam.addStudent(student);
                     SimpleServer.session.saveOrUpdate(student);
                 }
 

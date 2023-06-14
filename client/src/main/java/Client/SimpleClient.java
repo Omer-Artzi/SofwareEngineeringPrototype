@@ -91,7 +91,12 @@ public class SimpleClient extends AbstractClient {
             SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
-        else if (messageText.startsWith("ExtraTimeRequest data")) {////
+        else if (message.getMessage().startsWith("Extra Time Requests")) {    //Added by Liad 10/06
+            System.out.println("Extra Time Requests");
+            ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
+            EventBus.getDefault().post(stMsg);
+        }
+        else if (messageText.startsWith("ExtraTimeRequest data")) { //Added by liad
             System.out.println("SelectedClassExamEvent in client");
             List<Object> data = (List<Object>) message.getData();
             if (data == null) {
@@ -152,7 +157,10 @@ public class SimpleClient extends AbstractClient {
 			ExtraTime extraTime=(ExtraTime) message.getData();
 			PrincipalApproveEvent approveEvent =new PrincipalApproveEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"approve")) {
+                EventBus.getDefault().post(approveEvent);
+                System.out.println("Approve in client by liadddddddd");
 				approveEvent.show();
+                EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
         }
         else if (messageText.startsWith("Extra time rejected")) {
@@ -160,6 +168,7 @@ public class SimpleClient extends AbstractClient {
 			PrincipalRejectEvent rejectEvent =new PrincipalRejectEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"reject")) {
 				rejectEvent.show();
+                EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
 		}
 		else if (messageText.startsWith("Extra Time Requested")) {
@@ -178,6 +187,14 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Class Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
+        else if (messageText.startsWith("Question added successfully")){////////
+            System.out.println("Hi Omer!");
+            EndCreateQuestionEvent event=new EndCreateQuestionEvent("Question added successfully");
+            EventBus.getDefault().post(event);
+        }
+        else if (messageText.startsWith("new question could not be added to the database")){////////
+            EventBus.getDefault().post(new EndCreateQuestionEvent( "question could not be added"));
+        }
 		else if (messageText.startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
 		}
@@ -188,6 +205,9 @@ public class SimpleClient extends AbstractClient {
         }
         else if (messageText.startsWith("Success: StudentExam Approved")) {
             RefreshPerson event = new RefreshPerson("Success", (Person) message.getData());
+            EventBus.getDefault().post(event);
+        }else if (messageText.startsWith("extra time of specific class exam")) {//////////!!!!!!!!!!
+            extraTimeOfSpecificClassExam event = new extraTimeOfSpecificClassExam((ExtraTime) message.getData());
             EventBus.getDefault().post(event);
         }
         else if (messageText.startsWith("Failure: Failed to save StudentExam")) {
