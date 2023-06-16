@@ -474,7 +474,17 @@ public class AddExamController extends SaveBeforeExit {
     public boolean CheckForUnsavedData() {
         System.out.println("CheckForUnsavedData Client.Controllers.MainPanelScreens.SaveBeforeExit");
         if (chosenSubject != null && chosenCourse != null && addedQuestions != null && !addedQuestions.isEmpty() && examTime != 0) {
-            return true;
+            int sum = 0;
+            for (QuestionObject qo : questionObjectsList) {
+                sum += qo.getPercentage();
+            }
+            if (sum == 100)
+            {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         else {
             return false;
