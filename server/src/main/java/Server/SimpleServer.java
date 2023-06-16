@@ -723,6 +723,23 @@ public class SimpleServer extends AbstractServer {
                 }
             }
             // Lior's addition
+            else if (request.startsWith("Refresh User"))
+            {
+                Person user = retrieveUser(((Person)message.getData()).getEmail());
+
+                if (user != null)
+                {
+                    response = ("User retrieved: " + ((Person)message.getData()).getFullName());
+                    message.setMessage(response);
+                    message.setData(user);
+                }
+                else {
+                    response = "User Failed to be retrieved";
+                }
+                client.sendToClient(message);
+                System.out.println(response);
+            }
+
             else if (request.startsWith("Change Student Exam")) {
                 StudentExam studentExam = ((StudentExam) (message.getData()));
                 try {
