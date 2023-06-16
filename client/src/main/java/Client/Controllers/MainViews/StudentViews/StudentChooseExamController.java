@@ -74,7 +74,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
                     setText(null);
                 } else {
                     // replace with desired format
-                    setText(item.getCode());
+                    setText(item.getExamFormID());
                 }
             }
         });

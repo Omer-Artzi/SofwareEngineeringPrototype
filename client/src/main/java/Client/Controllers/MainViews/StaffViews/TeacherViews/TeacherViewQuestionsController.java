@@ -51,7 +51,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
     private TableView<Question> questionsTable;
 
     @FXML
-    private TableColumn<Question, IntegerProperty> IdColumn;
+    private TableColumn<Question, SimpleStringProperty> IdColumn;
 
     @FXML
     private TableColumn<Question, SimpleStringProperty> questionTextColumn;
@@ -93,7 +93,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         user = SimpleClient.getUser();
 
         // set up table columns
-        IdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        IdColumn.setCellValueFactory(new PropertyValueFactory<>("questionID"));
         questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("questionData"));
 
         PopulateSubjects();

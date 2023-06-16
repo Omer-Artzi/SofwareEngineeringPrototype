@@ -725,8 +725,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
             boolean changeScreen = PromptUserToSaveData(event.getSceneName());
         }
         try {
-            EventBus.getDefault().unregister(this);
             SimpleChatClient.setRoot(event.getSceneName());
+            EventBus.getDefault().unregister(this);
             System.out.println("TriggerDataCheck changing scene");
         }
         catch (IOException e) {

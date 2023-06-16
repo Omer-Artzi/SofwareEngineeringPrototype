@@ -138,13 +138,6 @@ public class StudentViewExamController extends SaveBeforeExit {
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
 
 
-        //ExamTV.setRowFactory(tv -> {
-        //    TableRow<StudentExam> row = new TableRow<>();
-        //
-        //    //row.setStyle("-fx-background-color: #E6E6FA;");
-        //
-        //    return row;
-        //});
 
         Callback<TableColumn<StudentExam, Integer>, TableCell<StudentExam, Integer>> cellFactory =
                 column -> new TableCell<StudentExam, Integer>() {

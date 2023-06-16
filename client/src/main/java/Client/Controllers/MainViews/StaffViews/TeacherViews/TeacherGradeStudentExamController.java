@@ -449,8 +449,10 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             BorderPane bord1 = new BorderPane();
             bord1.setPrefHeight(68);
             bord1.setPrefWidth(rowWidth / 10);
-            bord1.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
-                    "-fx-border-width: 2 2 2 4");
+            //bord1.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //        "-fx-border-width: 2 2 2 4");
+            bord1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+                            "-fx-border-width: 2 2 2 4");
             Label questionNumberLbl = new Label(Integer.toString(questionNumber+1));
 
             bord1.setCenter(questionNumberLbl);
@@ -485,9 +487,11 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
                 BorderPane bordLoop1 = new BorderPane();
                 if (j % 2 == 0)
-                    bordLoop1.setStyle("-fx-background-color: #B9D9EB; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    bordLoop1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    //bordLoop1.setStyle("-fx-background-color: #B9D9EB; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
                 else
-                    bordLoop1.setStyle("-fx-background-color: #E6E6FA; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    bordLoop1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    //bordLoop1.setStyle("-fx-background-color: #E6E6FA; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
 
                 Label answerNumber = new Label(Integer.toString(j));
                 answerNumber.setPadding(new Insets(0, 10, 0 ,10));
@@ -552,7 +556,9 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             Label questionScore = new Label(Integer.toString(questionScoreInt));
             bord4.setPrefWidth(rowWidth / 10);
             bord4.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //        "-fx-border-width: 2 4 2 2");
+            bord4.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
                     "-fx-border-width: 2 4 2 2");
             questionScore.setAlignment(Pos.CENTER);
             bord4.setCenter(questionScore);

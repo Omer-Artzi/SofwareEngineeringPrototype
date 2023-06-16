@@ -36,7 +36,6 @@ public class ExamForm implements Serializable {
     private List<Integer> questionsScores = new ArrayList<>();
     private String examFormID;
 
-    private String code;
     private String headerText;
     private String footerText;
     private String examNotesForTeacher;
@@ -107,18 +106,6 @@ public class ExamForm implements Serializable {
         this.examFormID = examFormID;
     }
 
-    public String getCode() {
-        Faker faker= new Faker();
-        if(code == null)
-        {
-            code = course.getSubject().getCode() + course.getCode() + faker.bothify("##");
-        }
-        return code;
-    }
-
-    public void setCode(String code) {
-        code = code;
-    }
 
     public Course getCourse(){return course;}
     public void setCourse(Course newCourse){this.course=newCourse;}

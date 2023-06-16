@@ -220,9 +220,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
         // collect the courses of the subject
         List<Course> teacherCourses = clientTeacher.getCourses();
-        List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName() == chosenSubjectStr)
+        List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName().startsWith(chosenSubjectStr))
                 .collect(Collectors.toList());
-
         // Sort Combo
         Collections.sort(subjectCourses, Comparator.comparing(Course::getName));
         for (int i = 0; i < subjectCourses.size(); i++)
@@ -249,6 +248,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
         if (event.getStatus().startsWith("Success"))
         {
+            SimpleClient.getClient().setUser(null);
             SimpleClient.getClient().setUser(event.getUser());
             Platform.runLater(()->{
                 try {
