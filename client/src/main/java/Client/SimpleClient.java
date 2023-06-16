@@ -222,6 +222,12 @@ public class SimpleClient extends AbstractClient {
             System.out.println("Fail : User");
             EventBus.getDefault().post(new UserMessageEvent((Person) message.getData(), "Fail"));
         }
+        else if (messageText.startsWith("User retrieved")) {
+            EventBus.getDefault().post(new UserMessageEvent((Person) message.getData(), "Success"));
+        }
+        else if (messageText.startsWith("User Failed to be retrieved")) {
+            EventBus.getDefault().post(new UserMessageEvent((Person) message.getData(), "Fail"));
+        }
         else if (messageText.startsWith("Success")) {
         }
         else if(message.getMessage().startsWith("Exam Saved Successfully"))
