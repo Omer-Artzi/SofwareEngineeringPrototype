@@ -507,6 +507,23 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             });
     }
 
+    ///////////////////////// SaveBeforeExit /////////////////////////
+    @Override
+    public boolean CheckForUnsavedData() {
+        System.out.println("CheckForUnsavedData Client.Controllers.MainPanelScreens.SaveBeforeExit");
+        return true;
+    }
+
+    @Override
+    public void SaveData() {
+        ActionEvent event = new ActionEvent();
+        try {
+            submitExam(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+//////////////////////////////////////////////////////////////////////
     @FXML
     void AssertFXMLComponents() {
         assert nextButton != null : "fx:id=\"nextButton\" was not injected: check your FXML file 'StudentDoExamDigital.fxml'.";

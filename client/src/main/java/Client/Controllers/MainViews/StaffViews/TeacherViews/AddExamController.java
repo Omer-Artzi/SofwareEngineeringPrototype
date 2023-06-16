@@ -469,9 +469,29 @@ public class AddExamController extends SaveBeforeExit {
             examNotesForTeacher = result.get();
         }
     }
+///////////////////// SaveBeforeExit ////////////////////////
+    @Override
+    public boolean CheckForUnsavedData() {
+        System.out.println("CheckForUnsavedData Client.Controllers.MainPanelScreens.SaveBeforeExit");
+        if (chosenSubject != null && chosenCourse != null && addedQuestions != null && !addedQuestions.isEmpty() && examTime != 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void SaveData() {
+        ActionEvent event = new ActionEvent();
+        try {
+            saveTest(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 /////////////////////////////////////////////////////////////
-
-
+    // class for the table of questions
     public static class QuestionObject {
         private int questionId;
         private String question;
