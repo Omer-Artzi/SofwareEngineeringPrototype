@@ -17,9 +17,9 @@
                <content>
                 <AnchorPane fx:id="mainPane" prefHeight="760.0" prefWidth="1024.0">
                      <children>
-                        <ImageView fx:id="LogoImage" fitHeight="438.0" fitWidth="468.0" layoutX="179.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="LogoImage" fitHeight="301.0" fitWidth="331.0" layoutX="512.0" layoutY="496.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../Images/HSTSLogo.png" />
+                              <Image url="@../Images/HSTS_Logo_2-removebg-preview.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="dateLabel" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="168.0" text="12:25:42">
