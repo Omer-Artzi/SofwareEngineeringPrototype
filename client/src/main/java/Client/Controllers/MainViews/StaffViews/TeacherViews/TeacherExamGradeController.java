@@ -281,7 +281,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
             if (!teacherSubjects.contains(subject))
                 teacherSubjects.add(subject);
         }
-
+        Collections.sort(teacherSubjects, Comparator.comparing(Subject::getName));
         // Fill subject combo
         for (int i = 0; i < teacherSubjects.size(); i++)
         {
@@ -341,7 +341,10 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
         // Initialize sort mechanic
         StatusColumn.setComparator(StatusColumn.getComparator().reversed());
+        IDColumn.setComparator(Comparator.comparingInt(value -> Integer.parseInt(value)));
         ClassExamTv.getSortOrder().add(StatusColumn);
+        ClassExamTv.getSortOrder().add(IDColumn);
+
         ExamFormTv.getSortOrder().add(StartDateColumn);
 
         Message refreshMsg = new Message(0, "Refresh User");

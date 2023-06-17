@@ -68,6 +68,11 @@
                   </TextFlow>
                   <HBox fx:id="ButtonsHbox" alignment="CENTER">
                      <children>
+                        <Button fx:id="DisapproveBtn" mnemonicParsing="false" onAction="#DisapproveBtnAct" onMouseEntered="#DisapproveBtnHover" onMouseExited="#DisapproveBtnHoverOut" onMousePressed="#DispproveBtnPressed" onMouseReleased="#DispproveBtnReleased" style="-fx-background-color: #DC6F6F; -fx-text-fill: white;" text="Disapprove Exam">
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </HBox.margin>
+                        </Button>
                         <Button fx:id="ApproveBtn" mnemonicParsing="false" onAction="#ApproveBtnAct" onMouseEntered="#ApproveBtnHover" onMouseExited="#ApproveBtnHoverOut" onMousePressed="#ApproveBtnPressed" onMouseReleased="#ApproveBtnReleased" style="-fx-text-fill: white; -fx-background-color: #6495ED;" text="Approve Exam">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />

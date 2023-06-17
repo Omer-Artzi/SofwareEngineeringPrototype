@@ -47,6 +47,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     @FXML
     private Button ApproveBtn;
     @FXML
+    private Button DisapproveBtn;
+    @FXML
     private Button BackBtn;
     @FXML
     private HBox ChangeScoreHbox;
@@ -166,6 +168,36 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     }
 
 
+    @FXML
+    void DisapproveBtnAct(ActionEvent event) throws IOException {
+
+        solvedExam.setGrade(-1);
+        solvedExam.setStatus(Enums.submissionStatus.Disapproved);
+        // send to server to set student Exam
+        Message studentExamMessage = new Message(0, "Change Student Exam");
+        studentExamMessage.setData(solvedExam);
+        SimpleClient.getClient().sendToServer(studentExamMessage);
+    }
+
+    @FXML
+    void DisapproveBtnHover(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #ED8F8F; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DisapproveBtnHoverOut(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #DC6F6F; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DispproveBtnPressed(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color: #CB5E5E; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DispproveBtnReleased(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #DC6F6F; -fx-text-fill: white;");
+    }
 
 
     @FXML
@@ -211,13 +243,13 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         }
         catch (Exception e)
         {
-            if (e.getMessage() == "out of range")
+            if (e.getMessage().startsWith("out of range"))
             {
                 ChangeScoreErrLbl.setText("Insert number between 0-100");
                 ChangeScoreErrLbl.setPrefHeight(Control.USE_COMPUTED_SIZE);
                 ChangeScoreErrLbl.setVisible(true);
             }
-            else if (e.getMessage() == "Blank Text Area")
+            else if (e.getMessage().startsWith("Blank Text Area"))
             {
                 ChangeScoreTextArea.setPromptText("You must enter the reason for score changing");
             }
@@ -253,7 +285,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     }
 
     @Subscribe
-    public void ExamApproved(RefreshPerson event) throws IOException, InterruptedException {
+    public void ExamApproved(RefreshPerson event) throws InterruptedException {
         Platform.runLater(() -> {
         String msg = event.getMessage();
         if (msg.startsWith("Success"))
@@ -263,7 +295,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
                 SimpleClient.getClient().setUser(event.getPerson());
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES);
                 alert.setTitle("Student grading saved");
-                alert.setHeaderText("CONFIRMATION: Approved");
+                alert.setHeaderText("CONFIRMATION: Saved");
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES)
                 {
@@ -273,6 +305,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
                     String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
                     int ExamExamSqlID = solvedExam.getClassExam().getExamForm().getID();
                     EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, ExamExamID, ExamExamSqlID));
+                    EventBus.getDefault().unregister(this);
                 }
             }
             catch (Exception e)
@@ -288,7 +321,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             alert.setHeaderText("Error: Saving Failed");
             alert.show();
         }
-            EventBus.getDefault().unregister(this);
         });
     }
 
@@ -309,7 +341,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
 
     @Subscribe
-    public void getStarterData(StudentExamEvent event) throws IOException, InterruptedException {
+    public void getStarterData(StudentExamEvent event) throws IOException {
         solvedExam = event.getStudentExam();
         Platform.runLater(() -> {
             try {
@@ -324,7 +356,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
                 // set the scroll to top after estimated time of scene rendering
                 PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
-                pause.setOnFinished(timedEvent -> {ScrollPane.setVvalue(0);});
+                pause.setOnFinished(timedEvent -> ScrollPane.setVvalue(0));
                 pause.play();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -440,7 +472,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            String studentAnswerStr = studentAnswers.get(questionNumber);
+            //String studentAnswerStr = studentAnswers.get(questionNumber);
             int studentAnswerInt =  question.getAnswers().indexOf(null) + 1;
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             System.out.println(correctAnswerInt);
