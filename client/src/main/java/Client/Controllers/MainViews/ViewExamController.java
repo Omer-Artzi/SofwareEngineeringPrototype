@@ -227,7 +227,7 @@ public class ViewExamController {
 	@FXML
 	public void moveToAddExams() throws IOException {
 		System.out.println("Move to Add Exam Page");
-		SimpleChatClient.setRoot("AddExam");
+		SimpleChatClient.setRoot("TeacherAddTestForm");
 	}
 	@FXML
 	public void MoveToModifyExams() throws IOException {
@@ -235,7 +235,7 @@ public class ViewExamController {
 		if(selectedForm != null) {
 			System.out.println("Move to Add Exam page");
 			EventBus.getDefault().post(new LoadExamEvent(selectedForm.getExamForm(),"Modify Exam"));
-			SimpleChatClient.setRoot("AddExam");
+			SimpleChatClient.setRoot("TeacherAddTestForm");
 		}
 		else {
 			JOptionPane.showMessageDialog(null,"No exam selected","Error!",JOptionPane.ERROR_MESSAGE);
