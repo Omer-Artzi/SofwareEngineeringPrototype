@@ -143,8 +143,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         stMsg.setQuestions(addedQuestions);
         System.out.println("Course: " + CourseCB.getValue());
         EventBus.getDefault().post(stMsg);
-        EventBus.getDefault().unregister(this);
-
+        EventBus.getDefault().unregister(this); //TODO: added by Edan - check if it's ok
     }
 
     @Subscribe
