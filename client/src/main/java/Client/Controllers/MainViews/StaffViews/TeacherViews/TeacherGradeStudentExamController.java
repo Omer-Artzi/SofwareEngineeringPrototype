@@ -472,10 +472,9 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            //String studentAnswerStr = studentAnswers.get(questionNumber);
-            int studentAnswerInt =  question.getAnswers().indexOf(null) + 1;
+            String studentAnswerStr = studentAnswers.get(questionNumber);
+            int studentAnswerInt =  question.getAnswers().indexOf(studentAnswerStr) + 1;
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
-            System.out.println(correctAnswerInt);
             HBox qustionHbox = new HBox();
 
             qustionHbox.setPrefWidth(rowWidth);
@@ -588,12 +587,12 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             //bord3.setPrefHeight(Control.USE_COMPUTED_SIZE);
             //bord3.setPrefWidth(rowWidth / 10);
             //
-            //if (question.getAnswers().indexOf(studentAnswerStr)+1 == correctAnswerInt)
-            //{
-            //    studentScore += questionScoreInt;
-            //    bord3.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
-            //            "-fx-border-width: 2");
-            //}
+            if (studentAnswerInt == correctAnswerInt)
+            {
+                studentScore += questionScoreInt;
+                //bord3.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+                //        "-fx-border-width: 2");
+            }
             //else
             //    bord3.setStyle("-fx-background-color: #DC6F6F; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
             //            "-fx-border-width: 2");
