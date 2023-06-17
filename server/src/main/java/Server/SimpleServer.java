@@ -922,15 +922,6 @@ public class SimpleServer extends AbstractServer {
         List<ClassExam> classExams = session.createQuery(query).getResultList();
         return classExams;
     }
-    ///STILL Dont Know if work!!
-    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
-        Root<ClassExam> root = query.from(ClassExam.class);
-        query.where(builder.equal(root.get("ID"), exam));
-        ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
-        return extraTime;
-    }
 
     // function to get the ExtraTime for a specific ClassExam
     private ExtraTime getExtraTimeForClassExam(ClassExam exam) {

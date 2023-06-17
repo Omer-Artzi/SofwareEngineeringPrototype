@@ -32,7 +32,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
+            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE" stylesheets="@sidebar.css">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>

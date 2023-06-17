@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -285,18 +286,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     @FXML
     void seePreview(ActionEvent event) throws IOException {
         Question question = CollectData();
-        System.out.println("The data of question is: "+question.getQuestionData());
-        int i=1;
-        for(String item: question.getAnswers())
-        {
-            System.out.println("question number "+i+ " is :"+item);
-            i++;
-        }
-        System.out.println("The correct is: "+question.getCorrectAnswer());
-        System.out.println("The S note: "+question.getStudentNote());
-        System.out.println("The P note: "+question.getTeacherNote());
-        System.out.println("The subject is "+String.valueOf(question.getSubject()));
-        //System.out.println("The course is "+question.getCourses().get(0));
 
         ChangePreviewEvent event1 = new ChangePreviewEvent();
         event1.setQuestion(question);
