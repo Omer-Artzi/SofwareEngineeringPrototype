@@ -220,7 +220,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         System.out.println("Chosen questions: " + chosenQuestions);
 
         try {
-            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("AddExam");
+            SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherAddTestForm");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
