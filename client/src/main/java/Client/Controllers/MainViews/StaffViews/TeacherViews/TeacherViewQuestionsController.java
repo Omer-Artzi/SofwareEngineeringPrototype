@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -95,6 +96,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         // set up table columns
         IdColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("questionData"));
+
+        IdColumn.setStyle("-fx-alignment: CENTER;");
 
         PopulateSubjects();
 
@@ -175,6 +178,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
             return;
         }
         coursePicker.getItems().addAll(selectedSubject.getCourses());
+        Collections.sort(coursePicker.getItems());
     }
 
     private void UpdateQuestions() {
@@ -284,6 +288,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
     public void updateSubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
 
         subjectPicker.getItems().addAll(event.getSubjects());
+        Collections.sort(subjectPicker.getItems());
     }
 
     @Subscribe
@@ -292,6 +297,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         subjectList = event.getSubjects();
         subjectPicker.getItems().clear();
         subjectPicker.getItems().addAll(subjectList);
+        Collections.sort(subjectPicker.getItems());
         subjectPicker.setOnAction(e -> UpdateCourses());
     }
 
@@ -351,6 +357,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
                 });
 
         questionsTable.getColumns().add(checkBoxColumn);
+        checkBoxColumn.setStyle("-fx-alignment: CENTER;");
+        checkBoxColumn.setMaxWidth(50);
 
         HandleChooseState();
     }
@@ -361,13 +369,5 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         SetPickersCourse(event.getCourse());
     }
-
-//  Client.Controllers.MainPanelScreens.SaveBeforeExit methods
-
-    /*@Override
-    public boolean CheckForUnsavedData() {
-        System.out.println("Checking for unsaved data in ViewQuestions");
-        return true;
-    }*/
 
 }
