@@ -47,6 +47,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     @FXML
     private Button ApproveBtn;
     @FXML
+    private Button DisapproveBtn;
+    @FXML
     private Button BackBtn;
     @FXML
     private HBox ChangeScoreHbox;
@@ -93,8 +95,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     @FXML
     private BorderPane TableTitleBord2;
 
-    @FXML
-    private BorderPane TableTitleBord3;
+    //@FXML
+    // private BorderPane TableTitleBord3;
 
     @FXML
     private BorderPane TableTitleBord4;
@@ -166,6 +168,36 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     }
 
 
+    @FXML
+    void DisapproveBtnAct(ActionEvent event) throws IOException {
+
+        solvedExam.setGrade(-1);
+        solvedExam.setStatus(Enums.submissionStatus.Disapproved);
+        // send to server to set student Exam
+        Message studentExamMessage = new Message(0, "Change Student Exam");
+        studentExamMessage.setData(solvedExam);
+        SimpleClient.getClient().sendToServer(studentExamMessage);
+    }
+
+    @FXML
+    void DisapproveBtnHover(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #ED8F8F; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DisapproveBtnHoverOut(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #DC6F6F; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DispproveBtnPressed(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color: #CB5E5E; -fx-text-fill: white;");
+    }
+
+    @FXML
+    void DispproveBtnReleased(MouseEvent event) {
+        DisapproveBtn.setStyle("-fx-background-color:  #DC6F6F; -fx-text-fill: white;");
+    }
 
 
     @FXML
@@ -211,13 +243,13 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         }
         catch (Exception e)
         {
-            if (e.getMessage() == "out of range")
+            if (e.getMessage().startsWith("out of range"))
             {
                 ChangeScoreErrLbl.setText("Insert number between 0-100");
                 ChangeScoreErrLbl.setPrefHeight(Control.USE_COMPUTED_SIZE);
                 ChangeScoreErrLbl.setVisible(true);
             }
-            else if (e.getMessage() == "Blank Text Area")
+            else if (e.getMessage().startsWith("Blank Text Area"))
             {
                 ChangeScoreTextArea.setPromptText("You must enter the reason for score changing");
             }
@@ -253,7 +285,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     }
 
     @Subscribe
-    public void ExamApproved(RefreshPerson event) throws IOException, InterruptedException {
+    public void ExamApproved(RefreshPerson event) throws InterruptedException {
         Platform.runLater(() -> {
         String msg = event.getMessage();
         if (msg.startsWith("Success"))
@@ -263,7 +295,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
                 SimpleClient.getClient().setUser(event.getPerson());
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", ButtonType.YES);
                 alert.setTitle("Student grading saved");
-                alert.setHeaderText("CONFIRMATION: Approved");
+                alert.setHeaderText("CONFIRMATION: Saved");
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.YES)
                 {
@@ -273,6 +305,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
                     String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
                     int ExamExamSqlID = solvedExam.getClassExam().getExamForm().getID();
                     EventBus.getDefault().post(new ClassExamGradeEvent(subjectStr, courseStr, ExamExamID, ExamExamSqlID));
+                    EventBus.getDefault().unregister(this);
                 }
             }
             catch (Exception e)
@@ -288,7 +321,6 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             alert.setHeaderText("Error: Saving Failed");
             alert.show();
         }
-            EventBus.getDefault().unregister(this);
         });
     }
 
@@ -309,7 +341,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
 
     @Subscribe
-    public void getStarterData(StudentExamEvent event) throws IOException, InterruptedException {
+    public void getStarterData(StudentExamEvent event) throws IOException {
         solvedExam = event.getStudentExam();
         Platform.runLater(() -> {
             try {
@@ -324,7 +356,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
                 // set the scroll to top after estimated time of scene rendering
                 PauseTransition pause = new PauseTransition(Duration.seconds(0.3));
-                pause.setOnFinished(timedEvent -> {ScrollPane.setVvalue(0);});
+                pause.setOnFinished(timedEvent -> ScrollPane.setVvalue(0));
                 pause.play();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -367,8 +399,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         AnswersVBOX_t.setPrefWidth(rowWidth);
         AnswerTitleBord.setPrefWidth(rowWidth);
         TableTitleBord1.setPrefWidth(1*rowWidth/10);
-        TableTitleBord2.setPrefWidth(7*rowWidth/10);
-        TableTitleBord3.setPrefWidth(1*rowWidth/10);
+        TableTitleBord2.setPrefWidth(8*rowWidth/10);
+        //TableTitleBord3.setPrefWidth(1*rowWidth/10);
         TableTitleBord4.setPrefWidth(1*rowWidth/10);
 
 
@@ -436,11 +468,14 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         for (int questionNumber = 0; studentAnswers != null && questionNumber < questions.size(); questionNumber++)
         {
 
+
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            String studentAnswerStr = studentAnswers.get(questionNumber);
+            //String studentAnswerStr = studentAnswers.get(questionNumber);
+            int studentAnswerInt =  question.getAnswers().indexOf(null) + 1;
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
+            System.out.println(correctAnswerInt);
             HBox qustionHbox = new HBox();
 
             qustionHbox.setPrefWidth(rowWidth);
@@ -449,8 +484,10 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             BorderPane bord1 = new BorderPane();
             bord1.setPrefHeight(68);
             bord1.setPrefWidth(rowWidth / 10);
-            bord1.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
-                    "-fx-border-width: 2 2 2 4");
+            //bord1.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //        "-fx-border-width: 2 2 2 4");
+            bord1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+                            "-fx-border-width: 2 2 2 4");
             Label questionNumberLbl = new Label(Integer.toString(questionNumber+1));
 
             bord1.setCenter(questionNumberLbl);
@@ -461,7 +498,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
             // insert the question text
 
-            Text porblemtext = new Text("problem " + (questionNumber + 1) + ": ");
+            Text porblemtext = new Text("Question " + (questionNumber + 1) + ": ");
             porblemtext.setStyle("-fx-font-weight: bold");
 
             Text contenttext = new Text(question.getQuestionData());
@@ -485,9 +522,11 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
                 BorderPane bordLoop1 = new BorderPane();
                 if (j % 2 == 0)
-                    bordLoop1.setStyle("-fx-background-color: #B9D9EB; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    bordLoop1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    //bordLoop1.setStyle("-fx-background-color: #B9D9EB; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
                 else
-                    bordLoop1.setStyle("-fx-background-color: #E6E6FA; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    bordLoop1.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                    //bordLoop1.setStyle("-fx-background-color: #E6E6FA; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
 
                 Label answerNumber = new Label(Integer.toString(j));
                 answerNumber.setPadding(new Insets(0, 10, 0 ,10));
@@ -504,12 +543,23 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
                     bordLoop2.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
                     answerText.setStyle("-fx-text-fill: white;");
                 }
-                // wrong answer style
-                else
+                else if(studentAnswerInt == j)
                 {
                     bordLoop2.setStyle("-fx-background-color: #DC6F6F; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
                     answerText.setStyle("-fx-text-fill: white;");
                 }
+                else
+                {
+                    bordLoop2.setStyle("-fx-padding: 10px; -fx-border-color: black;");
+                    //    answerText.setStyle("-fx-text-fill: white;");
+                }
+
+                //// wrong answer style
+                //else
+                //{
+                //    bordLoop2.setStyle("-fx-background-color: #DC6F6F; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;");
+                //    answerText.setStyle("-fx-text-fill: white;");
+                //}
                 bordLoop2.setCenter(answerText);
 
                 answerHbox.getChildren().add(bordLoop1);
@@ -526,37 +576,40 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
             bord2.setCenter(answersVbox);
             bord2.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord2.setPrefWidth(rowWidth*7 / 10);
+            bord2.setPrefWidth(rowWidth*8 / 10);
             //bord2.setPrefWidth(400);
             bord2.setStyle("-fx-border-color: black;");
 
-            // Set student answer
-            BorderPane bord3 = new BorderPane();
-            Label studentAnswer = new Label(Integer.toString(question.getAnswers().indexOf(studentAnswerStr)+1));
-            studentAnswer.setAlignment(Pos.CENTER);
-            bord3.setCenter(studentAnswer);
-            bord3.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord3.setPrefWidth(rowWidth / 10);
-
-            if (question.getAnswers().indexOf(studentAnswerStr)+1 == correctAnswerInt)
-            {
-                studentScore += questionScoreInt;
-                bord3.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
-                        "-fx-border-width: 2");
-            }
-            else
-                bord3.setStyle("-fx-background-color: #DC6F6F; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
-                        "-fx-border-width: 2");
+            //// Set student answer
+            //BorderPane bord3 = new BorderPane();
+            //Label studentAnswer = new Label(Integer.toString(question.getAnswers().indexOf(studentAnswerStr)+1));
+            //studentAnswer.setAlignment(Pos.CENTER);
+            //bord3.setCenter(studentAnswer);
+            //bord3.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            //bord3.setPrefWidth(rowWidth / 10);
+            //
+            //if (question.getAnswers().indexOf(studentAnswerStr)+1 == correctAnswerInt)
+            //{
+            //    studentScore += questionScoreInt;
+            //    bord3.setStyle("-fx-background-color: #65A873; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //            "-fx-border-width: 2");
+            //}
+            //else
+            //    bord3.setStyle("-fx-background-color: #DC6F6F; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //            "-fx-border-width: 2");
 
             BorderPane bord4 = new BorderPane();
             Label questionScore = new Label(Integer.toString(questionScoreInt));
-            bord4.setPrefWidth(rowWidth / 10);
+            bord4.setPrefWidth(rowWidth*1 / 10);
             bord4.setPrefHeight(Control.USE_COMPUTED_SIZE);
-            bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //bord4.setStyle("-fx-background-color: #F0F8FF; -fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
+            //        "-fx-border-width: 2 4 2 2");
+            bord4.setStyle("-fx-text-fill: white; -fx-padding: 10px; -fx-border-color: black;" +
                     "-fx-border-width: 2 4 2 2");
             questionScore.setAlignment(Pos.CENTER);
             bord4.setCenter(questionScore);
-            qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
+            qustionHbox.getChildren().addAll(bord1, bord2, bord4);
+            //qustionHbox.getChildren().addAll(bord1, bord2, bord3, bord4);
             AnswersVBOX_t.getChildren().add(QuestionIndexPlace++, qustionHbox);
         }
         if (solvedExam.getStatus() == Enums.submissionStatus.ToEvaluate)

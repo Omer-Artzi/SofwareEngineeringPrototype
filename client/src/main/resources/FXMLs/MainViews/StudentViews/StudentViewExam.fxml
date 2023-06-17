@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -17,9 +18,12 @@
         <columns>
           <TableColumn fx:id="subjectColumn" prefWidth="170.0" text="Subject" />
           <TableColumn fx:id="courseColumn" minWidth="0.0" prefWidth="240.0" text="Course" />
-            <TableColumn fx:id="examCodeColumn" prefWidth="160.0" text="Exam Code" />
+            <TableColumn fx:id="examTypeColumn" prefWidth="160.0" text="Exam Type" />
             <TableColumn fx:id="gradeColumn" minWidth="3.0" prefWidth="145.0" text="Grade" />
         </columns>
+         <tooltip>
+            <Tooltip text="Double click to view the graded exam" />
+         </tooltip>
       </TableView>
    </children>
 </AnchorPane>

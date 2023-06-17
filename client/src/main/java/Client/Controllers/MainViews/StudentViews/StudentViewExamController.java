@@ -8,7 +8,9 @@ import Client.SimpleClient;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
+import Entities.SchoolOwned.ExamForm;
 import Entities.StudentOwned.StudentExam;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,7 +41,7 @@ public class StudentViewExamController extends SaveBeforeExit {
     private TableColumn<StudentExam, ClassExam> courseColumn;
 
     @FXML
-    private TableColumn<StudentExam, ClassExam> examCodeColumn;
+    private TableColumn<StudentExam, String> examTypeColumn;
 
     @FXML
     private TableColumn<StudentExam,  Integer> gradeColumn;
@@ -53,20 +55,13 @@ public class StudentViewExamController extends SaveBeforeExit {
     @FXML
     void OnClickEvent(MouseEvent event) throws IOException {
         if (event.getClickCount() == 2) {
-
-            if(ExamTV.getSelectionModel().getSelectedItem() != null) {
+            // can watch only automatic tests
+            if(ExamTV.getSelectionModel().getSelectedItem() != null &&
+                    ExamTV.getSelectionModel().getSelectedItem().getClassExam().getExamType() == Enums.ExamType.Automatic) {
                 SimpleChatClient.setRoot("TeacherGradeStudentExam");
                 EventBus.getDefault().post(new StudentExamEvent(ExamTV.getSelectionModel().getSelectedItem()));
                 EventBus.getDefault().unregister(this);
             }
-            else
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error!");
-                alert.setHeaderText("Error: No Student Was Chosen");
-                alert.show();
-            }
-
         }
     }
 
@@ -76,7 +71,7 @@ public class StudentViewExamController extends SaveBeforeExit {
         EventBus.getDefault().register(this);
         assert ExamTV != null : "fx:id=\"ExamTV\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert courseColumn != null : "fx:id=\"courseColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
-        assert examCodeColumn != null : "fx:id=\"examCodeColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
+        assert examTypeColumn != null : "fx:id=\"examTypeColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert gradeColumn != null : "fx:id=\"gradeColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert subjectColumn != null : "fx:id=\"subjectColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         setTable();
@@ -122,29 +117,18 @@ public class StudentViewExamController extends SaveBeforeExit {
                 }
             }
         });
-        examCodeColumn.setCellValueFactory(new PropertyValueFactory<>("classExam"));
-        examCodeColumn.setCellFactory(tc -> new TableCell<>(){
-            @Override
-            protected void updateItem(ClassExam item, boolean empty) {
-                super.updateItem(item, empty); // must be called
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    // replace with desired format
-                    setText(item.getAccessCode());
-                }
-            }
+
+        examTypeColumn.setCellValueFactory(param ->  {
+
+        if (param.getValue().getClassExam().getExamType() == Enums.ExamType.Manual)
+            return new SimpleStringProperty("Manual");
+        else
+            return new SimpleStringProperty("Automatic");
+
         });
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
 
 
-        //ExamTV.setRowFactory(tv -> {
-        //    TableRow<StudentExam> row = new TableRow<>();
-        //
-        //    //row.setStyle("-fx-background-color: #E6E6FA;");
-        //
-        //    return row;
-        //});
 
         Callback<TableColumn<StudentExam, Integer>, TableCell<StudentExam, Integer>> cellFactory =
                 column -> new TableCell<StudentExam, Integer>() {
@@ -169,8 +153,8 @@ public class StudentViewExamController extends SaveBeforeExit {
 
 
         gradeColumn.setStyle( "-fx-alignment: CENTER;");
-        examCodeColumn.setStyle( "-fx-alignment: CENTER;");
-        examCodeColumn.setStyle( "-fx-alignment: CENTER;");
+        examTypeColumn.setStyle( "-fx-alignment: CENTER;");
+        examTypeColumn.setStyle( "-fx-alignment: CENTER;");
         courseColumn.setStyle( "-fx-alignment: CENTER;");
         subjectColumn.setStyle( "-fx-alignment: CENTER;");
 

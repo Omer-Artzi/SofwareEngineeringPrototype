@@ -4,6 +4,7 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Events.ChangeMainSceneEvent;
 import Client.Events.GeneralEvent;
 import Client.Events.LiveExamsEvent;
+import Client.Events.UserMessageEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Enums;
@@ -14,6 +15,7 @@ import Entities.SchoolOwned.Course;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
 import Entities.Users.Teacher;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -142,7 +144,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
 
     public static void SetVisibleAllNodes(Node node, boolean toSetVisible) {
         try {
-            node.setVisible(toSetVisible);
+            if (!node.visibleProperty().isBound())
+                node.setVisible(toSetVisible);
             if (node instanceof Parent) {
                 Parent parent = (Parent) node;
                 for (Node child : parent.getChildrenUnmodifiable()) {
@@ -538,17 +541,34 @@ public class ShowStatisticsController extends SaveBeforeExit {
     }
 
 
-    @FXML
-    void initialize() throws IOException {
-        EventBus.getDefault().register(this);
-        
+    @Subscribe
+    public void RefreshUser(UserMessageEvent event) throws IOException {
+
+        if (event.getStatus().startsWith("Success"))
+        {
+            SimpleClient.getClient().setUser(event.getUser());
+            Platform.runLater(()->{
+                try {
+                    startGraderScene();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        else
+            System.out.println("Failed to get updated data");
+    }
+
+    void startGraderScene() throws IOException {
         // Teacher initialization
+        SetVisibleAllNodes(controllerRoot, true);
         if (SimpleClient.getUser() instanceof Teacher)
         {
             TitleLabel.setText("Exams Statistics");
             TitleLabel.setPrefWidth(Region.USE_COMPUTED_SIZE);
             clientTeacher = (Teacher) SimpleClient.getUser();
-            
+
             // Extract exams
             List<ExamForm> examFormList = clientTeacher.getExamForm();
             List<ClassExam> classExamList = new ArrayList<>();
@@ -563,7 +583,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
                     currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
 
 
-            
+
             if (examFormList.isEmpty())
             {
                 System.out.println("The teacher " + clientTeacher.getFullName() + " Didn't create any exam");
@@ -574,7 +594,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
                 System.out.println("The teacher " + clientTeacher.getFullName() + " Didn't tested any exam");
                 return;
             }
-            
+
             initClassExamTable();
             ClassExamStatsTv.getItems().clear();
 
@@ -622,6 +642,19 @@ public class ShowStatisticsController extends SaveBeforeExit {
 
             HistType = false;
         }
+
+    }
+
+
+    @FXML
+    void initialize() throws IOException
+    {
+        EventBus.getDefault().register(this);
+        SetVisibleAllNodes(controllerRoot, false);
+
+        Message refreshMsg = new Message(0, "Refresh User");
+        refreshMsg.setData(SimpleClient.getClient().getUser());
+        SimpleClient.getClient().sendToServer(refreshMsg);
     }
 
     // Generate buttons for histogram column
@@ -692,8 +725,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
             boolean changeScreen = PromptUserToSaveData(event.getSceneName());
         }
         try {
-            EventBus.getDefault().unregister(this);
             SimpleChatClient.setRoot(event.getSceneName());
+            EventBus.getDefault().unregister(this);
             System.out.println("TriggerDataCheck changing scene");
         }
         catch (IOException e) {

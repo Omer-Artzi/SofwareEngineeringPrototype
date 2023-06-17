@@ -6,32 +6,46 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainWindowController {
 
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private AnchorPane mainPane;
-
     @FXML
     private AnchorPane sidePane;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private ImageView LogoImage;
+    double LogoImage_x;
+    double LogoImage_y;
+
+    private Timer timer;
+    private SimpleDateFormat formatter;
 
     private final Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
 
     @FXML
     private void initialize() throws IOException {
         InitializationAsserts();
-
         SimpleChatClient.setMainWindowController(this);
 
         SimpleChatClient.getScene().getWindow().setHeight(768);
@@ -54,10 +68,32 @@ public class MainWindowController {
         // load correct window according to user type
         mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
         //mainWindowParent = Client.SimpleChatClient.loadFXML("ViewQuestions");
-        mainPane.getChildren().clear();
+        //mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
 
+        timer = new Timer();
+        formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    ZoneId zoneId = ZoneId.systemDefault();
+                    ZonedDateTime zonedDateTime = LocalDateTime.now().atZone(zoneId);
+                    dateLabel.setText(formatter.format(Date.from(zonedDateTime.toInstant())));
+                });
+
+
+            }
+        }, 0, 1000);
+
+        LogoImage_x = LogoImage.getX();
+        LogoImage_y = LogoImage.getY();
+
+        dateLabel.getLayoutX();
+        dateLabel.getLayoutY();
+
     }
+
 
     private void InitializationAsserts() {
         assert mainPane != null : "fx:id=\"mainPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -106,6 +142,14 @@ public class MainWindowController {
                 mainPane.getChildren().add(mainWindowParent);
             });
         }
+
+
+        if(sceneName.contains("MainScreen"))
+        {
+            mainPane.getChildren().add(LogoImage);
+        }
+        mainPane.getChildren().add(dateLabel);
+
     }
 }
 

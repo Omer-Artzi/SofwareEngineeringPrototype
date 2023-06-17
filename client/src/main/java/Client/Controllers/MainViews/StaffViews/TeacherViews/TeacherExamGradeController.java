@@ -4,8 +4,10 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.MainViews.StaffViews.ShowStatisticsController;
 import Client.Events.ClassExamGradeEvent;
 import Client.Events.StudentExamEvent;
+import Client.Events.UserMessageEvent;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
+import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.ExamForm;
@@ -75,11 +77,11 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
 
     Teacher clientTeacher;
-    String chosenCourseStr;
-    String chosenExamFormIDStr;
-    String chosenSubjectStr;
+    String chosenCourseStr = null;
+    String chosenExamFormIDStr = null;
+    String chosenSubjectStr = null;
+    int ExamFormID;
     ClassExam chosenExam;
-    boolean initDone = false;
 
 
     @FXML
@@ -117,7 +119,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         // Fill table with the class exam which used the selected exam form
         for(ClassExam classExam : classExams)
         {
-            if(classExam.getExamForm().getExamFormID().startsWith(chosenExamFormIDStr))
+            if(classExam.getExamForm().getExamFormID().startsWith(chosenExamFormIDStr) &&
+                    classExam.getExamType() == Enums.ExamType.Automatic)
             {
                 selectedClassExams.add(classExam);
             }
@@ -218,9 +221,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
         // collect the courses of the subject
         List<Course> teacherCourses = clientTeacher.getCourses();
-        List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName() == chosenSubjectStr)
+        List<Course> subjectCourses = teacherCourses.stream().filter(item-> item.getSubject().getName().startsWith(chosenSubjectStr))
                 .collect(Collectors.toList());
-
         // Sort Combo
         Collections.sort(subjectCourses, Comparator.comparing(Course::getName));
         for (int i = 0; i < subjectCourses.size(); i++)
@@ -234,29 +236,35 @@ public class TeacherExamGradeController extends SaveBeforeExit {
     public void ReturnFromStudentGrade(ClassExamGradeEvent event) {
         // reselect previous items
         Platform.runLater(() -> {
-            // wait until the window is initialized
-            while (!initDone){
-                try {
-                    TimeUnit.MILLISECONDS.sleep(50);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            SubjectCombo.getSelectionModel().select(event.getSubjectStr());
-            CourseCombo.getSelectionModel().select(event.getCourseStr());
-            ExamIDCombo.getSelectionModel().select(event.getExamIDStr());
-            ExamFormTv.getSelectionModel().select(ExamFormTv.getItems().stream().filter(classExam ->
-                    classExam.getID() == event.getExamFormID()).collect(Collectors.toList()).get(0));
-            chosenExam = ExamFormTv.getSelectionModel().getSelectedItem();
-            SetClassExamTv();
+            chosenSubjectStr = event.getSubjectStr();
+            chosenCourseStr = event.getCourseStr();
+            chosenExamFormIDStr = event.getExamIDStr();
+            ExamFormID = event.getExamFormID();
         });
     }
 
-    @FXML
-    void initialize() throws IOException {
-        EventBus.getDefault().register(this);
 
+    @Subscribe
+    public void RefreshUser(UserMessageEvent event) throws IOException {
 
+        if (event.getStatus().startsWith("Success"))
+        {
+            SimpleClient.getClient().setUser(null);
+            SimpleClient.getClient().setUser(event.getUser());
+            Platform.runLater(()->{
+                try {
+                    startGraderScene();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        else
+            System.out.println("Failed to get updated data");
+    }
+
+    void startGraderScene() throws IOException {
         // Get teacher courses and return if the teacher is not assigned to any course
         clientTeacher = (Teacher) SimpleClient.getClient().getUser();
         List<Course> teacherCourses = clientTeacher.getCourses();
@@ -274,13 +282,29 @@ public class TeacherExamGradeController extends SaveBeforeExit {
             if (!teacherSubjects.contains(subject))
                 teacherSubjects.add(subject);
         }
-
+        Collections.sort(teacherSubjects, Comparator.comparing(Subject::getName));
         // Fill subject combo
         for (int i = 0; i < teacherSubjects.size(); i++)
         {
             SubjectCombo.getItems().add(teacherSubjects.get(i).getName());
         }
 
+
+        if(chosenCourseStr != null)
+        {
+            SubjectCombo.getSelectionModel().select(chosenCourseStr);
+            CourseCombo.getSelectionModel().select(chosenCourseStr);
+            ExamIDCombo.getSelectionModel().select(chosenExamFormIDStr);
+            ExamFormTv.getSelectionModel().select(ExamFormTv.getItems().stream().filter(classExam ->
+                    classExam.getID() == ExamFormID).collect(Collectors.toList()).get(0));
+            chosenExam = ExamFormTv.getSelectionModel().getSelectedItem();
+            SetClassExamTv();
+        }
+    }
+
+    @FXML
+    void initialize() throws IOException {
+        EventBus.getDefault().register(this);
 
         // Exam Form config
         StartDateColumn.setCellValueFactory(exam ->
@@ -318,10 +342,15 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
         // Initialize sort mechanic
         StatusColumn.setComparator(StatusColumn.getComparator().reversed());
+        IDColumn.setComparator(Comparator.comparingInt(value -> Integer.parseInt(value)));
         ClassExamTv.getSortOrder().add(StatusColumn);
+        ClassExamTv.getSortOrder().add(IDColumn);
+
         ExamFormTv.getSortOrder().add(StartDateColumn);
 
-        initDone = true;
+        Message refreshMsg = new Message(0, "Refresh User");
+        refreshMsg.setData(SimpleClient.getClient().getUser());
+        SimpleClient.getClient().sendToServer(refreshMsg);
     }
 
 }

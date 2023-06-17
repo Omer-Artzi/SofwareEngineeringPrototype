@@ -36,7 +36,6 @@ public class ExamForm implements Serializable {
     private List<Integer> questionsScores = new ArrayList<>();
     private String examFormID;
 
-    //private String code;
     private String headerText;
     private String footerText;
     private String examNotesForTeacher;

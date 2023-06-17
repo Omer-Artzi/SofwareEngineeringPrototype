@@ -49,7 +49,7 @@ public class PrincipalSidebarController extends SideBar {
     private Button mainPageButton;
 
     @FXML
-    void OnMainPageButtonPressed(ActionEvent event) {
+    public void OnMainPageButtonPressed(ActionEvent event) {
         ChangeScene("PrincipalMainScreen");
     }
 
@@ -60,7 +60,7 @@ public class PrincipalSidebarController extends SideBar {
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        ChangeScene("AddExam");
+        ChangeScene("TeacherAddTestForm");
     }
 
     @FXML

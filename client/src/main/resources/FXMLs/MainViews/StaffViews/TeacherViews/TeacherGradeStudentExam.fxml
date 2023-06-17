@@ -42,11 +42,6 @@
                               <Label style="-fx-font-weight: bold; font-s: 11px;" text="Questions" BorderPane.alignment="CENTER" />
                            </center>
                         </BorderPane>
-                        <BorderPane fx:id="TableTitleBord3" prefHeight="50.0" prefWidth="110.0" style="-fx-border-color: black; -fx-background-color: E3DBDF; -fx-border-width: 2;">
-                           <center>
-                              <Label prefHeight="34.0" prefWidth="51.0" style="-fx-font-weight: bold; -fx-font-size: 11px;" text="Student Choice" wrapText="true" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
                         <BorderPane fx:id="TableTitleBord4" prefHeight="50.0" prefWidth="83.0" style="-fx-border-color: black; -fx-border-width: 2 4 2 2; -fx-background-color: E3DBDF;">
                            <center>
                               <Label prefHeight="34.0" prefWidth="59.0" style="-fx-font-weight: bold; -fx-font-size: 11px; -fx-border-width: 2 2 2;" text="Question Point" wrapText="true" BorderPane.alignment="CENTER" />
@@ -73,6 +68,11 @@
                   </TextFlow>
                   <HBox fx:id="ButtonsHbox" alignment="CENTER">
                      <children>
+                        <Button fx:id="DisapproveBtn" mnemonicParsing="false" onAction="#DisapproveBtnAct" onMouseEntered="#DisapproveBtnHover" onMouseExited="#DisapproveBtnHoverOut" onMousePressed="#DispproveBtnPressed" onMouseReleased="#DispproveBtnReleased" style="-fx-background-color: #DC6F6F; -fx-text-fill: white;" text="Disapprove Exam">
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </HBox.margin>
+                        </Button>
                         <Button fx:id="ApproveBtn" mnemonicParsing="false" onAction="#ApproveBtnAct" onMouseEntered="#ApproveBtnHover" onMouseExited="#ApproveBtnHoverOut" onMousePressed="#ApproveBtnPressed" onMouseReleased="#ApproveBtnReleased" style="-fx-text-fill: white; -fx-background-color: #6495ED;" text="Approve Exam">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />

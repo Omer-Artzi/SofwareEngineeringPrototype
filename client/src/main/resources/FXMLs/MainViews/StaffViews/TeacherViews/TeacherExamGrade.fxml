@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherExamGradeController" stylesheets="@../../../styles.css">
    <children>
@@ -19,6 +20,9 @@
             <TableColumn fx:id="GradeColumn" prefWidth="185.0" text="Grade" />
             <TableColumn fx:id="StatusColumn" prefWidth="185.0" text="Exam Status" />
         </columns>
+         <tooltip>
+            <Tooltip text="Double click to view an grade a student solution" />
+         </tooltip>
       </TableView>
       <Label layoutX="62.0" layoutY="237.0" prefHeight="17.0" prefWidth="50.0" text="Exam ID:" />
       <ComboBox fx:id="ExamIDCombo" layoutX="122.0" layoutY="233.0" maxWidth="150.0" onAction="#ExamIDComboAct" promptText="Choose Exam ID" />
@@ -29,6 +33,9 @@
             <TableColumn fx:id="ExamineeNumberColumn" prefWidth="110.0" text="Examinee Number" />
             <TableColumn fx:id="ToCheckColumn" prefWidth="110.0" text="Exams To Check" />
         </columns>
+         <tooltip>
+            <Tooltip text="Double click to choose an exam" />
+         </tooltip>
       </TableView>
    </children>
 </AnchorPane>
