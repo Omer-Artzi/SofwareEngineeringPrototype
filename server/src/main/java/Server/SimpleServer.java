@@ -708,6 +708,10 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("Add ExamForm")) { // Added by Ilan
                 ExamForm newExamForm = ((ExamForm) (message.getData()));
+                // generate exam code
+                String examCode = createCodeOfExam(newExamForm); // TODO: Ilan- Added in 17.6, Check if it works
+                System.out.println("Exam code: " + examCode);
+                newExamForm.setExamFormID(examCode);
                 try {
                     session.save(newExamForm);
                     session.flush();
@@ -848,6 +852,17 @@ public class SimpleServer extends AbstractServer {
         }
 
     }
+
+    private String createCodeOfExam(ExamForm examForm){
+        List<ExamForm> examsFormsForCourse = getExamFormForCourse(examForm.getCourse());
+        int size = examsFormsForCourse.size();
+
+        String subjectID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getSubject().getId()),2);
+        String courseID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getCourse().getId()),2);
+        String examFormNumber = OperationUtils.IDZeroPadding(String.valueOf(size),2);
+        return subjectID+courseID+examFormNumber;
+    }
+
     private StudentExam getStudentExamFromClassExam(int studentID, int classExamID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<StudentExam> query = builder.createQuery(StudentExam.class);

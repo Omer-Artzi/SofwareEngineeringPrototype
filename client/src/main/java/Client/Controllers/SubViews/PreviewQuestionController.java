@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,6 +23,8 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class PreviewQuestionController {
+
+    public VBox mainPane;
 
     @FXML
     private ResourceBundle resources;
@@ -68,11 +71,13 @@ public class PreviewQuestionController {
         if(event.getSelectedAnswer() != null){
             this.selectedAnswer = event.getSelectedAnswer();
         }
+        System.out.println("entering populate question");
         PopulateQuestion();
         CreateAnswers();
     }
 
     private void PopulateQuestion() {
+        System.out.println("Client.Controllers.MainViews.SubViews.PreviewQuestionController.PopulateQuestion");
         questionText.setText(question.getQuestionData());
         // set question font and size
         questionText.setStyle("-fx-font-size: " + "Calibri" + "; -fx-font-size: " + "17" + ";" + "-fx-wrap-text: true" + ";" + "-fx-text-alignment: center_left" + ";");
@@ -88,13 +93,21 @@ public class PreviewQuestionController {
         if (question.getQuestionData().length() > 400) {
             questionText.setPrefHeight(200);
         }
-        if (question.getStudentNote() != null || question.getStudentNote() != "" || question.getStudentNote() != " ") {
-            studentNotes.setText(question.getStudentNote());
-            if(Objects.equals(studentNotes.getText(), "")){
-                studentNotes.setVisible(false);
+        if (question.getStudentNote() != null && !question.getStudentNote().trim().isEmpty()) {
+            if(!mainPane.getChildren().contains(studentNotes)){
+                System.out.println("adding studentNotes");
+                mainPane.getChildren().add(1,studentNotes);
             }
+            System.out.println("studentNotes is not empty");
+            System.out.println("studentNotes: " + question.getStudentNote());
+            studentNotes.setText(question.getStudentNote());
         }
         else {
+            if(mainPane.getChildren().contains(studentNotes)){
+                System.out.println("removing studentNotes");
+                mainPane.getChildren().remove(studentNotes);
+            }
+            System.out.println("studentNotes is empty");
             studentNotes.setVisible(false);
             studentNotes.setLineSpacing(0);
         }
@@ -102,11 +115,14 @@ public class PreviewQuestionController {
         /*if(Objects.equals(studentNotes.getText(), "")){
             studentNotes.setVisible(false);
         }*/
+        //mainPane.getChildren().remove(teacherNotes);
         //verify that the logged-in user is a teacher
         if(SimpleClient.getUser() instanceof Teacher){
+            //mainPane.getChildren().add(4,teacherNotes);
             teacherNotes.setText(question.getTeacherNote());
             teacherNotes.setVisible(true);
         }
+        System.out.println("question populated");
     }
 
     private void CreateAnswers() {

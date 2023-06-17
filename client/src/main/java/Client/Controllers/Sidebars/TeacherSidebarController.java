@@ -10,6 +10,9 @@ import java.io.IOException;
 public class TeacherSidebarController extends SideBar {
 
     @FXML
+    private Button mainPageButton;
+
+    @FXML
     private Button addQuestionButton;
 
     @FXML
@@ -32,13 +35,18 @@ public class TeacherSidebarController extends SideBar {
     private Label userTypeLabel;
 
     @FXML
+    void OnMainPageButtonPressed(ActionEvent event) {
+        ChangeScene("TeacherMainScreen");
+    }
+
+    @FXML
     void addQuestion(ActionEvent event) throws IOException {
         ChangeScene("TeacherAddQuestion");
     }
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        ChangeScene("AddExam");
+        ChangeScene("TeacherAddTestForm");
     }
 
     @FXML

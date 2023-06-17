@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1906.0" prefWidth="180.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.TeacherSidebarController">
+<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1906.0" prefWidth="180.0" stylesheets="@../../CSS/sidebarButton.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.TeacherSidebarController">
    <children>
       <VBox fx:id="sidebarVBox" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" prefWidth="40.0" style="-fx-background-color: #669bbc;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -32,30 +32,54 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addQuestion" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Add Question" textFill="WHITE">
+            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-home-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="viewQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="View Question" textFill="WHITE">
+            <Button fx:id="addQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addQuestion" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Add Question" textFill="WHITE">
+               <font>
+                  <Font name="Lucida Sans Demibold Italic" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Images/icons8-add-properties-96.png" />
+                     </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="viewQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="View Questions" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-search-property-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -69,8 +93,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-new-copy-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -84,8 +111,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-document-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -99,8 +129,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-create-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -114,8 +147,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-true-false-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -129,8 +165,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-versions-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
