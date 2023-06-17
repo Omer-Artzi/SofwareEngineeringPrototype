@@ -119,7 +119,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         // Fill table with the class exam which used the selected exam form
         for(ClassExam classExam : classExams)
         {
-            if(classExam.getExamForm().getExamFormID().startsWith(chosenExamFormIDStr))
+            if(classExam.getExamForm().getExamFormID().startsWith(chosenExamFormIDStr) &&
+                    classExam.getExamType() == Enums.ExamType.Automatic)
             {
                 selectedClassExams.add(classExam);
             }

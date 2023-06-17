@@ -18,7 +18,7 @@
         <columns>
           <TableColumn fx:id="subjectColumn" prefWidth="170.0" text="Subject" />
           <TableColumn fx:id="courseColumn" minWidth="0.0" prefWidth="240.0" text="Course" />
-            <TableColumn fx:id="examCodeColumn" prefWidth="160.0" text="Exam Code" />
+            <TableColumn fx:id="examTypeColumn" prefWidth="160.0" text="Exam Type" />
             <TableColumn fx:id="gradeColumn" minWidth="3.0" prefWidth="145.0" text="Grade" />
         </columns>
          <tooltip>
