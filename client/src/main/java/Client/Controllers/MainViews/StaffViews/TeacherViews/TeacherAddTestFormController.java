@@ -1,7 +1,6 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Controllers.MainViews.StudentViews.StudentDoExamManualController;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.*;
 import Client.SimpleChatClient;
@@ -27,7 +26,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
-public class AddExamController extends SaveBeforeExit {
+public class TeacherAddTestFormController extends SaveBeforeExit {
     private int examID;
     private int examTime = 0;
     private Teacher teacher;
@@ -93,7 +92,7 @@ public class AddExamController extends SaveBeforeExit {
     @FXML
     void rowClicked(MouseEvent event) {
         System.out.println("row clicked");
-        Client.Controllers.MainViews.TeacherViews.AddExamController.QuestionObject q = questionTable.getSelectionModel().getSelectedItem();
+        Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject q = questionTable.getSelectionModel().getSelectedItem();
         VBoxGrade.setText(String.valueOf(q.getGradePercentage()));
         VBoxQuestionID.setText(String.valueOf(q.getQuestion().getId()));
         VBoxQuestionText.setText(q.getQuestion().getQuestionText());
@@ -396,10 +395,10 @@ public class AddExamController extends SaveBeforeExit {
         CourseCB.setDisable(true);
         questionTable.setDisable(false);
         addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        /*List<Client.Controllers.MainViews.TeacherViews.AddExamController.QuestionObject> questionObjectsList = new ArrayList<>();
+        /*List<Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject> questionObjectsList = new ArrayList<>();
         for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
-            Client.Controllers.MainViews.TeacherViews.AddExamController.QuestionObject item = new Client.Controllers.MainViews.TeacherViews.AddExamController.QuestionObject(question.getID(), question.getQuestionData(), 0);
+            Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject item = new Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject(question.getID(), question.getQuestionData(), 0);
             questionObjectsList.add(item);
         }
         if (questionObjectsList != null) {
@@ -547,7 +546,7 @@ public class AddExamController extends SaveBeforeExit {
 
         @Override
         public String toString() {
-            return "Client.Controllers.MainViews.TeacherViews.AddExamController.QuestionObject{" +
+            return "Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject{" +
                     "question='" + question + '\'' +
                     '}';
         }
