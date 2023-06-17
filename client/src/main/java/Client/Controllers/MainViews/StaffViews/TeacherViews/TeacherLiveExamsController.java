@@ -42,7 +42,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     private ExtraTime SelectedExtraTime=null;
     @FXML
     private Button CreateNewExamButton;
-
     @FXML
     private VBox vBox;
     @FXML
@@ -72,9 +71,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     */
 
     public List<ClassExam> SelectedExams(List<ClassExam> examList) throws IOException {
-
         List<ClassExam>LiveExam=new ArrayList<>();
-        System.out.println("IN SELECTED EXAMS");
         // First check : if the ClassExam's start and end date is between the current date//
        LiveExam=examList;
         // Second check : show only the exams of the current student/ teacher, or show all in case the user is principal//
@@ -89,7 +86,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             RequestExtraTimeBT.setVisible(true);
             for(ClassExam item: LiveExam)
                 if(!item.getTeacher().equals(person)) {
-                    System.out.println("remoce from live exam list");
                     LiveExam.remove(item);
                 }
         }
@@ -120,6 +116,17 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         }
     }
 */
+
+    @Subscribe
+    public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event){
+        SelectedExtraTime=event.getExtraTimeList();
+        System.out.println("in @Subscribe function");
+        if(SelectedExam==null)
+            System.out.println("List is empty!");
+        JOptionPane.showMessageDialog(null, "HIIIII", "Database Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+
     @Subscribe
     public void updateText(PrincipalApproveEvent event)
     {
@@ -149,8 +156,8 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
 /* get the class exams from server , then insert them to the table and sort them by start and end date */
     @Subscribe
     public void update(LiveExamsEvent event) throws IOException {
+
         examList=event.getLiveExams();
-        //data.addAll(examList);
         data.addAll(SelectedExams(examList));
         Date CurrentDate=new Date();
         ExamsTable.setRowFactory(tv -> new TableRow<>(){
@@ -164,50 +171,28 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
                 // Set the background color based on some condition
                 if (item.getStartDate().before(CurrentDate)||item.getStartDate().equals(CurrentDate)) {
                     if (item.getFinalSubmissionDate().after(CurrentDate)) {
-                        System.out.println("In green");
-                        setStyle("-fx-background-color: green;");
+                        setStyle("-fx-background-color: #96EFAC;");
                     }
                 } else {
-                    setStyle("-fx-background-color: red;");
+                    setStyle("-fx-background-color: #F67679;");
                 }
             }
         }
     });
     }
 
-    public void findText(ClassExam selectedExam)
-    {
-        System.out.println("hello ilan1");
-            if (extraTimeList.isEmpty()) {
-                System.out.println("In findText , the extra time list is empty");
-                return;
-            }
-            if (SelectedExam==null)
-            {
-                System.out.println("In findText , the extra time list is empty");
-                return;
-            }
-            System.out.println("hello ilan");
-            for (ExtraTime item : extraTimeList) {
-                if (selectedExam.equals(item.getExam())) {
-                    if(item.getPrincipalNote()=="")
-                        System.out.println("The data of principal note didnt save in database");
-                    AnswerLabel.setText(AnswerLabel.getText() + " " + item.getPrincipalNote());
-                    //AnswerLabel.setText("Liad");
-                }
-            }
-    }
-
     @FXML
    void initialize() throws IOException {     // TODO:fill this function after merging with lior
+
         EventBus.getDefault().register(this);
         Message message=new Message(1, "Get Live Exams");
         SimpleClient.getClient().sendToServer(message);
 
         Person person =SimpleClient.getClient().getUser();
-        if(person instanceof Principal||person instanceof Student) {
 
-            RequestExtraTimeBT.setDisable(false);
+        if(person instanceof Principal||person instanceof Student) {
+            RequestExtraTimeBT.setVisible(false);
+            CreateNewExamButton.setVisible(false);
         }
 
         vBox=new VBox();
@@ -219,12 +204,17 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
 
         ExamsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                System.out.println("LIAD!!!!");
                 SelectedExam=newSelection;
                 if(SelectedExam.getExtraTime()!=null) {
-                    JOptionPane.showMessageDialog(null,SelectedExam.getExtraTime().getDecision(),"Class Exam Status",JOptionPane.INFORMATION_MESSAGE);
-                    AnswerTextFlow.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
-                    AnswerLabel.setVisible(true);
-                    AnswerLabel.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
+                    System.out.println("Ilan!!!!");
+                    Message message1=new Message(1, "Get all extra time requests");
+                    message1.setData(SelectedExam);
+                    try {
+                        SimpleClient.getClient().sendToServer(message1);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -232,45 +222,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         AnswerTextFlow.setDisable(false);
         ExamsTable.refresh();
     }
-/*
-    @FXML
-    void ChooseClassExam(MouseEvent event) {
-        JOptionPane.showMessageDialog(null,SelectedExam.getExtraTime().getDecision(),"Class Exam Status",JOptionPane.INFORMATION_MESSAGE);
-        AnswerTextFlow.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
-        AnswerLabel.setVisible(true);
-        AnswerLabel.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
-    }
-*/
-    @Subscribe
-    public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event){
-        System.out.println("In @Subscribe");
-        SelectedExtraTime=event.getExtraTime();
-    }
-    /*
 
-    public void seeAnswer(ActionEvent event) throws IOException {
-        Platform.runLater(()->{
-            try {
-                JOptionPane.showMessageDialog(null,SelectedExam.getExtraTime().getDecision(),"Class Exam Status",JOptionPane.INFORMATION_MESSAGE);
-                AnswerTextFlow.setText(SelectedExam.getExtraTime().getDecision());
-                System.out.println("hi from seeAnswer");
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        });
-
-        /*
-        Message message=new Message(1, "Get extra time of specific class exam", SelectedExam);
-        SimpleClient.getClient().sendToServer(message);
-
-        Platform.runLater(() -> {
-            if (SelectedExtraTime==null)
-                System.out.println("extraTime null in Live Exam");
-            AnswerTextFlow.setText("Answer: "+SelectedExtraTime.getDecision());
-            AnswerLabel.setVisible(true);
-            AnswerLabel.setText(AnswerLabel.getText() + " " + SelectedExtraTime.getDecision());
-        });
-        */
 
     @FXML
     void createNewExam(ActionEvent event) {
@@ -278,7 +230,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-       // LoadExamEvent event1=new LoadExamEvent();
+        //LoadExamEvent event1=new LoadExamEvent();
        // EventBus.getDefault().post(event1);
     }
 

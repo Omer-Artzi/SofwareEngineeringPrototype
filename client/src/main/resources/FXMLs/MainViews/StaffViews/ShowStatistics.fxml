@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="controllerRoot" prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.ShowStatisticsController">
+<AnchorPane fx:id="controllerRoot" prefHeight="768.0" prefWidth="800.0" stylesheets="@../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.ShowStatisticsController">
    <children>
       <Label fx:id="TitleLabel" layoutX="305.0" layoutY="14.0" prefHeight="35.0" prefWidth="206.0" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Stats and Reports" />
       <ComboBox fx:id="chooseReportTypeCombo" layoutX="132.0" layoutY="50.0" onAction="#reportTypeChosen" prefHeight="30.0" prefWidth="206.0" promptText="Choose exam filtering method" />

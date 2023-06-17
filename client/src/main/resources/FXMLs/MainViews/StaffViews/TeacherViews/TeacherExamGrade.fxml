@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherExamGradeController">
+<AnchorPane prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherExamGradeController" stylesheets="@../../../styles.css">
    <children>
       <ComboBox fx:id="SubjectCombo" layoutX="123.0" layoutY="99.0" maxWidth="150.0" onAction="#SubjectComboAct" promptText="Choose Subject" />
       <ComboBox fx:id="CourseCombo" layoutX="122.0" layoutY="166.0" maxWidth="159.0" onAction="#CourseComboAct" promptText="Choose Course" />

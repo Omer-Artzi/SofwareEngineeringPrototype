@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="root" prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherGradeStudentExamController">
+<AnchorPane fx:id="root" prefHeight="768.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherGradeStudentExamController" stylesheets="@../../../styles.css">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="267.0" layoutY="14.0" prefHeight="34.0" prefWidth="171.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Exam Assessment" />
       <ScrollPane fx:id="ScrollPane" layoutX="49.0" layoutY="103.0" prefHeight="597.0" prefWidth="730.0">

@@ -2,16 +2,14 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherMainScreenController">
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: linear-gradient(to left,#CFE4F1, #FCFDFD);" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherMainScreenController">
    <children>
       <Label fx:id="MainMessageLabel" alignment="TOP_CENTER" layoutX="60.0" layoutY="74.0" prefHeight="102.0" prefWidth="676.0" text="Teacher main scrren">
          <font>
             <Font name="SansSerif Regular" size="27.0" />
          </font>
       </Label>
-      <Pane layoutX="499.0" layoutY="-257.0" prefHeight="390.0" prefWidth="593.0" rotate="31.0" style="-fx-background-color: #7AB0DA; -fx-background-radius: 70;" />
    </children>
 </AnchorPane>

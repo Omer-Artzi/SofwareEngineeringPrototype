@@ -27,48 +27,22 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     private TableColumn<ExtraTime, String> InfoColumn;
     @FXML
     private TableColumn<ExtraTime, String> ExtraTimeColumn;
-
     @FXML
     private ChoiceBox<String> DecisionCoiceBox;
-
     @FXML
     private TableView<ExtraTime> ExtraTimeList;
-
     @FXML
     private TableColumn<ExtraTime, String> IDColumn;
-
-
     @FXML
     private TextArea PrincipalNote;
-
     @FXML
     private Button SendButton;
-
     @FXML
     private TableColumn<ExtraTime, String> SentByColumn;
-
     @FXML
     private Label DecisionLabel;
 
 
-    /* get the request from a teacher */
-    /*
-    @Subscribe
-    public void update(NotificationEvent event) throws IOException {
-        Platform.runLater(()-> {
-            try {
-                System.out.println("In pricipal MainScreen");
-                Principal user=((Principal)(Client.SimpleClient.getClient().getUser())); //
-                if(event.IsFound(user)) {
-                    event.show();
-                    //JOptionPane.showMessageDialog(null, "HI", "ExtraTimerRequest", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-*/
     /* get the Extra Time request from the data base */
     @Subscribe
     public void update(ExtraTimeRequestsEvent event) {
@@ -140,8 +114,10 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
             SimpleClient.getClient().sendToServer(message);
 
         } else {
+
             Message message = new Message(1, "Extra time rejected",extraTimeSelected );
             SimpleClient.getClient().sendToServer(message);
+
         }
     }
 }

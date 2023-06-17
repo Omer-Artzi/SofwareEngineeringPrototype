@@ -9,22 +9,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherLiveExamsController">
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherLiveExamsController">
    <children>
-      <TableView fx:id="ExamsTable" layoutX="54.0" layoutY="148.0" prefHeight="338.0" prefWidth="672.0">
+      <TableView fx:id="ExamsTable" layoutX="54.0" layoutY="148.0" prefHeight="338.0" prefWidth="782.0">
         <columns>
-          <TableColumn fx:id="SubjectColumn" prefWidth="116.00003051757812" text="Subject" />
-          <TableColumn fx:id="CourseColumn" prefWidth="123.19998168945312" text="Course" />
-            <TableColumn fx:id="StartTimeColumn" prefWidth="213.60003662109375" text="Start Time" />
-            <TableColumn fx:id="EndTimeColumn" prefWidth="220.79998779296875" text="End Time" />
+          <TableColumn fx:id="SubjectColumn" prefWidth="141.60003662109375" text="Subject" />
+          <TableColumn fx:id="CourseColumn" prefWidth="152.79995727539062" text="Course" />
+            <TableColumn fx:id="StartTimeColumn" prefWidth="250.39996337890625" text="Start Time" />
+            <TableColumn fx:id="EndTimeColumn" prefWidth="236.79998779296875" text="End Time" />
         </columns>
       </TableView>
-      <Button fx:id="RequestExtraTimeBT" layoutX="335.0" layoutY="511.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
+      <Button fx:id="RequestExtraTimeBT" layoutX="470.0" layoutY="511.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <VBox fx:id="vBox" layoutX="161.0" layoutY="554.0" prefHeight="130.0" prefWidth="574.0">
+      <VBox fx:id="vBox" layoutX="167.0" layoutY="608.0" prefHeight="130.0" prefWidth="574.0">
          <children>
             <Label fx:id="AnswerLabel" prefHeight="15.0" prefWidth="574.0" text="Answer:">
                <font>
@@ -33,7 +33,7 @@
             </Label>
          </children>
       </VBox>
-      <Button fx:id="CreateNewExamButton" layoutX="178.0" layoutY="511.0" mnemonicParsing="false" onAction="#createNewExam" text="Create new exam">
+      <Button fx:id="CreateNewExamButton" layoutX="312.0" layoutY="511.0" mnemonicParsing="false" onAction="#createNewExam" stylesheets="@../../../styles.css" text="Create new exam">
          <font>
             <Font size="14.0" />
          </font>

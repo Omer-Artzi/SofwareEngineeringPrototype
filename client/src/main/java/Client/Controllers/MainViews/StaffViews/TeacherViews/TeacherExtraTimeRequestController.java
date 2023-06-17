@@ -42,7 +42,7 @@ public class TeacherExtraTimeRequestController  {
     @FXML
     private javafx.scene.layout.VBox VBox;
 
-
+/* get fron the previous controller the selected exam */
     @Subscribe
     public void updateExam(SelectedClassExamEvent event)
     {
@@ -56,14 +56,11 @@ public class TeacherExtraTimeRequestController  {
 
     @FXML
     void initialize() {
-
         EventBus.getDefault().register(this);
     }
 
     @FXML
-    void NewTimeFunction(ActionEvent event) {
-
-    }
+    void NewTimeFunction(ActionEvent event) {}
 
     /* Send a notification to the relevant Principals*/
     @FXML

@@ -34,13 +34,12 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     private List<Subject> subjectOfTeacher;
     private List<String> notes;
     private int counter;
-
+    @FXML
+    private Label questionDataLabel;
     @FXML
     private Pane previewWindow;
-
     @FXML
     private ListSelectionView<Course> Courses;
-
     @FXML
     private TableColumn<Answer, String> AnswerColumn;
     @FXML
@@ -119,7 +118,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
 
         ObservableList<Answer> data = AnswerTable.getItems();
 
-        notes = new ArrayList<String>();
+        //notes = new ArrayList<String>();
         NumberColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
         AnswerColumn.setCellValueFactory(new PropertyValueFactory<>("answer"));
 
@@ -181,7 +180,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         }
 
     }
-
+/* check Question fileds and if everthing is llegal save the question in database and exit from the controller*/
     @FXML
     void addQuestion(ActionEvent event) throws IOException {
 
@@ -202,10 +201,12 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
             return;
         }
         System.out.println("The data of question is: "+question.getQuestionData());
-        System.out.println("The Answer is: "+question.getAnswers().get(0));
-        System.out.println("The Answer is: "+question.getAnswers().get(1));
-        System.out.println("The Answer is: "+question.getAnswers().get(2));
-        System.out.println("The Answer is: "+question.getAnswers().get(3));
+        int i=1;
+        for(String item: question.getAnswers())
+        {
+            System.out.println("question number "+i+ " is :"+item);
+            i++;
+        }
         System.out.println("The correct is: "+question.getCorrectAnswer());
         System.out.println("The S note: "+question.getStudentNote());
         System.out.println("The P note: "+question.getTeacherNote());
@@ -218,7 +219,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         if (state.equals(ContextualState.EDIT))
             SaveQuestionButtonPressed(question);
 
-        //Client.SimpleChatClient.setRoot("QuestionSaved");
     }
 
     private Question CollectData() {
@@ -238,21 +238,17 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
             if (String.valueOf(i + 1).equals(correctAnswer)) {
                 correct = answer.getAnswer();
             }
-            else
-                answers.add(answer.getAnswer());
-            i++;
+            answers.add(answer.getAnswer());
             if (!answer.getAnswer().equals(""))
                 counter++;
         }
-        answers.add(correct);
-        System.out.println("counter is " + counter);
+
 
         /* get the subject from the ChoiceBox */
         String selectedSubject = addSubjectChoiceBox.getValue();
         Subject subject = null;
         for (Subject item : subjectOfTeacher) {
             if (item.getName().equals(selectedSubject)) {
-                System.out.println("HELLOOOOO");
                 subject = item;
             }
         }
@@ -289,7 +285,19 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     @FXML
     void seePreview(ActionEvent event) throws IOException {
         Question question = CollectData();
-        System.out.println("Updating preview");
+        System.out.println("The data of question is: "+question.getQuestionData());
+        int i=1;
+        for(String item: question.getAnswers())
+        {
+            System.out.println("question number "+i+ " is :"+item);
+            i++;
+        }
+        System.out.println("The correct is: "+question.getCorrectAnswer());
+        System.out.println("The S note: "+question.getStudentNote());
+        System.out.println("The P note: "+question.getTeacherNote());
+        System.out.println("The subject is "+String.valueOf(question.getSubject()));
+        //System.out.println("The course is "+question.getCourses().get(0));
+
         ChangePreviewEvent event1 = new ChangePreviewEvent();
         event1.setQuestion(question);
         EventBus.getDefault().post(event1);
@@ -299,6 +307,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         ADD, EDIT
     }
 
+/* Answer Class the enable to insert objects type Answer objects to table */
     public static class Answer {
         private String answer;
         private String number;

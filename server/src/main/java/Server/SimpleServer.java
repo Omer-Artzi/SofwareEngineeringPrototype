@@ -275,26 +275,26 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("1Get Subjects of Teacher")) {  // Added by Ilan 30.5
                 String teacherID = request.substring(26);
-                System.out.println("Teacher ID: " + teacherID); /////
+                System.out.println("Teacher ID: " + teacherID);
                 int iTeacherID = Integer.parseInt(teacherID);
                 Teacher teacher = getTeacher(iTeacherID);
                 response = ("1Subjects of: " + teacher.getFullName());
-                System.out.println(response); /////
+                System.out.println(response);
                 message.setMessage(response);
                 message.setData(getSubjects(iTeacherID));
-                System.out.println("Subjects: " + teacher.getSubjectList()); /////
+                System.out.println("Subjects: " + teacher.getSubjectList());
                 client.sendToClient(message);
             }
             else if (request.startsWith("1Get Courses of Teacher")) {  // Added by Ilan 30.5
                 String teacherID = request.substring(25);
-                System.out.println("Teacher ID: " + teacherID); /////
+                System.out.println("Teacher ID: " + teacherID);
                 int iTeacherID = Integer.parseInt(teacherID);
                 Teacher teacher = getTeacher(iTeacherID);
                 response = ("1Courses of: " + teacher.getFullName());
-                System.out.println(response); /////
+                System.out.println(response);
                 message.setMessage(response);
                 message.setData(getCourses(iTeacherID));
-                System.out.println("Subjects: " + teacher.getSubjectList()); /////
+                System.out.println("Subjects: " + teacher.getSubjectList());
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get Subjects")) {
@@ -567,6 +567,12 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(retrieveClassExam());
                 client.sendToClient(message);
+            }else if (request.startsWith("Get all extra time requests")) {
+                response = "all extra time requests";
+                message.setMessage(response);
+                message.setData(getExtraTimeForClassExam((ClassExam) message.getData()));
+                //client.sendToClient(message);
+                sendToAllClients(message);
             }
             else if (request.startsWith("Get Extra Time Requests")) { /////
                 response = "Extra Time Requests";
@@ -885,15 +891,6 @@ public class SimpleServer extends AbstractServer {
         List<ClassExam> classExams = session.createQuery(query).getResultList();
         return classExams;
     }
-    ///STILL Dont Know if work!!
-    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
-        Root<ClassExam> root = query.from(ClassExam.class);
-        query.where(builder.equal(root.get("ID"), exam));
-        ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
-        return extraTime;
-    }
 
     private List<ExamForm> getExamFormForSubjects(Subject subject) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -967,6 +964,14 @@ public class SimpleServer extends AbstractServer {
         return exam;
     }
 
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
+        Root<ExtraTime> root = query.from(ExtraTime.class);
+        query.where(builder.equal(root.get("classExam"), exam));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult();
+        return extraTime;
+    }
 
     private List<ExtraTime> getExtraTime() {
         CriteriaBuilder builder = session.getCriteriaBuilder();
