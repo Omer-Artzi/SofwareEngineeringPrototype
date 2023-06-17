@@ -100,6 +100,11 @@ public class ExamForm implements Serializable {
     }
 
     public String getExamFormID() {
+        Faker faker= new Faker();
+        if(examFormID == null)
+        {
+            examFormID = course.getSubject().getCode() + course.getCode() + faker.bothify("##");
+        }
         return examFormID;
     }
 

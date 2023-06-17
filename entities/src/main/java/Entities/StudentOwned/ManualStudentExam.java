@@ -43,7 +43,7 @@ public class ManualStudentExam implements Serializable {
     {
         try {
             ExamForm selectedForm = studentExam.getClassExam().getExamForm();
-            String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getCode() + "_" + selectedForm.getCourse().getName() + ".docx";
+            String fileName = System.getProperty("user.dir") + "\\src\\main\\ExamToCheck\\Exam_" + selectedForm.getExamFormID() + "_" + selectedForm.getCourse().getName() + ".docx";
             File file = new File(fileName);
             FileOutputStream outputStream = new FileOutputStream(fileName);
             outputStream.write(examFile);
