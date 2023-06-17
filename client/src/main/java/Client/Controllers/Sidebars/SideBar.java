@@ -65,6 +65,11 @@ public class SideBar {
     private Button menuButton;
 
     @FXML
+    void initialize() {
+
+    }
+
+    @FXML
     void OnMenuButtonPressed(ActionEvent event) {
         if (sidebarState == SidebarState.EXPANDED) {
             sidebarState = SidebarState.COLLAPSED;

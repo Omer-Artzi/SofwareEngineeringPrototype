@@ -45,6 +45,13 @@ public class PrincipalSidebarController extends SideBar {
     @FXML
     private Button viewRequestsListButton;
 
+    @FXML
+    private Button mainPageButton;
+
+    @FXML
+    void OnMainPageButtonPressed(ActionEvent event) {
+        ChangeScene("PrincipalMainScreen");
+    }
 
     @FXML
     void addQuestion(ActionEvent event) throws IOException {

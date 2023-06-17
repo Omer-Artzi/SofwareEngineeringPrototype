@@ -32,6 +32,24 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#onMainPageButtonPressed" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Images/icons8-home-90.png" />
+                     </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             <Button fx:id="viewQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="View Question" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
@@ -39,8 +57,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-search-property-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -54,8 +75,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-document-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -69,8 +93,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-true-false-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -84,8 +111,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-versions-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
@@ -99,8 +129,11 @@
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-list-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>

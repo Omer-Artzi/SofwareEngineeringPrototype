@@ -50,8 +50,6 @@ public class ClassExam implements Serializable
     private ExtraTime extraTime;
     private Enums.examStatus examStatus;
 
-
-
     private int approvedExamsNum;
     private int examToEvaluate;
 

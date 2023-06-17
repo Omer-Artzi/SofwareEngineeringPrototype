@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -31,112 +32,151 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addQuestion" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Add Question" textFill="WHITE">
+            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-home-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="viewQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="View Question" textFill="WHITE">
+            <Button fx:id="addQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addQuestion" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Add Question" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-add-properties-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addTestFormsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addTestForms" prefHeight="50.0" prefWidth="238.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Add Test Forms" textFill="WHITE">
+            <Button fx:id="viewQuestionButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewQuestion" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #669bbc;" text="View Questions" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-search-property-96.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="viewTestFormsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewTestForms" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="View Test Forms" textFill="WHITE">
+            <Button fx:id="addTestFormsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#addTestForms" prefHeight="50.0" prefWidth="238.0" style="-fx-background-color: #669bbc;" text="Add Test Forms" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-new-copy-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="createExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#createExam" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Create Exam" textFill="WHITE">
+            <Button fx:id="viewTestFormsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#viewTestForms" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #669bbc;" text="View Test Forms" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-document-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="gradeExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#gradeExam" prefHeight="50.0" prefWidth="242.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Grade Exam" textFill="WHITE">
+            <Button fx:id="createExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#createExam" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="Create Exam" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/add.png" />
+                        <Image url="@../../Images/icons8-create-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="viewClassExamsButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="214.0" mnemonicParsing="false" onAction="#viewClassExams" prefHeight="50.0" prefWidth="181.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="View Class Exams" textFill="WHITE">
+            <Button fx:id="gradeExamButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#gradeExam" prefHeight="50.0" prefWidth="242.0" style="-fx-background-color: #669bbc;" text="Grade Exam" textFill="WHITE">
+               <font>
+                  <Font name="Lucida Sans Demibold Italic" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Images/icons8-true-false-96.png" />
+                     </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="viewClassExamsButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="214.0" mnemonicParsing="false" onAction="#viewClassExams" prefHeight="50.0" prefWidth="181.0" style="-fx-background-color: #669bbc;" text="View Class Exams" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="14.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../Images/view.png" />
+                        <Image url="@../../Images/icons8-versions-90.png" />
                      </image>
+                     <effect>
+                        <ColorAdjust brightness="1.0" />
+                     </effect>
                   </ImageView>
                </graphic>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="showStatisticsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#showStatistics" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Show Statistics" textFill="WHITE">
+            <Button fx:id="showStatisticsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#showStatistics" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="Show Statistics" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
@@ -151,7 +191,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="LogoutButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="364.0" mnemonicParsing="false" onAction="#OnLogoutButtonPressed" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" text="Logout" textFill="WHITE">
+            <Button fx:id="LogoutButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="364.0" mnemonicParsing="false" onAction="#OnLogoutButtonPressed" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="Logout" textFill="WHITE">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>
@@ -171,5 +211,6 @@
             </Button>
          </children>
       </VBox>
+      <Label fx:id="userTypeLabel" prefHeight="17.0" prefWidth="180.0" text="Label" />
    </children>
 </AnchorPane>

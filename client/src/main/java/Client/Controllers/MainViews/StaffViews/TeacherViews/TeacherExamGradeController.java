@@ -24,10 +24,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -105,7 +104,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
     @FXML
     void ExamIDComboAct(ActionEvent event) {
         chosenExamFormIDStr = ExamIDCombo.getSelectionModel().getSelectedItem();
-        SetExamFormTv();
+        if (chosenExamFormIDStr != null)
+            SetExamFormTv();
     }
 
     void SetExamFormTv()
@@ -135,7 +135,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         if(event.getClickCount() == 2)
         {
             chosenExam = ExamFormTv.getSelectionModel().getSelectedItem();
-            SetClassExamTv();
+            if (chosenExam != null)
+                SetClassExamTv();
         }
     }
 
@@ -157,16 +158,23 @@ public class TeacherExamGradeController extends SaveBeforeExit {
     void CourseComboAct(ActionEvent event)
     {
         chosenCourseStr = CourseCombo.getSelectionModel().getSelectedItem();
-        SetExamIDCombo();
+        if (chosenCourseStr != null)
+            SetExamIDCombo();
     }
 
     void SetExamIDCombo()
     {
-        ExamIDCombo.getItems().clear();
         ClassExamTv.getItems().clear();
+        ExamIDCombo.getItems().clear();
+
         // select Exam
         // collect the courses of the subject
+        Date currentTime = Date.from((LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         List<ClassExam> teacherExams = clientTeacher.getClassExam();
+
+        teacherExams = teacherExams.stream().filter(classExam ->
+                currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
+
         List<ExamForm> selectedExamForms = new ArrayList<>();
         for(ClassExam classExam : teacherExams)
         {
@@ -185,6 +193,7 @@ public class TeacherExamGradeController extends SaveBeforeExit {
         Collections.sort(selectedExamForms, Comparator.comparing(examForm -> examForm.getExamFormID()));
         ExamIDCombo.getItems().addAll(selectedExamForms.stream().map(examForm ->
                 examForm.getExamFormID()).collect(Collectors.toList()));
+
     }
 
     @FXML
@@ -195,12 +204,17 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
     void SetCourseCombo()
     {
-        if(!CourseCombo.getItems().isEmpty())
-            CourseCombo.getItems().clear();
-        if(!ExamIDCombo.getItems().isEmpty())
-            ExamIDCombo.getItems().clear();
-        if(!ClassExamTv.getItems().isEmpty())
+        if(!ClassExamTv.getItems().isEmpty()) {
             ClassExamTv.getItems().clear();
+        }
+        if(!ExamIDCombo.getItems().isEmpty()) {
+            ExamIDCombo.getItems().clear();
+        }
+        if(!CourseCombo.getItems().isEmpty()) {
+            CourseCombo.getItems().clear();
+        }
+
+
 
         // collect the courses of the subject
         List<Course> teacherCourses = clientTeacher.getCourses();

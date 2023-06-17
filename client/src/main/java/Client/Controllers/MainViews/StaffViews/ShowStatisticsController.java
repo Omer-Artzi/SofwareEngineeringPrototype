@@ -228,10 +228,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
         allClassExams = event.getLiveExams();
         // This is the part where we try to filter out any exams that aren't over yet by now.
         Date currentTime = ConvertToDate(LocalDateTime.now());
-
         allClassExams = allClassExams.stream().filter(classExam ->
-                classExam.getStartDate().after(currentTime) && classExam.getGradesMean() != -1).collect(Collectors.toList());
-
+                currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
         // It's population time... via a loop.
         for (int i = 0; i < allClassExams.size(); i++)
         {
@@ -331,7 +329,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
                         classExam.getExamForm().getCreator().getFullName().startsWith(chosenReport)).collect(Collectors.toList());
                 ClassExamStatsTv.getItems().addAll(classExams);
                 ClassExamStatsTv.sort();
-                allGrades = classExams.stream().map(ClassExam::getGradesMean).collect(Collectors.toList());
+                allGrades = classExams.stream().sorted(Comparator.comparing(classExam -> classExam.getStartDate()))
+                        .map(ClassExam::getGradesMean).collect(Collectors.toList());
                 allDates = classExams.stream().map(ClassExam::getStartDate).sorted().collect(Collectors.toList());
                 ClassExamStatsTv.setVisible(true);
                 ClassExamStatsTv.setPrefHeight(300);
@@ -348,7 +347,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
                         classExam.getExamForm().getCourse().getName().startsWith(chosenReport)).collect(Collectors.toList());
                 ClassExamStatsTv.getItems().addAll(classExams);
                 ClassExamStatsTv.sort();
-                allGrades = classExams.stream().map(ClassExam::getGradesMean).collect(Collectors.toList());
+                allGrades = classExams.stream().sorted(Comparator.comparing(classExam -> classExam.getStartDate()))
+                        .map(ClassExam::getGradesMean).collect(Collectors.toList());
                 allDates = classExams.stream().map(ClassExam::getStartDate).sorted().collect(Collectors.toList());
                 ClassExamStatsTv.setVisible(true);
                 ClassExamStatsTv.setPrefHeight(300);
@@ -399,7 +399,6 @@ public class ShowStatisticsController extends SaveBeforeExit {
         MeanLabel.setText(FormatDouble(ExamStats[0]));
         SDLabel.setText(FormatDouble(Math.sqrt(ExamStats[1])));
         MedianLabel.setText(FormatDouble(FindMedian(new ArrayList<>(allGrades))));
-
         BarChart barChart = GetHistogram(allGrades, allDates, 0, 0);
         barChart.setMaxHeight(300);
         barChart.setMaxWidth(600);
@@ -475,7 +474,7 @@ public class ShowStatisticsController extends SaveBeforeExit {
             else
             {
                 dataPoint = new XYChart.Data<>(
-                        FormatDate(dates.get(i), false), grades.get(i));
+                        FormatDate(dates.get(i), true), grades.get(i));
             }
 
             // Add the data point to the series
@@ -557,11 +556,13 @@ public class ShowStatisticsController extends SaveBeforeExit {
             // gets all the class exam the teacher belongs to the exam forms the teacher created
             for (ExamForm examForm : examFormList)
             {
-                for (ClassExam classExam : examForm.getClassExam())
-                {
-                    classExamList.add(classExam);
-                }
+                classExamList.addAll(examForm.getClassExam());
             }
+            Date currentTime = ConvertToDate(LocalDateTime.now());
+            classExamList = classExamList.stream().filter(classExam ->
+                    currentTime.after(classExam.getFinalSubmissionDate()) && classExam.getGradesMean() != -1).collect(Collectors.toList());
+
+
             
             if (examFormList.isEmpty())
             {
@@ -575,7 +576,9 @@ public class ShowStatisticsController extends SaveBeforeExit {
             }
             
             initClassExamTable();
-            
+            ClassExamStatsTv.getItems().clear();
+
+
             ClassExamStatsTv.getItems().addAll(classExamList);
             ClassExamStatsTv.sort();
 

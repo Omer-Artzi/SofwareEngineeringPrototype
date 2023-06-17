@@ -275,26 +275,26 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("1Get Subjects of Teacher")) {  // Added by Ilan 30.5
                 String teacherID = request.substring(26);
-                System.out.println("Teacher ID: " + teacherID);
+                System.out.println("Teacher ID: " + teacherID); /////
                 int iTeacherID = Integer.parseInt(teacherID);
                 Teacher teacher = getTeacher(iTeacherID);
                 response = ("1Subjects of: " + teacher.getFullName());
-                System.out.println(response);
+                System.out.println(response); /////
                 message.setMessage(response);
                 message.setData(getSubjects(iTeacherID));
-                System.out.println("Subjects: " + teacher.getSubjectList());
+                System.out.println("Subjects: " + teacher.getSubjectList()); /////
                 client.sendToClient(message);
             }
             else if (request.startsWith("1Get Courses of Teacher")) {  // Added by Ilan 30.5
                 String teacherID = request.substring(25);
-                System.out.println("Teacher ID: " + teacherID);
+                System.out.println("Teacher ID: " + teacherID); /////
                 int iTeacherID = Integer.parseInt(teacherID);
                 Teacher teacher = getTeacher(iTeacherID);
                 response = ("1Courses of: " + teacher.getFullName());
-                System.out.println(response);
+                System.out.println(response); /////
                 message.setMessage(response);
                 message.setData(getCourses(iTeacherID));
-                System.out.println("Subjects: " + teacher.getSubjectList());
+                System.out.println("Subjects: " + teacher.getSubjectList()); /////
                 client.sendToClient(message);
             }
             else if (request.startsWith("Get Subjects")) {
@@ -714,6 +714,10 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("Add ExamForm")) { // Added by Ilan
                 ExamForm newExamForm = ((ExamForm) (message.getData()));
+                // generate exam code
+                String examCode = createCodeOfExam(newExamForm); // TODO: Ilan- Added in 17.6, Check if it works
+                System.out.println("Exam code: " + examCode);
+                newExamForm.setExamFormID(examCode);
                 try {
                     session.save(newExamForm);
                     session.flush();
@@ -793,7 +797,6 @@ public class SimpleServer extends AbstractServer {
         //session.close();
     }
 
-
     private Boolean LogUserOut(Person user) {
         boolean userRemoved = LoggedInUsers.remove(user);
         System.out.println("user: " + (user.getFullName() + " removed: " + userRemoved));
@@ -838,6 +841,17 @@ public class SimpleServer extends AbstractServer {
         }
 
     }
+
+    private String createCodeOfExam(ExamForm examForm){
+        List<ExamForm> examsFormsForCourse = getExamFormForCourse(examForm.getCourse());
+        int size = examsFormsForCourse.size();
+
+        String subjectID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getSubject().getId()),2);
+        String courseID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getCourse().getId()),2);
+        String examFormNumber = OperationUtils.IDZeroPadding(String.valueOf(size),2);
+        return subjectID+courseID+examFormNumber;
+    }
+
     private StudentExam getStudentExamFromClassExam(int studentID, int classExamID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<StudentExam> query = builder.createQuery(StudentExam.class);
@@ -890,6 +904,25 @@ public class SimpleServer extends AbstractServer {
         query.where(builder.equal(root.get("subject"), subject));
         List<ClassExam> classExams = session.createQuery(query).getResultList();
         return classExams;
+    }
+    ///STILL Dont Know if work!!
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), exam));
+        ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
+        return extraTime;
+    }
+
+    // function to get the ExtraTime for a specific ClassExam
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
+        Root<ExtraTime> root = query.from(ExtraTime.class);
+        query.where(builder.equal(root.get("classExam"), exam));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult();
+        return extraTime;
     }
 
     private List<ExamForm> getExamFormForSubjects(Subject subject) {
@@ -964,14 +997,6 @@ public class SimpleServer extends AbstractServer {
         return exam;
     }
 
-    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
-        Root<ExtraTime> root = query.from(ExtraTime.class);
-        query.where(builder.equal(root.get("classExam"), exam));
-        ExtraTime extraTime = session.createQuery(query).getSingleResult();
-        return extraTime;
-    }
 
     private List<ExtraTime> getExtraTime() {
         CriteriaBuilder builder = session.getCriteriaBuilder();
