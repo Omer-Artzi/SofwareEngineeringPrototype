@@ -38,7 +38,7 @@ public class TeacherSidebarController extends SideBar {
 
     @FXML
     void addTestForms(ActionEvent event) throws IOException {
-        ChangeScene("AddExam");
+        ChangeScene("TeacherAddTestForm");
     }
 
     @FXML

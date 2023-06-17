@@ -158,7 +158,7 @@ public class ViewExamController {
 		title.setUnderline(UnderlinePatterns.DASH_LONG);
 		title.setText("Exam in " + selectedForm.getSubject().getName() + " - " + selectedForm.getCourse().getName());
 		title.addBreak();
-		title.setText("Exam Code: " + selectedForm.getCode(),title.getTextPosition());
+		title.setText("Exam Code: " + selectedForm.getExamFormID(),title.getTextPosition());
 		title.addBreak();
 		title.setText("Created By: " + selectedForm.getCreator().getFullName() + " in " + selectedForm.getDateCreated(),title.getTextPosition());
 		title.addBreak();
@@ -194,7 +194,7 @@ public class ViewExamController {
 		}
 		try
 		{
-			String fileName = "Exam_"+ selectedForm.getCode() + "_" + selectedForm.getCourse().getName()+".docx";
+			String fileName = "Exam_"+ selectedForm.getExamFormID() + "_" + selectedForm.getCourse().getName()+".docx";
 			FileOutputStream outputStream = new FileOutputStream(fileName);
 			document.write(outputStream);
 			System.out.println("Document created successfully.");

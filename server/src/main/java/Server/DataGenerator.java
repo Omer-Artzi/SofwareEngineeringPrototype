@@ -194,7 +194,7 @@ public class DataGenerator {
                 examForm.setCreator(teacher);
                 teacher.addExamForm(examForm);
 
-                examForm.getCode();
+                examForm.getExamFormID();
 
 
                 Date date = ConvertToDate(LocalDateTime.now());
