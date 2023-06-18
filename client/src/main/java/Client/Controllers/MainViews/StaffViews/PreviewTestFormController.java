@@ -4,12 +4,16 @@ import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.Sidebars.SideBar;
 import Client.Events.CourseMessageEvent;
 import Client.Events.RefreshPerson;
+import Client.Events.StudentExamEvent;
 import Client.Events.SubjectMessageEvent;
+import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
+import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
+import Entities.StudentOwned.StudentExam;
 import Entities.Users.Person;
 import Entities.Users.Principal;
 import Entities.Users.Teacher;
@@ -53,11 +57,17 @@ public class PreviewTestFormController extends SaveBeforeExit {
     private TableColumn<ExamForm, String> CreatorCol;
 
     @FXML
-    void ExamFormClick(MouseEvent event) {
+    void ExamFormClick(MouseEvent event) throws IOException {
 
         if (event.getClickCount() == 2)
         {
-            // show exam form
+            if (ExamFormTV.getSelectionModel().getSelectedItem() != null)
+            {
+                ClassExam classExam = new ClassExam(ExamFormTV.getSelectionModel().getSelectedItem());
+                SimpleChatClient.setRoot("TeacherGradeStudentExam");
+                EventBus.getDefault().post(new StudentExamEvent(new StudentExam(classExam)));
+                EventBus.getDefault().unregister(this);
+            }
         }
     }
     Person client;

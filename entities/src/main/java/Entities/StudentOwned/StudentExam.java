@@ -56,6 +56,12 @@ public class StudentExam implements Serializable {
         this.status = status;
     }
 
+    public StudentExam(ClassExam classExam)
+    {
+        this.classExam = classExam;
+        this.status = Enums.submissionStatus.NotTaken;
+    }
+
     // copy constructor
     public StudentExam(StudentExam other) {
         this.student = other.student;
