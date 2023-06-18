@@ -62,7 +62,7 @@ public class DataGenerator {
     private static List<Subject>  generateSubjectsAndCourses() throws IOException {
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
-        SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
+        SubjectWrapper subjects = objectMapper.readValue(DataGenerator.class.getResourceAsStream("/Server/SchoolSubjects.json"), SubjectWrapper.class);
         School.setSubjects(subjects.getSubjects());
         try {
             for (Subject subject : subjects.getSubjects()) {
