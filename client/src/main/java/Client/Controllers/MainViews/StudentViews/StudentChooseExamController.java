@@ -60,7 +60,7 @@ public class StudentChooseExamController extends SaveBeforeExit {
 
     @FXML
     private TableColumn<ClassExam, Integer> timeColumm;
-
+    
     @FXML
     void initialize() throws IOException {
         EventBus.getDefault().register(this);

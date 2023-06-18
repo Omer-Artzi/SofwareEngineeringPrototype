@@ -273,13 +273,17 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         */
 
     @FXML
-    void createNewExam(ActionEvent event) {
-        if(SelectedExam ==null){
+    void createNewExam(ActionEvent event) throws IOException {
+        SelectedExam = ExamsTable.getSelectionModel().getSelectedItem();
+        if(SelectedExam == null){
             JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-       // LoadExamEvent event1=new LoadExamEvent();
-       // EventBus.getDefault().post(event1);
+        LoadExamEvent loadExamEvent =new LoadExamEvent();
+        loadExamEvent.setClassExam(SelectedExam);
+        SimpleChatClient.setRoot("TeacherCreateClassExam");
+        EventBus.getDefault().post(loadExamEvent);
+
     }
 
     @FXML
