@@ -175,10 +175,12 @@ public class SimpleClient extends AbstractClient {
 		}
         else if (messageText.startsWith("Question added successfully")){
             EndCreateQuestionEvent event=new EndCreateQuestionEvent("Question added successfully");
+            //EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
             EventBus.getDefault().post(event);
         }
         else if (messageText.startsWith("new question could not be added to the database")){
             EventBus.getDefault().post(new EndCreateQuestionEvent( "question could not be added"));
+            //EventBus.getDefault().post(new GeneralEvent(new Message(0, "failed")));
         }
 		else if (messageText.startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));

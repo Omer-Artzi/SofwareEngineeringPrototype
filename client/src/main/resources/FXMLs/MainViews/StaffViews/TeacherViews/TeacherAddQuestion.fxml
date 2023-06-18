@@ -14,50 +14,50 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherAddQuestionController">
 
     <children>
-        <ChoiceBox fx:id="addSubjectChoiceBox" layoutX="285.0" layoutY="55.0" prefHeight="26.0" prefWidth="138.0" />
-        <TableView fx:id="AnswerTable" layoutX="78.0" layoutY="384.0" prefHeight="122.0" prefWidth="538.0">
+        <ChoiceBox fx:id="addSubjectChoiceBox" layoutX="291.0" layoutY="32.0" prefHeight="26.0" prefWidth="138.0" />
+        <TableView fx:id="AnswerTable" layoutX="79.0" layoutY="303.0" prefHeight="126.0" prefWidth="644.0">
             <columns>
                 <TableColumn fx:id="NumberColumn" prefWidth="58.4000244140625" text="Number" />
                 <TableColumn fx:id="AnswerColumn" prefWidth="478.40001525878904" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButton" layoutX="344.0" layoutY="651.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="30.0" prefWidth="67.0" stylesheets="@../../../styles.css" text="save">
+        <Button fx:id="addQuestionButton" layoutX="333.0" layoutY="717.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="37.0" prefWidth="89.0" stylesheets="@../../../styles.css" text="save">
             <font>
                 <Font name="Arial Rounded MT Bold" size="16.0" />
             </font>
         </Button>
-        <Button fx:id="previewButton" layoutX="251.0" layoutY="653.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
+        <Button fx:id="previewButton" layoutX="224.0" layoutY="550.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Label layoutX="223.0" layoutY="59.0" text="Subject">
+        <Label layoutX="223.0" layoutY="37.0" text="Subject">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <TextArea fx:id="QuestionDataTF" layoutX="78.0" layoutY="268.0" prefHeight="86.0" prefWidth="538.0" />
-        <TextArea fx:id="TeacherNote" layoutX="354.0" layoutY="540.0" prefHeight="60.0" prefWidth="261.0" />
-        <TextArea fx:id="StudentNote" layoutX="78.0" layoutY="540.0" prefHeight="60.0" prefWidth="253.0" />
-        <Label layoutX="360.0" layoutY="521.0" prefHeight="18.0" prefWidth="125.0" text="Teacher Note">
+        <TextArea fx:id="QuestionDataTF" layoutX="75.0" layoutY="243.0" prefHeight="52.0" prefWidth="650.0" />
+        <TextArea fx:id="TeacherNote" layoutX="401.0" layoutY="447.0" prefHeight="46.0" prefWidth="322.0" />
+        <TextArea fx:id="StudentNote" layoutX="76.0" layoutY="447.0" prefHeight="46.0" prefWidth="307.0" />
+        <Label layoutX="399.0" layoutY="429.0" prefHeight="18.0" prefWidth="125.0" text="Teacher Note">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <Label layoutX="79.0" layoutY="521.0" prefHeight="18.0" prefWidth="125.0" text="Student Note">
+        <Label layoutX="77.0" layoutY="429.0" prefHeight="18.0" prefWidth="125.0" text="Student Note">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
-        <ChoiceBox fx:id="CorrectAnswerCB" layoutX="391.0" layoutY="610.0" prefHeight="26.0" prefWidth="30.0" />
-        <Label layoutX="217.0" layoutY="608.0" prefHeight="30.0" prefWidth="173.0" text="Choose Correct Answer">
+        <ChoiceBox fx:id="CorrectAnswerCB" layoutX="245.0" layoutY="495.0" prefHeight="26.0" prefWidth="30.0" />
+        <Label layoutX="78.0" layoutY="493.0" prefHeight="30.0" prefWidth="173.0" text="Choose Correct Answer">
             <font>
                 <Font size="14.0" />
             </font>
         </Label>
-        <ListSelectionView fx:id="Courses" layoutX="68.0" layoutY="76.0" prefHeight="169.0" prefWidth="558.0" />
-        <Pane fx:id="previewWindow" layoutX="641.0" layoutY="301.0" prefHeight="288.0" prefWidth="307.0" />
-      <Label fx:id="questionDataLabel" layoutX="78.0" layoutY="238.0" prefHeight="30.0" prefWidth="275.0" text="Question data:">
+        <ListSelectionView fx:id="Courses" layoutX="68.0" layoutY="58.0" prefHeight="170.0" prefWidth="662.0" />
+        <Pane fx:id="previewWindow" layoutX="339.0" layoutY="495.0" prefHeight="218.0" prefWidth="595.0" />
+      <Label fx:id="questionDataLabel" layoutX="79.0" layoutY="213.0" prefHeight="30.0" prefWidth="275.0" text="Question data:">
          <font>
             <Font size="16.0" />
          </font>

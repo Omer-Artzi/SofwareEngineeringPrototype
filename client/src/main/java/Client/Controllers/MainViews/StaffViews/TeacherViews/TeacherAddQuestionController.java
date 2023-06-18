@@ -63,6 +63,8 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     private Button previewButton;
     private ContextualState state = ContextualState.ADD;
 
+
+
     @Subscribe
     public void editQuestion(StartEditExistingQuestionEvent event) {
         state = ContextualState.EDIT;
@@ -234,14 +236,15 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         String correct = "";
         List<String> answers = new ArrayList<>();
         List<Answer> dataList = AnswerTable.getItems();
-        int i = 0;
+        int i = 1;
         for (Answer answer : dataList) {
-            if (String.valueOf(i + 1).equals(correctAnswer)) {
+            if (String.valueOf(i ).equals(correctAnswer)) {
                 correct = answer.getAnswer();
             }
             answers.add(answer.getAnswer());
             if (!answer.getAnswer().equals(""))
                 counter++;
+            i++;
         }
 
 
@@ -296,6 +299,34 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         ADD, EDIT
     }
 
+    //////////////////////////// ***save before exit ***/////////////////////////////////////////////////////
+    @Override
+    public boolean CheckForUnsavedData() {
+        if (addSubjectChoiceBox != null && Courses.getTargetItems().isEmpty() && !CorrectAnswerCB.getValue().isEmpty() && !QuestionDataTF.getText().isEmpty() ) {
+            List<Answer> dataList = AnswerTable.getItems();
+            if(dataList.size()==4){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void SaveData() {
+        ActionEvent event = new ActionEvent();
+        try {
+            addQuestion(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //////////////////////////// *** Answer class ***/////////////////////////////////////////////////////
 /* Answer Class the enable to insert objects type Answer objects to table */
     public static class Answer {
         private String answer;
@@ -317,4 +348,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         public void setStyle(String s) {
         }
     }
+
+
 }
