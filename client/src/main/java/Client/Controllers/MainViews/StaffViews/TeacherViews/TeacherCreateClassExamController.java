@@ -10,6 +10,7 @@ import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
 import Events.ExamSavedEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -68,6 +70,10 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
 
     @FXML
     private ComboBox<Subject> subjectCB;
+    @FXML
+    private TableColumn<?,?> subjectColumn;
+    @FXML
+    private TableColumn<?,?> courseColumn;
 
 
     private List<Course> courses;
@@ -90,11 +96,13 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         assert subjectCB != null : "fx:id=\"subjectCB\" was not injected: check your FXML file 'TeacherCreateClassExam.fxml'.";
         EventBus.getDefault().register(this);
         ExamFormsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
+        //IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        IDColumn.setCellValueFactory(new PropertyValueFactory<>("examFormID"));
         lastUsedColumn.setCellValueFactory(new PropertyValueFactory<>("lastUsed"));
         teacherNotesColumn.setCellValueFactory(new PropertyValueFactory<>("examNotesForTeacher"));
         dateCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
+        subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
         typeCB.getItems().addAll("Digital", "Manual");
         courseCB.setDisable(true);
         ExamFormsTV.setDisable(true);
@@ -196,6 +204,11 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
         else
         {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Some fields are not filled properly");
+            alert.setHeaderText("Some fields are not filled properly");
+            alert.setContentText("Please make sure all field are filled properly");
+            alert.showAndWait();
             System.out.println("Please make sure all field are filled properly");
             System.out.println("code length: " + code.length());
             System.out.println("time format: " + isValidTimeFormat(time));
@@ -271,20 +284,48 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @Subscribe
     public void loadExam(LoadExamEvent event)
     {
-        classExam = event.getClassExam();
-        startDateTF.setValue(classExam.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        startTimeTF.setText(String.valueOf(classExam.getStartDate().getTime()));
-        endDateTF.setValue(classExam.getFinalSubmissionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        endTimeTF.setText(String.valueOf(classExam.getFinalSubmissionDate().getTime()));
-        codeTF.setText(classExam.getAccessCode());
-        typeCB.getSelectionModel().select(classExam.getExamType().toString());
-        double timeInSeconds = classExam.getExamTime();
-        int hours = (int) (timeInSeconds / 3600);
-        int minutes = (int) ((timeInSeconds % 3600) / 60);
-        int seconds = (int) (timeInSeconds % 60);
-        examTimeTF.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-        ExamFormsTV.getSelectionModel().select(classExam.getExamForm());
-        classExam = new ClassExam();
+        try {
+            System.out.println("Loading existing Exam");
+            ExamFormsTV.setDisable(false);
+            examTimeTF.setDisable(false);
+            typeCB.setDisable(false);
+            codeTF.setDisable(false);
+            startDateTF.setDisable(false);
+            endDateTF.setDisable(false);
+            startTimeTF.setDisable(false);
+            endTimeTF.setDisable(false);
+            courseCB.setDisable(false);
+            subjectCB.setValue(event.getClassExam().getSubject());
+            courseCB.setValue(event.getClassExam().getCourse());
+            ExamForm examForm = event.getClassExam().getExamForm();
+            ExamFormsTV.getItems().clear();
+            ExamFormsTV.getItems().add(examForm);
+            classExam = event.getClassExam();
+            saveExamButton.setDisable(false);
+            Date date = new Date(classExam.getStartDate().getTime() * 1000);
+            // Create a SimpleDateFormat object to format the date
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            // Format the date to HH:mm:ss format
+            String formattedTime = sdf.format(date);
+            startTimeTF.setText(formattedTime);
+            date = new Date(classExam.getFinalSubmissionDate().getTime() * 1000);
+            formattedTime = sdf.format(date);
+            endTimeTF.setText(formattedTime);
+            codeTF.setText(classExam.getAccessCode());
+            typeCB.getSelectionModel().select(classExam.getExamType().toString());
+            double timeInSeconds = classExam.getExamTime() * 60 ;
+            int hours = (int) (timeInSeconds / 3600);
+            int minutes = (int) ((timeInSeconds % 3600) / 60);
+            int seconds = (int) (timeInSeconds % 60);
+            examTimeTF.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            Thread.sleep(1000);
+            ExamFormsTV.getSelectionModel().select(classExam.getExamForm());
+            classExam = new ClassExam();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     private double timeToDouble(String time) {
         String[] timeParts = time.split(":");
@@ -301,13 +342,18 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     }
     @Subscribe
     public void examSaved(ExamSavedEvent event) throws IOException {
-        System.out.println("Exam Saved");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Exam Saved");
-        alert.setHeaderText("Exam Saved Successfully");
-        alert.setContentText("Exam Saved Successfully");
-        alert.showAndWait();
-        SimpleChatClient.setRoot("TeacherMainScreen");
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Exam Saved");
+            alert.setHeaderText("Exam Saved Successfully");
+            alert.setContentText("Exam Saved Successfully");
+            alert.showAndWait();
+            try {
+                SimpleChatClient.setRoot("TeacherMainScreen");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
     }
     @FXML

@@ -33,7 +33,7 @@ public class SimpleChatClient extends Application {
 
     private static MainWindowController mainWindowController;
 
-    public static final double version = 1.7;
+    public static final double version = 2.0;
 
     public static void setClient(SimpleClient simpleClient) {
         client = simpleClient;

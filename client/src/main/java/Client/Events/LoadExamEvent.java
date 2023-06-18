@@ -14,6 +14,10 @@ public class LoadExamEvent {
         this.screen = screen;
     }
 
+    public LoadExamEvent() {
+        this.screen = null;
+    }
+
     public ExamForm getExamForm() {
         return examForm;
     }

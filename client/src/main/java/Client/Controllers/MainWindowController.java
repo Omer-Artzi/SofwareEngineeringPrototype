@@ -147,8 +147,8 @@ public class MainWindowController {
         if(sceneName.contains("MainScreen"))
         {
             mainPane.getChildren().add(LogoImage);
+            mainPane.getChildren().add(dateLabel);
         }
-        mainPane.getChildren().add(dateLabel);
 
     }
 }

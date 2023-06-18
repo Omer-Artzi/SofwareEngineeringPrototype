@@ -48,7 +48,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     private int timeInSeconds;
     private ClassExam mainClassExam;
-    private StudentExam studentExam;
+    private StudentExam studentExam = new StudentExam();
 
     @FXML
     void fileDropped(DragEvent event) {

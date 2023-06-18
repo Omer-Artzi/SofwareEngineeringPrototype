@@ -62,7 +62,7 @@ public class DataGenerator {
     private static List<Subject>  generateSubjectsAndCourses() throws IOException {
         School school = School.getInstance();
         ObjectMapper objectMapper = new ObjectMapper();
-        SubjectWrapper subjects = objectMapper.readValue(new File("./src/main/resources/Server/SchoolSubjects.json"), SubjectWrapper.class);
+        SubjectWrapper subjects = objectMapper.readValue(DataGenerator.class.getResourceAsStream("/Server/SchoolSubjects.json"), SubjectWrapper.class);
         School.setSubjects(subjects.getSubjects());
         try {
             for (Subject subject : subjects.getSubjects()) {
@@ -412,7 +412,7 @@ public class DataGenerator {
                 Teacher teacher =  SimpleServer.retrieveTeachers().get(0);
                 //String code = Long.toString(faker.number().randomNumber(5, false));
                 String accessCode = "11aa";
-                Enums.ExamType examType = Enums.ExamType.values()[rand.nextInt(2)];
+                Enums.ExamType examType = Enums.ExamType.values()[filter % 2];
                 ClassExam classExam = new ClassExam(examForm, testStartDate, testEndDate, examTime*60, teacher, accessCode,examForm.getCourse(),examForm.getSubject(),examType);
                 classExam.setStudents(students);
                 examForm.addClassExam(classExam);

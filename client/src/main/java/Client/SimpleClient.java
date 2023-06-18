@@ -325,7 +325,6 @@ public class SimpleClient extends AbstractClient {
             alert.setTitle("Connection Error");
             alert.setContentText("Could not connect to server, please check with your admin that it is up");
             alert.showAndWait();
-            //JOptionPane.showMessageDialog(null,"Could not Connect to Server", "Connection Error",JOptionPane.WARNING_MESSAGE);
         }
     }
 }

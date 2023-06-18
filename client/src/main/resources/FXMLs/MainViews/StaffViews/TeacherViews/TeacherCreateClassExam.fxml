@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherCreateClassExamController">
    <children>
-      <VBox alignment="CENTER" layoutX="-2.0" layoutY="-9.0" prefHeight="810.0" prefWidth="1024.0">
+      <VBox alignment="CENTER" layoutX="-2.0" layoutY="-9.0" prefHeight="810.0" prefWidth="1024.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="68.0" prefWidth="600.0" spacing="100.0">
                <children>
@@ -24,11 +24,12 @@
                <children>
                   <TableView fx:id="ExamFormsTV" onSort="#onExamFormChosen" prefHeight="487.0" prefWidth="907.0" stylesheets="@../../../styles.css">
                     <columns>
-                      <TableColumn fx:id="IDColumn" prefWidth="71.0" text="ID" />
-                      <TableColumn fx:id="codeColumn" prefWidth="252.4671630859375" text="Code" />
-                        <TableColumn fx:id="teacherNotesColumn" prefWidth="260.5328369140625" text="Teacher Notes" />
-                        <TableColumn fx:id="dateCreatedColumn" minWidth="0.0" prefWidth="161.72720336914062" text="Date Created" />
-                        <TableColumn fx:id="lastUsedColumn" prefWidth="160.8123779296875" text="Last Used" />
+                      <TableColumn fx:id="IDColumn" prefWidth="97.85065460205078" text="ID" />
+                        <TableColumn fx:id="subjectColumn" prefWidth="160.47792053222656" text="Subject" />
+                        <TableColumn fx:id="courseColumn" prefWidth="117.0220947265625" text="Course" />
+                        <TableColumn fx:id="teacherNotesColumn" prefWidth="278.55902099609375" text="Teacher Notes" />
+                        <TableColumn fx:id="dateCreatedColumn" minWidth="0.0" prefWidth="142.44281005859375" text="Date Created" />
+                        <TableColumn fx:id="lastUsedColumn" prefWidth="109.55718994140625" text="Last Used" />
                     </columns>
                   </TableView>
                </children>
