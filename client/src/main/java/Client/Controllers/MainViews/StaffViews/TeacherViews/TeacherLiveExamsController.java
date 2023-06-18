@@ -165,10 +165,10 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
                 if (item.getStartDate().before(CurrentDate)||item.getStartDate().equals(CurrentDate)) {
                     if (item.getFinalSubmissionDate().after(CurrentDate)) {
                         System.out.println("In green");
-                        setStyle("-fx-background-color: green;");
+                        setStyle("-fx-background-color: #65A873;");
                     }
                 } else {
-                    setStyle("-fx-background-color: red;");
+                    setStyle("-fx-background-color: #DC6F6F;");
                 }
             }
         }
