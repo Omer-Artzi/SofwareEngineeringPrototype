@@ -178,6 +178,22 @@ public class SimpleServer extends AbstractServer {
         return exams;
     }
 
+    public static Subject getSubject(int SubjectID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Subject> query = builder.createQuery(Subject.class);
+        Root<Subject> root = query.from(Subject.class);
+        query.where(builder.equal(root.get("ID"), SubjectID));
+        return session.createQuery(query).getSingleResult();
+    }
+
+    public static Course getCourse(int CourseID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        Root<Course> root = query.from(Course.class);
+        query.where(builder.equal(root.get("ID"), CourseID));
+        return session.createQuery(query).getSingleResult();
+    }
+
     public static ExamForm getExamForm(int iExamFormID) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ExamForm> query = builder.createQuery(ExamForm.class);
@@ -751,6 +767,62 @@ public class SimpleServer extends AbstractServer {
                 }
             }
             // Lior's addition
+            else if (request.startsWith("Edit Exam Form")) {
+                ExamForm examForm = (ExamForm)message.getData();
+                ExamForm examFormDataBase = getExamForm(examForm.getID());
+
+                Teacher creator = (Teacher)retrieveUser(examForm.getCreator().getEmail());
+                examFormDataBase.setCreator(creator);
+                creator.addExamForm(examFormDataBase);
+                examFormDataBase.setQuestionList(examForm.getQuestionList());
+                examFormDataBase.setExamNotesForStudent(examForm.getExamNotesForStudent());
+                examFormDataBase.setExamNotesForTeacher(examForm.getExamNotesForTeacher());
+                examFormDataBase.setExamTime((int)examForm.getExamTime());
+                examFormDataBase.setDateCreated(examForm.getDateCreated());
+                examFormDataBase.setFooterText(examForm.getFooterText());
+                examFormDataBase.setHeaderText(examForm.getHeaderText());
+                examFormDataBase.setLastUsed(examForm.getLastUsed());
+                examFormDataBase.setUsedStatus(false);
+
+                session.update(examFormDataBase);
+                response = "Exam Was successfully Edited";
+                message.setMessage(response);
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Duplicate Exam Form")) {
+                ExamForm examForm = (ExamForm)message.getData();
+
+                // teacher link
+                Teacher creator = (Teacher)retrieveUser(examForm.getCreator().getEmail());
+                examForm.setCreator(creator);
+                creator.addExamForm(examForm);
+
+                // question link
+                List<Question> questionList = new ArrayList<>();
+                for(Question question : examForm.getQuestionList())
+                {
+                    Question dataQuestion = retrieveQuestion(question.getID());
+                    questionList.add(dataQuestion);
+                }
+                examForm.setQuestionList(questionList);
+
+                // subject link
+                Subject subject = getSubject(examForm.getSubject().getId().intValue());
+                subject.addExamForm(examForm);
+                examForm.setSubject(subject);
+
+                // Course link
+                Course course = getCourse(examForm.getCourse().getId().intValue());
+                course.addExamForm(examForm);
+                examForm.setCourse(course);
+
+                examForm.setClassExam(new ArrayList<>());
+
+                session.saveOrUpdate(examForm);
+                response = "Exam Was successfully Duplicated";
+                message.setMessage(response);
+                client.sendToClient(message);
+            }
             else if (request.startsWith("Get teacher's Subjects")) {
                 response = "Subjects";
                 message.setMessage(response);
@@ -1098,6 +1170,15 @@ public class SimpleServer extends AbstractServer {
         query.where(builder.equal(root.get("ID"), iTeacherID));
         Teacher teacher = session.createQuery(query).getSingleResult();
         return teacher;
+    }
+
+    private Question retrieveQuestion(int questionID) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Question> query = builder.createQuery(Question.class);
+        Root<Question> root = query.from(Question.class);
+        query.where(builder.equal(root.get("ID"), questionID));
+        Question question = session.createQuery(query).getSingleResult();
+        return question;
     }
 
     private List<StudentExam> retrieveStudentExams(int studentID) {
