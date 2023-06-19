@@ -162,8 +162,10 @@ public class SimpleClient extends AbstractClient {
                 user = SimpleClient.getClient().getUser();
                 if(!(user instanceof Student))
 				    approveEvent.show();
+                System.out.println("before eventBus");
                 EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
+            EventBus.getDefault().post(new PrincipalPressedShowDecision());
         }
         else if (messageText.startsWith("Extra time rejected")) {
 			ExtraTime extraTime=(ExtraTime) message.getData();
@@ -172,6 +174,7 @@ public class SimpleClient extends AbstractClient {
 				rejectEvent.show();
                 EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
+            EventBus.getDefault().post(new PrincipalPressedShowDecision());
 		}
 		else if (messageText.startsWith("Extra Time Requested")) {
 			ExtraTime extraTime=(ExtraTime) message.getData();
@@ -179,6 +182,7 @@ public class SimpleClient extends AbstractClient {
 			if(relevantUser(extraTime,"request")) {
 				notification.show();
 			}
+            EventBus.getDefault().post(new TeacherPressedSendRequest());
 		}
         else if (messageText.startsWith("Exam Forms in ")){
             System.out.println("IN Client Exam Forms number: " + ((List<ExamForm>)message.getData()).size());

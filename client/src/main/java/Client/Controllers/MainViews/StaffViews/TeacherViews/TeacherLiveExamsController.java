@@ -64,8 +64,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     @FXML
     private Label pastExamsLabel;
 /*
-
-
     @Subscribe
     public void chooseExam(ChooseExamEvent event){
         seeAnswerButton.setVisible(false);
@@ -74,71 +72,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     }
     */
 
-    /////////////////////////////*** Extra's ***///////////////////////////////////////////
-    public void colorRows(List<ClassExam>list,String color)
-    {
-        data.addAll(list);
-        ExamsTable.setRowFactory(tv -> new TableRow<>(){
-            @Override
-            protected void updateItem(ClassExam item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    // Set the default background color for empty rows
-                    setStyle("");
-                } else {
-                    // Set the background color based on some condition
-                    setStyle(color);
-                }
-            }
-        });
-
-    }
-
-    @FXML
-    void CurrentExamCheckBoxFunc(ActionEvent event) throws IOException {
-        Date CurrentDate = new Date();
-        List<ClassExam> CurrentExams = new ArrayList<>();
-        for (ClassExam item : examList) {
-            if (item.getStartDate().before(CurrentDate) || item.getStartDate().equals(CurrentDate)) {
-                if (item.getFinalSubmissionDate().after(CurrentDate)) {
-                    CurrentExams.add(item);
-                }
-            }
-        }
-        CurrentExams = SelectedExams(CurrentExams);
-        colorRows(CurrentExams,"-fx-background-color: #74E391");
-    }
-
-    @FXML
-    void FutureExamCheckBoxFunc(ActionEvent event) throws IOException {
-        Date CurrentDate = new Date();
-        List<ClassExam> CurrentExams = new ArrayList<>();
-        for (ClassExam item : examList) {
-            if (item.getStartDate().after(CurrentDate) || item.getStartDate().equals(CurrentDate)) {
-                CurrentExams.add(item);
-            }
-        }
-        CurrentExams = SelectedExams(CurrentExams);
-        colorRows(CurrentExams,"-fx-background-color: #7BAAE0");
-    }
-
-    @FXML
-    void PastExamCheckBoxFunc(ActionEvent event) throws IOException {
-        Date CurrentDate = new Date();
-        List<ClassExam> CurrentExams = new ArrayList<>();
-        for (ClassExam item : examList) {
-            if (item.getStartDate().before(CurrentDate) || item.getStartDate().equals(CurrentDate)) {
-                if (item.getFinalSubmissionDate().before(CurrentDate)) {
-                    CurrentExams.add(item);
-                }
-            }
-        }
-        CurrentExams = SelectedExams(CurrentExams);
-        colorRows(CurrentExams,"-fx-background-color: #F26666");
-
-    }
-/////////////////////////////////*** End Extra's ***/////////////////////////////////////////////////////
-    //***
     public List<ClassExam> SelectedExams(List<ClassExam> examList) throws IOException {
 
         List<ClassExam>LiveExam=new ArrayList<>();
@@ -157,7 +90,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             RequestExtraTimeBT.setVisible(true);
             for(ClassExam item: LiveExam)
                 if(!item.getTeacher().equals(person)) {
-                    System.out.println("remoce from live exam list");
                     LiveExam.remove(item);
                 }
         }
@@ -178,73 +110,18 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         return LiveExam;
     }
 
-/*
     @Subscribe
-    public void getExtraTimeRequests(ExtraTimeRequestsEvent event){
-        extraTimeList=event.getExtraTimeList();
-        for(ExtraTime ite: extraTimeList)
-        {
-            System.out.println("Principal note is: "+ite.getPrincipalNote());
-        }
-    }
-*/
-
-    @Subscribe
-    public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event){
+    public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event) throws IOException {
         SelectedExtraTime=event.getExtraTime();
-
-       // Platform.runLater(() -> {
-
-            if(SelectedExam==null)
-            {
-                System.out.println("Extra time is null");
-            }
-
-        //Dialog dialog = new Dialog();
-        //dialog.getDialogPane().setMinWidth(200);
-        //dialog.getDialogPane().setMinHeight(100);
         if(event.getMessage().equals("failed")||event.getExtraTime()==null) {
-           // dialog.setTitle("Decision Status");
-           // dialog.setHeaderText("Fail to get principal's decision");
-           // dialog.showAndWait();
             JOptionPane.showMessageDialog(null, "failed to find the decsion", "Decision Status", JOptionPane.ERROR_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Decision: "+SelectedExtraTime.getDecision()+"\nPrincipal note: "+SelectedExtraTime.getPrincipalNote(), "Decision Status", JOptionPane.INFORMATION_MESSAGE);
-            //JOptionPane.showMessageDialog(null, "Decision: approve", "Decision Status", JOptionPane.INFORMATION_MESSAGE);
-            //dialog.setTitle("Decision Status");
-            //dialog.setHeaderText("Decision: "+event.getExtraTime().getDecision());
-            //dialog.setContentText("Principal note: "+event.getExtraTime().getPrincipalNote());
-           // dialog.showAndWait();
         }
-
-       // });
+        EventBus.getDefault().unregister(this);
+        SimpleChatClient.setRoot("TeacherMainScreen");
     }
 
-/*
-    @Subscribe
-    public void updateText(PrincipalApproveEvent event)
-    {
-        ExtraTime extraTime=event.getExtraTime();
-        for(ClassExam item: examList){
-            if(extraTime.getExam().getID()==item.getID())
-            {
-                item.setExtraTime(extraTime);
-            }
-        }
-
-        Platform.runLater(() -> {
-
-            try {
-                System.out.println("get the extra time");
-                ExtraTime extraTime = event.getExtraTime();
-                extraTimeList.add(extraTime);
-                ExamsTable.refresh();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
- */
 
 /* get the class exams from server , then insert them to the table and sort them by start and end date */
     @Subscribe
@@ -306,9 +183,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             }
         });
         ExamsTable.refresh();
-
-        ExamsTable.refresh();
-
     }
 
 //////////////////////////////*** while pressing on create new exam button ***/////////////////////////////
@@ -357,6 +231,9 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     void showDecisionPressed(ActionEvent event)  throws IOException {
         if (SelectedExam==null){
             JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }if (SelectedExam.getExtraTime()==null){
+            JOptionPane.showMessageDialog(null, "There is no extra time request", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
         System.out.println("the selected exam" + SelectedExam.getCourse()+" In showDecisionPressed");

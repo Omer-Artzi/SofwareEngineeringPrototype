@@ -23,7 +23,6 @@ public class PrincipalApproveEvent extends PrincipalDecisionEvent{
         notification.hideAfter(Duration.seconds(60));
     }
 
-
     public void show() {
         System.out.println("In show()");
         try {

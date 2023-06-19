@@ -1,6 +1,10 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
+import Client.Controllers.MainViews.SaveBeforeExit;
+import Client.Events.PrincipalPressedShowDecision;
 import Client.Events.SelectedClassExamEvent;
+import Client.Events.TeacherPressedSendRequest;
+import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.SchoolOwned.ClassExam;
 import Entities.Communication.Message;
@@ -27,7 +31,7 @@ import java.util.List;
 
 
 //** A controller to fill details about the Request to Extra Time**//
-public class TeacherExtraTimeRequestController  {
+public class TeacherExtraTimeRequestController {
     @FXML
     private Label headerLabel;
     @FXML
@@ -47,7 +51,20 @@ public class TeacherExtraTimeRequestController  {
     @FXML
     private javafx.scene.layout.VBox VBox;
 
-/* get fron the previous controller the selected exam */
+    @Subscribe
+    public void requestSend(TeacherPressedSendRequest event) throws IOException {
+        EventBus.getDefault().unregister(this);
+        System.out.println("In decisionSaved");
+        JOptionPane.showMessageDialog(null, "Request sent", "Request Sent", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            SimpleChatClient.setRoot("TeacherMainScreen");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+/* get from the previous controller the selected exam */
     @Subscribe
     public void updateExam(SelectedClassExamEvent event)
     {
@@ -117,5 +134,28 @@ public class TeacherExtraTimeRequestController  {
         Message message=new Message(1, "Extra time request", extraTime);
 
         SimpleClient.getClient().sendToServer(message);
+       // EventBus.getDefault().unregister(this);
     }
+/*
+    @Override
+    public boolean CheckForUnsavedData() {
+        if (!NewTimeTextFiled.getText().isEmpty() && !TeacherNoteTF.getText().isEmpty() && !liad.getTargetItems().isEmpty() ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void SaveData() {
+        ActionEvent event = new ActionEvent();
+        try {
+            sendExtraTimeRequest(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+
 }

@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.PrincipalViews.PrincipalExtraTimeController">
    <children>
-      <TableView fx:id="ExtraTimeList" layoutX="91.0" layoutY="65.0" prefHeight="381.0" prefWidth="601.0">
+      <TableView fx:id="ExtraTimeList" layoutX="91.0" layoutY="119.0" prefHeight="326.0" prefWidth="602.0">
         <columns>
           <TableColumn fx:id="IDColumn" prefWidth="121.59999084472656" text="ID" />
           <TableColumn fx:id="InfoColumn" prefWidth="212.79998779296875" text="Info" />
@@ -31,5 +31,10 @@
             <Font size="17.0" />
          </font>
       </Button>
+      <Label fx:id="headerLabel" alignment="CENTER" layoutX="203.0" layoutY="65.0" prefHeight="31.0" prefWidth="370.0" text="Requests List">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
