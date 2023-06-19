@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.PrincipalViews.PrincipalExtraTimeController" stylesheets="../../../styles.css">
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.PrincipalViews.PrincipalExtraTimeController">
    <children>
-      <TableView fx:id="ExtraTimeList" layoutX="211.0" layoutY="41.0" prefHeight="381.0" prefWidth="601.0">
+      <TableView fx:id="ExtraTimeList" layoutX="91.0" layoutY="65.0" prefHeight="381.0" prefWidth="601.0">
         <columns>
           <TableColumn fx:id="IDColumn" prefWidth="121.59999084472656" text="ID" />
           <TableColumn fx:id="InfoColumn" prefWidth="212.79998779296875" text="Info" />
@@ -19,14 +19,14 @@
             <TableColumn fx:id="ExtraTimeColumn" prefWidth="145.60000000000002" text="Extra Time" />
         </columns>
       </TableView>
-      <TextArea fx:id="PrincipalNote" layoutX="226.0" layoutY="546.0" prefHeight="104.0" prefWidth="586.0" />
-      <Label fx:id="DecisionLabel" layoutX="226.0" layoutY="502.0" prefHeight="31.0" prefWidth="74.0" text="Decision:">
+      <TextArea fx:id="PrincipalNote" layoutX="91.0" layoutY="505.0" prefHeight="104.0" prefWidth="586.0" />
+      <Label fx:id="DecisionLabel" layoutX="91.0" layoutY="466.0" prefHeight="31.0" prefWidth="74.0" text="Decision:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="DecisionCoiceBox" layoutX="300.0" layoutY="505.0" prefHeight="26.0" prefWidth="92.0" />
-      <Button fx:id="SendButton" layoutX="471.0" layoutY="666.0" mnemonicParsing="false" onAction="#SendDecision" prefHeight="31.0" prefWidth="74.0" text="Send">
+      <ChoiceBox fx:id="DecisionCoiceBox" layoutX="173.0" layoutY="468.0" prefHeight="26.0" prefWidth="92.0" />
+      <Button fx:id="SendButton" layoutX="309.0" layoutY="628.0" mnemonicParsing="false" onAction="#SendDecision" prefHeight="31.0" prefWidth="74.0" text="Send">
          <font>
             <Font size="17.0" />
          </font>

@@ -27,10 +27,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class TeacherLiveExamsController extends SaveBeforeExit {
     @FXML
-    private Button seeDecisionButton;
+    private Button showDecisionButton;
     List<ExtraTime>extraTimeList=new ArrayList<>();
     ObservableList<ClassExam> data;
     private List<ClassExam> examList=new ArrayList<>();
@@ -38,10 +39,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     private ExtraTime SelectedExtraTime=null;
     @FXML
     private Button CreateNewExamButton;
-    @FXML
-    private VBox vBox;
-    @FXML
-    private Label AnswerLabel;
+
     @FXML
     private TableView<ClassExam> ExamsTable;
     @FXML
@@ -55,17 +53,19 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     @FXML
     private TableColumn<ClassExam, String> SubjectColumn;
     @FXML
-    private TextArea AnswerTextFlow;
+    private Label currentExamsLabel;
 
     @FXML
-    private CheckBox FutureExamCheckBox;
+    private Label futureLabel;
 
     @FXML
-    private CheckBox PastExamCheckBox;
-    @FXML
-    private CheckBox CurrentExamCheckBox;
+    private Label headerLabel;
 
-    /*
+    @FXML
+    private Label pastExamsLabel;
+/*
+
+
     @Subscribe
     public void chooseExam(ChooseExamEvent event){
         seeAnswerButton.setVisible(false);
@@ -192,10 +192,32 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     @Subscribe
     public void GetExtraTimeOfSpecificClassExam(extraTimeOfSpecificClassExam event){
         SelectedExtraTime=event.getExtraTime();
-        System.out.println("in @Subscribe function");
-        if(SelectedExam==null)
-            System.out.println("List is empty!");
-        JOptionPane.showMessageDialog(null, "HIIIII", "Database Error", JOptionPane.WARNING_MESSAGE);
+
+       // Platform.runLater(() -> {
+
+            if(SelectedExam==null)
+            {
+                System.out.println("Extra time is null");
+            }
+
+        //Dialog dialog = new Dialog();
+        //dialog.getDialogPane().setMinWidth(200);
+        //dialog.getDialogPane().setMinHeight(100);
+        if(event.getMessage().equals("failed")||event.getExtraTime()==null) {
+           // dialog.setTitle("Decision Status");
+           // dialog.setHeaderText("Fail to get principal's decision");
+           // dialog.showAndWait();
+            JOptionPane.showMessageDialog(null, "failed to find the decsion", "Decision Status", JOptionPane.ERROR_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Decision: "+SelectedExtraTime.getDecision()+"\nPrincipal note: "+SelectedExtraTime.getPrincipalNote(), "Decision Status", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Decision: approve", "Decision Status", JOptionPane.INFORMATION_MESSAGE);
+            //dialog.setTitle("Decision Status");
+            //dialog.setHeaderText("Decision: "+event.getExtraTime().getDecision());
+            //dialog.setContentText("Principal note: "+event.getExtraTime().getPrincipalNote());
+           // dialog.showAndWait();
+        }
+
+       // });
     }
 
 /*
@@ -242,13 +264,13 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
                 // Set the background color based on some condition
                 if (item.getStartDate().before(CurrentDate)||item.getStartDate().equals(CurrentDate)) {
                     if (item.getFinalSubmissionDate().after(CurrentDate)) {
-                        setStyle("-fx-background-color: #74E391");
+                        setStyle("-fx-background-color: #B2F7DB");
                     } else if (item.getFinalSubmissionDate().before(CurrentDate) || item.getFinalSubmissionDate().equals(CurrentDate)) {
-                        setStyle("-fx-background-color: #F26666");
+                        setStyle("-fx-background-color: #F7B2B2");
                     }
                 }
                 else{
-                    setStyle("-fx-background-color: #7BAAE0");
+                    setStyle("-fx-background-color: #B2D7F7");
                 }
             }
         }
@@ -269,7 +291,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             CreateNewExamButton.setVisible(false);
         }
 
-        vBox=new VBox();
         data = ExamsTable.getItems();
         SubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         CourseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
@@ -279,21 +300,15 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         ExamsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 SelectedExam=newSelection;
-                if(SelectedExam.getExtraTime()!=null) {
-                    JOptionPane.showMessageDialog(null,SelectedExam.getExtraTime().getDecision(),"Class Exam Status",JOptionPane.INFORMATION_MESSAGE);
-                    AnswerTextFlow.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
-                    AnswerLabel.setVisible(true);
-                    AnswerLabel.setText("Answer: " + SelectedExam.getExtraTime().getDecision());
-                }
+            }
+            else {
+                System.out.println("No class exam choose");
             }
         });
         ExamsTable.refresh();
-        AnswerLabel.setVisible(false);
-        AnswerTextFlow.setDisable(false);
+
         ExamsTable.refresh();
-        CurrentExamCheckBox.setVisible(false);
-        PastExamCheckBox.setVisible(false);
-        FutureExamCheckBox.setVisible(false);
+
     }
 
 //////////////////////////////*** while pressing on create new exam button ***/////////////////////////////
@@ -318,7 +333,10 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        if (SelectedExam.getExtraTime() != null) {
+            JOptionPane.showMessageDialog(null, "There is an extra time request to this class exam", "Error!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         Date currentDate = new Date();
         if (SelectedExam.getStartDate().after(currentDate) || SelectedExam.getFinalSubmissionDate().before(currentDate)){
             JOptionPane.showMessageDialog(null, "Invalid choose", "Error", JOptionPane.ERROR_MESSAGE);
@@ -336,11 +354,12 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     }
 //////////////////////////////*** while pressing on see decision button ***//////////////////////////////////
     @FXML
-    void seeDecisionFunc(ActionEvent event) throws IOException {
+    void showDecisionPressed(ActionEvent event)  throws IOException {
         if (SelectedExam==null){
             JOptionPane.showMessageDialog(null, "Please choose exam", "Error!", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        System.out.println("the selected exam" + SelectedExam.getCourse()+" In showDecisionPressed");
         Message message=new Message(1, "Get extra time of specific class exam", SelectedExam);
         SimpleClient.getClient().sendToServer(message);
     }

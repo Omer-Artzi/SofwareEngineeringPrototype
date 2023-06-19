@@ -10,23 +10,33 @@
 
 <AnchorPane fx:id="principalListSelectionView" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherExtraTimeRequestController">
     <children>
-        <TextArea fx:id="TeacherNoteTF" layoutX="31.0" layoutY="309.0" prefHeight="95.0" prefWidth="618.0" />
-        <Label layoutX="33.0" layoutY="278.0" prefHeight="31.0" prefWidth="109.0" text="Add note:">
+        <TextArea fx:id="TeacherNoteTF" layoutX="29.0" layoutY="409.0" prefHeight="95.0" prefWidth="618.0" />
+        <Label layoutX="33.0" layoutY="368.0" prefHeight="31.0" prefWidth="109.0" text="Add note:">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
-        <Button fx:id="sendBT" layoutX="281.0" layoutY="461.0" mnemonicParsing="false" onAction="#sendExtraTimeRequest" text="send">
+        <Button fx:id="sendBT" layoutX="280.0" layoutY="555.0" mnemonicParsing="false" onAction="#sendExtraTimeRequest" text="send">
             <font>
                 <Font size="15.0" />
             </font>
         </Button>
-        <ListSelectionView fx:id="liad" layoutX="25.0" layoutY="55.0" prefHeight="223.0" prefWidth="636.0" />
-      <Label fx:id="ExtraTimeLabel" layoutX="33.0" layoutY="412.0" prefHeight="31.0" prefWidth="158.0" text="Extra time in min:">
+        <ListSelectionView fx:id="liad" layoutX="20.0" layoutY="160.0" prefHeight="223.0" prefWidth="636.0" />
+      <Label fx:id="ExtraTimeLabel" layoutX="33.0" layoutY="517.0" prefHeight="31.0" prefWidth="158.0" text="Extra time in min:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="NewTimeTextFiled" layoutX="191.0" layoutY="414.0" onAction="#NewTimeFunction" prefHeight="26.0" prefWidth="43.0" />
+      <TextField fx:id="NewTimeTextFiled" layoutX="191.0" layoutY="520.0" onAction="#NewTimeFunction" prefHeight="26.0" prefWidth="43.0" />
+      <Label fx:id="headerLabel" layoutX="159.0" layoutY="61.0" prefHeight="40.0" prefWidth="360.0" text="Request Extra Time">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="choosePrincipalLabel" layoutX="35.0" layoutY="136.0" prefHeight="15.0" prefWidth="216.0" text="choose principals:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>

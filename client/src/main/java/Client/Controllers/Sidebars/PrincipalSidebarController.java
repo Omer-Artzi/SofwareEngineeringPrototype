@@ -19,12 +19,6 @@ public class PrincipalSidebarController extends SideBar {
     private URL location;
 
     @FXML
-    private Button addQuestionButton;
-
-    @FXML
-    private Button addTestFormsButton;
-
-    @FXML
     private Button showStatisticsButton;
 
     @FXML
@@ -51,19 +45,8 @@ public class PrincipalSidebarController extends SideBar {
     }
 
     @FXML
-    void addQuestion(ActionEvent event) throws IOException {
-        ChangeScene("TeacherAddQuestion");
-    }
-
-    @FXML
-    void addTestForms(ActionEvent event) throws IOException {
-        ChangeScene("TeacherAddTestForm");
-    }
-
-    @FXML
     void extraTimeList(ActionEvent event) throws IOException {
-        //ChangeScene("ListExtraTimeRequest");
-        SimpleChatClient.NewSetRoot("ListExtraTimeRequest");
+        ChangeScene("PrincipalExtraTime");
     }
 
     @FXML
@@ -93,8 +76,6 @@ public class PrincipalSidebarController extends SideBar {
     }
 
     void InitializationAsserts(){
-        //assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
-       // assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert userTypeLabel != null : "fx:id=\"userTypeLabel\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert viewClassExamsButton != null : "fx:id=\"viewClassExamsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
