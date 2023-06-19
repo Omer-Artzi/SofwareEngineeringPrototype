@@ -18,10 +18,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +50,34 @@ public class PreviewTestFormController extends SaveBeforeExit {
 
     @FXML
     private TableColumn<ExamForm, String> CreatorCol;
+
+    @FXML
+    private Button DuplicateBtn;
+
+    @FXML
+    private Button EditBtn;
+
+
+
+
+    @FXML
+    void DuplicateAct(ActionEvent event) throws IOException {
+        if (ExamFormTV.getSelectionModel().getSelectedItem() != null) {
+            SimpleChatClient.setRoot("TeacherAddTestForm");
+            EventBus.getDefault().post(new LoadExamEvent(ExamFormTV.getSelectionModel().getSelectedItem(), "Duplicate"));
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @FXML
+    void EditBtnAct(ActionEvent event) throws IOException {
+        if (ExamFormTV.getSelectionModel().getSelectedItem() != null) {
+            SimpleChatClient.setRoot("TeacherAddTestForm");
+            EventBus.getDefault().post(new LoadExamEvent(ExamFormTV.getSelectionModel().getSelectedItem(), "Edit"));
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
 
     @FXML
     void ExamFormClick(MouseEvent event) throws IOException {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.PreviewTestFormController">
+<AnchorPane prefHeight="768.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.PreviewTestFormController">
    <children>
       <ComboBox fx:id="SubjectCombo" layoutX="158.0" layoutY="104.0" onAction="#SubjectComboAct" prefWidth="150.0" promptText="Choose Subject" />
       <ComboBox fx:id="CourseCombo" layoutX="463.0" layoutY="104.0" onAction="#CourseComboAct" prefWidth="150.0" promptText="Choose Course" />
@@ -23,5 +24,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="EditBtn" layoutX="319.0" layoutY="644.0" mnemonicParsing="false" onAction="#EditBtnAct" prefHeight="26.0" prefWidth="52.0" text="Edit" />
+      <Button fx:id="DuplicateBtn" layoutX="430.0" layoutY="644.0" mnemonicParsing="false" onAction="#DuplicateAct" text="Duplicate" />
    </children>
 </AnchorPane>
