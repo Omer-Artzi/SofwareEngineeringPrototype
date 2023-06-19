@@ -14,6 +14,10 @@ import java.util.Optional;
 
 public class SaveBeforeExit {
 
+    /**
+     * Starts the process of preventing loss of data when changing scenes
+     * @param event ChangeMainSceneEvent is sent changes scene through the Sidebar
+     */
     @Subscribe
     public void TriggerDataCheck(ChangeMainSceneEvent event) {
         boolean unsavedData = CheckForUnsavedData();
@@ -21,7 +25,8 @@ public class SaveBeforeExit {
         Platform.runLater(() -> {
             if (unsavedData) {
                 boolean changeScreen = PromptUserToSaveData(event.getSceneName());
-            } else {
+            }
+            else {
                 try {
                     EventBus.getDefault().unregister(this);
                     SimpleChatClient.setRoot(event.getSceneName());
@@ -34,6 +39,11 @@ public class SaveBeforeExit {
         });
     }
 
+    /**
+     * Prompts the user to save data before changing scenes
+     * @param sceneName the name of the scene to change to
+     * @return true if the user chose to save the data, false if the user chose not to save the data or cancelled
+     */
     @FXML
     public boolean PromptUserToSaveData(String sceneName) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have unsaved data. Would you like to save it?", ButtonType.YES, javafx.scene.control.ButtonType.NO, ButtonType.CANCEL);
@@ -80,18 +90,26 @@ public class SaveBeforeExit {
         return false;
     }
 
-    // IMPLEMENT THIS METHOD IN THE CONTROLLER IF YOU HAVE SAVABLE DATA
+    /**
+     * Checks if there is unsaved data in the scene
+     * method to be overriden if screen has potentially unsaved data
+     * @return true if there is unsaved data in the scene
+     */
     public boolean CheckForUnsavedData() {
         System.out.println("CheckForUnsavedData Client.Controllers.MainPanelScreens.SaveBeforeExit");
         return false;
     }
 
-    // IMPLEMENT THIS METHOD IN THE CONTROLLER IF YOU HAVE SAVABLE DATA
+    /**
+     * Saves the data in the scene
+     * method to be overriden if screen has potentially savable data
+     * @throws SaveDataFailedException if the data save failed
+     */
     public void SaveData() throws SaveDataFailedException {
 
     }
 
-    public class SaveDataFailedException extends Exception {
+    public static class SaveDataFailedException extends Exception {
     }
 
     // flow: sidebar sends an event with the target scene name.

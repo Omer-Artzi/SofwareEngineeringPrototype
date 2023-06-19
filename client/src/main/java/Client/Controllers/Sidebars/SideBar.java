@@ -69,6 +69,9 @@ public class SideBar {
 
     }
 
+    /**
+     * This method is called when the user clicks on the "Menu" button and collpases/expands the sidebar
+     */
     @FXML
     void OnMenuButtonPressed(ActionEvent event) {
         if (sidebarState == SidebarState.EXPANDED) {
@@ -92,6 +95,9 @@ public class SideBar {
     }
 
 
+    /**
+     * called when a sidebar button is clicked to handle scene switching
+     */
     void ChangeScene(String sceneName) {
         ChangeMainSceneEvent event = new ChangeMainSceneEvent(sceneName);
         System.out.println("sidebar changing scene to " + sceneName);
