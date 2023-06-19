@@ -25,9 +25,6 @@ public class PrincipalSidebarController extends SideBar {
     private Button addTestFormsButton;
 
     @FXML
-    private Button gradeExamButton;
-
-    @FXML
     private Button showStatisticsButton;
 
     @FXML
@@ -70,12 +67,6 @@ public class PrincipalSidebarController extends SideBar {
     }
 
     @FXML
-    void gradeExam(ActionEvent event) {
-        ChangeScene("TeacherExamGrade");
-    }
-
-
-    @FXML
     void showStatistics(ActionEvent event)  {
         ChangeScene("ShowStatistics");
     }
@@ -104,7 +95,6 @@ public class PrincipalSidebarController extends SideBar {
     void InitializationAsserts(){
         //assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
        // assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
-        assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert showStatisticsButton != null : "fx:id=\"showStatisticsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert userTypeLabel != null : "fx:id=\"userTypeLabel\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
         assert viewClassExamsButton != null : "fx:id=\"viewClassExamsButton\" was not injected: check your FXML file 'PrincipalSidebar.fxml'.";
