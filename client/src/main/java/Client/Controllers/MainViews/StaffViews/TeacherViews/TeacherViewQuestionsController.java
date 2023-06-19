@@ -370,15 +370,16 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         List<Question> previousChoices = event.getQuestions();
         System.out.println("Previous choices: " + previousChoices);
+        chosenQuestions.clear();
+        chosenQuestions.addAll(previousChoices);
 
         checkBoxColumn.setCellValueFactory(
                 cell -> {
                     Question question = cell.getValue();
                     CheckBox checkBox = new CheckBox();
-                    if(previousChoices.contains(question)) {
+                    if(chosenQuestions.contains(question)) {
                         System.out.println("Contains question: " + question);
                         checkBox.selectedProperty().setValue(true);
-                        chosenQuestions.add(question);
                     }
                     else
                         checkBox.selectedProperty().setValue(false);
