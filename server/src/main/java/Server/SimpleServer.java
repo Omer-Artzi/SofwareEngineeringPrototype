@@ -754,10 +754,36 @@ public class SimpleServer extends AbstractServer {
                 String examCode = createCodeOfExam(newExamForm); // TODO: Ilan- Added in 17.6, Check if it works
                 System.out.println("Exam code: " + examCode);
                 newExamForm.setExamFormID(examCode);
+
+                // teacher link
+                Teacher creator = (Teacher)retrieveUser(newExamForm.getCreator().getEmail());
+                newExamForm.setCreator(creator);
+                creator.addExamForm(newExamForm);
+
+                // question link
+                List<Question> questionList = new ArrayList<>();
+                for(Question question : newExamForm.getQuestionList())
+                {
+                    Question dataQuestion = retrieveQuestion(question.getID());
+                    questionList.add(dataQuestion);
+                }
+                newExamForm.setQuestionList(questionList);
+
+                // subject link
+                Subject subject = getSubject(newExamForm.getSubject().getId().intValue());
+                subject.addExamForm(newExamForm);
+                newExamForm.setSubject(subject);
+
+                // Course link
+                Course course = getCourse(newExamForm.getCourse().getId().intValue());
+                course.addExamForm(newExamForm);
+                newExamForm.setCourse(course);
+                newExamForm.setLastUsed(DataGenerator.ConvertToDate(LocalDateTime.now()));
+
+                newExamForm.setClassExam(new ArrayList<>());
+
                 try {
                     session.save(newExamForm);
-                    session.saveOrUpdate(newExamForm.getCourse());
-                    session.saveOrUpdate(newExamForm.getCreator());
                     session.flush();
                     response = ("Success: new ExamForm in " + newExamForm.getCourse() + " was successfully added to the database");
                     message.setMessage(response);

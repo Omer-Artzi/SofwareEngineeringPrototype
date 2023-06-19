@@ -364,7 +364,7 @@ public class DataGenerator {
         return LocalDate.ofEpochDay(randomEpochDay).atTime(faker.number().numberBetween(8, 17), 0);
     }
 
-    private static Date ConvertToDate(LocalDateTime localDate) {
+    public static Date ConvertToDate(LocalDateTime localDate) {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zonedDateTime = localDate.atZone(zoneId);
         return Date.from(zonedDateTime.toInstant());
