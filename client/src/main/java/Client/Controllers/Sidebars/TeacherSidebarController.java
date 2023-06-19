@@ -56,7 +56,6 @@ public class TeacherSidebarController extends SideBar {
 
     @FXML
     void createExam(ActionEvent event) {
-
         ChangeScene("TeacherCreateClassExam");
     }
 
@@ -77,13 +76,13 @@ public class TeacherSidebarController extends SideBar {
 
     @FXML
     void viewTestForms(ActionEvent event) {
-        ChangeScene("TeacherViewLiveExams"/*"ViewTestForms"*/);
+        ChangeScene("TeacherViewLiveExams");
     }
 
     @FXML
     void initialize() {
         InitializationAsserts();
-
+        userTypeLabel.setText("Logged in as: Student");
     }
 
     void InitializationAsserts(){

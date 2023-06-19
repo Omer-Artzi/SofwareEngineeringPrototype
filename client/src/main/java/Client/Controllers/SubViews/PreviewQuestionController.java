@@ -59,6 +59,10 @@ public class PreviewQuestionController {
         teacherNotes.setVisible(false);
     }
 
+    /**
+     * Receives the question to present and presents it
+     * @param event containing the question
+     */
     @Subscribe
     public void SetQuestion(ChangePreviewEvent event) {
         System.out.println("Client.Controllers.MainViews.SubViews.PreviewQuestionController.SetQuestion");
@@ -76,6 +80,9 @@ public class PreviewQuestionController {
         CreateAnswers();
     }
 
+    /**
+     * slots the question details into the javaFX components
+     */
     private void PopulateQuestion() {
         System.out.println("Client.Controllers.MainViews.SubViews.PreviewQuestionController.PopulateQuestion");
         questionText.setText(question.getQuestionData());
@@ -94,13 +101,14 @@ public class PreviewQuestionController {
             questionText.setPrefHeight(200);
         }
         if (question.getStudentNote() != null && !question.getStudentNote().trim().isEmpty()) {
-            if(!mainPane.getChildren().contains(studentNotes)){
+            if(!(mainPane.getChildren().contains(studentNotes))){
                 System.out.println("adding studentNotes");
                 mainPane.getChildren().add(1,studentNotes);
             }
             System.out.println("studentNotes is not empty");
             System.out.println("studentNotes: " + question.getStudentNote());
             studentNotes.setText(question.getStudentNote());
+            studentNotes.setVisible(true);
         }
         else {
             if(mainPane.getChildren().contains(studentNotes)){
@@ -125,6 +133,9 @@ public class PreviewQuestionController {
         System.out.println("question populated");
     }
 
+    /**
+     * procedurally creates the answer radio buttons
+     */
     private void CreateAnswers() {
         answersToggleGroup = new ToggleGroup();
         List<String> answers = new ArrayList<>(question.getAnswers());
@@ -147,6 +158,10 @@ public class PreviewQuestionController {
 
     }
 
+    /**
+     * receives a request for the answer selected by the student and sends that answer
+     * @param event containing the request
+     */
     @Subscribe
     public void ReceiveAnswerRequest(RequestStudentAnswerToQuestion event) {
         System.out.println("Client.Controllers.MainViews.SubViews.PreviewQuestionController.ReceiveAnswerRequest");

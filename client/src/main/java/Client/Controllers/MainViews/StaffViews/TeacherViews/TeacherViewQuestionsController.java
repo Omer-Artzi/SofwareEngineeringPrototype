@@ -181,7 +181,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         Collections.sort(coursePicker.getItems());
     }
 
-    private void UpdateQuestions() {
+    /*private void UpdateQuestions() {
         System.out.println("Updating questions");
         Course selectedCourse = coursePicker.getValue();
         questionsTable.getItems().clear();
@@ -195,7 +195,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         questionsTable.getItems().addAll(selectedCourse.getQuestions());
         //questionsTable.setOnMouseClicked(e -> UpdatePreview());
-    }
+    }*/
 
     private void CheckboxPressed(Question question) {
         if (chosenQuestions.contains(question)) {
@@ -259,19 +259,27 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
 // send requests to the server
 
-    // sends a server requests for the Subjects of the logged in teacher
+    /**
+     * Sends a request to the server for the subjects of the logged in teacher
+      */
     private void RequestSubjectsOfTeacher() throws IOException {
         System.out.println("TeacherViewQuestions requesting subjects");
         Message message = new Message(1, "1Get Subjects of Teacher: " + SimpleClient.getClient().getUser().getID());
         SimpleClient.getClient().sendToServer(message);
     }
 
+    /**
+     * Sends a request to the server for all subjects
+     */
     void RequestAllSubjects() throws IOException {
         System.out.println("Requesting all subjects");
         Message request = new Message(1, "Get Subjects");
         SimpleClient.getClient().sendToServer(request);
     }
 
+    /**
+     * Sends a request to the server for all questions of a course
+     */
     private void RequestQuestions() throws IOException {
         System.out.println("Requesting questions");
         Message request = new Message(1, "Get Questions for Course: " + coursePicker.getValue().toString());
@@ -283,14 +291,26 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 // responses to messages from the server
 
 
-    // receives a list of subjects from the server
+    /**
+     * Receives a list of subjects from the server and populates the subject picker
+      */
     @Subscribe
     public void updateSubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
 
-        subjectPicker.getItems().addAll(event.getSubjects());
+        /*subjectPicker.getItems().addAll(event.getSubjects());
+        Collections.sort(subjectPicker.getItems());*/
+
+        System.out.println("Populating dropdown menus");
+        subjectList = event.getSubjects();
+        subjectPicker.getItems().clear();
+        subjectPicker.getItems().addAll(subjectList);
         Collections.sort(subjectPicker.getItems());
+        subjectPicker.setOnAction(e -> UpdateCourses());
     }
 
+    /**
+     * Receives a list of subjects from the server and populates the subject picker
+     */
     @Subscribe
     public void PopulateDropdownMenus(SubjectMessageEvent event) {
         System.out.println("Populating dropdown menus");
@@ -301,6 +321,9 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         subjectPicker.setOnAction(e -> UpdateCourses());
     }
 
+    /**
+     * Triggered when course is selected, loads the course's questions into the table
+     */
     @Subscribe
     public void PopulateQuestions(CourseQuestionsListEvent event) {
         System.out.println("Populating questions");
@@ -309,6 +332,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     }
 
+    /**
+     * Receives a question from the table
+     * @param selectedQuestion
+     */
     @Subscribe
     private void UpdatePreview(Question selectedQuestion) {
         this.selectedQuestion = selectedQuestion;
@@ -319,6 +346,11 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         EventBus.getDefault().post(event);
     }
 
+    /**
+     * handles adjusting the screen to perform as the question chooser for createExam
+     * adds a checkbox column to the table
+     * @param event
+     */
     @Subscribe
     public void ChooseQuestions(ChooseQuestionsEvent event) {
         System.out.println("Choosing questions");
@@ -333,7 +365,6 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         // add a checkbox column to the table
         TableColumn<Question, Boolean> checkBoxColumn = new TableColumn<>("Choose");
-        //checkBoxColumn.setCellValueFactory(new PropertyValueFactory<>("chosen"));
 
         List<Question> previousChoices = event.getQuestions();
         System.out.println("Previous choices: " + previousChoices);
@@ -363,6 +394,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         HandleChooseState();
     }
 
+    /**
+     * handles adjusting returning from editing a question
+     * @param event triggered when returning from editing a question
+     */
     @Subscribe
     public void ReturnFromEditQuestion(FinishEditExistingQuestionEvent event){
         System.out.println("Returning from edit question");
