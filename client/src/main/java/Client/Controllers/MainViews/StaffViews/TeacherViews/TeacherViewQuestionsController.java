@@ -81,6 +81,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     private Question selectedQuestion;
 
+    private TeacherAddTestFormController.SaveState storedAddTestFormState;
+
+
+
     @FXML
     void initialize() {
         System.out.println("Initializing Client.Controllers.MainPanelScreens.TeacherViewQuestionsController");
@@ -229,6 +233,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         System.out.println("Sending chosen questions to TeacherAddTestForm, subject: " + subjectPicker.getSelectionModel().getSelectedItem().getName() + ", course: " + coursePicker.getSelectionModel().getSelectedItem().getName());
         SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions, subjectPicker.getSelectionModel().getSelectedItem(), coursePicker.getSelectionModel().getSelectedItem());
+        chooseQuestionsEvent.setSaveState(storedAddTestFormState);
         EventBus.getDefault().post(chooseQuestionsEvent);
         EventBus.getDefault().unregister(this);
     }
@@ -356,6 +361,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
     @Subscribe
     public void ChooseQuestions(ChooseQuestionsEvent event) {
         System.out.println("Choosing questions");
+
+        storedAddTestFormState = event.getSaveState();
 
         // change state
         state = ContextualState.CHOOSE;
