@@ -400,24 +400,9 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onEndDateSelection()
     {
-        if(endDateTF.getValue().isAfter(startDateTF.getValue())||
-                ((endDateTF.getValue().equals(startDateTF.getValue())) &&
-                        timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText())))
-        {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
             typeCB.setDisable(false);
-        }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("Please select a date after today and after the start date");
-            alert.showAndWait();
-            //JOptionPane.showMessageDialog(null, "Please select a date after today and after the start date", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            endDateTF.setValue(null);
-        }
     }
     @FXML
     public void onTypeSelection()
