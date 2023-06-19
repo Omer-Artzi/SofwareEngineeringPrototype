@@ -1,6 +1,7 @@
 package Client.Controllers.MainViews;
 
 import Client.Events.ChangeMainSceneEvent;
+import Client.Events.LogoutEvent;
 import Client.SimpleChatClient;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -110,6 +111,11 @@ public class SaveBeforeExit {
     }
 
     public static class SaveDataFailedException extends Exception {
+    }
+
+    @Subscribe
+    public void UnregisterOnLogout(LogoutEvent event){
+        EventBus.getDefault().unregister(this);
     }
 
     // flow: sidebar sends an event with the target scene name.
