@@ -11,8 +11,6 @@ import Client.SimpleClient;
 import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
-import Entities.SchoolOwned.Question;
-import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
 import javafx.application.Platform;
@@ -172,6 +170,21 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     @Override @FXML
     public boolean PromptUserToSaveData(String sceneName) {
+        if (fileRecievedLabel.getText().equals("File Uploaded!")) {
+            try {
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
+                message.setData(studentExam);
+                SimpleClient.getClient().sendToServer(message);
+                SimpleChatClient.setRoot(sceneName);
+                EventBus.getDefault().unregister(this);
+                System.out.println("PromptUserToSaveData changing scene 2");
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return false;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have yet to submit your exam. If you leave now you will fail the exam. Do you still wish to leave?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
         alert.setTitle("Exam not submitted");
         Optional<ButtonType> result = alert.showAndWait();
@@ -182,6 +195,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
                     Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                     studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
                     message.setData(studentExam);
+                    SimpleClient.getClient().sendToServer(message);
                     SimpleChatClient.setRoot(sceneName);
                     EventBus.getDefault().unregister(this);
                     System.out.println("PromptUserToSaveData changing scene 2");
