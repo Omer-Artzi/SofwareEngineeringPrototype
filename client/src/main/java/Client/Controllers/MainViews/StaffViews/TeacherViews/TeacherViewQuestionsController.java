@@ -199,8 +199,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     private void CheckboxPressed(Question question) {
         if (chosenQuestions.contains(question)) {
+            System.out.println("Removing question from chosen questions");
             chosenQuestions.remove(question);
         } else {
+            System.out.println("Adding question to chosen questions");
             chosenQuestions.add(question);
         }
     }
