@@ -30,7 +30,7 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
     private URL location;
     @FXML
     private Label MainMessageLabel;
-
+/*
     @Subscribe
     public void update(NotificationEvent event) throws IOException {
         Platform.runLater(()-> {
@@ -46,7 +46,7 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
             }
         });
 }
-
+*/
     @FXML
     void initialize() throws IOException {
         EventBus.getDefault().register(this);

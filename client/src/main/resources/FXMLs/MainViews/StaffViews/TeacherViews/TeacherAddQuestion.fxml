@@ -21,12 +21,12 @@
                 <TableColumn fx:id="AnswerColumn" prefWidth="478.40001525878904" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButton" layoutX="333.0" layoutY="717.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="37.0" prefWidth="89.0" stylesheets="@../../../styles.css" text="save">
+        <Button fx:id="addQuestionButton" layoutX="172.0" layoutY="545.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="18.0" prefWidth="75.0" stylesheets="@../../../styles.css" text="save">
             <font>
-                <Font name="Arial Rounded MT Bold" size="16.0" />
+                <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Button fx:id="previewButton" layoutX="224.0" layoutY="550.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
+        <Button fx:id="previewButton" layoutX="75.0" layoutY="545.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
             <font>
                 <Font size="14.0" />
             </font>
@@ -56,7 +56,7 @@
             </font>
         </Label>
         <ListSelectionView fx:id="Courses" layoutX="68.0" layoutY="58.0" prefHeight="170.0" prefWidth="662.0" />
-        <Pane fx:id="previewWindow" layoutX="339.0" layoutY="495.0" prefHeight="218.0" prefWidth="595.0" />
+        <Pane fx:id="previewWindow" layoutX="399.0" layoutY="495.0" prefHeight="218.0" prefWidth="595.0" />
       <Label fx:id="questionDataLabel" layoutX="79.0" layoutY="213.0" prefHeight="30.0" prefWidth="275.0" text="Question data:">
          <font>
             <Font size="16.0" />

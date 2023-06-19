@@ -349,14 +349,22 @@ public class SimpleServer extends AbstractServer {
             else if (message.getMessage().startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());
                 try {
-                    session.save(extraTime);
+                   // if(getExtraTimeForClassExam1(extraTime.getExam())!=null) {
 
-                    session.flush();
+                        extraTime.getExam().setExtraTime(extraTime);
 
-                    response = ("Extra Time Requested");
-                    message.setMessage(response);
-                    //client.sendToClient(message);
-                    sendToAllClients(message);
+                        //session.update(extraTime.getExam());
+                        ClassExam classExam=retrieveClassExam(extraTime.getExam().getID());
+                        classExam.setExtraTime(extraTime);
+                        session.save(extraTime);
+                        session.saveOrUpdate(classExam);
+                        session.flush();
+
+                        response = ("Extra Time Requested");
+                        message.setMessage(response);
+                        //client.sendToClient(message);
+                        sendToAllClients(message);
+                   // }
                 }
                 catch (Exception e) {
                     response = (" could not be added to the database");
@@ -531,16 +539,26 @@ public class SimpleServer extends AbstractServer {
                 message.setData(getExamsForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
             }else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
-                response = "extra time of specific class exam";
-                message.setMessage(response);
-                ClassExam classExam=(ClassExam) (message.getData());
-                ExtraTime extraTime=getExtraTimeForClassExam(classExam);
-                message.setData(extraTime);
-                if(extraTime==null)
-                {
-                    System.out.println("the extra time i get is null :(");
+                try {
+                    System.out.println("In the server to get the extra time for specific class exam");
+                    response = "extra time of specific class exam";
+                    message.setMessage(response);
+                    ClassExam classExam = (ClassExam) (message.getData());
+                    if (classExam == null) {
+                        System.out.println("class exam the server get is null");
+                    }
+                    System.out.println("before retrieve !");
+                    ExtraTime extraTime = getExtraTimeForClassExam1(classExam);
+                    message.setData(extraTime);
+                    if (extraTime == null) {
+                        System.out.println("the extra time i get is null :(");
+                    }
+                    System.out.println("after retrieve !");
+                    client.sendToClient(message);/////
+                }catch(Exception e){
+                    response = "failed to get the extra time for specific class exam";
+                    client.sendToClient(message);
                 }
-                client.sendToClient(message);/////
             }
             else if (request.startsWith("Get Exams For Course")) {
                 response = "Exams in Course " + ((Course) (message.getData())).getName();
@@ -937,6 +955,15 @@ public class SimpleServer extends AbstractServer {
         List<ClassExam> examForms = session.createQuery(query).getResultList();
         return examForms;
     }
+    // function to go over ClassExam and get extraTime field
+    private ExtraTime getExtraTimeForClassExam1(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), exam.getID()));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult().getExtraTime();
+        return extraTime;
+    }
 
     private List<ClassExam> getExamsForSubjects(Subject subject) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -948,17 +975,6 @@ public class SimpleServer extends AbstractServer {
     }
 
     // function to get the ExtraTime for a specific ClassExam
-    /*private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
-        int classExamID= exam.getID();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
-        Root<ExtraTime> root = query.from(ExtraTime.class);
-        query.where(builder.equal(root.get("exam_ID"), classExamID));
-        ExtraTime extraTime = session.createQuery(query).getSingleResult();
-        return extraTime;
-    }*/
-
-    // function to get the ExtraTime for a specific ClassExam
     private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
         int classExamID= exam.getID();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -966,16 +982,6 @@ public class SimpleServer extends AbstractServer {
         Root<ExtraTime> root = query.from(ExtraTime.class);
         query.where(builder.equal(root.get("exam_ID"), classExamID));
         ExtraTime extraTime = session.createQuery(query).getSingleResult();
-        return extraTime;
-    }
-
-    // function to go over ClassExam and get extraTime field
-    private ExtraTime getExtraTimeForClassExam1(ClassExam exam) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
-        Root<ClassExam> root = query.from(ClassExam.class);
-        query.where(builder.equal(root.get("ID"), exam.getID()));
-        ExtraTime extraTime = session.createQuery(query).getSingleResult().getExtraTime();
         return extraTime;
     }
 

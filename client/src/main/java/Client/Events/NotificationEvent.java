@@ -30,6 +30,7 @@ public class NotificationEvent {
     //**show the notification with the details about the request time **//
     public void show()
     {
+        System.out.println("In notification.show()");
         try {
             Platform.runLater(() -> {
                 notification.showInformation();
