@@ -1,7 +1,6 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
-import Client.Controllers.MainViews.StudentViews.StudentDoExamDigitalController;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.*;
 import Client.SimpleChatClient;
@@ -12,7 +11,6 @@ import Entities.Users.Teacher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,9 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -203,7 +199,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     }
 
     @FXML
-    void priviewDigitalTest(ActionEvent event) throws IOException {
+    void previewDigitalTest(ActionEvent event) throws IOException {
         teacher = ((Teacher)(SimpleClient.getClient().getUser()));
         headerText= headerTextTF.getText();
         footerText= footerTextTF.getText();
@@ -454,6 +450,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         addNotesForStudentButton.setDisable(true);
         addNotesForTeacherButton.setDisable(true);
         previewTestButton.setDisable(true);
+        previewDigitalExamButton.setDisable(true);
         saveTestButton.setDisable(true);
         setTimeButton.setDisable(true);
     }
@@ -466,6 +463,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         addNotesForStudentButton.setDisable(false);
         addNotesForTeacherButton.setDisable(false);
         previewTestButton.setDisable(false);
+        previewDigitalExamButton.setDisable(false);
         saveTestButton.setDisable(false);
         setTimeButton.setDisable(false);
 

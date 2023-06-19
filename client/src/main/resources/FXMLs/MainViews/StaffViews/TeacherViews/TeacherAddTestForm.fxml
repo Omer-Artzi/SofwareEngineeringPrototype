@@ -44,6 +44,6 @@
          </cursor>
       </Button>
       <Button fx:id="setTimeButton" alignment="CENTER" layoutX="634.0" layoutY="653.0" mnemonicParsing="false" onAction="#setTime" prefHeight="25.0" prefWidth="141.0" text="Set Time" />
-      <Button fx:id="previewDigitalExamButton" layoutX="424.0" layoutY="653.0" mnemonicParsing="false" onAction="#priviewDigitalTest" prefHeight="25.0" prefWidth="156.0" text="Preview Digital Exam" />
+      <Button fx:id="previewDigitalExamButton" layoutX="424.0" layoutY="653.0" mnemonicParsing="false" onAction="#previewDigitalTest" prefHeight="25.0" prefWidth="156.0" text="Preview Digital Exam" />
    </children>
 </AnchorPane>
