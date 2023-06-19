@@ -362,7 +362,7 @@ public class SimpleServer extends AbstractServer {
                 message.setData(data);
                 client.sendToClient(message);
             }
-            else if (message.getMessage().startsWith("Extra time request")) {
+            else if (request.startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());
                 try {
                    // if(getExtraTimeForClassExam1(extraTime.getExam())!=null) {
@@ -428,7 +428,8 @@ public class SimpleServer extends AbstractServer {
                     response = "Manual Exam could not be saved";
                     e.printStackTrace();
                 }
-            }else if (request.startsWith("Digital Exam")) {
+            }
+            else if (request.startsWith("Digital Exam")) {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
@@ -554,7 +555,8 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(getExamsForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
-            }else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
+            }
+            else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
                 try {
                     System.out.println("In the server to get the extra time for specific class exam");
                     response = "extra time of specific class exam";
@@ -752,6 +754,34 @@ public class SimpleServer extends AbstractServer {
                 String examCode = createCodeOfExam(newExamForm); // TODO: Ilan- Added in 17.6, Check if it works
                 System.out.println("Exam code: " + examCode);
                 newExamForm.setExamFormID(examCode);
+
+                // teacher link
+                Teacher creator = (Teacher)retrieveUser(newExamForm.getCreator().getEmail());
+                newExamForm.setCreator(creator);
+                creator.addExamForm(newExamForm);
+
+                // question link
+                List<Question> questionList = new ArrayList<>();
+                for(Question question : newExamForm.getQuestionList())
+                {
+                    Question dataQuestion = retrieveQuestion(question.getID());
+                    questionList.add(dataQuestion);
+                }
+                newExamForm.setQuestionList(questionList);
+
+                // subject link
+                Subject subject = getSubject(newExamForm.getSubject().getId().intValue());
+                subject.addExamForm(newExamForm);
+                newExamForm.setSubject(subject);
+
+                // Course link
+                Course course = getCourse(newExamForm.getCourse().getId().intValue());
+                course.addExamForm(newExamForm);
+                newExamForm.setCourse(course);
+                newExamForm.setLastUsed(DataGenerator.ConvertToDate(LocalDateTime.now()));
+
+                newExamForm.setClassExam(new ArrayList<>());
+
                 try {
                     session.save(newExamForm);
                     session.flush();
@@ -975,7 +1005,7 @@ public class SimpleServer extends AbstractServer {
 
     private String createCodeOfExam(ExamForm examForm){
         List<ExamForm> examsFormsForCourse = getExamFormForCourse(examForm.getCourse());
-        int size = examsFormsForCourse.size();
+        int size = examsFormsForCourse.size()+1;
 
         String subjectID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getSubject().getId()),2);
         String courseID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getCourse().getId()),2);
