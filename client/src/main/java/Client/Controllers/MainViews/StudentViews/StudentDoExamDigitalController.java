@@ -173,7 +173,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
         setTimer();
         questionNumber.setText("Question " + (currentIndex+1) + " out of " + numberOfQuestions + ":");
-        changeNextProgressButton();
+        changeNextProgressButton(currentIndex);
         ChangePreviewEvent newEvent = new ChangePreviewEvent();
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
