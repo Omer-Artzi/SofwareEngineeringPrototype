@@ -188,7 +188,18 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null && ExamFormsTV.getSelectionModel().getSelectedItem() != null && startDateTF.getValue() != null && endDateTF.getValue() != null && courseCB.getSelectionModel().getSelectedItem() != null && subjectCB.getSelectionModel().getSelectedItem() != null && startDateTF.getValue().isBefore(endDateTF.getValue()) && startDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)) && endDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)))
+        if( code.length() == 4 && isValidTimeFormat(time) &&
+                isValidTimeFormat(startTime) &&
+                isValidTimeFormat(endTime) &&
+                typeCB.getSelectionModel().getSelectedItem() != null &&
+                ExamFormsTV.getSelectionModel().getSelectedItem() != null &&
+                startDateTF.getValue() != null &&
+                endDateTF.getValue() != null &&
+                courseCB.getSelectionModel().getSelectedItem() != null &&
+                subjectCB.getSelectionModel().getSelectedItem() != null &&
+                (endDateTF.getValue().isAfter(startDateTF.getValue())||
+                        ((endDateTF.getValue().equals(startDateTF.getValue())) &&
+                                timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText()))))
         {
 
             Date startDate = (Date.valueOf(startDateTF.getValue()));
@@ -388,7 +399,9 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onEndDateSelection()
     {
-        if(endDateTF.getValue().isAfter(startDateTF.getValue())||((endDateTF.getValue().equals(startDateTF.getValue())) && timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText())))
+        if(endDateTF.getValue().isAfter(startDateTF.getValue())||
+                ((endDateTF.getValue().equals(startDateTF.getValue())) &&
+                        timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText())))
         {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
