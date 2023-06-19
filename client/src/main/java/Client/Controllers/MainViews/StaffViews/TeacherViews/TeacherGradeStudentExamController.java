@@ -135,7 +135,14 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
     @FXML
     void BackBtnAct(ActionEvent event) throws IOException {
-        SimpleChatClient.setRoot("TeacherExamGrade");
+        if (solvedExam.getStatus() == Enums.submissionStatus.NotTaken)
+        {
+            SimpleChatClient.setRoot("PreviewTestForm");
+        }
+        else
+        {
+            SimpleChatClient.setRoot("TeacherExamGrade");
+        }
         String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
         String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
         String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();

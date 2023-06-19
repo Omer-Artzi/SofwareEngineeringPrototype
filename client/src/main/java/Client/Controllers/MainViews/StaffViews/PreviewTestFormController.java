@@ -2,10 +2,7 @@ package Client.Controllers.MainViews.StaffViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
 import Client.Controllers.Sidebars.SideBar;
-import Client.Events.CourseMessageEvent;
-import Client.Events.RefreshPerson;
-import Client.Events.StudentExamEvent;
-import Client.Events.SubjectMessageEvent;
+import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
@@ -33,6 +30,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class PreviewTestFormController extends SaveBeforeExit {
@@ -76,6 +74,7 @@ public class PreviewTestFormController extends SaveBeforeExit {
 
     String chosenSubjectStr;
     String chosenCourseStr;
+
 
     @FXML
     void CourseComboAct(ActionEvent event) {
@@ -156,7 +155,23 @@ public class PreviewTestFormController extends SaveBeforeExit {
                 CourseCombo.setDisable(false);
                 SubjectCombo.setDisable(false);
                 SubjectCombo.getItems().addAll(subjects.stream().map(subject -> subject.getName()).collect(Collectors.toList()));
+
+                if(chosenSubjectStr != null)
+                {
+                    SubjectCombo.getSelectionModel().select(chosenSubjectStr);
+                    CourseCombo.getSelectionModel().select(chosenCourseStr);
+                }
+
             }
+        });
+    }
+
+    @Subscribe
+    public void ReturnFromStudentGrade(ClassExamGradeEvent event) throws InterruptedException {
+        // reselect previous items
+        Platform.runLater(() -> {
+            chosenSubjectStr = event.getSubjectStr();
+            chosenCourseStr = event.getCourseStr();
         });
     }
 
