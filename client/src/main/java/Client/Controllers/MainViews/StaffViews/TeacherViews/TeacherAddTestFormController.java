@@ -1,6 +1,7 @@
 package Client.Controllers.MainViews.StaffViews.TeacherViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
+import Client.Controllers.MainViews.StudentViews.StudentDoExamDigitalController;
 import Client.Controllers.MainViews.ViewExamController;
 import Client.Events.*;
 import Client.SimpleChatClient;
@@ -11,14 +12,20 @@ import Entities.Users.Teacher;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -60,6 +67,9 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
     @FXML
     private Button previewTestButton;
+
+    @FXML
+    private Button previewDigitalExamButton;
 
     @FXML
     private Button saveTestButton;
@@ -191,6 +201,29 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         // open new word document with the test
         prepareExamFormForPreview();
     }
+
+    @FXML
+    void priviewDigitalTest(ActionEvent event) throws IOException {
+        teacher = ((Teacher)(SimpleClient.getClient().getUser()));
+        headerText= headerTextTF.getText();
+        footerText= footerTextTF.getText();
+        Date createdDate = new Date();
+        ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent);
+        // open new window with the test preview (new Stage)
+        Parent parent;
+        parent = SimpleChatClient.loadFXML("StudentDoExamDigital");
+        Scene scene = new Scene(parent, 1024, 768);
+        Stage stage = new Stage();
+        stage.setTitle("Preview Digital Exam");
+        stage.setScene(scene);
+        stage.show();
+        // send info to StudentDoExamDigital
+        StartExamPreviewEvent NewEvent = new StartExamPreviewEvent(examForm);
+        EventBus.getDefault().post(NewEvent);
+
+    }
+
+
 
     @FXML
     void saveTest(ActionEvent event) throws IOException {

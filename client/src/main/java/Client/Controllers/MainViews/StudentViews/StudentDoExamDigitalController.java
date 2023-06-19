@@ -72,6 +72,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     int numberOfQuestions;
     int currentIndex = 0;
 
+    boolean isPreview = false;
+
     // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
 
     // initialize the StudentDoExamDigital Screen
@@ -147,6 +149,33 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
         //System.out.println("5. after sending first question to preview");
+    }
+
+    @Subscribe
+    public void getExamForPreview(StartExamPreviewEvent event) {
+        System.out.println("in getExamForPreview");
+        isPreview = true;
+        selectedForm = StartExamPreviewEvent.getExamForm();
+        //title.setText("Exam in " + selectedForm.getSubject().getName() + " - " + selectedForm.getCourse().getName());
+        questionList = selectedForm.getQuestionList();
+        numberOfQuestions = selectedForm.getQuestionList().size();
+        renderProgress();
+        //timeInSeconds = (int) (selectedForm.getExamTime() * 60);
+        timeInSeconds = 60*60;
+        setTimer();
+        currentQuestion = questionList.get(currentIndex);
+        for (Question question : questionList){ // shuffle the answers of each question
+            List<String> sortedAnswers = question.getAnswers();
+            Collections.shuffle(sortedAnswers);
+            question.setAnswers(sortedAnswers);
+            rightAnswers.add(question.getCorrectAnswer());
+        }
+        setTimer();
+        questionNumber.setText("Question " + (currentIndex+1) + " out of " + numberOfQuestions + ":");
+        changeNextProgressButton();
+        ChangePreviewEvent newEvent = new ChangePreviewEvent();
+        newEvent.setQuestion(currentQuestion);
+        EventBus.getDefault().post(newEvent);
     }
 
     // get the answer of the student from the preview window
@@ -323,12 +352,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
             UpdateQuestion();
             if (currentIndex == numberOfQuestions - 1) {
                 nextButton.setVisible(false);
-                submitButton.setVisible(true);
+                if (isPreview == false) {
+                    submitButton.setVisible(true);
+                }
             }
         }
         else {
             nextButton.setVisible(false);
-            submitButton.setVisible(true);
+            if (isPreview == false) {
+                submitButton.setVisible(true);
+            }
         }
     }
 
