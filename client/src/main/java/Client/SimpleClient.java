@@ -94,6 +94,15 @@ public class SimpleClient extends AbstractClient {
         else if (message.getMessage().startsWith("Extra Time Requests")) {    //Added by Liad 10/06
             ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
             EventBus.getDefault().post(stMsg);
+        }else if (message.getMessage().startsWith("extra time of specific class exam")) {    //Added by Liad 19/06
+            System.out.println("gonna get the extra time of specific class exam in client");
+            extraTimeOfSpecificClassExam stMsg = new extraTimeOfSpecificClassExam((ExtraTime) message.getData(),"success");
+            EventBus.getDefault().post(stMsg);
+        }
+        else if (message.getMessage().startsWith("failed to get the extra time for specific class exam")) {    //Added by Liad 19/06
+            System.out.println("failed to send the extra time request!");
+            extraTimeOfSpecificClassExam stMsg = new extraTimeOfSpecificClassExam(null,"failed");
+            EventBus.getDefault().post(stMsg);
         }
         else if (messageText.startsWith("ExtraTimeRequest data")) { //Added by liad
             System.out.println("SelectedClassExamEvent in client");
@@ -194,11 +203,14 @@ public class SimpleClient extends AbstractClient {
             RefreshPerson event = new RefreshPerson("Success", (Person) message.getData());
             EventBus.getDefault().post(event);
         }
+        /*
         else if (messageText.startsWith("all extra time requests")) {                             //////////!!!!!!!!!!
             extraTimeOfSpecificClassExam event = new extraTimeOfSpecificClassExam((ExtraTime) message.getData());
             System.out.println("In Client!!!!!");
             EventBus.getDefault().post(event);
         }
+        */
+
         else if (messageText.startsWith("Failure: Failed to save StudentExam")) {
             RefreshPerson event = new RefreshPerson("Failure", null);
             EventBus.getDefault().post(event);

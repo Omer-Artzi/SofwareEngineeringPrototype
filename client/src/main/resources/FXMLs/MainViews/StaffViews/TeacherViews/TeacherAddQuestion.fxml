@@ -21,7 +21,7 @@
                 <TableColumn fx:id="AnswerColumn" prefWidth="478.40001525878904" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButton" layoutX="333.0" layoutY="717.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="37.0" prefWidth="89.0" stylesheets="@../../../styles.css" text="save">
+        <Button fx:id="addQuestionButton" layoutX="207.0" layoutY="639.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="37.0" prefWidth="89.0" stylesheets="@../../../styles.css" text="save">
             <font>
                 <Font name="Arial Rounded MT Bold" size="16.0" />
             </font>

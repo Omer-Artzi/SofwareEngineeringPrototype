@@ -65,8 +65,7 @@ public class PrincipalSidebarController extends SideBar {
 
     @FXML
     void extraTimeList(ActionEvent event) throws IOException {
-        //ChangeScene("ListExtraTimeRequest");
-        SimpleChatClient.NewSetRoot("ListExtraTimeRequest");
+        ChangeScene("PrincipalExtraTime");
     }
 
     @FXML
