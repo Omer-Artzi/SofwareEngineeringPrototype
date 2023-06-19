@@ -42,8 +42,10 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     private String examName; // necessary?
     private List<QuestionObject> questionObjectsList;
     private final List<Question> addedQuestions = new ArrayList<>();
-
     private List<Subject> teacherSubjects;
+    private ExamForm examFormToEdit = null;
+    private boolean isEdit = false;
+    private String editOption = null;
     @FXML
     private int msgId;
     @FXML
@@ -261,9 +263,23 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             }
         }
         ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime);
-        Message message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
-        message.setData(examForm);
-        SimpleClient.getClient().sendToServer(message);
+        Message message;
+        if (isEdit) {
+            if (editOption.equals("Edit")) {
+                message = new Message(1, "Edit ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
+                message.setData(examForm);
+                SimpleClient.getClient().sendToServer(message);
+            } else if (editOption.equals("Duplicate")) {
+                message = new Message(1, "Duplicate ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
+                message.setData(examForm);
+                SimpleClient.getClient().sendToServer(message);
+            }
+        }
+        else {
+            message = new Message(1, "Add ExamForm: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
+            message.setData(examForm);
+            SimpleClient.getClient().sendToServer(message);
+        }
     }
 
     void prepareExamFormForPreview() throws IOException {
@@ -437,6 +453,46 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         }*/
         //enable();
         addQuestionButton.setDisable(false);
+    }
+
+    @Subscribe
+    public void editTestForm(LoadExamEvent event){
+        isEdit = true;
+        if (event.getExamForm() != null){
+            examFormToEdit = event.getExamForm();
+            editOption = event.getScreen();
+            SubjectCB.getItems().add(examFormToEdit.getSubject());
+            SubjectCB.getSelectionModel().select(examFormToEdit.getSubject());
+            CourseCB.getItems().add(examFormToEdit.getCourse());
+            CourseCB.getSelectionModel().select(examFormToEdit.getCourse());
+            SubjectCB.setDisable(true);
+            CourseCB.setDisable(true);
+            headerTextTF.setText(examFormToEdit.getHeaderText());
+            footerTextTF.setText(examFormToEdit.getFooterText());
+            questionObjectsList = new ArrayList<>();
+            int i=0;
+            for (Question question : examFormToEdit.getQuestionList()) {
+                QuestionObject item = new QuestionObject(question.getID(), question.getQuestionData(), examFormToEdit.getQuestionsScores().get(i));
+                questionObjectsList.add(item);
+                i++;
+            }
+            if (questionObjectsList != null) {
+                questionTable.getItems().clear();
+                questionTable.getItems().addAll(questionObjectsList);
+                questionTable.refresh();
+            }
+            setTimeButton.setDisable(false);
+            addNotesForStudentButton.setDisable(false);
+            addNotesForTeacherButton.setDisable(false);
+            previewTestButton.setDisable(false);
+            previewDigitalExamButton.setDisable(false);
+            saveTestButton.setDisable(false);
+            addQuestionButton.setDisable(false);
+            headerTextTF.setDisable(false);
+            footerTextTF.setDisable(false);
+            questionTable.setDisable(false);
+        }
+
     }
 
 
