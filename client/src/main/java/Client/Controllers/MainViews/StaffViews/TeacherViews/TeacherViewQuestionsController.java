@@ -228,6 +228,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         System.out.println("Sending chosen questions to TeacherAddTestForm, subject: " + subjectPicker.getSelectionModel().getSelectedItem().getName() + ", course: " + coursePicker.getSelectionModel().getSelectedItem().getName());
         SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions, subjectPicker.getSelectionModel().getSelectedItem(), coursePicker.getSelectionModel().getSelectedItem());
         EventBus.getDefault().post(chooseQuestionsEvent);
+        EventBus.getDefault().unregister(this);
     }
 
     private void SetPickersCourse(Course course){
