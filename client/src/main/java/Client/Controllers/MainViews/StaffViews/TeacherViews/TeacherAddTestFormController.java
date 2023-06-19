@@ -41,7 +41,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     private String examNotesForTeacher;
     private String examName; // necessary?
     private List<QuestionObject> questionObjectsList;
-    private final List<Question> addedQuestions = new ArrayList<>();
+    private List<Question> addedQuestions = new ArrayList<>();
     private List<Subject> teacherSubjects;
     private ExamForm examFormToEdit = null;
     private boolean isEdit = false;
@@ -161,6 +161,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 System.out.println("received questions from TeacherViewQuestions: " + event.getQuestions());
                 chosenSubject= event.getSubject();
                 chosenCourse= event.getCourse();
+                System.out.println("questions from event: " + event.getQuestions());
                 //SubjectCB.getItems().clear();
                 //CourseCB.getItems().clear();
                 //SubjectCB.getItems().add(chosenSubject);
@@ -173,20 +174,20 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 resetButton.setDisable(false);
                 enable();
                 addQuestionButton.setDisable(false);
-
-
-
                 //List<Question> addedQuestions = event.getQuestions();
-                for (Question q : event.getQuestions()) { // add questions to addedQuestions list if they are not already there
+                /*for (Question q : event.getQuestions()) { // add questions to addedQuestions list if they are not already there
                     if(!addedQuestions.contains(q))
                         addedQuestions.add(q);
-                }
+                }*/
+                addedQuestions = event.getQuestions();
                 questionObjectsList.clear();
+                System.out.println("questionObjectList: " + questionObjectsList);
                 for (Question q : addedQuestions) { // convert questions to questionTable
                     QuestionObject newQuestion = new QuestionObject(q.getID(), q.getQuestionData(), 0);
                     questionObjectsList.add(newQuestion);
                 }
                 questionTable.getItems().clear();
+                System.out.println("questionObjectsList: " + questionObjectsList);
                 questionTable.getItems().addAll(questionObjectsList);
                 questionTable.refresh();
             } catch (Exception e) {
@@ -467,6 +468,12 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             CourseCB.getSelectionModel().select(examFormToEdit.getCourse());
             SubjectCB.setDisable(true);
             CourseCB.setDisable(true);
+            chosenSubject = examFormToEdit.getSubject();
+            chosenCourse = examFormToEdit.getCourse();
+            addedQuestions = examFormToEdit.getQuestionList();
+            examTime = (int)examFormToEdit.getExamTime();
+            examNotesForTeacher = examFormToEdit.getExamNotesForTeacher();
+            examNotesForStudent = examFormToEdit.getExamNotesForStudent();
             headerTextTF.setText(examFormToEdit.getHeaderText());
             footerTextTF.setText(examFormToEdit.getFooterText());
             questionObjectsList = new ArrayList<>();
