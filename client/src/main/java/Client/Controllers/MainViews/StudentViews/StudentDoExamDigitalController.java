@@ -72,6 +72,8 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     int numberOfQuestions;
     int currentIndex = 0;
 
+    int previousIndex = 0;
+
     // TODO: delete fields that are not used in the end of the project (numberOfQuestionsAnswered, numberOfRightAnswers...)
 
     // initialize the StudentDoExamDigital Screen
@@ -142,7 +144,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         //String style = progressButtons.get(currentIndex).getStyle();
         //progressButtons.get(currentIndex).setStyle(style.substring(0,style.length()-1)+";-fx-border-color: #000000; -fx-border-width: 5px;");
         questionNumber.setText("Question " + (currentIndex+1) + " out of " + numberOfQuestions + ":");
-        changeNextProgressButton();
+        changeNextProgressButton(currentIndex);
         ChangePreviewEvent newEvent = new ChangePreviewEvent();
         newEvent.setQuestion(currentQuestion);
         EventBus.getDefault().post(newEvent);
@@ -181,7 +183,7 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
         System.out.println("Number of questions answered: " + numberOfQuestionsAnswered);
         //progressButtons.get(currentIndex-1).setStyle("-fx-background-color: #80d780;");
-        progressButtons.get(currentIndex-1).setStyle("-fx-background-color:  #80d780; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold;");
+        progressButtons.get(previousIndex).setStyle("-fx-background-color:  #80d780; -fx-background-radius: 50px; -fx-text-fill: #ffffff; -fx-font-size: 15px; -fx-font-weight: bold;");
         System.out.println("///// End of getAnswer /////");
     }
 
@@ -284,14 +286,15 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     // method to handle the transition to the previous question
     @FXML
     void previousQuestion(ActionEvent event) {
+            previousIndex = currentIndex;
         if (currentIndex > 0) {
             //String style= progressButtons.get(currentIndex).getStyle();
             //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
-            changePreviousProgressButton();
+            changePreviousProgressButton(currentIndex);
             currentIndex--;
             //style= progressButtons.get(currentIndex).getStyle();
             //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
-            changeNextProgressButton();
+            changeNextProgressButton(currentIndex);
             nextButton.setVisible(true);
             submitButton.setVisible(false);
             if (currentIndex == 0) {
@@ -308,15 +311,16 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     // method to handle the transition to the next question
     @FXML
     void nextQuestion(ActionEvent event){
+        previousIndex = currentIndex;
         if (currentIndex < numberOfQuestions - 1) {
             //System.out.println("currentIndex - before: " + currentIndex + " numberOfQuestions: " + numberOfQuestions);
             //String style= progressButtons.get(currentIndex).getStyle();
             //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
-            changePreviousProgressButton();
+            changePreviousProgressButton(currentIndex);
             currentIndex++;
             //style= progressButtons.get(currentIndex).getStyle();
             //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
-            changeNextProgressButton();
+            changeNextProgressButton(currentIndex);
             if (currentIndex > 0) {
                 previousButton.setVisible(true);
             }
@@ -446,12 +450,13 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
                 //String style= progressButtons.get(currentIndex).getStyle();
                 //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
                 System.out.println("/////////////// index before= " + currentIndex + " ///////////////");
-                changePreviousProgressButton();
+                previousIndex = currentIndex;
+                changePreviousProgressButton(previousIndex);
                 this.currentIndex = index;
                 //style= progressButtons.get(currentIndex).getStyle();
                 //progressButtons.get(currentIndex).setStyle(style.substring(0,127) + " -fx-border-color: #000000; -fx-border-width: 5px; -fx-border-radius: 45px;");
                 System.out.println("/////////////// index after= " + currentIndex + " ///////////////");
-                changeNextProgressButton();
+                changeNextProgressButton(currentIndex);
                 this.UpdateQuestion();
                 previousButton.setVisible(index != 0);
                 if (index == questionList.size()-1) {
@@ -468,14 +473,15 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
         }
     }
 
-    private void changePreviousProgressButton() {
-        String style= progressButtons.get(currentIndex).getStyle();
-        progressButtons.get(currentIndex).setStyle(style.substring(0,128) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
+    private void changePreviousProgressButton(int index) {
+        System.out.println("changing previous button: " + index);
+        String style= progressButtons.get(index).getStyle();
+        progressButtons.get(index).setStyle(style.substring(0,128) + " -fx-border-color: #ffffff; -fx-border-width: 0px; -fx-border-radius: 00px;");
     }
 
-    private void changeNextProgressButton() {
-        String style= progressButtons.get(currentIndex).getStyle();
-        progressButtons.get(currentIndex).setStyle(style.substring(0,128) + " -fx-border-color: rgba(0,0,0,0.37); -fx-border-width: 3px; -fx-border-radius: 47px;");
+    private void changeNextProgressButton(int index) {
+        String style= progressButtons.get(index).getStyle();
+        progressButtons.get(index).setStyle(style.substring(0,128) + " -fx-border-color: rgba(0,0,0,0.37); -fx-border-width: 3px; -fx-border-radius: 47px;");
     }
 
     // TODO: check if this method works in real time (when the principal approves the extra time)
