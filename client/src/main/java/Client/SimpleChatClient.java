@@ -62,6 +62,11 @@ public class SimpleChatClient extends Application {
         }
     }
 
+    /**
+     * handles closing the server down
+     * notifies the server that the client is closing, logs the user out and stops the process
+     * @throws Exception
+     */
     @Override
     public void stop() throws Exception {
         Message message = new Message(1, "Client Closed");
@@ -74,11 +79,21 @@ public class SimpleChatClient extends Application {
         System.exit(0);
     }
 
+    /**
+     * loads provided fxml file into the main screen
+     * @param fxml the fxml file name
+     */
     public static void setRoot(String fxml) throws IOException {
         System.out.println("setRoot");
         mainWindowController.LoadSceneToMainWindow(fxml);
     }
 
+    /**
+     * sets the root of the scene to provided fxml.
+     * @param fxml the fxml file name
+     * @return the fxml file as a Parent object
+     * @throws IOException
+     */
     public static void NewSetRoot(String fxml) throws IOException {
         Platform.runLater(() -> {
             try {
@@ -90,10 +105,15 @@ public class SimpleChatClient extends Application {
 
     }
 
+    /**
+     * Loads the fxml file from the resource folder.
+     * @param fxml the fxml file name
+     * @return the fxml file as a Parent object
+     * @throws IOException
+     */
     public static Parent loadFXML(String fxml) throws IOException {
         System.out.println("loadFXML: " + fxml);
         List<String> possiblePaths = new ArrayList<>();
-        possiblePaths.add("IlansFuckingBullshitResources/");
         possiblePaths.add("MainViews/");
         possiblePaths.add("StaffViews/");
         possiblePaths.add("PrincipalViews/");
@@ -104,8 +124,6 @@ public class SimpleChatClient extends Application {
         possiblePaths.add("");
 
         // recursively search for the fxml file url in the resource folder:
-// https://stackoverflow.com/questions/20389255/what-is-the-difference-between-getclass-getclassloader-getresource-and-getcl
-
         for(String path1 : possiblePaths){
             for(String path2 : possiblePaths) {
                 for (String path3 : possiblePaths) {
