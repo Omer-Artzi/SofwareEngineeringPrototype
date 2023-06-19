@@ -213,6 +213,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
             classExam.setExamType(typeCB.getSelectionModel().getSelectedItem());
             classExam.setTeacher((Teacher)SimpleClient.getUser());
+            classExam.setCourse(courseCB.getValue());
             Message message = new Message(1, "Add New Class Exam");
             message.setData(classExam);
             SimpleClient.getClient().sendToServer(message);
