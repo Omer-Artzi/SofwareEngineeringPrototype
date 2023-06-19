@@ -20,11 +20,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
-import java.sql.Date;
+
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -202,10 +205,17 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
                                 timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText()))))
         {
 
-            Date startDate = (Date.valueOf(startDateTF.getValue()));
-            startDate.setTime((long)timeToDouble(startTimeTF.getText()));
-            Date endDate = (Date.valueOf(endDateTF.getValue()));
-            endDate.setTime((long)timeToDouble(endTimeTF.getText()));
+
+            Date startDate = (Date.from(startDateTF.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            long startTiming = ((long)timeToDouble(startTimeTF.getText())*1000) + startDate.getTime();
+
+            Date endDate = (Date.from(endDateTF.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            long endTiming = ((long)timeToDouble(endTimeTF.getText())*1000) + endDate.getTime();
+
+
+            startDate.setTime(startTiming);
+            endDate.setTime(endTiming);
+
             classExam.setStartDate(startDate);
             classExam.setFinalSubmissionDate(endDate);
             classExam.setAccessCode(codeTF.getText());
