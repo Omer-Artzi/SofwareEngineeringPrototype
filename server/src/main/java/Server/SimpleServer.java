@@ -751,6 +751,30 @@ public class SimpleServer extends AbstractServer {
                 }
             }
             // Lior's addition
+            else if (request.startsWith("Get teacher's Subjects")) {
+                response = "Subjects";
+                message.setMessage(response);
+                message.setData(getSubjects(((Teacher) message.getData()).getID()));
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Get teacher's Courses")) {
+                response = "Courses";
+                message.setMessage(response);
+                message.setData(getCourses(((Teacher)message.getData()).getID()));
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Get All Subjects")) {
+                response = "Subjects";
+                message.setMessage(response);
+                message.setData(getSubjects());
+                client.sendToClient(message);
+            }
+            else if (request.startsWith("Get All Courses")) {
+                response = "Courses";
+                message.setMessage(response);
+                message.setData(getCourses());
+                client.sendToClient(message);
+            }
             else if (request.startsWith("Refresh User"))
             {
                 Person user = retrieveUser(((Person)message.getData()).getEmail());

@@ -82,6 +82,17 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
     @FXML
     private Label StudentNameLabel;
 
+    @FXML
+    private Label IDLabel;
+
+    @FXML
+    private Label NameLabel;
+
+    @FXML
+    private Label TitleLabel;
+    @FXML
+    private TextFlow GradeTF;
+
 
     private Person client;
 
@@ -124,7 +135,14 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
     @FXML
     void BackBtnAct(ActionEvent event) throws IOException {
-        SimpleChatClient.setRoot("TeacherExamGrade");
+        if (solvedExam.getStatus() == Enums.submissionStatus.NotTaken)
+        {
+            SimpleChatClient.setRoot("PreviewTestForm");
+        }
+        else
+        {
+            SimpleChatClient.setRoot("TeacherExamGrade");
+        }
         String subjectStr = solvedExam.getClassExam().getExamForm().getSubject().getName();
         String courseStr = solvedExam.getClassExam().getExamForm().getCourse().getName();
         String ExamExamID = solvedExam.getClassExam().getExamForm().getExamFormID();
@@ -472,7 +490,10 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             Question question = questions.get(questionNumber);
             String correctAnswer = question.getCorrectAnswer();
             int correctAnswerInt = question.getAnswers().indexOf(correctAnswer) + 1;
-            String studentAnswerStr = studentAnswers.get(questionNumber);
+            String studentAnswerStr = "";
+            if (questionNumber < studentAnswers.size())
+                studentAnswerStr = studentAnswers.get(questionNumber);
+
             int studentAnswerInt =  question.getAnswers().indexOf(studentAnswerStr) + 1;
             int questionScoreInt = solvedExam.getClassExam().getExamForm().getQuestionsScores().get(questionNumber);
             HBox qustionHbox = new HBox();
@@ -616,11 +637,29 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
         else
             SetStudentScore(solvedExam.getGrade());
 
-        StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
-        StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        if (solvedExam.getStatus() != Enums.submissionStatus.NotTaken)
+        {
+            StudentIDLabel.setText(solvedExam.getStudent().getPersonID());
+            StudentIDLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+            StudentNameLabel.setText(solvedExam.getStudent().getFullName());
+            StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        }
+        else
+        {
+            StudentIDLabel.setVisible(false);
+            StudentNameLabel.setVisible(false);
+            IDLabel.setVisible(false);
+            NameLabel.setVisible(false);
+            TitleLabel.setText("Exam Preview");
+            ShowStatisticsController.SetVisibleAllNodes(ButtonsHbox,false);
+            ShowStatisticsController.SetVisibleAllNodes(GradeTF,false);
+            ShowStatisticsController.DisableAllNodes(ButtonsHbox,true);
+            AnswerTitleBord.setVisible(false);
 
-        StudentNameLabel.setText(solvedExam.getStudent().getFullName());
-        StudentNameLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
+        }
+
+
+
         return AnswersVBOX_t;
     }
 
