@@ -11,7 +11,7 @@
          <children>
             <Label fx:id="questionText" text="" />
             <Label fx:id="studentNotes" text="" />
-            <VBox fx:id="answersBox" prefHeight="200.0" prefWidth="100.0" />
+            <VBox fx:id="answersBox" prefWidth="100.0" />
             <Label fx:id="teacherNotes" text="" />
          </children>
          <padding>

@@ -39,7 +39,7 @@ public class StudentExam implements Serializable {
     private String teacherNote;
     private String scoreChangeReason;
 
-    @Type(type = "org.hibernate.type.BlobType")
+    //@Type(type = "org.hibernate.type.BlobType")
     @Lob
     private byte[] ManualExamByteArray;
 

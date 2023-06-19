@@ -41,22 +41,6 @@ public class LoginController {
     private Label wrongLoginLabel;
     private static TranslateTransition translateTransition;
 
-    // This method is called when the user clicks on the login button.
-    // It sends a NewLoginMessage to the server with the username and password entered by the user.
-
-    /*
-    @FXML
-    void login(ActionEvent event) {
-        String username = usernameTF.getText();
-        String password = passwordTF.getText();
-        NewLoginMessage logMessage = new NewLoginMessage(1, "Login", username, password);
-        try {
-            Client.SimpleClient.getClient().sendToServer(logMessage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-     */
-
     @FXML
     public void login(ActionEvent event) throws IOException, InterruptedException {
         checkLogin();
@@ -107,7 +91,6 @@ public class LoginController {
             //Client.SimpleChatClient.setRoot("TeacherMainScreen");
             EventBus.getDefault().unregister(this);
             SimpleChatClient.NewSetRoot("MainWindow");
-
         }
         else {
             Platform.runLater(() -> {

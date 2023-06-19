@@ -41,8 +41,13 @@ public class MainWindowController {
     private Timer timer;
     private SimpleDateFormat formatter;
 
-    private final Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
+    //private final Hashtable<String, Parent> loadedScenes = new Hashtable<String, Parent>();
 
+    /**
+     * This method is called when the main window is loaded.
+     * It initializes the date label and loads the sidebar and main window.
+     * @throws IOException
+     */
     @FXML
     private void initialize() throws IOException {
         InitializationAsserts();
@@ -67,8 +72,6 @@ public class MainWindowController {
         String mainScreenName = userType + "MainScreen";
         // load correct window according to user type
         mainWindowParent = SimpleChatClient.loadFXML(mainScreenName);
-        //mainWindowParent = Client.SimpleChatClient.loadFXML("ViewQuestions");
-        //mainPane.getChildren().clear();
         mainPane.getChildren().add(mainWindowParent);
 
         timer = new Timer();
@@ -100,38 +103,22 @@ public class MainWindowController {
         assert sidePane != null : "fx:id=\"sidePane\" was not injected: check your FXML file 'MainWindow.fxml'.";
     }
 
+    /**
+     * Load a scene to the main window
+     * @param sceneName
+     * @throws IOException
+     */
     @FXML
     public void LoadSceneToMainWindow(String sceneName) throws IOException {
-        /*Platform.runLater(() -> {
-            Parent mainWindowParent;
-
-            System.out.println("Client.Main window loading scene: " + sceneName);
-
-            try {
-                mainWindowParent = SimpleChatClient.loadFXML(sceneName);
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            loadedScenes.put(sceneName, mainWindowParent);
-
-
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(mainWindowParent);
-        });*/
-
         Parent mainWindowParent;
-
         System.out.println("Client.Main window loading scene: " + sceneName);
-
         try {
             mainWindowParent = SimpleChatClient.loadFXML(sceneName);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
         }
-        loadedScenes.put(sceneName, mainWindowParent);
-
+        //loadedScenes.put(sceneName, mainWindowParent);
         if(Platform.isFxApplicationThread()){
             mainPane.getChildren().clear();
             mainPane.getChildren().add(mainWindowParent);
@@ -142,14 +129,11 @@ public class MainWindowController {
                 mainPane.getChildren().add(mainWindowParent);
             });
         }
-
-
         if(sceneName.contains("MainScreen"))
         {
             mainPane.getChildren().add(LogoImage);
             mainPane.getChildren().add(dateLabel);
         }
-
     }
 }
 

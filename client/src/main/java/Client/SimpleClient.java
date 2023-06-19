@@ -76,10 +76,12 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Manual Exam")) { //Added by Omer 3.6
             ExamEndedEvent stMsg = new ExamEndedEvent();
             EventBus.getDefault().post(stMsg);
-        } else if (messageText.startsWith("Digital Exam")) {
+        }
+        else if (messageText.startsWith("Digital Exam")) {
             ExamEndedEvent stMsg = new ExamEndedEvent();
             EventBus.getDefault().post(stMsg);
-        } else if (messageText.startsWith("1Subjects of")) { //Added by Ilan 30.5
+        }
+        else if (messageText.startsWith("1Subjects of")) { //Added by Ilan 30.5
             SubjectsOfTeacherMessageEvent stMsg = new SubjectsOfTeacherMessageEvent((List<Subject>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
@@ -168,7 +170,8 @@ public class SimpleClient extends AbstractClient {
 			if(relevantUser(extraTime,"request")) {
 				notification.show();
 			}
-		}else if (messageText.startsWith("Exam Forms in ")){
+		}
+        else if (messageText.startsWith("Exam Forms in ")){
             System.out.println("IN Client Exam Forms number: " + ((List<ExamForm>)message.getData()).size());
             ExamMessageEvent event = new ExamMessageEvent();
             event.setExamForms((List<ExamForm>)message.getData());
@@ -192,8 +195,7 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.equals("Error! we got an empty message")) {
             EventBus.getDefault().post(new ErrorEvent(message));
         }
-        else if (messageText.startsWith("Grade Saved")) {
-        }
+        else if (messageText.startsWith("Grade Saved")) {}
         else if (messageText.startsWith("Success: StudentExam Approved")) {
             RefreshPerson event = new RefreshPerson("Success", (Person) message.getData());
             EventBus.getDefault().post(event);
@@ -221,10 +223,7 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("User Failed to be retrieved")) {
             EventBus.getDefault().post(new UserMessageEvent((Person) message.getData(), "Fail"));
         }
-        else if (messageText.startsWith("Success")) {
-        }
-        else if(message.getMessage().startsWith("Exam Saved Successfully"))
-        {
+        else if(message.getMessage().startsWith("Exam Saved Successfully")) {
             ExamSavedEvent event = new ExamSavedEvent();
             EventBus.getDefault().post(event);
 
@@ -240,6 +239,10 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Questions in Course")) {
             CourseQuestionsListEvent stMsg = new CourseQuestionsListEvent((List<Question>) message.getData());
             // System.out.println("Check");
+            EventBus.getDefault().post(stMsg);
+        }
+        else if (messageText.startsWith("Success: User logged out")){
+            LogoutEvent stMsg = new LogoutEvent();
             EventBus.getDefault().post(stMsg);
         }
         else {

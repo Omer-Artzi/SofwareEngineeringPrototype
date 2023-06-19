@@ -948,12 +948,34 @@ public class SimpleServer extends AbstractServer {
     }
 
     // function to get the ExtraTime for a specific ClassExam
-    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+    /*private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        int classExamID= exam.getID();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
         Root<ExtraTime> root = query.from(ExtraTime.class);
-        query.where(builder.equal(root.get("classExam"), exam));
+        query.where(builder.equal(root.get("exam_ID"), classExamID));
         ExtraTime extraTime = session.createQuery(query).getSingleResult();
+        return extraTime;
+    }*/
+
+    // function to get the ExtraTime for a specific ClassExam
+    private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
+        int classExamID= exam.getID();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ExtraTime> query = builder.createQuery(ExtraTime.class);
+        Root<ExtraTime> root = query.from(ExtraTime.class);
+        query.where(builder.equal(root.get("exam_ID"), classExamID));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult();
+        return extraTime;
+    }
+
+    // function to go over ClassExam and get extraTime field
+    private ExtraTime getExtraTimeForClassExam1(ClassExam exam) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
+        Root<ClassExam> root = query.from(ClassExam.class);
+        query.where(builder.equal(root.get("ID"), exam.getID()));
+        ExtraTime extraTime = session.createQuery(query).getSingleResult().getExtraTime();
         return extraTime;
     }
 
