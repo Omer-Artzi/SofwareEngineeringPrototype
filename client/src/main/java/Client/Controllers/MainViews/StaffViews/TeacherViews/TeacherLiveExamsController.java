@@ -39,8 +39,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     private ExtraTime SelectedExtraTime=null;
     @FXML
     private Button CreateNewExamButton;
-    @FXML
-    private VBox vBox;
+
     @FXML
     private TableView<ClassExam> ExamsTable;
     @FXML
@@ -53,15 +52,18 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     private TableColumn<ClassExam, String> StartTimeColumn;
     @FXML
     private TableColumn<ClassExam, String> SubjectColumn;
+    @FXML
+    private Label currentExamsLabel;
 
+    @FXML
+    private Label futureLabel;
+
+    @FXML
+    private Label headerLabel;
+
+    @FXML
+    private Label pastExamsLabel;
 /*
-    @FXML
-    private CheckBox FutureExamCheckBox;
-
-    @FXML
-    private CheckBox PastExamCheckBox;
-    @FXML
-    private CheckBox CurrentExamCheckBox;
 
 
     @Subscribe
@@ -262,13 +264,13 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
                 // Set the background color based on some condition
                 if (item.getStartDate().before(CurrentDate)||item.getStartDate().equals(CurrentDate)) {
                     if (item.getFinalSubmissionDate().after(CurrentDate)) {
-                        setStyle("-fx-background-color: #74E391");
+                        setStyle("-fx-background-color: #B2F7DB");
                     } else if (item.getFinalSubmissionDate().before(CurrentDate) || item.getFinalSubmissionDate().equals(CurrentDate)) {
-                        setStyle("-fx-background-color: #F26666");
+                        setStyle("-fx-background-color: #F7B2B2");
                     }
                 }
                 else{
-                    setStyle("-fx-background-color: #7BAAE0");
+                    setStyle("-fx-background-color: #B2D7F7");
                 }
             }
         }
@@ -289,7 +291,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             CreateNewExamButton.setVisible(false);
         }
 
-        vBox=new VBox();
         data = ExamsTable.getItems();
         SubjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         CourseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));

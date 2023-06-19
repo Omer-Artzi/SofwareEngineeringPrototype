@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +28,10 @@ import java.util.List;
 
 //** A controller to fill details about the Request to Extra Time**//
 public class TeacherExtraTimeRequestController  {
+    @FXML
+    private Label headerLabel;
+    @FXML
+    private Label choosePrincipalLabel;
     private ClassExam exam;
     private List<Principal> principals_list;
     @FXML

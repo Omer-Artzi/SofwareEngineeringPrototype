@@ -88,7 +88,11 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     @Subscribe
     public void endCreateQuestion(EndCreateQuestionEvent event) throws IOException {
         JOptionPane.showMessageDialog(null, event.getStatus(), "Question Status", JOptionPane.INFORMATION_MESSAGE);
-        SimpleChatClient.setRoot("TeacherMainScreen");
+        if(state.equals(ContextualState.EDIT))
+            SimpleChatClient.setRoot("TeacherViewQuestions");
+        else
+            SimpleChatClient.setRoot("TeacherAddQuestion");
+        EventBus.getDefault().unregister(this);
     }
 
     public void Elements(boolean b) {
@@ -200,18 +204,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, errorMSG, "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        System.out.println("The data of question is: "+question.getQuestionData());
-        int i=1;
-        for(String item: question.getAnswers())
-        {
-            System.out.println("question number "+i+ " is :"+item);
-            i++;
-        }
-        System.out.println("The correct is: "+question.getCorrectAnswer());
-        System.out.println("The S note: "+question.getStudentNote());
-        System.out.println("The P note: "+question.getTeacherNote());
-        System.out.println("The subject is "+String.valueOf(question.getSubject()));
-        System.out.println("The course is "+question.getCourses().get(0));
 
         Message message = new Message(1, "Save Question");
         message.setData(question);
@@ -277,6 +269,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
             SimpleChatClient.getMainWindowController().LoadSceneToMainWindow("TeacherViewQuestions");
             FinishEditExistingQuestionEvent editQuestionEvent = new FinishEditExistingQuestionEvent(question, courseOfEditQuestion);
             EventBus.getDefault().post(editQuestionEvent);
+            //EventBus.getDefault().unregister(this);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -346,6 +339,4 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
         public void setStyle(String s) {
         }
     }
-
-
 }
