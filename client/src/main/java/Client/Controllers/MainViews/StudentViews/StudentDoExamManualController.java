@@ -231,10 +231,13 @@ public class StudentDoExamManualController extends SaveBeforeExit {
     }
     @Subscribe
     public void getExtraTime(PrincipalApproveEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
-        int addedTime = event.getExtraTime().getDelta();
-        System.out.println("addedTime: " + addedTime);
-        timeInSeconds += addedTime*60;
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
+            int addedTime = event.getExtraTime().getDelta();
+            System.out.println("addedTime: " + addedTime);
+            timeInSeconds += addedTime*60;
+        });
+
     }
 
 }

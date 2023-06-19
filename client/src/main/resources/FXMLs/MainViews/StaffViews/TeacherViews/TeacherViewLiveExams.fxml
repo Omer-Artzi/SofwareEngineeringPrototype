@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherLiveExamsController">
    <children>
-      <TableView fx:id="ExamsTable" layoutX="54.0" layoutY="162.0" prefHeight="338.0" prefWidth="672.0">
+      <TableView fx:id="ExamsTable" layoutX="49.0" layoutY="98.0" prefHeight="338.0" prefWidth="672.0">
         <columns>
           <TableColumn fx:id="SubjectColumn" prefWidth="116.00003051757812" text="Subject" />
           <TableColumn fx:id="CourseColumn" prefWidth="123.19998168945312" text="Course" />
@@ -17,37 +17,37 @@
             <TableColumn fx:id="EndTimeColumn" prefWidth="220.79998779296875" text="End Time" />
         </columns>
       </TableView>
-      <Label fx:id="headerLabel" alignment="CENTER" layoutX="284.0" layoutY="91.0" prefHeight="46.0" prefWidth="180.0" text="Class Exam List">
+      <Label fx:id="headerLabel" alignment="CENTER" layoutX="280.0" layoutY="35.0" prefHeight="46.0" prefWidth="180.0" text="Class Exam List">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Button fx:id="RequestExtraTimeBT" layoutX="323.0" layoutY="526.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
+      <Button fx:id="RequestExtraTimeBT" layoutX="308.0" layoutY="472.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="CreateNewExamButton" layoutX="154.0" layoutY="526.0" mnemonicParsing="false" onAction="#createNewExam" text="Create new exam">
+      <Button fx:id="CreateNewExamButton" layoutX="152.0" layoutY="472.0" mnemonicParsing="false" onAction="#createNewExam" text="Create new exam">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Label fx:id="futureLabel" layoutX="68.0" layoutY="587.0" prefHeight="16.0" prefWidth="110.0" style="-fx-background-color: #B2D7F7;" text="Future exams">
+      <Label fx:id="futureLabel" layoutX="68.0" layoutY="556.0" prefHeight="16.0" prefWidth="110.0" style="-fx-background-color: #B2D7F7;" text="Future exams">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label fx:id="currentExamsLabel" layoutX="68.0" layoutY="613.0" prefHeight="20.0" prefWidth="110.0" style="-fx-background-color: #B2F7DB;" text="Current exams">
+      <Label fx:id="currentExamsLabel" layoutX="68.0" layoutY="586.0" prefHeight="20.0" prefWidth="110.0" style="-fx-background-color: #B2F7DB;" text="Current exams">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="pastExamsLabel" layoutX="68.0" layoutY="641.0" prefHeight="20.0" prefWidth="110.0" style="-fx-background-color: #F7B2B2;" text="Past exams">
+      <Label fx:id="pastExamsLabel" layoutX="68.0" layoutY="615.0" prefHeight="20.0" prefWidth="110.0" style="-fx-background-color: #F7B2B2;" text="Past exams">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="showDecisionButton" layoutX="504.0" layoutY="526.0" mnemonicParsing="false" onAction="#showDecisionPressed" text="Show Decision">
+      <Button fx:id="showDecisionButton" layoutX="475.0" layoutY="472.0" mnemonicParsing="false" onAction="#showDecisionPressed" text="Show Decision">
          <font>
             <Font size="14.0" />
          </font>

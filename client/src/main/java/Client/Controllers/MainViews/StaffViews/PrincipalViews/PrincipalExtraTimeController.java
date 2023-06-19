@@ -1,10 +1,16 @@
 package Client.Controllers.MainViews.StaffViews.PrincipalViews;
 
 import Client.Controllers.MainViews.SaveBeforeExit;
+import Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherAddQuestionController;
 import Client.Events.ExtraTimeRequestsEvent;
+import Client.Events.PrincipalApproveEvent;
+import Client.Events.PrincipalDecisionEvent;
+import Client.Events.PrincipalPressedShowDecision;
+import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
 import Entities.Communication.ExtraTime;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrincipalExtraTimeController extends SaveBeforeExit {
+    @FXML
+    private Label headerLabel;
     private ExtraTime extraTimeSelected;
     private List<ExtraTime> extraTimeList = new ArrayList<>();
     private ObservableList<ExtraTime> data;
@@ -42,6 +50,18 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
     @FXML
     private Label DecisionLabel;
 
+    @Subscribe
+    public void decisionSaved(PrincipalPressedShowDecision event) throws IOException {
+        EventBus.getDefault().unregister(this);
+        System.out.println("In decisionSaved");
+        JOptionPane.showMessageDialog(null, "Decision sent", "Decision Sent", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                SimpleChatClient.setRoot("PrincipalMainScreen");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        //EventBus.getDefault().unregister(this);
+    }
 
     /* get the Extra Time request from the data base */
     @Subscribe
@@ -118,6 +138,26 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
             Message message = new Message(1, "Extra time rejected",extraTimeSelected );
             SimpleClient.getClient().sendToServer(message);
 
+        }
+    }
+
+    @Override
+    public boolean CheckForUnsavedData() {
+        if (extraTimeSelected!=null && !DecisionCoiceBox.getValue().isEmpty()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void SaveData() {
+        ActionEvent event = new ActionEvent();
+        try {
+            SendDecision(event);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
