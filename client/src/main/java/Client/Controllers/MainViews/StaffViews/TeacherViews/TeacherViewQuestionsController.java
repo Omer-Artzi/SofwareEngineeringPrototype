@@ -234,6 +234,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         System.out.println("Sending chosen questions to TeacherAddTestForm, subject: " + subjectPicker.getSelectionModel().getSelectedItem().getName() + ", course: " + coursePicker.getSelectionModel().getSelectedItem().getName());
         SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions, subjectPicker.getSelectionModel().getSelectedItem(), coursePicker.getSelectionModel().getSelectedItem());
         chooseQuestionsEvent.setSaveState(storedAddTestFormState);
+        System.out.println("Sending event: " + chooseQuestionsEvent);
         EventBus.getDefault().post(chooseQuestionsEvent);
         EventBus.getDefault().unregister(this);
     }
@@ -363,6 +364,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         System.out.println("Choosing questions");
 
         storedAddTestFormState = event.getSaveState();
+        System.out.println("Stored state: " + storedAddTestFormState);
 
         // change state
         state = ContextualState.CHOOSE;
