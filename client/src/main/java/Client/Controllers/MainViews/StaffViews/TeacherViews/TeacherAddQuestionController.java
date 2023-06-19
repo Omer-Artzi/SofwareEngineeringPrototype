@@ -9,12 +9,10 @@ import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.Question;
 import Entities.SchoolOwned.Subject;
 import Entities.Users.Teacher;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,7 +31,6 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     private final Course courseOfEditQuestion = null;
     private List<Course> courseOfTeacher;
     private List<Subject> subjectOfTeacher;
-    private List<String> notes;
     private int counter;
     @FXML
     private Label questionDataLabel;
@@ -302,9 +299,10 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     //////////////////////////// ***save before exit ***/////////////////////////////////////////////////////
     @Override
     public boolean CheckForUnsavedData() {
-        if (addSubjectChoiceBox != null && Courses.getTargetItems().isEmpty() && !CorrectAnswerCB.getValue().isEmpty() && !QuestionDataTF.getText().isEmpty() ) {
+        if (!Courses.getTargetItems().isEmpty() && !CorrectAnswerCB.getValue().isEmpty() && !QuestionDataTF.getText().isEmpty() ) {
             List<Answer> dataList = AnswerTable.getItems();
             if(dataList.size()==4){
+                System.out.println("Found unsaved data");
                 return true;
             }
             else {

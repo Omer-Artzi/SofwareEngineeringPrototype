@@ -574,7 +574,7 @@ public class SimpleServer extends AbstractServer {
                 //client.sendToClient(message);
                 sendToAllClients(message);
             }
-            else if (request.startsWith("Get Extra Time Requests")) { /////
+            else if (request.startsWith("Get Extra Time Requests")) { /////from extra time list controller of principal
                 response = "Extra Time Requests";
                 message.setMessage(response);
                 message.setData(getExtraTime());

@@ -12,7 +12,7 @@ public class extraTimeOfSpecificClassExam {
         this.extraTime = extraTime;
     }
 
-    public ExtraTime getExtraTimeList() {
+    public ExtraTime getExtraTime() {
         return extraTime;
     }
 

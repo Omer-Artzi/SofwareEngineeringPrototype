@@ -24,7 +24,7 @@ public class PrincipalRejectEvent extends PrincipalDecisionEvent{
                 notification.text("Principal note: "+this.getExtraTime().getPrincipalNote());
                 notification.position(Pos.BOTTOM_RIGHT);
                 notification.hideAfter(Duration.seconds(60));
-                notification.show();
+                notification.showError();
            // });
 
         //} catch (Exception e) {

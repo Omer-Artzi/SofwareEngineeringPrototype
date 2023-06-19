@@ -24,6 +24,7 @@ public class NotificationEvent {
         notification.text("From: "+ extraTime.getTeacher().getFullName());
         notification.position(Pos.BOTTOM_RIGHT);
         notification.hideAfter(Duration.seconds(60));
+
     }
 
     //**show the notification with the details about the request time **//
@@ -31,7 +32,7 @@ public class NotificationEvent {
     {
         try {
             Platform.runLater(() -> {
-                notification.show();
+                notification.showInformation();
             });
         } catch (Exception e) {
             e.printStackTrace();
