@@ -92,7 +92,7 @@ public class PrincipalSidebarController extends SideBar {
 
     @FXML
     void viewTestForms(ActionEvent event) {
-        ChangeScene("TeacherViewLiveExams"/*"ViewTestForms"*/);
+        ChangeScene("PreviewTestForm");
     }
 
     @FXML

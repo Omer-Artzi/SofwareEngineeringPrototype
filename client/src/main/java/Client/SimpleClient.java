@@ -93,6 +93,10 @@ public class SimpleClient extends AbstractClient {
             SubjectMessageEvent stMsg = new SubjectMessageEvent((List<Subject>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
+        else if (messageText.startsWith("Courses")) {
+            CourseMessageEvent stMsg = new CourseMessageEvent((List<Course>) message.getData());
+            EventBus.getDefault().post(stMsg);
+        }
         else if (message.getMessage().startsWith("Extra Time Requests")) {    //Added by Liad 10/06
             ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
             EventBus.getDefault().post(stMsg);

@@ -76,7 +76,7 @@ public class TeacherSidebarController extends SideBar {
 
     @FXML
     void viewTestForms(ActionEvent event) {
-        ChangeScene("TeacherViewLiveExams");
+        ChangeScene("PreviewTestForm");
     }
 
     @FXML
