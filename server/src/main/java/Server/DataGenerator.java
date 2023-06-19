@@ -399,7 +399,7 @@ public class DataGenerator {
                     testStartDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(14).toLocalDate(),
                             currentDate.atStartOfDay().minusDays(4).toLocalDate()));
                     testEndDate = ConvertToDate(GenerateRandomDate(currentDate.atStartOfDay().minusDays(3).toLocalDate(),
-                            currentDate.atStartOfDay().minusDays(0).toLocalDate()));
+                            currentDate.atStartOfDay().minusDays(0).toLocalDate()));/////
                 }
                 // Generate exams which can be start on the future
                 else {

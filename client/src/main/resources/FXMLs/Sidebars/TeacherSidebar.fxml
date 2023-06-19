@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1906.0" prefWidth="180.0" stylesheets="@../../CSS/sidebarButton.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.TeacherSidebarController">
+<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1906.0" prefWidth="180.0" stylesheets="@sidebar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.TeacherSidebarController">
    <children>
-      <VBox fx:id="sidebarVBox" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" prefWidth="40.0" style="-fx-background-color: #669bbc;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="sidebarVBox" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" prefWidth="40.0" style="-fx-background-color: #669bbc;" stylesheets="@sidebar.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="menuButton" alignment="BASELINE_CENTER" layoutX="10.0" layoutY="439.0" mnemonicParsing="false" onAction="#OnMenuButtonPressed" prefHeight="50.0" prefWidth="279.0" style="-fx-background-color: #669bbc;" text="MENU" textFill="WHITE">
                <font>
@@ -32,7 +32,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE">
+            <Button fx:id="mainPageButton" alignment="BASELINE_LEFT" layoutX="10.0" layoutY="60.0" mnemonicParsing="false" onAction="#OnMainPageButtonPressed" prefHeight="53.0" prefWidth="239.0" style="-fx-background-color: #669bbc;" text="Main" textFill="WHITE" stylesheets="@sidebar.css">
                <font>
                   <Font name="Lucida Sans Demibold Italic" size="15.0" />
                </font>

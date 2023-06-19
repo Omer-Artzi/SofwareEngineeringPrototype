@@ -1,0 +1,73 @@
+.VBox {
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.button
+{
+    -fx-background-color:#C9E2EF ;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #585A5D;
+    -fx-background-radius: 10;
+    -fx-border-color: #5EC1F2;
+    -fx-border-radius: 10;
+
+}
+.button:hover
+{
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-background-color:#8AB1CC;
+}
+.button:pressed
+{
+    -fx-background-color:#2F82BB
+}
+.choice-box
+{
+    -fx-background-color:#C9E2EF ;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #585A5D;
+    -fx-background-radius: 10;
+    -fx-border-color: #5EC1F2;
+    -fx-border-radius: 10;
+
+}
+.choice-box:hover
+{
+    -fx-background-color:#8AB1CC;
+}
+.label
+{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #585A5D;
+}
+
+.AnchorPane{
+    -fx-background-color: linear-gradient(to left,#CFE4F1, white);
+}
+.text-area{
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+.list-view{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #61686C;
+}
+.table-view{
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-text-fill: #61686C;
+    -fx-border-radius: 5;
+}
+.password-field{
+    -fx-background-color: transparent;
+    -fx-border-color: #4AA1CD;
+    -fx-border-width: 0px 0px 2px 0px;
+}
+#loginButton
+{
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+.notification-bar > .pane {
+    -fx-background-color:  #4AA1CD;
+    -fx-padding: 10 10 10 10
+}

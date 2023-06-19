@@ -567,8 +567,14 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(retrieveClassExam());
                 client.sendToClient(message);
+            }else if (request.startsWith("Get all extra time requests")) {
+                response = "all extra time requests";
+                message.setMessage(response);
+                message.setData(getExtraTimeForClassExam((ClassExam) message.getData()));
+                //client.sendToClient(message);
+                sendToAllClients(message);
             }
-            else if (request.startsWith("Get Extra Time Requests")) { /////
+            else if (request.startsWith("Get Extra Time Requests")) { /////from extra time list controller of principal
                 response = "Extra Time Requests";
                 message.setMessage(response);
                 message.setData(getExtraTime());
@@ -940,15 +946,6 @@ public class SimpleServer extends AbstractServer {
         List<ClassExam> classExams = session.createQuery(query).getResultList();
         return classExams;
     }
-    ///STILL Dont Know if work!!
-    /*private ExtraTime getExtraTimeForClassExam(ClassExam exam) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ClassExam> query = builder.createQuery(ClassExam.class);
-        Root<ClassExam> root = query.from(ClassExam.class);
-        query.where(builder.equal(root.get("ID"), exam));
-        ExtraTime extraTime = (ExtraTime) session.createQuery(query).getResultList();
-        return extraTime;
-    }*/
 
     // function to get the ExtraTime for a specific ClassExam
     private ExtraTime getExtraTimeForClassExam(ClassExam exam) {

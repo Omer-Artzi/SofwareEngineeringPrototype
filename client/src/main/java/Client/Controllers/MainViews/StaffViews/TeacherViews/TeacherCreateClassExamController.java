@@ -364,7 +364,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onStartDateSelection()
     {
-        if(startDateTF.getValue().isAfter(LocalDate.now()))
+        if(/*startDateTF.getValue().isAfter(LocalDate.now())*/ startDateTF.getValue() != null)
         {
             endDateTF.setDisable(false);
             endTimeTF.setDisable(false);
@@ -384,7 +384,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onEndDateSelection()
     {
-        if(endDateTF.getValue().isAfter(LocalDate.now()) && endDateTF.getValue().isAfter(startDateTF.getValue()))
+        if(/*endDateTF.getValue().isAfter(LocalDate.now()) &&*/ endDateTF.getValue().isAfter(startDateTF.getValue()))
         {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);

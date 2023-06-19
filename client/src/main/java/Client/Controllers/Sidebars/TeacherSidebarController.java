@@ -83,10 +83,11 @@ public class TeacherSidebarController extends SideBar {
     @FXML
     void initialize() {
         InitializationAsserts();
-        userTypeLabel.setText("Logged in as: Teacher");
+
     }
 
     void InitializationAsserts(){
+
         assert addQuestionButton != null : "fx:id=\"addQuestionButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert addTestFormsButton != null : "fx:id=\"addTestFormsButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";
         assert gradeExamButton != null : "fx:id=\"gradeExamButton\" was not injected: check your FXML file 'TeacherSidebar.fxml'.";

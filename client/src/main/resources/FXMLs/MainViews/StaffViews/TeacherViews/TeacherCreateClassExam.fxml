@@ -10,19 +10,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherCreateClassExamController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherCreateClassExamController">
    <children>
       <VBox alignment="CENTER" layoutX="-2.0" layoutY="-9.0" prefHeight="810.0" prefWidth="1024.0" spacing="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="68.0" prefWidth="600.0" spacing="100.0">
                <children>
-                  <ComboBox fx:id="subjectCB" onAction="#onSubjectSelection" prefWidth="150.0" promptText="Select Subject" />
-                  <ComboBox fx:id="courseCB" onAction="#onCourseSelection" prefWidth="150.0" promptText="Select Course" />
+                  <ComboBox fx:id="subjectCB" onAction="#onSubjectSelection" prefWidth="150.0" promptText="Select Subject" stylesheets="@../../../styles.css" />
+                  <ComboBox fx:id="courseCB" onAction="#onCourseSelection" prefWidth="150.0" promptText="Select Course" stylesheets="@../../../styles.css" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="487.0" prefWidth="1024.0">
                <children>
-                  <TableView fx:id="ExamFormsTV" onSort="#onExamFormChosen" prefHeight="487.0" prefWidth="907.0">
+                  <TableView fx:id="ExamFormsTV" onSort="#onExamFormChosen" prefHeight="487.0" prefWidth="907.0" stylesheets="@../../../styles.css">
                     <columns>
                       <TableColumn fx:id="IDColumn" prefWidth="97.85065460205078" text="ID" />
                         <TableColumn fx:id="subjectColumn" prefWidth="160.47792053222656" text="Subject" />

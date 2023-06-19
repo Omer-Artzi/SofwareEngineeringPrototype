@@ -29,7 +29,7 @@ public class PrincipalApproveEvent extends PrincipalDecisionEvent{
         try {
             Platform.runLater(() -> {
                 System.out.println("In show() in ApproveEvent");
-                notification.show();
+                notification.showConfirm();
             });
         } catch (Exception e) {
             e.printStackTrace();

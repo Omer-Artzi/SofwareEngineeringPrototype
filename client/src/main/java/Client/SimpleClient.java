@@ -55,7 +55,7 @@ public class SimpleClient extends AbstractClient {
     }
 
     @Override
-    protected void handleMessageFromServer(Object msg) {
+    protected void handleMessageFromServer(Object msg) throws IOException {
         System.out.println("Converting message...");
         Message message = (Message) msg;
         String messageText = message.getMessage();
@@ -96,25 +96,13 @@ public class SimpleClient extends AbstractClient {
             EventBus.getDefault().post(stMsg);
         }
         else if (message.getMessage().startsWith("Extra Time Requests")) {    //Added by Liad 10/06
-            System.out.println("Extra Time Requests");
             ExtraTimeRequestsEvent stMsg = new ExtraTimeRequestsEvent((List<ExtraTime>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
         else if (messageText.startsWith("ExtraTimeRequest data")) { //Added by liad
             System.out.println("SelectedClassExamEvent in client");
             List<Object> data = (List<Object>) message.getData();
-            if (data == null) {
-                System.out.println("Empty exam in client");
-            }
-            if (((List<Principal>) data.get(1)).isEmpty()) {
-                System.out.println("Empty principals in client");
-            }
-            System.out.println("SelectedClassExamEvent in client2");
-            if (message.getData() == null || ((List<Object>) (message.getData())).isEmpty())
-                System.out.println("Somethings wrong with message");
             SelectedClassExamEvent stMsg = new SelectedClassExamEvent((List<Object>) message.getData());
-            if (stMsg == null)
-                System.out.println("the event is null");
             EventBus.getDefault().post(stMsg);
         }
         else if (messageText.startsWith("Principals")) {
@@ -122,7 +110,6 @@ public class SimpleClient extends AbstractClient {
             EventBus.getDefault().post(stMsg);
         }
         else if (messageText.startsWith("Live Exams")) {
-            System.out.println("Live exams in client");
             LiveExamsEvent stMsg = new LiveExamsEvent((List<ClassExam>) message.getData());
             EventBus.getDefault().post(stMsg);
         }
@@ -157,13 +144,13 @@ public class SimpleClient extends AbstractClient {
 			EventBus.getDefault().post(new NewSubscriberEvent(message));
 		}
 		else if (messageText.startsWith("Extra time approved")) {
-			System.out.println("In Client: approved");
 			ExtraTime extraTime=(ExtraTime) message.getData();
 			PrincipalApproveEvent approveEvent =new PrincipalApproveEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"approve")) {
                 EventBus.getDefault().post(approveEvent);
-                System.out.println("Approve in client by liadddddddd");
-				approveEvent.show();
+                user = SimpleClient.getClient().getUser();
+                if(!(user instanceof Student))
+				    approveEvent.show();
                 EventBus.getDefault().post(new PrincipalDecisionEvent((ExtraTime) message.getData()));
 			}
         }
@@ -176,7 +163,6 @@ public class SimpleClient extends AbstractClient {
 			}
 		}
 		else if (messageText.startsWith("Extra Time Requested")) {
-			System.out.println("IN Client Extra Time Requested");
 			ExtraTime extraTime=(ExtraTime) message.getData();
 			NotificationEvent notification =new NotificationEvent((ExtraTime) message.getData());
 			if(relevantUser(extraTime,"request")) {
@@ -191,13 +177,14 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Class Exams in ")){
 			EventBus.getDefault().post(new ExamMessageEvent((List<ClassExam>)message.getData()));
 		}
-        else if (messageText.startsWith("Question added successfully")){////////
-            System.out.println("Hi Omer!");
+        else if (messageText.startsWith("Question added successfully")){
             EndCreateQuestionEvent event=new EndCreateQuestionEvent("Question added successfully");
+            //EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
             EventBus.getDefault().post(event);
         }
-        else if (messageText.startsWith("new question could not be added to the database")){////////
+        else if (messageText.startsWith("new question could not be added to the database")){
             EventBus.getDefault().post(new EndCreateQuestionEvent( "question could not be added"));
+            //EventBus.getDefault().post(new GeneralEvent(new Message(0, "failed")));
         }
 		else if (messageText.startsWith("Success: new ExamForm")){
 			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
@@ -210,8 +197,10 @@ public class SimpleClient extends AbstractClient {
         else if (messageText.startsWith("Success: StudentExam Approved")) {
             RefreshPerson event = new RefreshPerson("Success", (Person) message.getData());
             EventBus.getDefault().post(event);
-        }else if (messageText.startsWith("extra time of specific class exam")) {//////////!!!!!!!!!!
+        }
+        else if (messageText.startsWith("all extra time requests")) {                             //////////!!!!!!!!!!
             extraTimeOfSpecificClassExam event = new extraTimeOfSpecificClassExam((ExtraTime) message.getData());
+            System.out.println("In Client!!!!!");
             EventBus.getDefault().post(event);
         }
         else if (messageText.startsWith("Failure: Failed to save StudentExam")) {
@@ -258,6 +247,7 @@ public class SimpleClient extends AbstractClient {
         }
     }
 
+    /* Check the user to send the decision of principal */
 	public boolean relevantUser(ExtraTime extraTime,String type){
 
 		System.out.println("In relevantUser " +type);
@@ -291,11 +281,8 @@ public class SimpleClient extends AbstractClient {
 			}
 		}
 
-
 		/* only if the event is reject, we check if the student exist in class exam list */
 		 if(type.equals("approve")) {
-				System.out.println("In relevantUser: approve");
-				System.out.println(("name: "+user.getFullName()));
 				if (user instanceof Student) {
 					List<Student> students = extraTime.getExam().getStudents();
 					for (Student item : students) {
@@ -304,7 +291,6 @@ public class SimpleClient extends AbstractClient {
 					}
 				}
 				else if (user instanceof Teacher) {
-					System.out.println("In relevantUser: approve: Teacher");
 					Teacher teacher = extraTime.getTeacher();
                     return teacher.equals(user);
 				}
