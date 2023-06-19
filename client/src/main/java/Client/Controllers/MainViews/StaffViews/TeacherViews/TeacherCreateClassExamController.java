@@ -188,7 +188,18 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null && ExamFormsTV.getSelectionModel().getSelectedItem() != null && startDateTF.getValue() != null && endDateTF.getValue() != null && courseCB.getSelectionModel().getSelectedItem() != null && subjectCB.getSelectionModel().getSelectedItem() != null && startDateTF.getValue().isBefore(endDateTF.getValue()) && startDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)) && endDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)))
+        if( code.length() == 4 && isValidTimeFormat(time) &&
+                isValidTimeFormat(startTime) &&
+                isValidTimeFormat(endTime) &&
+                typeCB.getSelectionModel().getSelectedItem() != null &&
+                ExamFormsTV.getSelectionModel().getSelectedItem() != null &&
+                startDateTF.getValue() != null &&
+                endDateTF.getValue() != null &&
+                courseCB.getSelectionModel().getSelectedItem() != null &&
+                subjectCB.getSelectionModel().getSelectedItem() != null &&
+                (endDateTF.getValue().isAfter(startDateTF.getValue())||
+                        ((endDateTF.getValue().equals(startDateTF.getValue())) &&
+                                timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText()))))
         {
 
             Date startDate = (Date.valueOf(startDateTF.getValue()));
@@ -202,6 +213,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
             classExam.setExamType(typeCB.getSelectionModel().getSelectedItem());
             classExam.setTeacher((Teacher)SimpleClient.getUser());
+            classExam.setCourse(courseCB.getValue());
             Message message = new Message(1, "Add New Class Exam");
             message.setData(classExam);
             SimpleClient.getClient().sendToServer(message);
@@ -388,22 +400,9 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onEndDateSelection()
     {
-        if(endDateTF.getValue().isAfter(startDateTF.getValue())||((endDateTF.getValue().equals(startDateTF.getValue())) && timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText())))
-        {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
             typeCB.setDisable(false);
-        }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText("Please select a date after today and after the start date");
-            alert.showAndWait();
-            //JOptionPane.showMessageDialog(null, "Please select a date after today and after the start date", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-            endDateTF.setValue(null);
-        }
     }
     @FXML
     public void onTypeSelection()
