@@ -362,7 +362,7 @@ public class SimpleServer extends AbstractServer {
                 message.setData(data);
                 client.sendToClient(message);
             }
-            else if (message.getMessage().startsWith("Extra time request")) {
+            else if (request.startsWith("Extra time request")) {
                 ExtraTime extraTime = (ExtraTime) (message.getData());
                 try {
                    // if(getExtraTimeForClassExam1(extraTime.getExam())!=null) {
@@ -428,7 +428,8 @@ public class SimpleServer extends AbstractServer {
                     response = "Manual Exam could not be saved";
                     e.printStackTrace();
                 }
-            }else if (request.startsWith("Digital Exam")) {
+            }
+            else if (request.startsWith("Digital Exam")) {
                 try {
                     response = "Digital Exam Received";
                     message.setMessage(response);
@@ -554,7 +555,8 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(getExamsForSubjects((Subject) (message.getData())));
                 client.sendToClient(message);
-            }else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
+            }
+            else if (request.startsWith("Get extra time of specific class exam")) {/////////// LIAD ADDITION
                 try {
                     System.out.println("In the server to get the extra time for specific class exam");
                     response = "extra time of specific class exam";
@@ -754,6 +756,8 @@ public class SimpleServer extends AbstractServer {
                 newExamForm.setExamFormID(examCode);
                 try {
                     session.save(newExamForm);
+                    session.saveOrUpdate(newExamForm.getCourse());
+                    session.saveOrUpdate(newExamForm.getCreator());
                     session.flush();
                     response = ("Success: new ExamForm in " + newExamForm.getCourse() + " was successfully added to the database");
                     message.setMessage(response);
