@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import javax.security.sasl.SaslClient;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
@@ -41,7 +42,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     private String examNotesForTeacher;
     private String examName; // necessary?
     private List<QuestionObject> questionObjectsList;
-    private final List<Question> addedQuestions = new ArrayList<>();
+    private List<Question> addedQuestions = new ArrayList<>();
     private List<Subject> teacherSubjects;
     private ExamForm examFormToEdit = null;
     private boolean isEdit = false;
@@ -159,34 +160,46 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         Platform.runLater(()-> {
             try{
                 System.out.println("received questions from TeacherViewQuestions: " + event.getQuestions());
-                chosenSubject= event.getSubject();
-                chosenCourse= event.getCourse();
+                SaveState saveState = event.getSaveState();
+                System.out.println("questions from event: " + event.getQuestions());
                 //SubjectCB.getItems().clear();
                 //CourseCB.getItems().clear();
                 //SubjectCB.getItems().add(chosenSubject);
                 //CourseCB.getItems().add(chosenCourse);
-                SubjectCB.setValue(chosenSubject);
-                CourseCB.setValue(chosenCourse);
+                //SubjectCB.setValue(chosenSubject);
+                //CourseCB.setValue(chosenCourse);
+                SubjectCB.getItems().add(event.getSubject());
+                SubjectCB.getSelectionModel().select(event.getSubject());
+                CourseCB.getItems().add(event.getCourse());
+                CourseCB.getSelectionModel().select(event.getCourse());
                 SubjectCB.setDisable(true);
                 CourseCB.setDisable(true);
+                chosenSubject= event.getSubject();
+                chosenCourse= event.getCourse();
+                examTime = (int)saveState.getExamTime();
+                examNotesForTeacher = saveState.getExamNotesForTeacher();
+                examNotesForStudent = saveState.getExamNotesForStudent();
+                headerTextTF.setText(saveState.getHeaderText());
+                footerTextTF.setText(saveState.getFooterText());
                 resetButton.setVisible(true);
                 resetButton.setDisable(false);
+
                 enable();
                 addQuestionButton.setDisable(false);
-
-
-
                 //List<Question> addedQuestions = event.getQuestions();
-                for (Question q : event.getQuestions()) { // add questions to addedQuestions list if they are not already there
+                /*for (Question q : event.getQuestions()) { // add questions to addedQuestions list if they are not already there
                     if(!addedQuestions.contains(q))
                         addedQuestions.add(q);
-                }
+                }*/
+                addedQuestions = event.getQuestions();
                 questionObjectsList.clear();
+                System.out.println("questionObjectList: " + questionObjectsList);
                 for (Question q : addedQuestions) { // convert questions to questionTable
                     QuestionObject newQuestion = new QuestionObject(q.getID(), q.getQuestionData(), 0);
                     questionObjectsList.add(newQuestion);
                 }
                 questionTable.getItems().clear();
+                System.out.println("questionObjectsList: " + questionObjectsList);
                 questionTable.getItems().addAll(questionObjectsList);
                 questionTable.refresh();
             } catch (Exception e) {
@@ -467,6 +480,12 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             CourseCB.getSelectionModel().select(examFormToEdit.getCourse());
             SubjectCB.setDisable(true);
             CourseCB.setDisable(true);
+            chosenSubject = examFormToEdit.getSubject();
+            chosenCourse = examFormToEdit.getCourse();
+            addedQuestions = examFormToEdit.getQuestionList();
+            examTime = (int)examFormToEdit.getExamTime();
+            examNotesForTeacher = examFormToEdit.getExamNotesForTeacher();
+            examNotesForStudent = examFormToEdit.getExamNotesForStudent();
             headerTextTF.setText(examFormToEdit.getHeaderText());
             footerTextTF.setText(examFormToEdit.getFooterText());
             questionObjectsList = new ArrayList<>();
@@ -586,6 +605,10 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             e.printStackTrace();
         }
     }
+
+    private void saveCurrentState () {
+        SaveState saveState = new SaveState(chosenSubject, chosenCourse, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime, isEdit, editOption);
+    }
 /////////////////////////////////////////////////////////////
     // class for the table of questions
     public static class QuestionObject {
@@ -638,4 +661,83 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                     '}';
         }
     }
+
+    ///////////////////////////////////////////////////////////////
+    public class SaveState{
+        private Subject subject;
+        private Course course;
+        private String headerText;
+        private String footerText;
+        private ArrayList<Question> questionList;
+        //private ArrayList<Integer> questionsScores;
+        private String examNotesForTeacher;
+        private String examNotesForStudent;
+        private double examTime;
+        private boolean _isEdit;
+        private String _editOption;
+
+        public SaveState(){};
+        public SaveState(Subject subject, Course course, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent, double examTime, boolean _isEdit, String _editOption) {
+            this.subject = subject;
+            this.course = course;
+            this.headerText = headerText;
+            this.footerText = footerText;
+            //this.questionList = questionList;
+            //this.questionsScores = questionsScores;
+            this.examNotesForTeacher = examNotesForTeacher;
+            this.examNotesForStudent = examNotesForStudent;
+            this.examTime = examTime;
+            this._isEdit = _isEdit;
+            this._editOption = _editOption;
+        }
+
+        public Subject getSubject() {
+            return subject;
+        }
+
+        public Course getCourse() {
+            return course;
+        }
+
+        public String getHeaderText() {
+            return headerText;
+        }
+
+        public String getFooterText() {
+            return footerText;
+        }
+
+        public ArrayList<Question> getQuestionList() {
+            return questionList;
+        }
+
+        /*public ArrayList<Integer> getQuestionsScores() {
+            return questionsScores;
+        }*/
+
+        public String getExamNotesForTeacher() {
+            return examNotesForTeacher;
+        }
+
+        public String getExamNotesForStudent() {
+            return examNotesForStudent;
+        }
+
+        public double getExamTime() {
+            return examTime;
+        }
+
+        public boolean is_isEdit() {
+            return _isEdit;
+        }
+
+        public String get_editOption() {
+            return _editOption;
+        }
+    }
+
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+

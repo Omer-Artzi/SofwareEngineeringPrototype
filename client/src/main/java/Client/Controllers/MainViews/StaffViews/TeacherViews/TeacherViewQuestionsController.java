@@ -81,6 +81,10 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
     private Question selectedQuestion;
 
+    private TeacherAddTestFormController.SaveState storedAddTestFormState;
+
+
+
     @FXML
     void initialize() {
         System.out.println("Initializing Client.Controllers.MainPanelScreens.TeacherViewQuestionsController");
@@ -229,6 +233,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         System.out.println("Sending chosen questions to TeacherAddTestForm, subject: " + subjectPicker.getSelectionModel().getSelectedItem().getName() + ", course: " + coursePicker.getSelectionModel().getSelectedItem().getName());
         SendChosenQuestionsEvent chooseQuestionsEvent = new SendChosenQuestionsEvent(chosenQuestions, subjectPicker.getSelectionModel().getSelectedItem(), coursePicker.getSelectionModel().getSelectedItem());
+        chooseQuestionsEvent.setSaveState(storedAddTestFormState);
+        System.out.println("Sending event: " + chooseQuestionsEvent);
         EventBus.getDefault().post(chooseQuestionsEvent);
         EventBus.getDefault().unregister(this);
     }
@@ -357,6 +363,9 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
     public void ChooseQuestions(ChooseQuestionsEvent event) {
         System.out.println("Choosing questions");
 
+        storedAddTestFormState = event.getSaveState();
+        System.out.println("Stored state: " + storedAddTestFormState);
+
         // change state
         state = ContextualState.CHOOSE;
 
@@ -370,15 +379,16 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
 
         List<Question> previousChoices = event.getQuestions();
         System.out.println("Previous choices: " + previousChoices);
+        chosenQuestions.clear();
+        chosenQuestions.addAll(previousChoices);
 
         checkBoxColumn.setCellValueFactory(
                 cell -> {
                     Question question = cell.getValue();
                     CheckBox checkBox = new CheckBox();
-                    if(previousChoices.contains(question)) {
+                    if(chosenQuestions.contains(question)) {
                         System.out.println("Contains question: " + question);
                         checkBox.selectedProperty().setValue(true);
-                        chosenQuestions.add(question);
                     }
                     else
                         checkBox.selectedProperty().setValue(false);

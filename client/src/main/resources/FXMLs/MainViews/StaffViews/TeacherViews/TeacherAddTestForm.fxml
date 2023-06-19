@@ -30,20 +30,20 @@
       <Text layoutX="116.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Header Text:" />
       <Text layoutX="118.0" layoutY="592.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Footer Text:" />
       <Button fx:id="addNotesForTeacherButton" alignment="CENTER" layoutX="191.0" layoutY="699.0" mnemonicParsing="false" onAction="#addNotesForTeacher" prefHeight="25.0" prefWidth="180.0" text="Add Notes For Teacher" />
-      <Button fx:id="addQuestionButton" alignment="CENTER" contentDisplay="CENTER" layoutX="814.0" layoutY="678.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="25.0" prefWidth="141.0" text="Add Questions" />
-      <Button fx:id="previewTestButton" layoutX="424.0" layoutY="700.0" mnemonicParsing="false" onAction="#previewTest" prefHeight="25.0" prefWidth="156.0" text="Preview Manual Exam" />
-      <Button fx:id="saveTestButton" alignment="CENTER" layoutX="634.0" layoutY="699.0" mnemonicParsing="false" onAction="#saveTest" prefHeight="25.0" prefWidth="141.0" text="Save Test" />
+      <Button fx:id="addQuestionButton" alignment="CENTER" contentDisplay="CENTER" layoutX="814.0" layoutY="653.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="25.0" prefWidth="141.0" text="Add Questions" />
+      <Button fx:id="previewTestButton" layoutX="404.0" layoutY="699.0" mnemonicParsing="false" onAction="#previewTest" prefHeight="25.0" prefWidth="180.0" text="Preview Manual Exam" />
+      <Button fx:id="saveTestButton" alignment="CENTER" layoutX="614.0" layoutY="699.0" mnemonicParsing="false" onAction="#saveTest" prefHeight="25.0" prefWidth="180.0" text="Save Test" />
       <TextArea fx:id="headerTextTF" layoutX="192.0" layoutY="115.0" prefHeight="55.0" prefWidth="679.0" />
       <TextArea fx:id="footerTextTF" layoutX="191.0" layoutY="560.0" prefHeight="55.0" prefWidth="679.0" />
       <ComboBox fx:id="SubjectCB" layoutX="170.0" layoutY="67.0" onAction="#onSubjectSelection" prefWidth="150.0" />
       <ComboBox fx:id="CourseCB" layoutX="437.0" layoutY="67.0" onAction="#onCourseSelection" prefWidth="150.0" />
       <Button fx:id="addNotesForStudentButton" alignment="CENTER" layoutX="191.0" layoutY="653.0" mnemonicParsing="false" onAction="#addNotesForStudent" prefHeight="25.0" prefWidth="180.0" text="Add Notes For Student" />
-      <Button fx:id="resetButton" layoutX="757.0" layoutY="66.0" mnemonicParsing="false" onAction="#resetForm" prefHeight="25.0" prefWidth="114.0" style="-fx-background-color: #E8695F;" text="Reset Form">
+      <Button fx:id="resetButton" layoutX="695.0" layoutY="64.0" mnemonicParsing="false" onAction="#resetForm" prefHeight="25.0" prefWidth="180.0" style="-fx-background-color: #E8695F;" text="Reset Form">
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </Button>
-      <Button fx:id="setTimeButton" alignment="CENTER" layoutX="634.0" layoutY="653.0" mnemonicParsing="false" onAction="#setTime" prefHeight="25.0" prefWidth="141.0" text="Set Time" />
-      <Button fx:id="previewDigitalExamButton" layoutX="424.0" layoutY="653.0" mnemonicParsing="false" onAction="#previewDigitalTest" prefHeight="25.0" prefWidth="156.0" text="Preview Digital Exam" />
+      <Button fx:id="setTimeButton" alignment="CENTER" layoutX="614.0" layoutY="653.0" mnemonicParsing="false" onAction="#setTime" prefHeight="25.0" prefWidth="180.0" text="Set Time" />
+      <Button fx:id="previewDigitalExamButton" layoutX="404.0" layoutY="653.0" mnemonicParsing="false" onAction="#previewDigitalTest" prefHeight="25.0" prefWidth="180.0" text="Preview Digital Exam" />
    </children>
 </AnchorPane>

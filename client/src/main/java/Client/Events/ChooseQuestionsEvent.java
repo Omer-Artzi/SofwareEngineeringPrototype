@@ -1,5 +1,6 @@
 package Client.Events;
 
+import Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherAddTestFormController;
 import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.Question;
 import Entities.SchoolOwned.Subject;
@@ -11,6 +12,7 @@ public class ChooseQuestionsEvent {
     private List<Question> questions;
     private Subject subject;
     private Course course;
+    private TeacherAddTestFormController.SaveState saveState;
 
     public ChooseQuestionsEvent() {}
 
@@ -42,5 +44,13 @@ public class ChooseQuestionsEvent {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public TeacherAddTestFormController.SaveState getSaveState() {
+        return saveState;
+    }
+
+    public void setSaveState(TeacherAddTestFormController.SaveState saveState) {
+        this.saveState = saveState;
     }
 }
