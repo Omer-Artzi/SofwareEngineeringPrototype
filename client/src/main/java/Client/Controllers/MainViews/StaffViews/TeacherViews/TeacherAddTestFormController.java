@@ -150,7 +150,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         stMsg.setCourse(CourseCB.getValue());
         stMsg.setSubject(SubjectCB.getValue());
         stMsg.setQuestions(addedQuestions);
-        SaveState saveState = new SaveState(chosenSubject, chosenCourse, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime, isEdit, editOption);
+        SaveState saveState = new SaveState(chosenSubject, chosenCourse, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime, isEdit, editOption, examFormToEdit);
         stMsg.setSaveState(saveState);
         System.out.println("Course: " + CourseCB.getValue());
         EventBus.getDefault().post(stMsg);
@@ -188,6 +188,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 resetButton.setDisable(false);
                 isEdit = saveState.getIsEdit();
                 editOption = saveState.getEditOption();
+                examFormToEdit = saveState.get_examFormToEdit();
 
                 enable();
                 addQuestionButton.setDisable(false);
@@ -280,14 +281,22 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 }
             }
         }
+
         ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime);
         Message message;
         System.out.println("isEdit: " + isEdit);
         System.out.println("editOption: " + editOption);
         if (isEdit) {
+            examFormToEdit.setHeaderText(headerText);
+            examFormToEdit.setFooterText(footerText);
+            examFormToEdit.setExamNotesForTeacher(examNotesForTeacher);
+            examFormToEdit.setExamNotesForStudent(examNotesForStudent);
+            examFormToEdit.setQuestionList(addedQuestions);
+            examFormToEdit.setQuestionsScores(grades);
+            examFormToEdit.setExamTime(examTime);
             if (editOption.equals("Edit")) {
                 message = new Message(1, "Edit Exam Form: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
-                message.setData(examForm);
+                message.setData(examFormToEdit);
                 SimpleClient.getClient().sendToServer(message);
             } else if (editOption.equals("Duplicate")) {
                 message = new Message(1, "Duplicate Exam Form: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
@@ -679,8 +688,10 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         private boolean _isEdit;
         private String _editOption;
 
+        private ExamForm _examFormToEdit;
+
         public SaveState(){};
-        public SaveState(Subject subject, Course course, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent, double examTime, boolean _isEdit, String _editOption) {
+        public SaveState(Subject subject, Course course, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent, double examTime, boolean _isEdit, String _editOption, ExamForm _examFormToEdit) {
             this.subject = subject;
             this.course = course;
             this.headerText = headerText;
@@ -692,6 +703,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             this.examTime = examTime;
             this._isEdit = _isEdit;
             this._editOption = _editOption;
+            this._examFormToEdit = _examFormToEdit;
         }
 
         public Subject getSubject() {
@@ -736,6 +748,14 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
         public String getEditOption() {
             return _editOption;
+        }
+
+        public ExamForm get_examFormToEdit() {
+            return _examFormToEdit;
+        }
+
+        public void set_examFormToEdit(ExamForm _examFormToEdit) {
+            this._examFormToEdit = _examFormToEdit;
         }
     }
 
