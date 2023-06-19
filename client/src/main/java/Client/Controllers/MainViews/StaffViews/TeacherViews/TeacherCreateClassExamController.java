@@ -5,10 +5,12 @@ import Client.Events.*;
 import Client.SimpleChatClient;
 import Client.SimpleClient;
 import Entities.Communication.Message;
+import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
+import Entities.Users.Teacher;
 import Events.ExamSavedEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -31,7 +33,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     private DatePicker endDateTF;
 
     @FXML
-    private ComboBox<String> typeCB;
+    private ComboBox<Enums.ExamType> typeCB;
 
     @FXML
     private TableView<ExamForm> ExamFormsTV;
@@ -103,7 +105,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         dateCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         courseColumn.setCellValueFactory(new PropertyValueFactory<>("course"));
-        typeCB.getItems().addAll("Digital", "Manual");
+        typeCB.getItems().addAll(Enums.ExamType.Automatic, Enums.ExamType.Manual);
         courseCB.setDisable(true);
         ExamFormsTV.setDisable(true);
         startDateTF.setDisable(true);
@@ -186,18 +188,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        if( code.length() == 4 &&
-                isValidTimeFormat(time) &&
-                isValidTimeFormat(startTime) &&
-                isValidTimeFormat(endTime) &&
-                typeCB.getSelectionModel().getSelectedItem() != null &&
-                ExamFormsTV.getSelectionModel().getSelectedItem() != null &&
-                startDateTF.getValue() != null &&
-                endDateTF.getValue() != null &&
-                courseCB.getSelectionModel().getSelectedItem() != null &&
-                subjectCB.getSelectionModel().getSelectedItem() != null &&
-                (startDateTF.getValue().isBefore(endDateTF.getValue()) ||
-                startDateTF.getValue().isEqual(endDateTF.getValue()) && timeToDouble(endTimeTF.getText()) > timeToDouble(startTimeTF.getText())))
+        if( code.length() == 4 && isValidTimeFormat(time) && isValidTimeFormat(startTime) && isValidTimeFormat(endTime) && typeCB.getSelectionModel().getSelectedItem() != null && ExamFormsTV.getSelectionModel().getSelectedItem() != null && startDateTF.getValue() != null && endDateTF.getValue() != null && courseCB.getSelectionModel().getSelectedItem() != null && subjectCB.getSelectionModel().getSelectedItem() != null && startDateTF.getValue().isBefore(endDateTF.getValue()) && startDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)) && endDateTF.getValue().isAfter(LocalDate.now().minus(1, ChronoUnit.DAYS)))
         {
 
             Date startDate = (Date.valueOf(startDateTF.getValue()));
@@ -209,6 +200,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             classExam.setAccessCode(codeTF.getText());
             classExam.setExamTime((timeToDouble(examTimeTF.getText()))/60);
             classExam.setExamForm(ExamFormsTV.getSelectionModel().getSelectedItem());
+            classExam.setExamType(typeCB.getSelectionModel().getSelectedItem());
+            classExam.setTeacher((Teacher)SimpleClient.getUser());
             Message message = new Message(1, "Add New Class Exam");
             message.setData(classExam);
             SimpleClient.getClient().sendToServer(message);
@@ -323,7 +316,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             formattedTime = sdf.format(date);
             endTimeTF.setText(formattedTime);
             codeTF.setText(classExam.getAccessCode());
-            typeCB.getSelectionModel().select(classExam.getExamType().toString());
+            typeCB.getSelectionModel().select(classExam.getExamType());
             double timeInSeconds = classExam.getExamTime() * 60 ;
             int hours = (int) (timeInSeconds / 3600);
             int minutes = (int) ((timeInSeconds % 3600) / 60);
@@ -395,7 +388,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     public void onEndDateSelection()
     {
-        if(/*endDateTF.getValue().isAfter(LocalDate.now()) &&*/ endDateTF.getValue().isAfter(startDateTF.getValue()) || endDateTF.getValue().isEqual(startDateTF.getValue()) &&  timeToDouble(endTimeTF.getText()) > timeToDouble(startTimeTF.getText()))
+        if(endDateTF.getValue().isAfter(startDateTF.getValue())||((endDateTF.getValue().equals(startDateTF.getValue())) && timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText())))
         {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
