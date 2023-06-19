@@ -1005,7 +1005,7 @@ public class SimpleServer extends AbstractServer {
 
     private String createCodeOfExam(ExamForm examForm){
         List<ExamForm> examsFormsForCourse = getExamFormForCourse(examForm.getCourse());
-        int size = examsFormsForCourse.size();
+        int size = examsFormsForCourse.size()+1;
 
         String subjectID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getSubject().getId()),2);
         String courseID = OperationUtils.IDZeroPadding(String.valueOf(examForm.getCourse().getId()),2);
