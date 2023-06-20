@@ -321,11 +321,25 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("Add New Class Exam")) {
                 try {
+                    System.out.println("Add New Class Exam request received");
                     response = "Exam Saved Successfully";
                     message.setMessage(response);
-                    session.saveOrUpdate((ClassExam) (message.getData()));
+                    ClassExam classExam = (ClassExam) (message.getData());
+                    List<Student> students = retrieveStudentsForCourse(classExam.getCourse().getId());
+                    for(Student student: students) {
+                        student.addClassExam(classExam);
+                        classExam.getStudents().add(student);
+                        StudentExam studentExam = new StudentExam();
+                        student.addStudentExam(studentExam);
+                        studentExam.setStatus(Enums.submissionStatus.NotTaken);
+                        studentExam.setClassExam(classExam);
+                        studentExam.setStudentAnswers(new ArrayList<>());
+                        classExam.getStudentExams().add(studentExam);
+                    }
+                    session.saveOrUpdate(classExam);
                     session.flush();
                     client.sendToClient(message);
+                    System.out.println("Exam Saved Successfully");
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -957,6 +971,14 @@ public class SimpleServer extends AbstractServer {
             session.getTransaction().commit();
         }
         //session.close();
+    }
+
+    private List<Student> retrieveStudentsForCourse(Long id) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Student> query = builder.createQuery(Student.class);
+        Root<Student> root = query.from(Student.class);
+        query.where(builder.equal(root.get("course").get("id"), id));
+        return session.createQuery(query).getResultList();
     }
 
     private Boolean LogUserOut(Person user) {

@@ -10,6 +10,8 @@ import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
+import Entities.StudentOwned.StudentExam;
+import Entities.Users.Student;
 import Entities.Users.Teacher;
 import Events.ExamSavedEvent;
 import javafx.application.Platform;
@@ -27,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -138,9 +141,9 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         {
 
             for(Course course: courses) {
-                System.out.println("Course: " + course.getName() + " Subject: " + course.getSubject().getName() + " selectedSubject: " + selectedSubject.getName() + " equals: " + course.getSubject().getName().equals(selectedSubject.getName()));
+                //System.out.println("Course: " + course.getName() + " Subject: " + course.getSubject().getName() + " selectedSubject: " + selectedSubject.getName() + " equals: " + course.getSubject().getName().equals(selectedSubject.getName()));
                 if(course.getSubject().getName().equals(selectedSubject.getName())) {
-                    System.out.println("Course: " + course.getName() + " added to courseCB");
+                    //System.out.println("Course: " + course.getName() + " added to courseCB");
                     courseCB.getItems().add(course);
                 }
             }
@@ -203,8 +206,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
                 (endDateTF.getValue().isAfter(startDateTF.getValue())||
                         ((endDateTF.getValue().equals(startDateTF.getValue())) &&
                                 timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText()))))
-        {
 
+        {
 
             Date startDate = (Date.from(startDateTF.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             long startTiming = ((long)timeToDouble(startTimeTF.getText())*1000) + startDate.getTime();
