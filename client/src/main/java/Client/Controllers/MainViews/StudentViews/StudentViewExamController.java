@@ -68,7 +68,9 @@ public class StudentViewExamController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         assert ExamTV != null : "fx:id=\"ExamTV\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert courseColumn != null : "fx:id=\"courseColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
         assert examTypeColumn != null : "fx:id=\"examTypeColumn\" was not injected: check your FXML file 'StudentViewExam.fxml'.";
