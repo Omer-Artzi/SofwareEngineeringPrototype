@@ -10,6 +10,7 @@ import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.Question;
 import Entities.SchoolOwned.Subject;
 import Entities.Users.Person;
+import Entities.Users.Principal;
 import Entities.Users.Teacher;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -127,7 +128,7 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         state = ContextualState.VIEW;
         ContextualButton.setText("Edit Question");
         ContextualButton.setDisable(true);
-        ContextualButton.setVisible(true);
+        ContextualButton.setVisible(!(SimpleClient.getUser() instanceof Principal));
     }
 
     private void HandleChooseState(){

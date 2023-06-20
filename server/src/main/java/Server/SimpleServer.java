@@ -797,26 +797,45 @@ public class SimpleServer extends AbstractServer {
             }
             // Lior's addition
             else if (request.startsWith("Edit Exam Form")) {
+                //System.out.println("Edit Exam Form");
                 ExamForm examForm = (ExamForm)message.getData();
+                //System.out.println("0");
                 ExamForm examFormDataBase = getExamForm(examForm.getID());
 
+                //System.out.println("1");
+
                 Teacher creator = (Teacher)retrieveUser(examForm.getCreator().getEmail());
+                //System.out.println("2");
                 examFormDataBase.setCreator(creator);
+                //System.out.println("3");
                 creator.addExamForm(examFormDataBase);
+                //System.out.println("4");
                 examFormDataBase.setQuestionList(examForm.getQuestionList());
+                //System.out.println("5");
                 examFormDataBase.setExamNotesForStudent(examForm.getExamNotesForStudent());
+                //System.out.println("6");
                 examFormDataBase.setExamNotesForTeacher(examForm.getExamNotesForTeacher());
+                //System.out.println("7");
                 examFormDataBase.setExamTime((int)examForm.getExamTime());
+                //System.out.println("8");
                 examFormDataBase.setDateCreated(examForm.getDateCreated());
+                //System.out.println("9");
                 examFormDataBase.setFooterText(examForm.getFooterText());
+                //System.out.println("10");
                 examFormDataBase.setHeaderText(examForm.getHeaderText());
+                //System.out.println("11");
                 examFormDataBase.setLastUsed(examForm.getLastUsed());
+                //System.out.println("12");
                 examFormDataBase.setUsedStatus(false);
 
+                //System.out.println("got to update");
                 session.update(examFormDataBase);
+                session.flush();
+                //System.out.println("updated");
                 response = "Exam Was successfully Edited";
                 message.setMessage(response);
                 client.sendToClient(message);
+                //System.out.println("finished edit form");
             }
             else if (request.startsWith("Duplicate Exam Form")) {
                 ExamForm examForm = (ExamForm)message.getData();
@@ -848,10 +867,14 @@ public class SimpleServer extends AbstractServer {
 
                 examForm.setClassExam(new ArrayList<>());
 
+                System.out.println("saving duplicate");
                 session.saveOrUpdate(examForm);
+                session.flush();
+                System.out.println("saved duplicate");
                 response = "Exam Was successfully Duplicated";
                 message.setMessage(response);
                 client.sendToClient(message);
+                System.out.println("finished duplicate form");
             }
             else if (request.startsWith("Get teacher's Subjects")) {
                 response = "Subjects";
