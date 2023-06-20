@@ -114,7 +114,8 @@ public class SideBar {
         Message message = new Message(1, "Logout", SimpleClient.getUser());
         SimpleClient.getClient().sendToServer(message);
         UnregisterFromEventBus();
-        SimpleChatClient.NewSetRoot("Login");
+        System.out.println("Logging out");
+        SimpleChatClient.NewSetRoot("login");
     }
 
     void RegisterToEventBus() {
