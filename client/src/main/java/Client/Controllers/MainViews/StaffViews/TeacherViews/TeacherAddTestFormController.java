@@ -327,11 +327,22 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     @Subscribe
     public void examSaved(GeneralEvent event) throws IOException {
         Platform.runLater(()-> {
-            try{
+            try {
                 System.out.println("exam saved");
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Exam Saved");
                 alert.setHeaderText("Exam Saved");
+                if (event.getMessage().equals("Success: new ExamForm Added")) {
+                    alert.setContentText("New ExamForm Saved Successfully");
+                } else if (event.getMessage().equals("Success: ExamForm Was successfully Edited")) {
+                    alert.setContentText("ExamForm Edited Successfully");
+                } else if (event.getMessage().equals("Success: ExamForm Was successfully Edited")) {
+                    alert.setContentText("Success: ExamForm Was successfully Duplicated");
+                } else {
+                    alert.setContentText("ExamForm Was Saved");
+                }
+
+
                 alert.setContentText("Exam Saved Successfully");
                 alert.showAndWait();
                 //resetForm(null);

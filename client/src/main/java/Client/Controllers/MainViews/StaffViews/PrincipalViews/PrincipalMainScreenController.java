@@ -59,14 +59,14 @@ public class PrincipalMainScreenController extends SaveBeforeExit {
         LocalTime endTime = LocalTime.of(16, 0);
         boolean isBetween = !currentTime.isBefore(startTime) && !currentTime.isAfter(endTime);
         if (isBetween) {
-            MainMessageLabel.setText("Good Afternoon "+principal.getFullName());
+            MainMessageLabel.setText("Good Afternoon, "+principal.getFullName());
         } else {
             if(currentTime.isBefore(startTime)){
-                MainMessageLabel.setText("Good Morning "+principal.getFullName());
+                MainMessageLabel.setText("Good Morning, "+principal.getFullName());
             }
             else
             {
-                MainMessageLabel.setText("Good Evening "+principal.getFullName());
+                MainMessageLabel.setText("Good Evening, "+principal.getFullName());
             }
         }
     }
