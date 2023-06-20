@@ -197,7 +197,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         }
         LoadExamEvent loadExamEvent =new LoadExamEvent();
         loadExamEvent.setClassExam(SelectedExam);
-        EventBus.getDefault().unregister(this);
         SimpleChatClient.setRoot("TeacherCreateClassExam");
         EventBus.getDefault().post(loadExamEvent);
 
@@ -219,7 +218,6 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, "Invalid choose", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        EventBus.getDefault().unregister(this);
         SimpleChatClient.setRoot("ExtraTimeRequest");
         Message message=new Message(1, "Get ExtraTimeRequest data",SelectedExam);
         Platform.runLater(()-> {

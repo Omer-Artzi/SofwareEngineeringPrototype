@@ -92,7 +92,8 @@ public class TeacherViewQuestionsController extends SaveBeforeExit {
         HandleViewState();
 
         // subscribe to server
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
 
         // get logged-in User (Teacher or Principal)
         user = SimpleClient.getUser();

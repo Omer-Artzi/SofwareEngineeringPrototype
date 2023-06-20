@@ -387,7 +387,8 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
 
     @FXML
     void initialize() {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         // set the unnecessary nodes to invisible
         FeedbackHbox.setVisible(false);
         FeedbackHbox.setPrefHeight(0);

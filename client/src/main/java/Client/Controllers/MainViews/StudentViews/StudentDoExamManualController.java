@@ -70,7 +70,9 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     @FXML
     void initialize() {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
 
         assert dragAndDropImg != null : "fx:id=\"dragAndDropImg\" was not injected: check your FXML file 'StudentDoExamManual.fxml'.";
         assert timeLeftLabel != null : "fx:id=\"timeLeftLabel\" was not injected: check your FXML file 'StudentDoExamManual.fxml'.";
@@ -172,6 +174,21 @@ public class StudentDoExamManualController extends SaveBeforeExit {
 
     @Override @FXML
     public boolean PromptUserToSaveData(String sceneName) {
+        if (fileRecievedLabel.getText().equals("File Uploaded!")) {
+            try {
+                Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
+                studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
+                message.setData(studentExam);
+                SimpleClient.getClient().sendToServer(message);
+                SimpleChatClient.setRoot(sceneName);
+                EventBus.getDefault().unregister(this);
+                System.out.println("PromptUserToSaveData changing scene 2");
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return false;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "You have yet to submit your exam. If you leave now you will fail the exam. Do you still wish to leave?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
         alert.setTitle("Exam not submitted");
         Optional<ButtonType> result = alert.showAndWait();
@@ -182,6 +199,7 @@ public class StudentDoExamManualController extends SaveBeforeExit {
                     Message message = new Message(1, "Manual Exam for student ID: " + SimpleClient.getUser().getID());
                     studentExam.setStatus(Enums.submissionStatus.Unsubmitted);
                     message.setData(studentExam);
+                    SimpleClient.getClient().sendToServer(message);
                     SimpleChatClient.setRoot(sceneName);
                     EventBus.getDefault().unregister(this);
                     System.out.println("PromptUserToSaveData changing scene 2");
@@ -217,10 +235,13 @@ public class StudentDoExamManualController extends SaveBeforeExit {
     }
     @Subscribe
     public void getExtraTime(PrincipalApproveEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
-        int addedTime = event.getExtraTime().getDelta();
-        System.out.println("addedTime: " + addedTime);
-        timeInSeconds += addedTime*60;
+        Platform.runLater(()->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The teacher has approved your request for extra time. Do you wish to continue?", ButtonType.YES, javafx.scene.control.ButtonType.NO);
+            int addedTime = event.getExtraTime().getDelta();
+            System.out.println("addedTime: " + addedTime);
+            timeInSeconds += addedTime*60;
+        });
+
     }
 
 }

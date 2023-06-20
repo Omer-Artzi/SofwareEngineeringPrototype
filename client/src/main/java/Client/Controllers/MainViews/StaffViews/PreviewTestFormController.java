@@ -211,7 +211,8 @@ public class PreviewTestFormController extends SaveBeforeExit {
     }
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         client = SimpleClient.getUser();
         if (client instanceof Teacher)
         {
@@ -223,6 +224,10 @@ public class PreviewTestFormController extends SaveBeforeExit {
         else if (client instanceof Principal)
         {
             SimpleClient.getClient().sendToServer(new Message(0, "Get All Subjects"));
+            EditBtn.setDisable(true);
+            EditBtn.setVisible(false);
+            DuplicateBtn.setDisable(true);
+            DuplicateBtn.setVisible(false);
         }
         CourseCombo.setDisable(true);
         SubjectCombo.setDisable(true);
@@ -235,6 +240,8 @@ public class PreviewTestFormController extends SaveBeforeExit {
         CreatorCol.setStyle( "-fx-alignment: CENTER;");
         LastUsedCol.setStyle( "-fx-alignment: CENTER;");
         ExamIDCol.setStyle( "-fx-alignment: CENTER;");
+
+
     }
 
 }

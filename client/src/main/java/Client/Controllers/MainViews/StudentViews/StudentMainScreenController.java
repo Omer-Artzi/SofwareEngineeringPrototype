@@ -26,7 +26,9 @@ public class StudentMainScreenController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         assert MainMessageLabel != null : "fx:id=\"MainMessageLabel\" was not injected: check your FXML file 'StudentMainScreen.fxml'.";
         Student student= (Student) SimpleClient.getClient().getUser();
 

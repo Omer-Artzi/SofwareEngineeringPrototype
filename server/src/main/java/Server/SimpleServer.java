@@ -821,11 +821,12 @@ public class SimpleServer extends AbstractServer {
             else if (request.startsWith("Duplicate Exam Form")) {
                 ExamForm examForm = (ExamForm)message.getData();
 
+                examForm.setExamFormID(createCodeOfExam(examForm));
+                examForm.setLastUsed(DataGenerator.ConvertToDate(LocalDateTime.now()));
                 // teacher link
                 Teacher creator = (Teacher)retrieveUser(examForm.getCreator().getEmail());
                 examForm.setCreator(creator);
                 creator.addExamForm(examForm);
-
                 // question link
                 List<Question> questionList = new ArrayList<>();
                 for(Question question : examForm.getQuestionList())

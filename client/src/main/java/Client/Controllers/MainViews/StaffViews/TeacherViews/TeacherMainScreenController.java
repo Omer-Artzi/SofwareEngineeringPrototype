@@ -27,8 +27,8 @@ public class TeacherMainScreenController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
 
         Teacher teacher= (Teacher)SimpleClient.getClient().getUser();
 

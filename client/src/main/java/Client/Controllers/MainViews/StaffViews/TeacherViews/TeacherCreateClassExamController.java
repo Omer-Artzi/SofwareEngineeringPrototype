@@ -99,7 +99,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         assert startDateTF != null : "fx:id=\"startDateTF\" was not injected: check your FXML file 'TeacherCreateClassExam.fxml'.";
         assert startTimeTF != null : "fx:id=\"startTimeTF\" was not injected: check your FXML file 'TeacherCreateClassExam.fxml'.";
         assert subjectCB != null : "fx:id=\"subjectCB\" was not injected: check your FXML file 'TeacherCreateClassExam.fxml'.";
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         ExamFormsTV.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         //IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("examFormID"));

@@ -150,7 +150,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         stMsg.setCourse(CourseCB.getValue());
         stMsg.setSubject(SubjectCB.getValue());
         stMsg.setQuestions(addedQuestions);
-        SaveState saveState = new SaveState(chosenSubject, chosenCourse, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime, isEdit, editOption);
+        SaveState saveState = new SaveState(chosenSubject, chosenCourse, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime, isEdit, editOption, examFormToEdit);
         stMsg.setSaveState(saveState);
         System.out.println("Course: " + CourseCB.getValue());
         EventBus.getDefault().post(stMsg);
@@ -183,11 +183,15 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 examNotesForTeacher = saveState.getExamNotesForTeacher();
                 examNotesForStudent = saveState.getExamNotesForStudent();
                 headerTextTF.setText(saveState.getHeaderText());
+                headerText = saveState.getHeaderText();
                 footerTextTF.setText(saveState.getFooterText());
+                footerText = saveState.getFooterText();
                 resetButton.setVisible(true);
                 resetButton.setDisable(false);
                 isEdit = saveState.getIsEdit();
                 editOption = saveState.getEditOption();
+                examFormToEdit = saveState.get_examFormToEdit();
+                populateFields();
 
                 enable();
                 addQuestionButton.setDisable(false);
@@ -280,14 +284,22 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 }
             }
         }
+
         ExamForm examForm = new ExamForm(teacher, chosenSubject, chosenCourse, addedQuestions, grades, createdDate, headerText, footerText, examNotesForTeacher, examNotesForStudent, examTime);
         Message message;
         System.out.println("isEdit: " + isEdit);
         System.out.println("editOption: " + editOption);
         if (isEdit) {
+            examFormToEdit.setHeaderText(headerText);
+            examFormToEdit.setFooterText(footerText);
+            examFormToEdit.setExamNotesForTeacher(examNotesForTeacher);
+            examFormToEdit.setExamNotesForStudent(examNotesForStudent);
+            examFormToEdit.setQuestionList(addedQuestions);
+            examFormToEdit.setQuestionsScores(grades);
+            examFormToEdit.setExamTime(examTime);
             if (editOption.equals("Edit")) {
                 message = new Message(1, "Edit Exam Form: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
-                message.setData(examForm);
+                message.setData(examFormToEdit);
                 SimpleClient.getClient().sendToServer(message);
             } else if (editOption.equals("Duplicate")) {
                 message = new Message(1, "Duplicate Exam Form: " + "Subject-" + chosenSubject + ", Course-" + chosenCourse);
@@ -374,7 +386,8 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         disable();
         questionIdColumn.setCellValueFactory(new PropertyValueFactory<>("questionId"));
         questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("question"));
@@ -457,9 +470,9 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
     @Subscribe
     public void updateScreen(CourseQuestionsListEvent event) {
-        CourseCB.setDisable(true);
-        questionTable.setDisable(false);
-        addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        Platform.runLater(() -> {
+            CourseCB.setDisable(true);
+            questionTable.setDisable(false);
         /*List<Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject> questionObjectsList = new ArrayList<>();
         for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
@@ -471,8 +484,13 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             questionTable.getItems().addAll(questionObjectsList);
             questionTable.refresh();
         }*/
-        //enable();
-        addQuestionButton.setDisable(false);
+            //enable();
+            addQuestionButton.setText("Edit Questions");
+            addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+            addQuestionButton.setDisable(false);
+
+        });
+
     }
 
     @Subscribe
@@ -496,6 +514,12 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             headerTextTF.setText(examFormToEdit.getHeaderText());
             footerTextTF.setText(examFormToEdit.getFooterText());
             questionObjectsList = new ArrayList<>();
+            populateFields();
+
+
+
+
+
             int i=0;
             for (Question question : examFormToEdit.getQuestionList()) {
                 QuestionObject item = new QuestionObject(question.getID(), question.getQuestionData(), examFormToEdit.getQuestionsScores().get(i));
@@ -507,19 +531,44 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 questionTable.getItems().addAll(questionObjectsList);
                 questionTable.refresh();
             }
+
             setTimeButton.setDisable(false);
             addNotesForStudentButton.setDisable(false);
             addNotesForTeacherButton.setDisable(false);
             previewTestButton.setDisable(false);
             previewDigitalExamButton.setDisable(false);
             saveTestButton.setDisable(false);
+            addQuestionButton.setText("Edit Questions");
+            addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
             addQuestionButton.setDisable(false);
             headerTextTF.setDisable(false);
             footerTextTF.setDisable(false);
             questionTable.setDisable(false);
         }
-
     }
+
+    private void populateFields(){
+        // populate fields if needed
+        if (headerText != null){
+            headerTextTF.setText(headerText);
+        }
+        if (footerText != null){
+            footerTextTF.setText(footerText);
+        }
+        if (examTime != 0){
+            setTimeButton.setText("Exam time: " + examTime + " minutes");
+            setTimeButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        if (examNotesForTeacher != null){
+            //addNotesForTeacherButton.setText("Notes for teacher: " + examNotesForTeacher);
+            addNotesForTeacherButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        if (examNotesForStudent != null){
+            //addNotesForStudentButton.setText("Notes for student: " + examNotesForStudent);
+            addNotesForStudentButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
 
 
 //////////////////////////// diasble and enable buttons ////////////////////////////
@@ -679,8 +728,10 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
         private boolean _isEdit;
         private String _editOption;
 
+        private ExamForm _examFormToEdit;
+
         public SaveState(){};
-        public SaveState(Subject subject, Course course, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent, double examTime, boolean _isEdit, String _editOption) {
+        public SaveState(Subject subject, Course course, String headerText, String footerText, String examNotesForTeacher, String examNotesForStudent, double examTime, boolean _isEdit, String _editOption, ExamForm _examFormToEdit) {
             this.subject = subject;
             this.course = course;
             this.headerText = headerText;
@@ -692,6 +743,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             this.examTime = examTime;
             this._isEdit = _isEdit;
             this._editOption = _editOption;
+            this._examFormToEdit = _examFormToEdit;
         }
 
         public Subject getSubject() {
@@ -736,6 +788,14 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
         public String getEditOption() {
             return _editOption;
+        }
+
+        public ExamForm get_examFormToEdit() {
+            return _examFormToEdit;
+        }
+
+        public void set_examFormToEdit(ExamForm _examFormToEdit) {
+            this._examFormToEdit = _examFormToEdit;
         }
     }
 
