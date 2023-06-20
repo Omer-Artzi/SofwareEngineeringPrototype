@@ -294,7 +294,7 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
     //////////////////////////// ***save before exit ***/////////////////////////////////////////////////////
     @Override
     public boolean CheckForUnsavedData() {
-        if (!Courses.getTargetItems().isEmpty() && !CorrectAnswerCB.getValue().isEmpty() && !QuestionDataTF.getText().isEmpty() ) {
+        if (!Courses.getTargetItems().isEmpty() && CorrectAnswerCB.getValue()!=null && !QuestionDataTF.getText().isEmpty() ) {
             List<Answer> dataList = AnswerTable.getItems();
             if(dataList.size()==4){
                 System.out.println("Found unsaved data");

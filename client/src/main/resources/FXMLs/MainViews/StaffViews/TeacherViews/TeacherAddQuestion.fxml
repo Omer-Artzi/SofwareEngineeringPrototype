@@ -9,63 +9,69 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.ListSelectionView?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" stylesheets="@../../../styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.MainViews.StaffViews.TeacherViews.TeacherAddQuestionController">
 
     <children>
-        <ChoiceBox fx:id="addSubjectChoiceBox" layoutX="342.0" layoutY="82.0" prefHeight="26.0" prefWidth="138.0" />
-        <TableView fx:id="AnswerTable" layoutX="80.0" layoutY="357.0" prefHeight="126.0" prefWidth="644.0">
+        <ChoiceBox fx:id="addSubjectChoiceBox" layoutX="342.0" layoutY="70.0" prefHeight="26.0" prefWidth="138.0" />
+        <TableView fx:id="AnswerTable" layoutX="80.0" layoutY="349.0" prefHeight="143.0" prefWidth="644.0">
             <columns>
                 <TableColumn fx:id="NumberColumn" prefWidth="58.4000244140625" text="Number" />
                 <TableColumn fx:id="AnswerColumn" prefWidth="584.0000152587891" text="Answer" />
             </columns>
         </TableView>
-        <Button fx:id="addQuestionButton" layoutX="239.0" layoutY="629.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="18.0" prefWidth="75.0" stylesheets="@../../../styles.css" text="save">
+        <Button fx:id="addQuestionButton" layoutX="80.0" layoutY="644.0" mnemonicParsing="false" onAction="#addQuestion" prefHeight="18.0" prefWidth="75.0" stylesheets="@../../../styles.css" text="save">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Button fx:id="previewButton" layoutX="145.0" layoutY="629.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
+        <Button fx:id="previewButton" layoutX="80.0" layoutY="603.0" mnemonicParsing="false" onAction="#seePreview" stylesheets="@../../../styles.css" text="preview">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Label layoutX="277.0" layoutY="86.0" text="Subject">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-        <TextArea fx:id="QuestionDataTF" layoutX="78.0" layoutY="295.0" prefHeight="52.0" prefWidth="650.0" />
-        <TextArea fx:id="TeacherNote" layoutX="404.0" layoutY="502.0" prefHeight="18.0" prefWidth="322.0" />
-        <TextArea fx:id="StudentNote" layoutX="79.0" layoutY="502.0" prefHeight="26.0" prefWidth="307.0" />
-        <Label layoutX="402.0" layoutY="484.0" prefHeight="18.0" prefWidth="125.0" text="Teacher Note">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-        <Label layoutX="80.0" layoutY="484.0" prefHeight="18.0" prefWidth="125.0" text="Student Note">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Label>
-        <ChoiceBox fx:id="CorrectAnswerCB" layoutX="314.0" layoutY="586.0" prefHeight="26.0" prefWidth="30.0" />
-        <Label layoutX="141.0" layoutY="584.0" prefHeight="30.0" prefWidth="173.0" text="Choose Correct Answer">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Label>
-        <ListSelectionView fx:id="Courses" layoutX="71.0" layoutY="110.0" prefHeight="170.0" prefWidth="662.0" />
-        <Pane fx:id="previewWindow" layoutX="402.0" layoutY="549.0" prefHeight="218.0" prefWidth="595.0" />
-      <Label fx:id="questionDataLabel" layoutX="82.0" layoutY="265.0" prefHeight="30.0" prefWidth="275.0" text="Question data:">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Label alignment="CENTER" layoutX="152.0" layoutY="38.0" prefHeight="29.0" prefWidth="518.0" text="Add Question">
+        <TextArea fx:id="QuestionDataTF" layoutX="77.0" layoutY="277.0" prefHeight="45.0" prefWidth="650.0" />
+        <TextArea fx:id="TeacherNote" layoutX="404.0" layoutY="519.0" prefHeight="18.0" prefWidth="322.0" />
+        <TextArea fx:id="StudentNote" layoutX="81.0" layoutY="519.0" prefHeight="26.0" prefWidth="307.0" />
+        <ChoiceBox fx:id="CorrectAnswerCB" layoutX="234.0" layoutY="566.0" prefHeight="26.0" prefWidth="30.0" />
+        <ListSelectionView fx:id="Courses" layoutX="71.0" layoutY="92.0" prefHeight="146.0" prefWidth="662.0" />
+        <Pane fx:id="previewWindow" layoutX="273.0" layoutY="549.0" prefHeight="218.0" prefWidth="583.0" />
+      <Label alignment="CENTER" layoutX="152.0" layoutY="22.0" prefHeight="29.0" prefWidth="518.0" text="Add Question">
          <font>
             <Font size="23.0" />
          </font>
       </Label>
+      <Text layoutX="80.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To fill answer select row and prees Enter before save:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="79.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question data:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="289.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Subject:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="404.0" layoutY="515.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teacher Note:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="82.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Note:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="78.0" layoutY="584.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Correct Answer:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>
