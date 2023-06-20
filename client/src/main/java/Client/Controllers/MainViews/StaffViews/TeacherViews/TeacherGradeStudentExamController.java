@@ -658,8 +658,7 @@ public class TeacherGradeStudentExamController extends SaveBeforeExit
             AnswerTitleBord.setVisible(false);
 
         }
-
-
+        TitleLabel.setPrefWidth(Control.USE_COMPUTED_SIZE);
 
         return AnswersVBOX_t;
     }
