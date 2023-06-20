@@ -194,6 +194,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
+        examTimeTF.setText(timeToFormat(ExamFormsTV.getSelectionModel().getSelectedItem().getExamTime()));
         if( code.length() == 4 && isValidTimeFormat(time) &&
                 isValidTimeFormat(startTime) &&
                 isValidTimeFormat(endTime) &&
@@ -253,6 +254,19 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
            // JOptionPane.showMessageDialog(null, "Please make sure all field are filled properly", "Invalid Input", JOptionPane.WARNING_MESSAGE);
 
         }
+    }
+
+    private String timeToFormat(double examTime) {
+        int hours = (int)examTime/60;
+        int minutes = (int)examTime%60;
+        String time = "";
+        if(hours < 10)
+            time += "0";
+        time += hours + ":";
+        if(minutes < 10)
+            time += "0";
+        time += minutes;
+        return time;
     }
 
     @Subscribe
