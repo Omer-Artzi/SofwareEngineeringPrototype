@@ -22,12 +22,12 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <Button fx:id="RequestExtraTimeBT" layoutX="308.0" layoutY="472.0" mnemonicParsing="false" onAction="#RequestExtraTime" text="Request Extra Time">
+      <Button fx:id="RequestExtraTimeBT" layoutX="308.0" layoutY="472.0" mnemonicParsing="false" onAction="#RequestExtraTime" stylesheets="@../../../styles.css" text="Request Extra Time">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="CreateNewExamButton" layoutX="152.0" layoutY="472.0" mnemonicParsing="false" onAction="#createNewExam" text="Create new exam">
+      <Button fx:id="CreateNewExamButton" layoutX="152.0" layoutY="472.0" mnemonicParsing="false" onAction="#createNewExam" stylesheets="@../../../styles.css" text="Create new exam">
          <font>
             <Font size="14.0" />
          </font>
@@ -47,7 +47,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="showDecisionButton" layoutX="475.0" layoutY="472.0" mnemonicParsing="false" onAction="#showDecisionPressed" text="Show Decision">
+      <Button fx:id="showDecisionButton" layoutX="475.0" layoutY="472.0" mnemonicParsing="false" onAction="#showDecisionPressed" stylesheets="@../../../styles.css" text="Show Decision">
          <font>
             <Font size="14.0" />
          </font>

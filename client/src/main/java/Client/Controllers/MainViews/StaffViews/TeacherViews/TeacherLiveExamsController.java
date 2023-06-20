@@ -157,7 +157,9 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
     @FXML
    void initialize() throws IOException {
 
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         Message message=new Message(1, "Get Live Exams");
         SimpleClient.getClient().sendToServer(message);
 
@@ -195,6 +197,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
         }
         LoadExamEvent loadExamEvent =new LoadExamEvent();
         loadExamEvent.setClassExam(SelectedExam);
+        EventBus.getDefault().unregister(this);
         SimpleChatClient.setRoot("TeacherCreateClassExam");
         EventBus.getDefault().post(loadExamEvent);
 
@@ -216,6 +219,7 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
             JOptionPane.showMessageDialog(null, "Invalid choose", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        EventBus.getDefault().unregister(this);
         SimpleChatClient.setRoot("ExtraTimeRequest");
         Message message=new Message(1, "Get ExtraTimeRequest data",SelectedExam);
         Platform.runLater(()-> {

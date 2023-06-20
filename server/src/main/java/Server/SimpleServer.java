@@ -699,6 +699,7 @@ public class SimpleServer extends AbstractServer {
                 Question newQuestion = ((Question) (message.getData()));
                 try {
                     Question questionToSave=new Question();
+                    Subject subjectToSave=getSubject(newQuestion.getSubject().getId().intValue());
 
                     List<Course>courses=getCourses();
                     List<Course>coursesToSave=new ArrayList<>();
@@ -707,17 +708,13 @@ public class SimpleServer extends AbstractServer {
                         for (Course item1: newQuestion.getCourses()){
                             if(item1.getId().equals(item.getId())){
                                 coursesToSave.add(item);
+                                item.addQuestion(questionToSave);
                             }
                         }
                     }
                     questionToSave.setCourses(coursesToSave);
 
-                    List<Subject>subjects=getSubjects();
-                    for(Subject item: subjects)
-                    {
-                        if(newQuestion.getCourses().get(0).getId().equals(item.getId()))
-                            questionToSave.setSubject(item);
-                    }
+                    questionToSave.setSubject(subjectToSave);
 
                     questionToSave.setAnswers(newQuestion.getAnswers());
 
@@ -733,6 +730,8 @@ public class SimpleServer extends AbstractServer {
                     questionToSave.setExamForm(examForms);
                     String codeToSave=createCodeOfQuestion(newQuestion.getSubject());
                     questionToSave.setQuestionID(codeToSave);
+
+                    subjectToSave.addQuestion(questionToSave);
                     session.save(questionToSave);
                     session.flush();
 

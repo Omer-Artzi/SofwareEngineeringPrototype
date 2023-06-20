@@ -261,6 +261,8 @@ public class TeacherAddQuestionController extends SaveBeforeExit {
 
         Question question = new Question(SelectedCourses, data, answers, correct, teacherNote, studentNote);
         question.setSubject(subject);
+
+        System.out.println("subject is: "+subject);
         return question;
     }
 
