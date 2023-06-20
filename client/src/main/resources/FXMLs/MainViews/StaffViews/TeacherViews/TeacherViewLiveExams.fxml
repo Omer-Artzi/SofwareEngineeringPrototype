@@ -27,7 +27,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="CreateNewExamButton" layoutX="152.0" layoutY="472.0" mnemonicParsing="false" onAction="#createNewExam" stylesheets="@../../../styles.css" text="Create new exam">
+      <Button fx:id="CreateNewExamButton" layoutX="152.0" layoutY="472.0" mnemonicParsing="false" onAction="#createNewExam" stylesheets="@../../../styles.css" text="Duplicate Exam">
          <font>
             <Font size="14.0" />
          </font>
