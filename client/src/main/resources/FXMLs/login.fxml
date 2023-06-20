@@ -57,7 +57,7 @@
                   <Blend />
                </effect>
             </Button>
-            <Label fx:id="wrongLoginLabel" layoutX="195.0" layoutY="262.0" prefHeight="17.0" prefWidth="189.0" textFill="#dc0a0a" />
+            <Label fx:id="wrongLoginLabel" layoutX="182.0" layoutY="267.0" prefHeight="37.0" prefWidth="189.0" textAlignment="CENTER" textFill="#dc0a0a" wrapText="true" />
          </children>
       </AnchorPane>
    </right>

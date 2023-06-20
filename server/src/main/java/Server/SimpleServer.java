@@ -261,20 +261,26 @@ public class SimpleServer extends AbstractServer {
                 List<String> credentials = (List<String>) message.getData();
                 String password = credentials.get(1);
                 Person user = retrieveUser(credentials.get(0));
-                if (BCrypt.checkpw(password, user.getPassword()) && user != null) {
-                    if (LoggedInUsers.contains(user)) {
-                        response = "Fail: User already logged in";
+                if (user != null){
+                    if (BCrypt.checkpw(password, user.getPassword()) && user != null) {
+                        if (LoggedInUsers.contains(user)) {
+                            response = "Fail: User already logged in";
+                        }
+                        else {
+                            LoggedInUsers.add(user);
+                            System.out.println("User " + user.getFullName() + " logged in");
+                            response = "Success: User logged in";
+                            message.setData(user);
+                        }
                     }
                     else {
-                        LoggedInUsers.add(user);
-                        System.out.println("User " + user.getFullName() + " logged in");
-                        response = "Success: User logged in";
-                        message.setData(user);
+                        response = "Fail: User not found, user not logged in";
                     }
                 }
                 else {
-                    response = "Fail : User not found, user not logged in";
+                    response = "Fail: User not found, user not logged in";
                 }
+
                 message.setMessage(response);
                 client.sendToClient(message);
             }
@@ -480,7 +486,7 @@ public class SimpleServer extends AbstractServer {
                     e.printStackTrace();
                 }
             }
-            else if (message.getMessage().startsWith("Extra time approved")) {
+            else if (request.startsWith("Extra time approved")) {
                 try {
                     ExtraTime extraTime=(ExtraTime) message.getData();
 
@@ -507,7 +513,7 @@ public class SimpleServer extends AbstractServer {
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Extra time rejected")) {
+            else if (request.startsWith("Extra time rejected")) {
                 try {
                     ExtraTime extraTime=(ExtraTime) message.getData();
                     SessionFactory SessionFactory = getSessionFactory(null);
@@ -529,7 +535,7 @@ public class SimpleServer extends AbstractServer {
                 sendToAllClients(message);
 
             }
-            else if (message.getMessage().startsWith("Exam approved")) {
+            else if (request.startsWith("Exam approved")) {
                 try {
                     session.save(message.getData());
                     response = "Exam saved successfully";
@@ -618,7 +624,8 @@ public class SimpleServer extends AbstractServer {
                 message.setMessage(response);
                 message.setData(retrieveClassExam());
                 client.sendToClient(message);
-            }else if (request.startsWith("Get all extra time requests")) {
+            }
+            else if (request.startsWith("Get all extra time requests")) {
                 response = "all extra time requests";
                 message.setMessage(response);
                 message.setData(getExtraTimeForClassExam((ClassExam) message.getData()));

@@ -10,6 +10,11 @@ public class UserMessageEvent {
         this.status = stat;
     }
 
+    public UserMessageEvent(String stat) {
+        this.user = null;
+        this.status = stat;
+    }
+
     public Person getUser() {
         return user;
     }

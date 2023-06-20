@@ -96,7 +96,7 @@ public class LoginController {
             Platform.runLater(() -> {
                 try {
                     wiggle();
-                    wrongLoginLabel.setText("E-mail address or password is wrong");
+                    wrongLoginLabel.setText(event.getStatus());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
