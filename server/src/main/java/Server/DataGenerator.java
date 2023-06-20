@@ -195,6 +195,7 @@ public class DataGenerator {
                 teacher.addExamForm(examForm);
 
                 examForm.getExamFormID();
+                examForm.setExamTime(60);
 
 
                 Date date = ConvertToDate(LocalDateTime.now());
@@ -252,8 +253,8 @@ public class DataGenerator {
                     teacher.setEmail("admin");
                     teacher.setPassword(BCrypt.hashpw("1234", salt));
                     teacher.setGender(Enums.Gender.Female);
-                    teacher.setFirstName("super");
-                    teacher.setLastName("user");
+                    teacher.setFirstName("Shir");
+                    teacher.setLastName("Sneh");
                     admin = teacher;
                 }
                 for (Course course : coursesList) {
@@ -298,7 +299,7 @@ public class DataGenerator {
         try {
             List<Principal> principals = new ArrayList<>();
             String salt = BCrypt.gensalt(); // TODO
-            Principal admin = new Principal("PrincipalFirstName", "PrincipalLastName", Enums.Gender.Male, "admin1", "admin2");
+            Principal admin = new Principal("Malki", "Grossman", Enums.Gender.Female, "admin1", "admin2");
             admin.setEmail("adminP");
             admin.setPassword(BCrypt.hashpw("1234", salt)); // TODO
             //admin.setPassword("1234");
@@ -340,7 +341,7 @@ public class DataGenerator {
             IDList.add(personID);
             Student student;
             if (i == 0)
-                student = new Student("Super", "Student", Enums.Gender.Female, "student",
+                student = new Student("Noa", "Kirel", Enums.Gender.Female, "student",
                                       BCrypt.hashpw("1234", salt), "123456789");
             else
                 student = new Student(firstName, lastName, Enums.Gender.Female, studentEmail, password, personID);
