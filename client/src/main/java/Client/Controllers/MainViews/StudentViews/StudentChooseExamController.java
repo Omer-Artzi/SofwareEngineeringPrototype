@@ -63,7 +63,10 @@ public class StudentChooseExamController extends SaveBeforeExit {
     
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("examForm"));
         codeColumn.setCellFactory(tc -> new TableCell<>(){

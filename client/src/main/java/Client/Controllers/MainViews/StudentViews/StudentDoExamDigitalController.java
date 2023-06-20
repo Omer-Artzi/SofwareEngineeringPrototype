@@ -81,7 +81,9 @@ public class StudentDoExamDigitalController extends SaveBeforeExit {
     @FXML
     void initialize() {
         System.out.println("Initializing Client.Controllers.MainPanelScreens.TeacherViewQuestionsController");
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         user = SimpleClient.getUser();
         nextButton.setVisible(true);
         previousButton.setVisible(false);
