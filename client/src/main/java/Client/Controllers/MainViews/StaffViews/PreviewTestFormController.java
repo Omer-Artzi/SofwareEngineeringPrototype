@@ -211,7 +211,8 @@ public class PreviewTestFormController extends SaveBeforeExit {
     }
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         client = SimpleClient.getUser();
         if (client instanceof Teacher)
         {

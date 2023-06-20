@@ -649,7 +649,8 @@ public class ShowStatisticsController extends SaveBeforeExit {
     @FXML
     void initialize() throws IOException
     {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         SetVisibleAllNodes(controllerRoot, false);
 
         Message refreshMsg = new Message(0, "Refresh User");

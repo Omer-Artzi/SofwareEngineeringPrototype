@@ -81,7 +81,8 @@ public class PrincipalExtraTimeController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         elementStatus(false);
         Message message = new Message(1, "Get Extra Time Requests");
         SimpleClient.getClient().sendToServer(message);

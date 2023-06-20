@@ -304,7 +304,8 @@ public class TeacherExamGradeController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
 
         // Exam Form config
         StartDateColumn.setCellValueFactory(exam ->

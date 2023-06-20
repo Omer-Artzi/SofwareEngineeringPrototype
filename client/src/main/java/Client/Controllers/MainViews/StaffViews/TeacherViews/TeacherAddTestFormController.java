@@ -386,7 +386,8 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
     @FXML
     void initialize() throws IOException {
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         disable();
         questionIdColumn.setCellValueFactory(new PropertyValueFactory<>("questionId"));
         questionTextColumn.setCellValueFactory(new PropertyValueFactory<>("question"));
@@ -469,8 +470,9 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
 
     @Subscribe
     public void updateScreen(CourseQuestionsListEvent event) {
-        CourseCB.setDisable(true);
-        questionTable.setDisable(false);
+        Platform.runLater(() -> {
+            CourseCB.setDisable(true);
+            questionTable.setDisable(false);
         /*List<Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject> questionObjectsList = new ArrayList<>();
         for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
@@ -482,10 +484,13 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             questionTable.getItems().addAll(questionObjectsList);
             questionTable.refresh();
         }*/
-        //enable();
-        addQuestionButton.setText("Edit Questions");
-        addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        addQuestionButton.setDisable(false);
+            //enable();
+            addQuestionButton.setText("Edit Questions");
+            addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+            addQuestionButton.setDisable(false);
+
+        });
+
     }
 
     @Subscribe

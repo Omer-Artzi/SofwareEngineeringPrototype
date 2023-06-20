@@ -156,8 +156,8 @@ public class TeacherLiveExamsController extends SaveBeforeExit {
 
     @FXML
    void initialize() throws IOException {
-
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         Message message=new Message(1, "Get Live Exams");
         SimpleClient.getClient().sendToServer(message);
 
