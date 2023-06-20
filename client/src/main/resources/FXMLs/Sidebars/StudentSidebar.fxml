@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0"  xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.StudentSidebarController" stylesheets="@sidebar.css">
+<AnchorPane fx:id="sideBarPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2000.0" stylesheets="@sidebar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controllers.Sidebars.StudentSidebarController">
    <children>
       <VBox layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" prefWidth="180.0" style="-fx-background-color: #669bbc;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -106,6 +106,6 @@
             </Button>
          </children>
       </VBox>
-      <Label fx:id="userTypeLabel" prefHeight="17.0" prefWidth="180.0" text="Label" />
+      <Label fx:id="userTypeLabel" prefHeight="17.0" prefWidth="180.0" text="Label" textFill="#669bbc" />
    </children>
 </AnchorPane>
