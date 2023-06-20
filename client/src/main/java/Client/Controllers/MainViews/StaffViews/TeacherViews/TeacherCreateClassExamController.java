@@ -83,6 +83,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     private TableColumn<?,?> courseColumn;
 
+    private boolean loadExamFlag = false;
+
 
     private List<Course> courses;
     private ClassExam classExam;
@@ -265,7 +267,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         if(minutes < 10)
             time += "0";
         time += minutes;
-        return time;
+        return (time + ":00");
     }
 
     @Subscribe
@@ -274,29 +276,34 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         Platform.runLater(()->{
         List<ExamForm> exams = event.getExamForms();
         System.out.println("Num of exams: " + exams.size() + " " + exams);
-        ExamFormsTV.getItems().clear();
-        if(exams != null && !exams.isEmpty())
-        {
-            ExamFormsTV.getItems().addAll(exams);
-            ExamFormsTV.setDisable(false);
-            startDateTF.setDisable(false);
-            startTimeTF.setDisable(false);
-        }
-        else
-        {
-           Alert alert = new Alert(Alert.AlertType.WARNING);
+        if(loadExamFlag == false) {
+            ExamFormsTV.getItems().clear();
+            if(exams != null && !exams.isEmpty())
+            {
+                ExamFormsTV.getItems().addAll(exams);
+                ExamFormsTV.setDisable(false);
+                startDateTF.setDisable(false);
+                startTimeTF.setDisable(false);
+            }
+            else
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("No Exam Forms");
                 alert.setHeaderText("No Exam Forms Found");
                 alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
                 alert.showAndWait();
 
-            //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
+                //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
+            }
         }
+        loadExamFlag = false;
+
             ;});
     }
     @Subscribe
     public void displaySubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
          subjects = event.getSubjects();
+         subjectCB.getItems().clear();
         if(subjects != null && !subjects.isEmpty())
         {
             subjectCB.getItems().addAll(subjects);
@@ -315,6 +322,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @Subscribe
     public void displayCourses(CoursesOfTeacherEvent event){
        courses = event.getCourses();
+       courseCB.getItems().clear();
        if(courses != null && !courses.isEmpty())
         {
             courseCB.getItems().addAll(courses);
@@ -331,6 +339,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     public void loadExam(LoadExamEvent event)
     {
         try {
+            loadExamFlag = true;
             System.out.println("Loading existing Exam");
             ExamFormsTV.setDisable(false);
             examTimeTF.setDisable(false);
