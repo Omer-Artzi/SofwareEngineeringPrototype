@@ -1287,5 +1287,7 @@ public class SimpleServer extends AbstractServer {
             e1.printStackTrace();
         }
     }
-
+    public static List<Person> getLoggedInUsers() {
+        return LoggedInUsers;
+    }
 }

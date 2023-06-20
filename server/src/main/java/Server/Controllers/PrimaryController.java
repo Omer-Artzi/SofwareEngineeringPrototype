@@ -4,12 +4,10 @@ import Entities.Communication.Transmission;
 import Server.Events.ClientUpdateEvent;
 import Server.Events.TerminationEvent;
 import Server.Events.TransmissionEvent;
+import Server.SimpleServer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +39,8 @@ public class PrimaryController {
     private TextField connectedClientsTF;
     @FXML
     private TableColumn<Transmission, SimpleStringProperty> clientColumn;
+    @FXML
+    private Button logOutAllButton;
 
     @FXML
     void initialize() {
@@ -70,6 +70,15 @@ public class PrimaryController {
     public void updateClientNum(ClientUpdateEvent event)
     {
         connectedClientsTF.setText("Number of connected clients: " + ClientUpdateEvent.getNumOfConnectedClients());
+    }
+    @FXML
+    public void onLogOutAll()
+    {
+        SimpleServer.getLoggedInUsers().clear();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Log out all");
+        alert.setHeaderText("All users have been logged out");
+        alert.showAndWait();
     }
 
 }
