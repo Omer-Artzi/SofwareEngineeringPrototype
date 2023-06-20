@@ -974,12 +974,12 @@ public class SimpleServer extends AbstractServer {
         //session.close();
     }
 
-    private List<Student> retrieveStudentsForCourse(Long id) {
+    private List<Student> retrieveStudentsForCourse(long id) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Student> query = builder.createQuery(Student.class);
-        Root<Student> root = query.from(Student.class);
-        query.where(builder.equal(root.get("course").get("id"), id));
-        return session.createQuery(query).getResultList();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        Root<Course> root = query.from(Course.class);
+        query.where(builder.equal(root.get("ID"), id));
+        return session.createQuery(query).getSingleResult().getStudents();
     }
 
     private Boolean LogUserOut(Person user) {
@@ -1053,6 +1053,7 @@ public class SimpleServer extends AbstractServer {
         String questionCode=OperationUtils.IDZeroPadding(String.valueOf(size),3);
         return subCode+questionCode;
     }
+
 
     private List<Question> getQuestionsBySubject(long SubjectID)
     {
