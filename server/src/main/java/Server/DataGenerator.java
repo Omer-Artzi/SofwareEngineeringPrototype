@@ -343,6 +343,9 @@ public class DataGenerator {
             if (i == 0)
                 student = new Student("Noa", "Kirel", Enums.Gender.Female, "student",
                                       BCrypt.hashpw("1234", salt), "123456789");
+            else if (i == 1)
+                student = new Student("Netta", "Barzilai", Enums.Gender.Female, "student2",
+                        BCrypt.hashpw("1234", salt), "223456789");
             else
                 student = new Student(firstName, lastName, Enums.Gender.Female, studentEmail, password, personID);
             for (int  j = 0; j < 2;j++)
@@ -437,14 +440,14 @@ public class DataGenerator {
             return null;
         }
     }
-    public static List<StudentExam> generateStudentExams(List<ClassExam> classExams,List<Student> students)
+    public static List<StudentExam> generateStudentExams(List<ClassExam> classExams, List<Student> students)
     {
         List<StudentExam> studentExams = new ArrayList<>();
         int currentStatus = 0;
-        for(ClassExam classExam: classExams)
+        int i = 0;
+        for(ClassExam classExam : classExams)
         {
-            int i = 0;
-            for(Student student:students)
+            for(Student student : students)
             {
                 int randGrade = rand.nextInt(100);
                 Enums.submissionStatus status;
@@ -473,6 +476,16 @@ public class DataGenerator {
                     studentExams.add(currentExam);
                     if (status == Enums.submissionStatus.Approved)
                     {
+                        randGrade = 0;
+                        for (int quizNum = 0; quizNum < currentExam.getStudentAnswers().size(); quizNum++)
+                        {
+                            if (currentExam.getStudentAnswers().get(quizNum).startsWith(questions.get(quizNum).getCorrectAnswer()))
+                            {
+                                randGrade += currentExam.getClassExam().getExamForm().getQuestionsScores().get(quizNum);
+                            }
+                        }
+                        currentExam.setGrade(randGrade);
+
                         if(randGrade >= 50)
                             currentExam.setTeacherNote("Great job!!");
                         else
@@ -491,6 +504,7 @@ public class DataGenerator {
 
                 i++;
             }
+            i++;
             currentStatus++;
         }
 
