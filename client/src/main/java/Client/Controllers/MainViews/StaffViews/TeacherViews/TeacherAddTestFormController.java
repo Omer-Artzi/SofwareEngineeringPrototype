@@ -183,12 +183,15 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 examNotesForTeacher = saveState.getExamNotesForTeacher();
                 examNotesForStudent = saveState.getExamNotesForStudent();
                 headerTextTF.setText(saveState.getHeaderText());
+                headerText = saveState.getHeaderText();
                 footerTextTF.setText(saveState.getFooterText());
+                footerText = saveState.getFooterText();
                 resetButton.setVisible(true);
                 resetButton.setDisable(false);
                 isEdit = saveState.getIsEdit();
                 editOption = saveState.getEditOption();
                 examFormToEdit = saveState.get_examFormToEdit();
+                populateFields();
 
                 enable();
                 addQuestionButton.setDisable(false);
@@ -468,7 +471,6 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
     public void updateScreen(CourseQuestionsListEvent event) {
         CourseCB.setDisable(true);
         questionTable.setDisable(false);
-        addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         /*List<Client.Controllers.MainViews.TeacherViews.TeacherAddTestFormController.QuestionObject> questionObjectsList = new ArrayList<>();
         for (Question question : event.getQuestions()) {
             //System.out.println(question.getQuestionData());
@@ -481,6 +483,8 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             questionTable.refresh();
         }*/
         //enable();
+        addQuestionButton.setText("Edit Questions");
+        addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         addQuestionButton.setDisable(false);
     }
 
@@ -505,6 +509,12 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
             headerTextTF.setText(examFormToEdit.getHeaderText());
             footerTextTF.setText(examFormToEdit.getFooterText());
             questionObjectsList = new ArrayList<>();
+            populateFields();
+
+
+
+
+
             int i=0;
             for (Question question : examFormToEdit.getQuestionList()) {
                 QuestionObject item = new QuestionObject(question.getID(), question.getQuestionData(), examFormToEdit.getQuestionsScores().get(i));
@@ -516,19 +526,44 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 questionTable.getItems().addAll(questionObjectsList);
                 questionTable.refresh();
             }
+
             setTimeButton.setDisable(false);
             addNotesForStudentButton.setDisable(false);
             addNotesForTeacherButton.setDisable(false);
             previewTestButton.setDisable(false);
             previewDigitalExamButton.setDisable(false);
             saveTestButton.setDisable(false);
+            addQuestionButton.setText("Edit Questions");
+            addQuestionButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
             addQuestionButton.setDisable(false);
             headerTextTF.setDisable(false);
             footerTextTF.setDisable(false);
             questionTable.setDisable(false);
         }
-
     }
+
+    private void populateFields(){
+        // populate fields if needed
+        if (headerText != null){
+            headerTextTF.setText(headerText);
+        }
+        if (footerText != null){
+            footerTextTF.setText(footerText);
+        }
+        if (examTime != 0){
+            setTimeButton.setText("Exam time: " + examTime + " minutes");
+            setTimeButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        if (examNotesForTeacher != null){
+            //addNotesForTeacherButton.setText("Notes for teacher: " + examNotesForTeacher);
+            addNotesForTeacherButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        if (examNotesForStudent != null){
+            //addNotesForStudentButton.setText("Notes for student: " + examNotesForStudent);
+            addNotesForStudentButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
 
 
 //////////////////////////// diasble and enable buttons ////////////////////////////
