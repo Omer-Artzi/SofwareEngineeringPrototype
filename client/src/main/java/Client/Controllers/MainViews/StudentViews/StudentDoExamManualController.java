@@ -11,6 +11,8 @@ import Client.SimpleClient;
 import Entities.Communication.Message;
 import Entities.Enums;
 import Entities.SchoolOwned.ClassExam;
+import Entities.SchoolOwned.Question;
+import Entities.StudentOwned.ManualStudentExam;
 import Entities.StudentOwned.StudentExam;
 import Entities.Users.Student;
 import javafx.application.Platform;
