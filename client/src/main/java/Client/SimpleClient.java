@@ -203,8 +203,18 @@ public class SimpleClient extends AbstractClient {
             //EventBus.getDefault().post(new GeneralEvent(new Message(0, "failed")));
         }
 		else if (messageText.startsWith("Success: new ExamForm")){
-			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success")));
+			EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success: new ExamForm Added")));
 		}
+        else if (messageText.startsWith("ExamForm Was successfully")) {
+            if (messageText.startsWith("ExamForm Was successfully Edited")) {
+                EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success: ExamForm Was successfully Edited")));
+            }
+            else if (messageText.startsWith("ExamForm Was successfully Duplicated")) {
+                EventBus.getDefault().post(new GeneralEvent(new Message(0, "Success: ExamForm Was successfully Duplicated")));
+            }
+        }
+
+
         else if (messageText.equals("Error! we got an empty message")) {
             EventBus.getDefault().post(new ErrorEvent(message));
         }

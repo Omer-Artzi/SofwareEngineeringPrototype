@@ -847,7 +847,7 @@ public class SimpleServer extends AbstractServer {
                 session.update(examFormDataBase);
                 session.flush();
                 //System.out.println("updated");
-                response = "Exam Was successfully Edited";
+                response = "ExamForm Was successfully Edited";
                 message.setMessage(response);
                 client.sendToClient(message);
                 //System.out.println("finished edit form");
@@ -886,7 +886,7 @@ public class SimpleServer extends AbstractServer {
                 session.saveOrUpdate(examForm);
                 session.flush();
                 System.out.println("saved duplicate");
-                response = "Exam Was successfully Duplicated";
+                response = "ExamForm Was successfully Duplicated";
                 message.setMessage(response);
                 client.sendToClient(message);
                 System.out.println("finished duplicate form");
