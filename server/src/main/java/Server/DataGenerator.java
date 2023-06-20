@@ -348,6 +348,7 @@ public class DataGenerator {
             {
                 int courseNum = faker.number().numberBetween(0, courses.size());
                 student.addCourse(courses.get(courseNum));
+                courses.get(courseNum).addStudents(student);
             }
             students.add(student);
             SimpleServer.session.save(student);
