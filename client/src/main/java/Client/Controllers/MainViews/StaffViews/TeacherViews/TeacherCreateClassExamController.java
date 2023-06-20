@@ -194,7 +194,6 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         String startTime =examTimeTF.getText();
         String endTime =examTimeTF.getText();
         String code = codeTF.getText();
-        examTimeTF.setText(timeToFormat(ExamFormsTV.getSelectionModel().getSelectedItem().getExamTime()));
         if( code.length() == 4 && isValidTimeFormat(time) &&
                 isValidTimeFormat(startTime) &&
                 isValidTimeFormat(endTime) &&
@@ -272,8 +271,10 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @Subscribe
     public void displayExamForms(ExamMessageEvent event)
     {
+        Platform.runLater(()->{
         List<ExamForm> exams = event.getExamForms();
         System.out.println("Num of exams: " + exams.size() + " " + exams);
+        ExamFormsTV.getItems().clear();
         if(exams != null && !exams.isEmpty())
         {
             ExamFormsTV.getItems().addAll(exams);
@@ -283,13 +284,15 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
         else
         {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Exam Forms");
-            alert.setHeaderText("No Exam Forms Found");
-            alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
-            alert.showAndWait();
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("No Exam Forms");
+                alert.setHeaderText("No Exam Forms Found");
+                alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
+                alert.showAndWait();
+
             //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
         }
+            ;});
     }
     @Subscribe
     public void displaySubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
@@ -430,6 +433,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
             typeCB.setDisable(false);
+        examTimeTF.setText(timeToFormat(ExamFormsTV.getSelectionModel().getSelectedItem().getExamTime()));
     }
     @FXML
     public void onTypeSelection()

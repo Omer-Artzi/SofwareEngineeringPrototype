@@ -334,6 +334,7 @@ public class SimpleServer extends AbstractServer {
                         studentExam.setStatus(Enums.submissionStatus.NotTaken);
                         studentExam.setClassExam(classExam);
                         studentExam.setStudentAnswers(new ArrayList<>());
+                        session.saveOrUpdate(studentExam);
                         classExam.getStudentExams().add(studentExam);
                     }
                     session.saveOrUpdate(classExam);
