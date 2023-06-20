@@ -413,6 +413,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             alert.setContentText("Exam Saved Successfully");
             alert.showAndWait();
             try {
+                EventBus.getDefault().unregister(this);
                 SimpleChatClient.setRoot("TeacherMainScreen");
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -423,6 +424,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @FXML
     private void requestExisting() throws IOException {
         EventBus.getDefault().post(new ChooseExamEvent());
+        EventBus.getDefault().unregister(this);
         SimpleChatClient.setRoot("TeacherViewLiveExams");
     }
     @FXML
