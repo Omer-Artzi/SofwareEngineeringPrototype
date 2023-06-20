@@ -10,6 +10,8 @@ import Entities.SchoolOwned.ClassExam;
 import Entities.SchoolOwned.Course;
 import Entities.SchoolOwned.ExamForm;
 import Entities.SchoolOwned.Subject;
+import Entities.StudentOwned.StudentExam;
+import Entities.Users.Student;
 import Entities.Users.Teacher;
 import Events.ExamSavedEvent;
 import javafx.application.Platform;
@@ -27,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -79,6 +82,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     private TableColumn<?,?> subjectColumn;
     @FXML
     private TableColumn<?,?> courseColumn;
+
+    private boolean loadExamFlag = false;
 
 
     private List<Course> courses;
@@ -139,9 +144,9 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         {
 
             for(Course course: courses) {
-                System.out.println("Course: " + course.getName() + " Subject: " + course.getSubject().getName() + " selectedSubject: " + selectedSubject.getName() + " equals: " + course.getSubject().getName().equals(selectedSubject.getName()));
+                //System.out.println("Course: " + course.getName() + " Subject: " + course.getSubject().getName() + " selectedSubject: " + selectedSubject.getName() + " equals: " + course.getSubject().getName().equals(selectedSubject.getName()));
                 if(course.getSubject().getName().equals(selectedSubject.getName())) {
-                    System.out.println("Course: " + course.getName() + " added to courseCB");
+                    //System.out.println("Course: " + course.getName() + " added to courseCB");
                     courseCB.getItems().add(course);
                 }
             }
@@ -204,8 +209,8 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
                 (endDateTF.getValue().isAfter(startDateTF.getValue())||
                         ((endDateTF.getValue().equals(startDateTF.getValue())) &&
                                 timeToDouble(endTimeTF.getText())> timeToDouble(startTimeTF.getText()))))
-        {
 
+        {
 
             Date startDate = (Date.from(startDateTF.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             long startTiming = ((long)timeToDouble(startTimeTF.getText())*1000) + startDate.getTime();
@@ -253,31 +258,53 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
         }
     }
 
+    private String timeToFormat(double examTime) {
+        int hours = (int)examTime/60;
+        int minutes = (int)examTime%60;
+        String time = "";
+        if(hours < 10)
+            time += "0";
+        time += hours + ":";
+        if(minutes < 10)
+            time += "0";
+        time += minutes;
+        return (time + ":00");
+    }
+
     @Subscribe
     public void displayExamForms(ExamMessageEvent event)
     {
+        Platform.runLater(()->{
         List<ExamForm> exams = event.getExamForms();
         System.out.println("Num of exams: " + exams.size() + " " + exams);
-        if(exams != null && !exams.isEmpty())
-        {
-            ExamFormsTV.getItems().addAll(exams);
-            ExamFormsTV.setDisable(false);
-            startDateTF.setDisable(false);
-            startTimeTF.setDisable(false);
+        if(loadExamFlag == false) {
+            ExamFormsTV.getItems().clear();
+            if(exams != null && !exams.isEmpty())
+            {
+                ExamFormsTV.getItems().addAll(exams);
+                ExamFormsTV.setDisable(false);
+                startDateTF.setDisable(false);
+                startTimeTF.setDisable(false);
+            }
+            else
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("No Exam Forms");
+                alert.setHeaderText("No Exam Forms Found");
+                alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
+                alert.showAndWait();
+
+                //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
+            }
         }
-        else
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Exam Forms");
-            alert.setHeaderText("No Exam Forms Found");
-            alert.setContentText("No Exam Forms Found For Course: " + courseCB.getSelectionModel().getSelectedItem().getName());
-            alert.showAndWait();
-            //JOptionPane.showMessageDialog(null, "There are no exam forms in this course, please create some", "Database Error", JOptionPane.WARNING_MESSAGE);
-        }
+        loadExamFlag = false;
+
+            ;});
     }
     @Subscribe
     public void displaySubjects(SubjectsOfTeacherMessageEvent event) throws IOException {
          subjects = event.getSubjects();
+         subjectCB.getItems().clear();
         if(subjects != null && !subjects.isEmpty())
         {
             subjectCB.getItems().addAll(subjects);
@@ -296,6 +323,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     @Subscribe
     public void displayCourses(CoursesOfTeacherEvent event){
        courses = event.getCourses();
+       courseCB.getItems().clear();
        if(courses != null && !courses.isEmpty())
         {
             courseCB.getItems().addAll(courses);
@@ -312,6 +340,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
     public void loadExam(LoadExamEvent event)
     {
         try {
+            loadExamFlag = true;
             System.out.println("Loading existing Exam");
             ExamFormsTV.setDisable(false);
             examTimeTF.setDisable(false);
@@ -414,6 +443,7 @@ public class TeacherCreateClassExamController extends SaveBeforeExit {
             codeTF.setDisable(false);
             examTimeTF.setDisable(false);
             typeCB.setDisable(false);
+        examTimeTF.setText(timeToFormat(ExamFormsTV.getSelectionModel().getSelectedItem().getExamTime()));
     }
     @FXML
     public void onTypeSelection()

@@ -321,11 +321,26 @@ public class SimpleServer extends AbstractServer {
             }
             else if (request.startsWith("Add New Class Exam")) {
                 try {
+                    System.out.println("Add New Class Exam request received");
                     response = "Exam Saved Successfully";
                     message.setMessage(response);
-                    session.saveOrUpdate((ClassExam) (message.getData()));
+                    ClassExam classExam = (ClassExam) (message.getData());
+                    List<Student> students = retrieveStudentsForCourse(classExam.getCourse().getId());
+                    for(Student student: students) {
+                        student.addClassExam(classExam);
+                        classExam.getStudents().add(student);
+                        StudentExam studentExam = new StudentExam();
+                        student.addStudentExam(studentExam);
+                        studentExam.setStatus(Enums.submissionStatus.NotTaken);
+                        studentExam.setClassExam(classExam);
+                        studentExam.setStudentAnswers(new ArrayList<>());
+                        session.saveOrUpdate(studentExam);
+                        classExam.getStudentExams().add(studentExam);
+                    }
+                    session.saveOrUpdate(classExam);
                     session.flush();
                     client.sendToClient(message);
+                    System.out.println("Exam Saved Successfully");
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -981,6 +996,14 @@ public class SimpleServer extends AbstractServer {
         //session.close();
     }
 
+    private List<Student> retrieveStudentsForCourse(long id) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        Root<Course> root = query.from(Course.class);
+        query.where(builder.equal(root.get("ID"), id));
+        return session.createQuery(query).getSingleResult().getStudents();
+    }
+
     private Boolean LogUserOut(Person user) {
         boolean userRemoved = LoggedInUsers.remove(user);
         System.out.println("user: " + (user.getFullName() + " removed: " + userRemoved));
@@ -1052,6 +1075,7 @@ public class SimpleServer extends AbstractServer {
         String questionCode=OperationUtils.IDZeroPadding(String.valueOf(size),3);
         return subCode+questionCode;
     }
+
 
     private List<Question> getQuestionsBySubject(long SubjectID)
     {
