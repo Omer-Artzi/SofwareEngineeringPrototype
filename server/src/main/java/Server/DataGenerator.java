@@ -306,6 +306,10 @@ public class DataGenerator {
             admin.setGender(Enums.Gender.Female);
             SimpleServer.session.save(admin);
             principals.add(admin);
+            Principal admin2 = new Principal("Backup", "Principal", Enums.Gender.Female, "adminp2",
+                    BCrypt.hashpw("1234", salt));
+            SimpleServer.session.save(admin2);
+            principals.add(admin2);
             SimpleServer.session.flush();
             for (int i = 0; i < 5; i++) {
                 String PrincipalFirstName = faker.name().firstName();
