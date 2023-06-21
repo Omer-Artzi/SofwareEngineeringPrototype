@@ -341,9 +341,7 @@ public class TeacherAddTestFormController extends SaveBeforeExit {
                 } else {
                     alert.setContentText("ExamForm Was Saved");
                 }
-
-
-                alert.setContentText("Exam Saved Successfully");
+                //alert.setContentText("Exam Saved Successfully");
                 alert.showAndWait();
                 //resetForm(null);
                 EventBus.getDefault().unregister(this);
